@@ -1,10 +1,9 @@
 .navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
   width: 100%;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+
+  
   z-index: 1000;
 }
 
@@ -21,7 +20,7 @@
 .navbar-logo {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1f2937;
+  color: white;
   text-decoration: none;
   letter-spacing: -0.5px;
   transition: transform 0.2s;
@@ -41,14 +40,14 @@
 }
 
 .navbar-links li a {
-  color: #374151;
+  color: white;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s;
 }
 
 .navbar-links li a:hover {
-  color: #111827;
+  color: white;
 }
 
 /* Actions Container */
@@ -63,7 +62,6 @@
   display: none;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.4);
   border: 1px solid #d1d5db;
   border-radius: 9999px;
   padding: 8px 16px;
@@ -75,17 +73,17 @@
   background: transparent;
   border: none;
   outline: none;
-  color: #1f2937;
+  color: white;
   width: 160px;
   font-size: 14px;
 }
 
 .search-box input::placeholder {
-  color: #6b7280;
+  color: white;
 }
 
 .search-box svg {
-  color: #4b5563;
+  color: white;
 }
 
 /* Icon Buttons */
