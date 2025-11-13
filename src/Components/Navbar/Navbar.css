@@ -3,7 +3,6 @@
   top: 0;
   width: 100%;
 
-  
   z-index: 1000;
 }
 
@@ -190,6 +189,50 @@
   color: #4b5563;
 }
 
+.icon-btn.user-btn {
+  display: none;
+}
+
+.auth-btn {
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 100px;
+  padding: 8px 18px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
+  color: white;
+}
+
+.auth-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.login-btn {
+  background: transparent;
+}
+
+.signup-btn {
+  background: white;
+  color: #111827;
+  font-weight: 600;
+}
+
+.signup-btn:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.icon-btn.user-btn {
+  display: flex !important;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .auth-btn {
+    display: none;
+  }
+}
+
 /* Tablet and Desktop Styles */
 @media (min-width: 768px) {
   .navbar-links {
@@ -209,9 +252,4 @@
   .search-box {
     display: flex;
   }
-}
-
-/* Hide user button on mobile */
-.icon-btn.user-btn {
-  display: none;
 }

@@ -5,6 +5,7 @@ import "./Navbar.css";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const toggleDarkMode = () => {
@@ -46,10 +47,21 @@ export default function Navbar() {
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
-          {/* User Profile */}
-          <button className="icon-btn user-btn">
-            <User size={20} />
-          </button>
+          {/* Login/Signup */}
+          {!isLoggedIn ? (
+            <>
+              <a href="/login" className="auth-btn login-btn">
+                Login
+              </a>
+              <a href="/signup" className="auth-btn signup-btn">
+                Sign Up
+              </a>
+            </>
+          ) : (
+            <button className="icon-btn user-btn">
+              <User size={20} />
+            </button>
+          )}
 
           {/* Hamburger */}
           <button className="hamburger" onClick={toggleMenu}>
@@ -70,6 +82,19 @@ export default function Navbar() {
           <li>
             <a href="/contact">Contact</a>
           </li>
+
+          {/*  Login/Signup  */}
+          {!isLoggedIn && (
+            <>
+              <li>
+                <a href="/login">Login</a>
+              </li>
+              <li>
+                <a href="/signup">Sign Up</a>
+              </li>
+            </>
+          )}
+
           {/* Mobile Search */}
           <li>
             <div className="mobile-search">
