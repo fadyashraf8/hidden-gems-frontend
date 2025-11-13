@@ -5,13 +5,12 @@ import Footer from "../Footer/Footer.jsx";
 
 export default function Layout() {
   return (
-    <>
+    <div className="">
       <Navbar></Navbar>
 
       <Outlet></Outlet>
 
-
       <Footer></Footer>
-    </>
+    </div>
   );
 }
