@@ -1,11 +1,23 @@
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { login, logout } from "../../redux/userSlice";
 import { Menu, X, Search, User, Moon, Sun } from "lucide-react";
 import "./Navbar.css";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const dispatch = useDispatch(); 
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
+  const handleLogin = () => {
+    dispatch(login()); 
+  };
+
+  const handleLogout = () => {
+    dispatch(logout()); 
+  };
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const toggleDarkMode = () => {
@@ -47,18 +59,18 @@ export default function Navbar() {
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
-          {/* Login/Signup */}
+          {/* Login/Logout */}
           {!isLoggedIn ? (
             <>
-              <a href="/login" className="auth-btn login-btn">
+              <button className="auth-btn login-btn" onClick={handleLogin}>
                 Login
-              </a>
+              </button>
               <a href="/signup" className="auth-btn signup-btn">
                 Sign Up
               </a>
             </>
           ) : (
-            <button className="icon-btn user-btn">
+            <button className="icon-btn user-btn" onClick={handleLogout}>
               <User size={20} />
             </button>
           )}
@@ -83,7 +95,7 @@ export default function Navbar() {
             <a href="/contact">Contact</a>
           </li>
 
-          {/*  Login/Signup  */}
+          {/* Login/Signup */}
           {!isLoggedIn && (
             <>
               <li>

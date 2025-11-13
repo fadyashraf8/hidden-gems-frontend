@@ -1,8 +1,16 @@
+/* Color Palettes
+#FEF3E2
+#FAB12F
+#FA812F
+#DD0303 */
+
+
+
+
 .navbar {
   position: fixed;
   top: 0;
   width: 100%;
-
   z-index: 1000;
 }
 
@@ -213,8 +221,8 @@
 }
 
 .signup-btn {
-  background: white;
-  color: #111827;
+  background: #DD0303;
+  color: white;
   font-weight: 600;
 }
 
