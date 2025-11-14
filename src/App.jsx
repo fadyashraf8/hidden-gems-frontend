@@ -1,7 +1,10 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 import Home from "./Pages/Home/Home";
 import Layout from "./Components/Layout/Layout";
+
 import AboutLayout from "./Components/Layout/AboutLayout/AboutLayout";
 import AboutUs from "./Pages/Footer/About/AboutUs";
 import Careers from "./Pages/Footer/About/Careers";
@@ -9,11 +12,13 @@ import Press from "./Pages/Footer/About/Press";
 import Terms from "./Pages/Footer/About/terms";
 import Privacy from "./Pages/Footer/About/Privacy";
 import Content from "./Pages/Footer/About/Content";
+
 import DiscoverLayout from "./Components/Layout/DiscoverLayout/DiscoverLayout";
 import Blog from "./Pages/Footer/Discover/Blog";
 import Support from "./Pages/Footer/Discover/Support";
 import Hidden from "./Pages/Footer/Discover/Hidden";
 import Cities from "./Pages/Footer/Discover/Cities";
+
 import BusinessesLayout from "./Components/Layout/BusinessesLayout/BusinessesLayout";
 import Business from "./Pages/Footer/Business/Business";
 import AddPlace from "./Pages/Footer/Business/AddPlace";
@@ -21,13 +26,16 @@ import Advertising from "./Pages/Footer/Business/Advertising";
 import Partners from "./Pages/Footer/Business/Partners";
 
 function App() {
+  const dark = useSelector((state) => state.darkMode.enabled);
+
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Layout />,
       children: [
-        { index: true, element: <Home></Home> },
-        { path: "/home", element: <Home></Home> },
+        { index: true, element: <Home /> },
+        { path: "home", element: <Home /> },
+
         {
           path: "about",
           element: <AboutLayout />,
@@ -38,9 +46,10 @@ function App() {
             { path: "press", element: <Press /> },
             { path: "terms", element: <Terms /> },
             { path: "privacy", element: <Privacy /> },
-            { path: "Content", element: <Content /> },
+            { path: "content", element: <Content /> },
           ],
         },
+
         {
           path: "discover",
           element: <DiscoverLayout />,
@@ -52,11 +61,12 @@ function App() {
             { path: "cities", element: <Cities /> },
           ],
         },
+
         {
           path: "business",
           element: <BusinessesLayout />,
           children: [
-            { index: true, element: <Blog /> },
+            { index: true, element: <Business /> },
             { path: "business", element: <Business /> },
             { path: "addPlace", element: <AddPlace /> },
             { path: "advertising", element: <Advertising /> },
@@ -68,9 +78,9 @@ function App() {
   ]);
 
   return (
-    <>
-      <RouterProvider router={router}></RouterProvider>
-    </>
+    <div className={dark ? "dark-mode" : ""}>
+      <RouterProvider router={router} />
+    </div>
   );
 }
 
