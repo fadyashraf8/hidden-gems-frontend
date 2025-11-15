@@ -1,36 +1,54 @@
+
 import "./App.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
+import { useSelector } from "react-redux";
+
 import Home from "./Pages/Home/Home";
 import Layout from "./Components/Layout/Layout";
-import AboutLayout from "./Components/Footer/AboutLayout/AboutLayout";
-import AboutUs from "./Components/Footer/Pages/About/AboutUs";
-import Careers from "./Components/Footer/Pages/About/Careers";
-import Press from "./Components/Footer/Pages/About/Press";
-import Terms from "./Components/Footer/Pages/About/terms";
-import Privacy from "./Components/Footer/Pages/About/Privacy";
-import Content from "./Components/Footer/Pages/About/Content";
-import DiscoverLayout from "./Components/Footer/DiscoverLayout/DiscoverLayout";
-import Blog from "./Components/Footer/Pages/Discover/Blog";
-import Support from "./Components/Footer/Pages/Discover/Support";
-import Hidden from "./Components/Footer/Pages/Discover/Hidden";
-import Cities from "./Components/Footer/Pages/Discover/Cities";
-import BusinessesLayout from "./Components/Footer/DiscoverLayout/BusinessesLayout/BusinessesLayout";
-import Business from "./Components/Footer/Pages/Business/Business";
-import AddPlace from "./Components/Footer/Pages/Business/AddPlace";
-import Advertising from "./Components/Footer/Pages/Business/Advertising";
-import Partners from "./Components/Footer/Pages/Business/Partners";
+
+import AboutLayout from "./Components/Layout/AboutLayout/AboutLayout";
+import AboutUs from "./Pages/Footer/About/AboutUs";
+import Careers from "./Pages/Footer/About/Careers";
+import Press from "./Pages/Footer/About/Press";
+import Terms from "./Pages/Footer/About/terms";
+import Privacy from "./Pages/Footer/About/Privacy";
+import Content from "./Pages/Footer/About/Content";
+
+import DiscoverLayout from "./Components/Layout/DiscoverLayout/DiscoverLayout";
+import Blog from "./Pages/Footer/Discover/Blog";
+import Support from "./Pages/Footer/Discover/Support";
+import Hidden from "./Pages/Footer/Discover/Hidden";
+import Cities from "./Pages/Footer/Discover/Cities";
+
+import BusinessesLayout from "./Components/Layout/BusinessesLayout/BusinessesLayout";
+import Business from "./Pages/Footer/Business/Business";
+import AddPlace from "./Pages/Footer/Business/AddPlace";
+import Advertising from "./Pages/Footer/Business/Advertising";
+import Partners from "./Pages/Footer/Business/Partners";
+import SignUp from "./Pages/signUp/signUp";
+import Login from "./Pages/Login/Login";
+// Protect routes
+
 
 function App() {
+  const dark = useSelector((state) => state.darkMode.enabled);
+
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout />,
+      element: <Layout />, // Main layout
       children: [
-        { index: true, element: <Home></Home> },
-        { path: "/home", element: <Home></Home> },
+        { index: true, element: <Home /> },
+        { path: "home", element: <Home /> },
+
+
         {
           path: "about",
-          element: <AboutLayout />,
+          element: <AboutLayout />, // layout wrapper
           children: [
             { index: true, element: <AboutUs /> },
             { path: "aboutUS", element: <AboutUs /> },
@@ -38,9 +56,11 @@ function App() {
             { path: "press", element: <Press /> },
             { path: "terms", element: <Terms /> },
             { path: "privacy", element: <Privacy /> },
-            { path: "Content", element: <Content /> },
+            { path: "content", element: <Content /> },
           ],
         },
+
+
         {
           path: "discover",
           element: <DiscoverLayout />,
@@ -52,25 +72,34 @@ function App() {
             { path: "cities", element: <Cities /> },
           ],
         },
+
+
         {
           path: "business",
           element: <BusinessesLayout />,
           children: [
-            { index: true, element: <Blog /> },
+            { index: true, element: <Business /> },
             { path: "business", element: <Business /> },
             { path: "addPlace", element: <AddPlace /> },
             { path: "advertising", element: <Advertising /> },
             { path: "partners", element: <Partners /> },
           ],
         },
+
+        // Login Page
+        { path: "signUp", element: <SignUp/> },
+        { path: "login", element: <Login/> },
       ],
     },
   ]);
 
+
+  return <RouterProvider router={router} />;
+
   return (
-    <>
-      <RouterProvider router={router}></RouterProvider>
-    </>
+    <div className={dark ? "dark-mode" : ""}>
+      <RouterProvider router={router} />
+    </div>
   );
 }
 
