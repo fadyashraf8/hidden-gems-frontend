@@ -65,7 +65,7 @@ export default function Navbar() {
               <button className="auth-btn login-btn" onClick={handleLogin}>
                 Login
               </button>
-              <a href="/signup" className="auth-btn signup-btn">
+              <a href="/signUp" className="auth-btn signup-btn">
                 Sign Up
               </a>
             </>
@@ -102,7 +102,7 @@ export default function Navbar() {
                 <a href="/login">Login</a>
               </li>
               <li>
-                <a href="/signup">Sign Up</a>
+                <a href="/signUp">Sign Up</a>
               </li>
             </>
           )}

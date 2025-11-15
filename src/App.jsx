@@ -1,5 +1,10 @@
+
 import "./App.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import Layout from "./Components/Layout/Layout";
 import AboutLayout from "./Components/Layout/AboutLayout/AboutLayout";
@@ -19,18 +24,24 @@ import Business from "./Pages/Footer/Business/Business";
 import AddPlace from "./Pages/Footer/Business/AddPlace";
 import Advertising from "./Pages/Footer/Business/Advertising";
 import Partners from "./Pages/Footer/Business/Partners";
+import SignUp from "./Pages/signUp/signUp";
+import Login from "./Pages/Login/Login";
+// Protect routes
+
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout />,
+      element: <Layout />, // Main layout
       children: [
-        { index: true, element: <Home></Home> },
-        { path: "/home", element: <Home></Home> },
+        { index: true, element: <Home /> },
+        { path: "home", element: <Home /> },
+
+        // About Routes
         {
           path: "about",
-          element: <AboutLayout />,
+          element: <AboutLayout />, // layout wrapper
           children: [
             { index: true, element: <AboutUs /> },
             { path: "aboutUS", element: <AboutUs /> },
@@ -38,9 +49,11 @@ function App() {
             { path: "press", element: <Press /> },
             { path: "terms", element: <Terms /> },
             { path: "privacy", element: <Privacy /> },
-            { path: "Content", element: <Content /> },
+            { path: "content", element: <Content /> },
           ],
         },
+
+        // Discover Routes
         {
           path: "discover",
           element: <DiscoverLayout />,
@@ -52,26 +65,28 @@ function App() {
             { path: "cities", element: <Cities /> },
           ],
         },
+
+        // Business Routes
         {
           path: "business",
           element: <BusinessesLayout />,
           children: [
-            { index: true, element: <Blog /> },
+            { index: true, element: <Business /> },
             { path: "business", element: <Business /> },
             { path: "addPlace", element: <AddPlace /> },
             { path: "advertising", element: <Advertising /> },
             { path: "partners", element: <Partners /> },
           ],
         },
+
+        // Login Page
+        { path: "signUp", element: <SignUp/> },
+        { path: "login", element: <Login/> },
       ],
     },
   ]);
 
-  return (
-    <>
-      <RouterProvider router={router}></RouterProvider>
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
