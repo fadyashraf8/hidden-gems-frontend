@@ -5,8 +5,11 @@ import {
   RouterProvider,
   Navigate,
 } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 import Home from "./Pages/Home/Home";
 import Layout from "./Components/Layout/Layout";
+
 import AboutLayout from "./Components/Layout/AboutLayout/AboutLayout";
 import AboutUs from "./Pages/Footer/About/AboutUs";
 import Careers from "./Pages/Footer/About/Careers";
@@ -14,11 +17,13 @@ import Press from "./Pages/Footer/About/Press";
 import Terms from "./Pages/Footer/About/terms";
 import Privacy from "./Pages/Footer/About/Privacy";
 import Content from "./Pages/Footer/About/Content";
+
 import DiscoverLayout from "./Components/Layout/DiscoverLayout/DiscoverLayout";
 import Blog from "./Pages/Footer/Discover/Blog";
 import Support from "./Pages/Footer/Discover/Support";
 import Hidden from "./Pages/Footer/Discover/Hidden";
 import Cities from "./Pages/Footer/Discover/Cities";
+
 import BusinessesLayout from "./Components/Layout/BusinessesLayout/BusinessesLayout";
 import Business from "./Pages/Footer/Business/Business";
 import AddPlace from "./Pages/Footer/Business/AddPlace";
@@ -30,6 +35,8 @@ import Login from "./Pages/Login/Login";
 
 
 function App() {
+  const dark = useSelector((state) => state.darkMode.enabled);
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -38,7 +45,7 @@ function App() {
         { index: true, element: <Home /> },
         { path: "home", element: <Home /> },
 
-        // About Routes
+
         {
           path: "about",
           element: <AboutLayout />, // layout wrapper
@@ -53,7 +60,7 @@ function App() {
           ],
         },
 
-        // Discover Routes
+
         {
           path: "discover",
           element: <DiscoverLayout />,
@@ -66,7 +73,7 @@ function App() {
           ],
         },
 
-        // Business Routes
+
         {
           path: "business",
           element: <BusinessesLayout />,
@@ -86,7 +93,14 @@ function App() {
     },
   ]);
 
+
   return <RouterProvider router={router} />;
+
+  return (
+    <div className={dark ? "dark-mode" : ""}>
+      <RouterProvider router={router} />
+    </div>
+  );
 }
 
 export default App;

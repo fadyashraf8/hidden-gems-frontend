@@ -1,19 +1,71 @@
-/* Color Palettes
-#FEF3E2
-#FAB12F
-#FA812F
-#DD0303 */
+:root {
+  /* ==== LIGHT MODE COLORS ==== */
+  --lm-bg: rgba(255, 255, 255, 0.8); /* navbar background */
+  --lm-accent: #dd0303; /* buttons, sticky navbar */
+  --lm-glass: rgba(255, 255, 255, 0.4); 
 
+  --text-light: #000000;
+  --border-light: #d1d5db;
 
+  /* ==== DARK MODE COLORS ==== */
+  --dm-bg: rgba(0, 0, 0, 0.4); 
+  --dm-accent: #ff6500; 
+  --dm-glass: rgba(255, 255, 255, 0.15); 
 
+  --text-dark: #ffffff;
+  --border-dark: rgba(255, 255, 255, 0.3);
+}
 
+/* ============ GLOBAL DARK MODE ============ */
+.dark-mode {
+  background: #080808;
+  color: var(--text-dark);
+}
+
+.dark-mode .navbar {
+  background: var(--dm-bg);
+  color: var(--text-dark);
+}
+
+.dark-mode a,
+.dark-mode input {
+  color: var(--text-dark) !important;
+}
+
+/* Glass elements */
+.dark-mode .search-box,
+.dark-mode .mobile-search,
+.dark-mode .icon-btn,
+.dark-mode .hamburger {
+  background: var(--dm-glass);
+  border-color: var(--border-dark);
+}
+
+/* Dark mode sticky */
+body.dark-mode .navbar.sticky {
+  background-color: var(--dm-accent);
+}
+
+/* ============ NAVBAR BASE ============ */
 .navbar {
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
+  transition: all 0.5s ease-in-out;
 }
 
+.normal {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: none;
+}
+
+.sticky {
+  background: #dd0303;
+  box-shadow: 0px 30px 50px rgba(0, 0, 0, 0.05);
+}
+
+/* ============ CONTAINER ============ */
 .navbar-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -23,11 +75,11 @@
   justify-content: space-between;
 }
 
-/* Logo */
+/* ============ LOGO ============ */
 .navbar-logo {
   font-size: 1.5rem;
   font-weight: 700;
-  color: white;
+  color: inherit;
   text-decoration: none;
   letter-spacing: -0.5px;
   transition: transform 0.2s;
@@ -37,7 +89,7 @@
   transform: scale(1.05);
 }
 
-/* Desktop Links */
+/* ============ DESKTOP LINKS ============ */
 .navbar-links {
   display: none;
   list-style: none;
@@ -47,24 +99,24 @@
 }
 
 .navbar-links li a {
-  color: white;
+  color: inherit;
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.2s;
+  transition: opacity 0.2s;
 }
 
 .navbar-links li a:hover {
-  color: white;
+  opacity: 0.7;
 }
 
-/* Actions Container */
+/* ============ ACTIONS ============ */
 .navbar-actions {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-/* Search Box */
+/* ============ SEARCH BOX (DESKTOP) ============ */
 .search-box {
   display: none;
   align-items: center;
@@ -72,6 +124,7 @@
   border: 1px solid #d1d5db;
   border-radius: 9999px;
   padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
@@ -80,66 +133,81 @@
   background: transparent;
   border: none;
   outline: none;
-  color: white;
+  color: inherit;
   width: 160px;
   font-size: 14px;
 }
 
 .search-box input::placeholder {
-  color: white;
+  color: inherit;
 }
 
 .search-box svg {
-  color: white;
+  color: inherit;
 }
 
-/* Icon Buttons */
-.icon-btn {
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.4);
-  border: 1px solid #d1d5db;
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: background 0.2s;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.icon-btn:hover {
-  background: rgba(255, 255, 255, 0.6);
-}
-
-.icon-btn svg {
-  color: #1f2937;
-}
-
-/* Hamburger Menu */
+/* ============ BUTTONS ============ */
+.icon-btn,
 .hamburger {
-  display: flex;
   padding: 8px;
   background: rgba(255, 255, 255, 0.4);
   border: 1px solid #d1d5db;
   border-radius: 9999px;
   cursor: pointer;
   transition: background 0.2s;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
+.icon-btn:hover,
 .hamburger:hover {
   background: rgba(255, 255, 255, 0.6);
 }
 
+.icon-btn svg,
 .hamburger svg {
-  color: #1f2937;
+  color: inherit;
 }
 
-/* Mobile Menu */
+/* ============ AUTH BUTTONS ============ */
+.auth-btn {
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 100px;
+  padding: 8px 18px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
+  color: inherit;
+}
+
+.auth-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.login-btn {
+  background: transparent;
+}
+
+.signup-btn {
+  background: #dd0303;
+  color: white;
+}
+
+.login-btn:hover {
+  background-color: #dd0303;
+  color: white;
+}
+
+.signup-btn:hover {
+  opacity: 0.9;
+  color: black;
+}
+
+/* ============ MOBILE MENU ============ */
 .mobile-menu {
   display: flex;
   flex-direction: column;
@@ -154,19 +222,18 @@
 }
 
 .mobile-menu li a {
-  display: block;
-  color: #374151;
+  color: inherit;
   text-decoration: none;
   font-weight: 500;
   padding: 8px 0;
-  transition: color 0.2s;
+  transition: opacity 0.2s;
 }
 
 .mobile-menu li a:hover {
-  color: #111827;
+  opacity: 0.7;
 }
 
-/* Mobile Search */
+/* ============ MOBILE SEARCH ============ */
 .mobile-search {
   display: flex;
   align-items: center;
@@ -177,82 +244,38 @@
   padding: 8px 16px;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  margin-top: 8px;
 }
 
 .mobile-search input {
   background: transparent;
   border: none;
   outline: none;
-  color: #1f2937;
+  color: inherit;
   width: 100%;
   font-size: 14px;
 }
 
 .mobile-search input::placeholder {
-  color: #6b7280;
+  color: inherit;
 }
 
 .mobile-search svg {
-  color: #4b5563;
+  color: inherit;
 }
 
-.icon-btn.user-btn {
-  display: none;
-}
-
-.auth-btn {
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: 100px;
-  padding: 8px 18px;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(4px);
-  color: white;
-}
-
-.auth-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.login-btn {
-  background: transparent;
-}
-
-.signup-btn {
-  background: #DD0303;
-  color: white;
-  font-weight: 600;
-}
-
-.signup-btn:hover {
-  background: rgba(255, 255, 255, 0.85);
-}
-
-.icon-btn.user-btn {
-  display: flex !important;
-}
-
-/* Mobile Styles */
+/* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
   .auth-btn {
     display: none;
   }
 }
 
-/* Tablet and Desktop Styles */
 @media (min-width: 768px) {
   .navbar-links {
     display: flex;
   }
-
   .hamburger {
     display: none;
-  }
-
-  .icon-btn.user-btn {
-    display: flex;
   }
 }
 
