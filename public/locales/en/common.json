@@ -1,0 +1,30 @@
+{
+  "app_name": "Gemsy",
+
+  "footer_about_title": "About",
+  "footer_discover_title": "Discover",
+  "footer_business_title": "For Businesses",
+  
+  "link_about_us": "About Us",
+  "link_careers": "Careers",
+  "link_content_guidelines": "Content Guidelines",
+  "link_terms_of_service": "Terms of Service",
+  "link_privacy_policy": "Privacy Policy",
+  
+  "link_blog": "Blog",
+  "link_support": "Support",
+  "link_explore_cities": "Explore Cities",
+  "link_hidden": "Hidden",
+  
+  "link_for_businesses": "For Businesses",
+  "link_add_your_place": "Add Your Place",
+  "link_advertising": "Advertising",
+  "link_partner_with_us": "Partner With Us",
+
+  "nav_search_placeholder": "Search places…",
+  "nav_link_places": "Places",
+  "nav_link_surprise": "Surprise Me",
+  "nav_link_contact": "Contact",
+  "nav_auth_login": "Login",
+  "nav_auth_signup": "Sign Up"
+}

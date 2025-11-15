@@ -4,8 +4,11 @@ import { login, logout } from "../../redux/userSlice";
 import { Menu, X, Search, User, Moon, Sun } from "lucide-react";
 import { toggleDarkMode } from "../../redux/darkModeSlice";
 import "./Navbar.css";
+import { useTranslation } from "react-i18next";
+import TranslateTwoToneIcon from '@mui/icons-material/TranslateTwoTone';
 
 export default function Navbar() {
+  const { t, i18n } = useTranslation()
   const [isOpen, setIsOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -57,31 +60,35 @@ export default function Navbar() {
       <div className="navbar-container">
         {/* Logo */}
         <a href="/" className="navbar-logo">
-          Gemsy
+          {t("app_name")}
         </a>
 
         {/* Search - Desktop only */}
         <div className="search-box">
           <Search size={18} />
-          <input type="text" placeholder="Search places…" />
+          <input type="text" placeholder={t("nav_search_placeholder")} />
         </div>
 
         {/* Desktop Menu */}
         <ul className="navbar-links">
           <li>
-            <a href="/places">Places</a>
+            <a href="/places">{t("nav_link_places")}</a>
           </li>
           <li>
-            <a href="/surprise">Surprise Me</a>
+            <a href="/surprise">{t("nav_link_surprise")}</a>
           </li>
           <li>
-            <a href="/contact">Contact</a>
+            <a href="/contact">{t("nav_link_contact")}</a>
           </li>
         </ul>
 
         {/* Actions */}
         <div className="navbar-actions">
           {/* Dark Mode */}
+          <TranslateTwoToneIcon style={{ cursor: 'pointer', marginRight: '10px' }} onClick={() => {
+            const newLang = i18n.language === 'en' ? 'ar' : 'en';
+            i18n.changeLanguage(newLang);
+          }} />
           <button className="icon-btn" onClick={handleDarkToggle}>
             {dark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
@@ -90,10 +97,10 @@ export default function Navbar() {
           {!isLoggedIn ? (
             <>
               <button className="auth-btn login-btn" onClick={handleLogin}>
-                Login
+                { t("nav_auth_login")}
               </button>
               <a href="/signUp" className="auth-btn signup-btn">
-                Sign Up
+                { t("nav_auth_signup")}
               </a>
             </>
           ) : (

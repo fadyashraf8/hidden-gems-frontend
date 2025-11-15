@@ -93,9 +93,6 @@ function App() {
     },
   ]);
 
-
-  return <RouterProvider router={router} />;
-
   return (
     <div className={dark ? "dark-mode" : ""}>
       <RouterProvider router={router} />
