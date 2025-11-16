@@ -1,48 +1,48 @@
 :root {
   /* ==== LIGHT MODE COLORS ==== */
-  --lm-bg: rgba(255, 255, 255, 0.8); /* navbar background */
-  --lm-accent: #dd0303; /* buttons, sticky navbar */
-  --lm-glass: rgba(255, 255, 255, 0.4); 
+  --lm-bg: rgba(255, 255, 255, 0.8); 
+  --lm-accent: #dd0303; 
+  --lm-glass: rgba(255, 255, 255, 0.4);
 
   --text-light: #000000;
   --border-light: #d1d5db;
 
   /* ==== DARK MODE COLORS ==== */
-  --dm-bg: rgba(0, 0, 0, 0.4); 
-  --dm-accent: #ff6500; 
-  --dm-glass: rgba(255, 255, 255, 0.15); 
+  --dm-bg: rgba(0, 0, 0, 0.4);
+  --dm-accent: #ff6500;
+  --dm-glass: rgba(255, 255, 255, 0.15);
 
   --text-dark: #ffffff;
   --border-dark: rgba(255, 255, 255, 0.3);
 }
 
-/* ============ GLOBAL DARK MODE ============ */
-.dark-mode {
+/* ============ GLOBAL DARK MODE (SHADCN) ============ */
+.dark {
   background: #080808;
   color: var(--text-dark);
 }
 
-.dark-mode .navbar {
+.dark .navbar {
   background: var(--dm-bg);
   color: var(--text-dark);
 }
 
-.dark-mode a,
-.dark-mode input {
+.dark a,
+.dark input {
   color: var(--text-dark) !important;
 }
 
-/* Glass elements */
-.dark-mode .search-box,
-.dark-mode .mobile-search,
-.dark-mode .icon-btn,
-.dark-mode .hamburger {
+/* Glass elements in dark mode */
+.dark .search-box,
+.dark .mobile-search,
+.dark .icon-btn,
+.dark .hamburger {
   background: var(--dm-glass);
   border-color: var(--border-dark);
 }
 
-/* Dark mode sticky */
-body.dark-mode .navbar.sticky {
+/* Dark mode sticky navbar */
+.dark .navbar.sticky {
   background-color: var(--dm-accent);
 }
 
@@ -170,6 +170,47 @@ body.dark-mode .navbar.sticky {
 .icon-btn svg,
 .hamburger svg {
   color: inherit;
+}
+
+/* ============ PROFILE DROPDOWN ============ */
+.profile-dropdown-container {
+  position: relative;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: var(--lm-bg);
+  color: inherit;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+}
+
+.dark .profile-dropdown {
+  background: var(--dm-bg);
+  color: var(--text-dark);
+}
+
+.profile-dropdown a,
+.profile-dropdown button {
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: inherit;
+}
+
+.profile-dropdown a:hover,
+.profile-dropdown button:hover {
+  opacity: 0.7;
 }
 
 /* ============ AUTH BUTTONS ============ */
