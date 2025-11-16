@@ -35,6 +35,7 @@ import Login from "./Pages/Login/Login";
 
 
 function App() {
+  const dark = useSelector((state) => state.darkMode.enabled);
 
   const router = createBrowserRouter([
     {

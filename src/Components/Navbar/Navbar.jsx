@@ -1,23 +1,23 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../redux/userSlice";
-import { Menu, X, Search, User } from "lucide-react";
+import { login, logout } from "../../redux/userSlice";
+import { Menu, X, Search, User, Moon, Sun } from "lucide-react";
+import { toggleDarkMode } from "../../redux/darkModeSlice";
 import "./Navbar.css";
-import ModeToggle from "../mode-toggle.tsx";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const dispatch = useDispatch();
+  const dark = useSelector((state) => state.darkMode.enabled);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const handleDarkToggle = () => {
+    dispatch(toggleDarkMode());
+  };
 
   useEffect(() => {
-    const header = document.getElementById("nav");
-
     const scrollFunction = () => {
+      const header = document.getElementById("nav");
       if (!header) return;
 
       if (window.scrollY > 900) {
@@ -30,8 +30,27 @@ export default function Navbar() {
     };
 
     window.addEventListener("scroll", scrollFunction);
+
     return () => window.removeEventListener("scroll", scrollFunction);
   }, []);
+
+  useEffect(() => {
+    if (dark) {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
+  }, [dark]);
+
+  const handleLogin = () => {
+    dispatch(login());
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
+  const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
     <nav id="nav" className="navbar normal">
@@ -41,7 +60,7 @@ export default function Navbar() {
           Gemsy
         </a>
 
-        {/* Search */}
+        {/* Search - Desktop only */}
         <div className="search-box">
           <Search size={18} />
           <input type="text" placeholder="Search places…" />
@@ -62,36 +81,25 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="navbar-actions">
-          {/* Dark/Light/System Toggle */}
-          <ModeToggle />
+          {/* Dark Mode */}
+          <button className="icon-btn" onClick={handleDarkToggle}>
+            {dark ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
 
-          {/* If NOT logged in */}
+          {/* Login/Logout */}
           {!isLoggedIn ? (
             <>
-              <a href="/login" className="auth-btn login-btn">
+              <button className="auth-btn login-btn" onClick={handleLogin}>
                 Login
-              </a>
+              </button>
               <a href="/signUp" className="auth-btn signup-btn">
                 Sign Up
               </a>
             </>
           ) : (
-            // Logged in → Dropdown
-            <div className="profile-dropdown-container">
-              <button
-                className="icon-btn user-btn"
-                onClick={() => setShowProfileMenu((prev) => !prev)}
-              >
-                <User size={20} />
-              </button>
-
-              {showProfileMenu && (
-                <div className="profile-dropdown">
-                  <a href="/profile">Profile</a>
-                  <button onClick={() => dispatch(logout())}>Logout</button>
-                </div>
-              )}
-            </div>
+            <button className="icon-btn user-btn" onClick={handleLogout}>
+              <User size={20} />
+            </button>
           )}
 
           {/* Hamburger */}
@@ -114,6 +122,7 @@ export default function Navbar() {
             <a href="/contact">Contact</a>
           </li>
 
+          {/* Login/Signup */}
           {!isLoggedIn && (
             <>
               <li>
@@ -125,6 +134,7 @@ export default function Navbar() {
             </>
           )}
 
+          {/* Mobile Search */}
           <li>
             <div className="mobile-search">
               <Search size={18} />
