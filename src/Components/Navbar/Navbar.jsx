@@ -3,7 +3,7 @@ import { Menu, X, Search, User, Moon, Sun } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDarkMode } from "../../redux/darkModeSlice";
 import AuthContext from "../../Context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -56,7 +56,7 @@ export default function Navbar() {
     localStorage.removeItem("userToken");
     setisloggedin(false);
     setUserDropdown(false);
-    navigate("/"); // optional: redirect to home after logout
+    navigate("/");
   };
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -64,9 +64,9 @@ export default function Navbar() {
   return (
     <nav id="nav" className="navbar normal">
       <div className="navbar-container">
-        <a href="/" className="navbar-logo">
+        <Link to="/" className="navbar-logo">
           Gemsy
-        </a>
+        </Link>
 
         <div className="search-box">
           <Search size={18} />
@@ -75,13 +75,13 @@ export default function Navbar() {
 
         <ul className="navbar-links">
           <li>
-            <a href="/places">Places</a>
+            <NavLink to="/places">Places</NavLink>
           </li>
           <li>
-            <a href="/surprise">Surprise Me</a>
+            <NavLink to="/surprise">Surprise Me</NavLink>
           </li>
           <li>
-            <a href="/contact">Contact</a>
+            <NavLink to="/contact">Contact</NavLink>
           </li>
         </ul>
 
@@ -92,12 +92,12 @@ export default function Navbar() {
 
           {!isloggedin ? (
             <>
-              <a href="/login" className="auth-btn login-btn">
+              <Link to="/login" className="auth-btn login-btn">
                 Login
-              </a>
-              <a href="/signUp" className="auth-btn signup-btn">
+              </Link>
+              <Link to="/signUp" className="auth-btn signup-btn">
                 Sign Up
-              </a>
+              </Link>
             </>
           ) : (
             <div className="user-dropdown-wrapper" ref={dropdownRef}>
@@ -125,21 +125,21 @@ export default function Navbar() {
       {isOpen && (
         <ul className="mobile-menu">
           <li>
-            <a href="/places">Places</a>
+            <NavLink to="/places">Places</NavLink>
           </li>
           <li>
-            <a href="/surprise">Surprise Me</a>
+            <NavLink to="/surprise">Surprise Me</NavLink>
           </li>
           <li>
-            <a href="/contact">Contact</a>
+            <NavLink to="/contact">Contact</NavLink>
           </li>
           {!isloggedin && (
             <>
               <li>
-                <a href="/login">Login</a>
+                <Link to="/login">Login</Link>
               </li>
               <li>
-                <a href="/signUp">Sign Up</a>
+                <Link to="/signUp">Sign Up</Link>
               </li>
             </>
           )}
