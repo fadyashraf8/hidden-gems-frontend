@@ -1,25 +1,28 @@
-import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { login, logout } from "../../redux/userSlice";
+import { useState, useEffect, useContext, useRef } from "react";
 import { Menu, X, Search, User, Moon, Sun } from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
 import { toggleDarkMode } from "../../redux/darkModeSlice";
+import AuthContext from "../../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [userDropdown, setUserDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   const dispatch = useDispatch();
   const dark = useSelector((state) => state.darkMode.enabled);
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const handleDarkToggle = () => {
-    dispatch(toggleDarkMode());
-  };
+  const handleDarkToggle = () => dispatch(toggleDarkMode());
 
+  const { isloggedin, setisloggedin } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  // Sticky navbar on scroll
   useEffect(() => {
     const scrollFunction = () => {
       const header = document.getElementById("nav");
       if (!header) return;
-
       if (window.scrollY > 900) {
         header.classList.add("sticky");
         header.classList.remove("normal");
@@ -28,26 +31,32 @@ export default function Navbar() {
         header.classList.add("normal");
       }
     };
-
     window.addEventListener("scroll", scrollFunction);
-
     return () => window.removeEventListener("scroll", scrollFunction);
   }, []);
 
+  // Dark mode class
   useEffect(() => {
-    if (dark) {
-      document.body.classList.add("dark-mode");
-    } else {
-      document.body.classList.remove("dark-mode");
-    }
+    if (dark) document.body.classList.add("dark-mode");
+    else document.body.classList.remove("dark-mode");
   }, [dark]);
 
-  const handleLogin = () => {
-    dispatch(login());
-  };
+  // Close dropdown if clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setUserDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleLogout = () => {
-    dispatch(logout());
+    localStorage.removeItem("userToken");
+    setisloggedin(false);
+    setUserDropdown(false);
+    navigate("/"); // optional: redirect to home after logout
   };
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -55,18 +64,15 @@ export default function Navbar() {
   return (
     <nav id="nav" className="navbar normal">
       <div className="navbar-container">
-        {/* Logo */}
         <a href="/" className="navbar-logo">
           Gemsy
         </a>
 
-        {/* Search - Desktop only */}
         <div className="search-box">
           <Search size={18} />
           <input type="text" placeholder="Search places…" />
         </div>
 
-        {/* Desktop Menu */}
         <ul className="navbar-links">
           <li>
             <a href="/places">Places</a>
@@ -79,37 +85,43 @@ export default function Navbar() {
           </li>
         </ul>
 
-        {/* Actions */}
         <div className="navbar-actions">
-          {/* Dark Mode */}
           <button className="icon-btn" onClick={handleDarkToggle}>
             {dark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
-          {/* Login/Logout */}
-          {!isLoggedIn ? (
+          {!isloggedin ? (
             <>
-              <button className="auth-btn login-btn" onClick={handleLogin}>
+              <a href="/login" className="auth-btn login-btn">
                 Login
-              </button>
+              </a>
               <a href="/signUp" className="auth-btn signup-btn">
                 Sign Up
               </a>
             </>
           ) : (
-            <button className="icon-btn user-btn" onClick={handleLogout}>
-              <User size={20} />
-            </button>
+            <div className="user-dropdown-wrapper" ref={dropdownRef}>
+              <button
+                className="icon-btn user-btn"
+                onClick={() => setUserDropdown(!userDropdown)}
+              >
+                <User size={20} />
+              </button>
+              {userDropdown && (
+                <div className="user-dropdown-menu">
+                  <button onClick={() => navigate("/profile")}>Profile</button>
+                  <button onClick={handleLogout}>Sign Out</button>
+                </div>
+              )}
+            </div>
           )}
 
-          {/* Hamburger */}
           <button className="hamburger" onClick={toggleMenu}>
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isOpen && (
         <ul className="mobile-menu">
           <li>
@@ -121,9 +133,7 @@ export default function Navbar() {
           <li>
             <a href="/contact">Contact</a>
           </li>
-
-          {/* Login/Signup */}
-          {!isLoggedIn && (
+          {!isloggedin && (
             <>
               <li>
                 <a href="/login">Login</a>
@@ -133,8 +143,6 @@ export default function Navbar() {
               </li>
             </>
           )}
-
-          {/* Mobile Search */}
           <li>
             <div className="mobile-search">
               <Search size={18} />

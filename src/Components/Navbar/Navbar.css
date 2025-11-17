@@ -234,6 +234,37 @@ body.dark-mode .navbar.sticky {
   color: black;
 }
 
+.user-dropdown-wrapper {
+  position: relative;
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-dropdown-menu button {
+  padding: 10px 15px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.user-dropdown-menu button:hover {
+  background-color: #f0f0f0;
+}
+
 /* ============ MOBILE MENU ============ */
 .mobile-menu {
   display: flex;
