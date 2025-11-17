@@ -1,56 +1,46 @@
+// src/components/Navbar.jsx
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { login, logout } from "../../redux/userSlice";
+import { clearCredentials } from "../../redux/userSlice";
+import { logoutApi } from "../../services/authService";
 import { Menu, X, Search, User, Moon, Sun } from "lucide-react";
 import { toggleDarkMode } from "../../redux/darkModeSlice";
 import "./Navbar.css";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
   const dispatch = useDispatch();
+
   const dark = useSelector((state) => state.darkMode.enabled);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const handleDarkToggle = () => {
-    dispatch(toggleDarkMode());
-  };
+  const userInfo = useSelector((state) => state.user.userInfo);
 
+  // Dark mode toggle effect
+  useEffect(() => {
+    document.body.classList.toggle("dark-mode", dark);
+  }, [dark]);
+
+  // Sticky header on scroll
   useEffect(() => {
     const scrollFunction = () => {
       const header = document.getElementById("nav");
       if (!header) return;
-
-      if (window.scrollY > 900) {
-        header.classList.add("sticky");
-        header.classList.remove("normal");
-      } else {
-        header.classList.remove("sticky");
-        header.classList.add("normal");
-      }
+      header.classList.toggle("sticky", window.scrollY > 900);
+      header.classList.toggle("normal", window.scrollY <= 900);
     };
-
     window.addEventListener("scroll", scrollFunction);
-
     return () => window.removeEventListener("scroll", scrollFunction);
   }, []);
 
-  useEffect(() => {
-    if (dark) {
-      document.body.classList.add("dark-mode");
-    } else {
-      document.body.classList.remove("dark-mode");
+  const handleLogout = async () => {
+    try {
+      await logoutApi(); // call backend logout if exists
+    } catch (err) {
+      console.warn("Logout failed:", err);
+    } finally {
+      dispatch(clearCredentials());
     }
-  }, [dark]);
-
-  const handleLogin = () => {
-    dispatch(login());
   };
-
-  const handleLogout = () => {
-    dispatch(logout());
-  };
-
-  const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
     <nav id="nav" className="navbar normal">
@@ -60,13 +50,13 @@ export default function Navbar() {
           Gemsy
         </a>
 
-        {/* Search - Desktop only */}
+        {/* Search box */}
         <div className="search-box">
           <Search size={18} />
           <input type="text" placeholder="Search places…" />
         </div>
 
-        {/* Desktop Menu */}
+        {/* Desktop links */}
         <ul className="navbar-links">
           <li>
             <a href="/places">Places</a>
@@ -81,35 +71,49 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="navbar-actions">
-          {/* Dark Mode */}
-          <button className="icon-btn" onClick={handleDarkToggle}>
+          {/* Dark Mode Toggle */}
+          <button
+            className="icon-btn"
+            onClick={() => dispatch(toggleDarkMode())}
+          >
             {dark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
-          {/* Login/Logout */}
           {!isLoggedIn ? (
             <>
-              <button className="auth-btn login-btn" onClick={handleLogin}>
+              <a href="/login" className="auth-btn login-btn">
                 Login
-              </button>
+              </a>
               <a href="/signUp" className="auth-btn signup-btn">
                 Sign Up
               </a>
             </>
           ) : (
-            <button className="icon-btn user-btn" onClick={handleLogout}>
-              <User size={20} />
-            </button>
+            <>
+              {userInfo?.image ? (
+                <img
+                  src={userInfo.image}
+                  alt={userInfo.firstName || "User"}
+                  className="rounded-full w-8 h-8 object-cover"
+                />
+              ) : (
+                <User size={20} className="icon-btn user-btn" />
+              )}
+              <span className="user-name">{userInfo?.firstName || "User"}</span>
+              <button className="auth-btn login-btn" onClick={handleLogout}>
+                Logout
+              </button>
+            </>
           )}
 
           {/* Hamburger */}
-          <button className="hamburger" onClick={toggleMenu}>
+          <button className="hamburger" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       {isOpen && (
         <ul className="mobile-menu">
           <li>
@@ -122,7 +126,6 @@ export default function Navbar() {
             <a href="/contact">Contact</a>
           </li>
 
-          {/* Login/Signup */}
           {!isLoggedIn && (
             <>
               <li>
@@ -134,7 +137,6 @@ export default function Navbar() {
             </>
           )}
 
-          {/* Mobile Search */}
           <li>
             <div className="mobile-search">
               <Search size={18} />

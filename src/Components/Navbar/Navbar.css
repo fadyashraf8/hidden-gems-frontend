@@ -2,37 +2,64 @@
   /* ==== LIGHT MODE COLORS ==== */
   --lm-bg: rgba(255, 255, 255, 0.8); /* navbar background */
   --lm-accent: #dd0303; /* buttons, sticky navbar */
-  --lm-glass: rgba(255, 255, 255, 0.4); 
 
-  --text-light: #000000;
-  --border-light: #d1d5db;
+  --lm-text: #000000;
 
   /* ==== DARK MODE COLORS ==== */
-  --dm-bg: rgba(0, 0, 0, 0.4); 
-  --dm-accent: #ff6500; 
-  --dm-glass: rgba(255, 255, 255, 0.15); 
+  --dm-bg: #060b15;
+  --dm-card-bg: #131620;
+  --dm-accent: #ff6500;
 
-  --text-dark: #ffffff;
-  --border-dark: rgba(255, 255, 255, 0.3);
+  --dm-text: #ffffff;
+  --dm-subtext: #999ba8;
 }
 
 /* ============ GLOBAL DARK MODE ============ */
 .dark-mode {
-  background: #080808;
-  color: var(--text-dark);
+  background: var(--dm-bg);
+  color: var(--dm-text);
 }
 
 .dark-mode .navbar {
-  background: var(--dm-bg);
-  color: var(--text-dark);
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--dm-text);
 }
 
 .dark-mode a,
 .dark-mode input {
-  color: var(--text-dark) !important;
+  color: var(--dm-text) !important;
 }
 
-/* Glass elements */
+.dark-mode footer {
+  background: var(--dm-bg);
+}
+
+.dark-mode .cat-mui {
+  background: var(--dm-card-bg);
+}
+
+.dark-mode .cat-mui svg {
+  color: #ff6500;
+}
+
+.dark-mode .card-res {
+  background: var(--dm-card-bg);
+  color: var(--dm-text);
+}
+
+.dark-mode .card-res p {
+  color: var(--dm-subtext);
+  background: var(--dm-card-bg);
+}
+
+.dark-mode .card-res svg {
+  color: var(--dm-subtext);
+}
+
+.dark-mode .card-res svg:hover {
+  color: var(--dm-accent);
+}
+
 .dark-mode .search-box,
 .dark-mode .mobile-search,
 .dark-mode .icon-btn,
