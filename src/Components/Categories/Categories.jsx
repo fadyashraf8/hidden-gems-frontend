@@ -11,7 +11,7 @@ const CUBE_SIZE = 140; // MODIFIED: Increased size for a bigger cube
 
 const CategoryItem = ({ Icon, label }) => (
     // PINPOINT 4: Added 3D Hover/Shadow Effect
-    <Box 
+    <Box  className="cat-mui"
         sx={{ 
             // MODIFIED: Increased width/height to the new CUBE_SIZE
             width: CUBE_SIZE, 

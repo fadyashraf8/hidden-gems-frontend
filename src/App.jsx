@@ -31,6 +31,8 @@ import Advertising from "./Pages/Footer/Business/Advertising";
 import Partners from "./Pages/Footer/Business/Partners";
 import SignUp from "./Pages/signUp/signUp";
 import Login from "./Pages/Login/Login";
+import ForgetPassword from "./Pages/ForgetPassword/ForgetPassword";
+import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 // Protect routes
 
 
@@ -44,7 +46,6 @@ function App() {
       children: [
         { index: true, element: <Home /> },
         { path: "home", element: <Home /> },
-
 
         {
           path: "about",
@@ -60,7 +61,6 @@ function App() {
           ],
         },
 
-
         {
           path: "discover",
           element: <DiscoverLayout />,
@@ -72,7 +72,6 @@ function App() {
             { path: "cities", element: <Cities /> },
           ],
         },
-
 
         {
           path: "business",
@@ -87,14 +86,18 @@ function App() {
         },
 
         // Login Page
-        { path: "signUp", element: <SignUp/> },
-        { path: "login", element: <Login/> },
+        { path: "signUp", element: <SignUp /> },
+        { path: "login", element: <Login />, },
+        { path: "forget", element: <ForgetPassword /> },
+        {path:"reset", element:<ResetPassword/>}
+      
+    
+        
       ],
     },
   ]);
 
 
-  return <RouterProvider router={router} />;
 
   return (
     <div className={dark ? "dark-mode" : ""}>

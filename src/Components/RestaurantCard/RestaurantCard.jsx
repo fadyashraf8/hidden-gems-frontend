@@ -84,7 +84,7 @@ export default function ReviewCard() {
     const REVIEW_RED_COLOR = '#E74C3C';
 
     return (
-        <Card sx={{ maxWidth: 345, margin: '0 auto', boxShadow: 3 }}>
+        <Card className='card-res' sx={{ maxWidth: 345, margin: '0 auto', boxShadow: 3 }}>
             
             <CardHeader title="Jinha K. wrote a review" action={<Typography variant="caption">1 hour ago</Typography>} />
             <CardMedia component="img" height="194" image="https://via.placeholder.com/345x194" alt="Review photo" />
