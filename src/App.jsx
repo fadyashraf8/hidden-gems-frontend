@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 
 import Home from "./Pages/Home/Home";
 import Layout from "./Components/Layout/Layout";
+import Admin from "./Pages/Admin/Admin";
 
 import AboutLayout from "./Components/Layout/AboutLayout/AboutLayout";
 import AboutUs from "./Pages/Footer/About/AboutUs";
@@ -89,10 +90,9 @@ function App() {
         { path: "signUp", element: <SignUp /> },
         { path: "login", element: <Login />, },
         { path: "forget", element: <ForgetPassword /> },
-        {path:"reset", element:<ResetPassword/>}
-      
-    
-        
+        { path: "reset", element: <ResetPassword /> },
+        // Admin Dashboard
+        { path: "admin", element: <Admin /> },
       ],
     },
   ]);
