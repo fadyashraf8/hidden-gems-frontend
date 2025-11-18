@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
 const ForgetPassword = () => {
-  const navigate = useNavigate(); // 👈 تهيئة navigate
+  const navigate = useNavigate(); 
   const [isLoading, setIsLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
@@ -40,10 +40,9 @@ const ForgetPassword = () => {
         return;
       }
 
-      // عرض رسالة النجاح
       setSuccessMsg(json.message || "Request sent successfully");
 
-      // توجيه تلقائي بعد ثانيتين
+   
       setTimeout(() => {
         navigate("/reset");
       }, 2000);
@@ -70,14 +69,7 @@ const ForgetPassword = () => {
           />
 
           {/* Old password */}
-          <Input
-            isInvalid={Boolean(errors.password?.message)}
-            errorMessage={errors.password?.message}
-            variant="bordered"
-            label="Old Password"
-            type="password"
-            {...register("password", { required: "Password is required" })}
-          />
+        
 
           {/* Submit button */}
           <Button

@@ -44,7 +44,7 @@ const LoginPage = () => {
       seterrMsg(data?.message || data?.error || "error");
     } catch (err) {
       setisloading(false);
-      seterrMsg(err?.message || "un expected error");
+      seterrMsg(err?.message || "unexpected error");
       console.error("Login error:", err);
     }
   }

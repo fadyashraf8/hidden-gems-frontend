@@ -9,6 +9,7 @@ import "./Navbar.css";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
+  const [user, setUser] = useState(null); // ← الجديد
   const dropdownRef = useRef(null);
 
   const dispatch = useDispatch();
@@ -17,6 +18,38 @@ export default function Navbar() {
 
   const { isloggedin, setisloggedin } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // ====== Fetch user data from /auth/me  ======
+useEffect(() => {
+  if (!isloggedin) return;
+
+  async function fetchUser() {
+    try {
+      const res = await fetch("http://localhost:3000/auth/me", {
+        credentials: "include",
+      });
+
+      if (!res) {
+        console.error("No response from server");
+        return;
+      }
+
+      if (!res.ok) {
+        console.error("Failed to fetch user, status:", res.status);
+        return;
+      }
+
+      const data = await res.json();
+      setUser(data.user); // نجيب الـ user مباشرة
+    } catch (err) {
+      console.error("Failed to fetch user", err);
+    }
+  }
+
+  fetchUser();
+}, [isloggedin]);
+
+  // ============================================
 
   // Sticky navbar on scroll
   useEffect(() => {
@@ -52,11 +85,25 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("userToken");
-    setisloggedin(false);
-    setUserDropdown(false);
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        console.error("Logout failed");
+        return;
+      }
+
+      setisloggedin(false);
+      setUserDropdown(false);
+      setUser(null);
+      navigate("/");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -106,9 +153,28 @@ export default function Navbar() {
                 onClick={() => setUserDropdown(!userDropdown)}
               >
                 <User size={20} />
+
+                {/* ==== عرض اسم اليوزر هنا ==== */}
+                {user && (
+                  <p style={{ marginLeft: "6px" }}>
+                    {user.firstName }
+                  </p>
+                )}
               </button>
+
               {userDropdown && (
                 <div className="user-dropdown-menu">
+                  {user && (
+                    <p
+                      style={{
+                        
+                        padding: "8px 10px",
+                        opacity: 0.8,
+                      }}
+                    >
+                      Hi {user.firstName}
+                    </p>
+                  )}
                   <button onClick={() => navigate("/profile")}>Profile</button>
                   <button onClick={handleLogout}>Sign Out</button>
                 </div>
@@ -154,3 +220,4 @@ export default function Navbar() {
     </nav>
   );
 }
+
