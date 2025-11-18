@@ -6,6 +6,8 @@ import './index.css'
 import App from './App.jsx'
 import { HeroUIProvider } from "@heroui/react";
 import AuthContextProvider from "./Context/authContext.jsx";
+import './i18n.js';
+
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <HeroUIProvider>
