@@ -9,7 +9,7 @@ import "./Navbar.css";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
-  const [user, setUser] = useState(null); // ← الجديد
+  const [user, setUser] = useState(null); 
   const dropdownRef = useRef(null);
 
   const dispatch = useDispatch();
@@ -154,7 +154,7 @@ useEffect(() => {
               >
                 <User size={20} />
 
-                {/* ==== عرض اسم اليوزر هنا ==== */}
+               
                 {user && (
                   <p style={{ marginLeft: "6px" }}>
                     {user.firstName }
