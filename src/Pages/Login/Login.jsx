@@ -36,7 +36,6 @@ const LoginPage = () => {
         data &&
         (data.message === "Login successful" || data.message === "success")
       ) {
-        localStorage.setItem("userToken", "true");
         setisloggedin(true);
         navigate("/", { replace: true });
         return;
