@@ -1,34 +1,36 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 
 const Footer = () => {
+  const { t } = useTranslation()
   const aboutLinks = [
-    {
-      name: "About Us",
-      to: "/about/aboutUS",
-    },
-    { name: "Careers", to: "/about/careers" },
-    { name: "Content Guidelines", to: "/about/content" },
-    { name: "Terms of Service", to: "/about/terms" },
-    { name: "Privacy Policy", to: "/about/privacy" },
+  { 
+    name: "link_about_us",
+    to: "/about/aboutUS",
+  },
+  { name: "link_careers", to: "/about/careers" }, 
+  { name: "link_content_guidelines", to: "/about/content" },
+  { name: "link_terms_of_service", to: "/about/terms" },
+  { name: "link_privacy_policy", to: "/about/privacy" },
   ];
 
-  const discoverLinks = [
-    { name: "Blog", to: "/discover/blog" },
-    { name: "Support", to: "/discover/support" },
-    {
-      name: "Explore Cities",
-      to: "/discover/cities",
-    },
-    { name: "Hidden", to: "/discover/Hidden" },
-  ];
+const discoverLinks = [
+  { name: "link_blog", to: "/discover/blog" },
+  { name: "link_support", to: "/discover/support" },
+  {
+    name: "link_explore_cities",
+    to: "/discover/cities",
+  },
+  { name: "link_hidden", to: "/discover/Hidden" },
+];
 
-  const businessLinks = [
-    { name: "For Businesses", to: "/business/business" },
-    { name: "Add Your Place", to: "/business/addPlace" },
-    { name: "Advertising", to: "/business/advertising" },
-    { name: "Partner With Us", to: "/business/partners" },
-  ];
+const businessLinks = [
+  { name: "link_for_businesses", to: "/business/business" },
+  { name: "link_add_your_place", to: "/business/addPlace" },
+  { name: "link_advertising", to: "/business/advertising" },
+  { name: "link_partner_with_us", to: "/business/partners" },
+];
 
   const linkStyle =
     "block py-2 px-3 rounded transition-all duration-200 hover:bg-gray-100 hover:border-l-4 hover:border-[#DD0303] hover:text-[#DD0303] hover:font-medium hover:pl-4";
@@ -39,13 +41,13 @@ const Footer = () => {
         {/* About */}
         <div>
           <h3 className="text-[#DD0303] font-semibold mb-5 text-base uppercase tracking-wide">
-            About
+            {t('footer_about_title')}
           </h3>
           <ul className="space-y-1">
             {aboutLinks.map((link) => (
               <li key={link.name}>
                 <NavLink to={link.to} className={linkStyle}>
-                  {link.name}
+                  {t(link.name)}
                 </NavLink>
               </li>
             ))}
@@ -55,13 +57,13 @@ const Footer = () => {
         {/* Discover */}
         <div>
           <h3 className="text-[#DD0303] font-semibold mb-5 text-base uppercase tracking-wide">
-            Discover
+            {t('footer_discover_title')}
           </h3>
           <ul className="space-y-1">
             {discoverLinks.map((link) => (
               <li key={link.name}>
                 <NavLink to={link.to} className={linkStyle}>
-                  {link.name}
+                  {t(link.name)}
                 </NavLink>
               </li>
             ))}
@@ -71,13 +73,13 @@ const Footer = () => {
         {/* For Businesses */}
         <div>
           <h3 className="text-[#DD0303] font-semibold mb-5 text-base uppercase tracking-wide">
-            For Businesses
+            {t('footer_business_title')}
           </h3>
           <ul className="space-y-1">
             {businessLinks.map((link) => (
               <li key={link.name}>
                 <NavLink to={link.to} className={linkStyle}>
-                  {link.name}
+                  {t(link.name)}
                 </NavLink>
               </li>
             ))}
