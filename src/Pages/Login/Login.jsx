@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../../Context/AuthContext";
 
 const LoginPage = () => {
-  const { setisloggedin } = useContext(AuthContext);
+  const { setisloggedin, setUser } = useContext(AuthContext);
 
   const [isloading, setisloading] = useState(false);
   const [errMsg, seterrMsg] = useState("");
@@ -37,6 +37,18 @@ const LoginPage = () => {
         (data.message === "Login successful" || data.message === "success")
       ) {
         setisloggedin(true);
+        // Fetch user info after login
+        try {
+          const res = await fetch("http://localhost:3000/auth/me", {
+            credentials: "include",
+          });
+          if (res.ok) {
+            const userData = await res.json();
+            setUser(userData.user);
+          }
+        } catch (e) {
+          // fallback: don't set user
+        }
         navigate("/", { replace: true });
         return;
       }

@@ -9,45 +9,45 @@ import "./Navbar.css";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
-  const [user, setUser] = useState(null); 
+  const { isloggedin, setisloggedin, user, setUser } = useContext(AuthContext);
   const dropdownRef = useRef(null);
 
   const dispatch = useDispatch();
   const dark = useSelector((state) => state.darkMode.enabled);
   const handleDarkToggle = () => dispatch(toggleDarkMode());
 
-  const { isloggedin, setisloggedin } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // ====== Fetch user data from /auth/me  ======
-useEffect(() => {
-  if (!isloggedin) return;
+  useEffect(() => {
+    if (!isloggedin) return;
 
-  async function fetchUser() {
-    try {
-      const res = await fetch("http://localhost:3000/auth/me", {
-        credentials: "include",
-      });
+    async function fetchUser() {
+      try {
+        const res = await fetch("http://localhost:3000/auth/me", {
+          credentials: "include",
+        });
 
-      if (!res) {
-        console.error("No response from server");
-        return;
+        if (!res) {
+          console.error("No response from server");
+          return;
+        }
+
+        if (!res.ok) {
+          console.error("Failed to fetch user, status:", res.status);
+          return;
+        }
+
+        const data = await res.json();
+        setUser(data.user);
+      } catch (err) {
+        console.error("Failed to fetch user", err);
       }
-
-      if (!res.ok) {
-        console.error("Failed to fetch user, status:", res.status);
-        return;
-      }
-
-      const data = await res.json();
-      setUser(data.user); // نجيب الـ user مباشرة
-    } catch (err) {
-      console.error("Failed to fetch user", err);
     }
-  }
 
-  fetchUser();
-}, [isloggedin]);
+    fetchUser();
+    // eslint-disable-next-line
+  }, [isloggedin]);
 
   // ============================================
 
@@ -176,6 +176,9 @@ useEffect(() => {
                     </p>
                   )}
                   <button onClick={() => navigate("/profile")}>Profile</button>
+                  {user && user.role === "admin" && (
+                    <button onClick={() => navigate("/admin")}>Admin Dashboard</button>
+                  )}
                   <button onClick={handleLogout}>Sign Out</button>
                 </div>
               )}

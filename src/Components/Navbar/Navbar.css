@@ -39,7 +39,11 @@
 }
 
 .dark-mode .cat-mui svg {
-  color: #ff6500;
+  color: var(--dm-text);
+}
+
+.dark-mode .cat-mui span {
+  color: var(--dm-subtext);
 }
 
 .dark-mode .card-res {
