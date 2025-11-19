@@ -12,7 +12,7 @@ import { checkAuth } from "./redux/userSlice";
 import Home from "./Pages/Home/Home";
 import Layout from "./Components/Layout/Layout";
 import Admin from "./Pages/Admin/Admin";
-
+import { Toaster } from "react-hot-toast";
 import AboutLayout from "./Components/Layout/AboutLayout/AboutLayout";
 import AboutUs from "./Pages/Footer/About/AboutUs";
 import Careers from "./Pages/Footer/About/Careers";
@@ -36,6 +36,16 @@ import SignUp from "./Pages/signUp/signUp";
 import Login from "./Pages/Login/Login";
 import ForgetPassword from "./Pages/ForgetPassword/ForgetPassword";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
+import UserProfile from "./Pages/UserProfile/UserProfile";
+import NotFoundPage from "./Pages/NotFound/NotFoundPage";
+import ProtectedAuthRoutes from './ProtectedRoutes/ProtectedAuthRoutes';
+import AuthLayout from './Components/Layout/AuthLayout';
+import MainLayout from './Components/Layout/MainLayout';
+import ProtectedRoutes from './ProtectedRoutes/ProtectedRoutes';
+
+
+
+
 
 function App() {
   const dark = useSelector((state) => state.darkMode.enabled);
@@ -92,12 +102,65 @@ function App() {
         },
 
         // Login Page
-        { path: "signUp", element: <SignUp /> },
-        { path: "login", element: <Login />, },
-        { path: "forget", element: <ForgetPassword /> },
-        { path: "reset", element: <ResetPassword /> },
+        {
+          path: "/",
+          element: <MainLayout></MainLayout>,
+          children: [
+            {
+              path: "profile",
+              element: (
+                <ProtectedRoutes>
+                  <UserProfile></UserProfile>
+                </ProtectedRoutes>
+              ),
+            },
+          ],
+        },
+
+
+        {
+          path: "/",
+          element: <AuthLayout></AuthLayout>,
+          children: [
+            {
+              path: "signUp",
+              element: (
+                <ProtectedAuthRoutes>
+                  <SignUp></SignUp>
+                </ProtectedAuthRoutes>
+              ),
+            },
+            {
+              path: "login",
+              element: (
+                <ProtectedAuthRoutes>
+                  <Login></Login>
+                </ProtectedAuthRoutes>
+              ),
+            },
+            {
+              path: "forget",
+              element: (
+                <ProtectedAuthRoutes>
+                  <ForgetPassword></ForgetPassword>
+                </ProtectedAuthRoutes>
+              ),
+            },
+            {
+              path: "reset",
+              element: (
+                <ProtectedAuthRoutes>
+                  <ResetPassword></ResetPassword>
+                </ProtectedAuthRoutes>
+              ),
+            },
+          ],
+        },
         // Admin Dashboard
         { path: "admin", element: <Admin /> },
+
+        // 404 Page
+        { path: "*", element: <NotFoundPage /> },
       ],
     },
   ]);
@@ -106,6 +169,43 @@ function App() {
 
   return (
     <div className={dark ? "dark-mode" : ""}>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+
+          // 🔴 ERROR STYLE
+          error: {
+            style: {
+              background: "#DD0303",
+              color: "white",
+              borderRadius: "12px",
+              padding: "14px 18px",
+              fontSize: "15px",
+            },
+            iconTheme: {
+              primary: "white",
+              secondary: "#DD0303",
+            },
+          },
+
+          // 🟢 SUCCESS STYLE
+          success: {
+            style: {
+              background: "#22c55e", // Tailwind green-500
+              color: "white",
+              borderRadius: "12px",
+              padding: "14px 18px",
+              fontSize: "15px",
+            },
+            iconTheme: {
+              primary: "white",
+              secondary: "#22c55e",
+            },
+          },
+        }}
+      />
+
       <RouterProvider router={router} />
     </div>
   );
