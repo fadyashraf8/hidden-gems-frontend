@@ -37,23 +37,8 @@ import ForgetPassword from "./Pages/ForgetPassword/ForgetPassword";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import UserProfile from "./Pages/UserProfile/UserProfile";
 import NotFoundPage from "./Pages/NotFound/NotFoundPage";
-import ProtectedAuthRoutes from './ProtectedRoutes/ProtectedAuthRoutes';
-import AuthLayout from './Components/Layout/AuthLayout';
-import MainLayout from './Components/Layout/MainLayout';
-import ProtectedRoutes from './ProtectedRoutes/ProtectedRoutes';
-
-
-
-
-
-import ProtectedRoute from "./Components/Auth/ProtectedRoute";
-import PublicRoute from "./Components/Auth/PublicRoute";
-
-import ProtectedRoute from "./Components/Auth/ProtectedRoute";
-import PublicRoute from "./Components/Auth/PublicRoute";
-
-import ProtectedRoute from "./Components/Auth/ProtectedRoute";
-import PublicRoute from "./Components/Auth/PublicRoute";
+import AuthLayout from "./Components/Layout/AuthLayout";
+import MainLayout from "./Components/Layout/MainLayout";
 
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import PublicRoute from "./Components/Auth/PublicRoute";
@@ -119,27 +104,23 @@ function App() {
           ],
         },
 
-        // Login Page
+        // User Profile
         {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
           path: "/",
           element: <MainLayout></MainLayout>,
           children: [
             {
               path: "profile",
               element: (
-                <ProtectedRoutes>
+                <ProtectedRoute>
                   <UserProfile></UserProfile>
-                </ProtectedRoutes>
+                </ProtectedRoute>
               ),
             },
           ],
         },
 
-
+        // Auth Pages
         {
           path: "/",
           element: <AuthLayout></AuthLayout>,
@@ -147,177 +128,39 @@ function App() {
             {
               path: "signUp",
               element: (
-                <ProtectedAuthRoutes>
+                <PublicRoute>
                   <SignUp></SignUp>
-                </ProtectedAuthRoutes>
+                </PublicRoute>
               ),
             },
             {
               path: "login",
               element: (
-                <ProtectedAuthRoutes>
+                <PublicRoute>
                   <Login></Login>
-                </ProtectedAuthRoutes>
+                </PublicRoute>
               ),
             },
             {
               path: "forget",
               element: (
-                <ProtectedAuthRoutes>
+                <PublicRoute>
                   <ForgetPassword></ForgetPassword>
-                </ProtectedAuthRoutes>
+                </PublicRoute>
               ),
             },
             {
               path: "reset",
               element: (
-                <ProtectedAuthRoutes>
+                <PublicRoute>
                   <ResetPassword></ResetPassword>
-                </ProtectedAuthRoutes>
+                </PublicRoute>
               ),
             },
           ],
         },
-        // Admin Dashboard
-        { path: "admin", element: <Admin /> },
 
-        // 404 Page
-        { path: "*", element: <NotFoundPage /> },
-=======
-          path: "signUp",
-          element: (
-            <PublicRoute>
-              <SignUp />
-            </PublicRoute>
-          ),
-        },
-        {
-          path: "login",
-          element: (
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          ),
-        },
-        {
-          path: "forget",
-          element: (
-            <PublicRoute>
-              <ForgetPassword />
-            </PublicRoute>
-          ),
-        },
-        {
-          path: "reset",
-          element: (
-            <PublicRoute>
-              <ResetPassword />
-            </PublicRoute>
-          ),
-        },
         // Admin Dashboard
-=======
-          path: "signUp",
-          element: (
-            <PublicRoute>
-              <SignUp />
-            </PublicRoute>
-          ),
-        },
-        {
-          path: "login",
-          element: (
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          ),
-        },
-        {
-          path: "forget",
-          element: (
-            <PublicRoute>
-              <ForgetPassword />
-            </PublicRoute>
-          ),
-        },
-        {
-          path: "reset",
-          element: (
-            <PublicRoute>
-              <ResetPassword />
-            </PublicRoute>
-          ),
-        },
-        // Admin Dashboard
->>>>>>> Stashed changes
-=======
-          path: "signUp",
-          element: (
-            <PublicRoute>
-              <SignUp />
-            </PublicRoute>
-          ),
-        },
-        {
-          path: "login",
-          element: (
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          ),
-        },
-        {
-          path: "forget",
-          element: (
-            <PublicRoute>
-              <ForgetPassword />
-            </PublicRoute>
-          ),
-        },
-        {
-          path: "reset",
-          element: (
-            <PublicRoute>
-              <ResetPassword />
-            </PublicRoute>
-          ),
-        },
-        // Admin Dashboard
->>>>>>> Stashed changes
-=======
-          path: "signUp",
-          element: (
-            <PublicRoute>
-              <SignUp />
-            </PublicRoute>
-          ),
-        },
-        {
-          path: "login",
-          element: (
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          ),
-        },
-        {
-          path: "forget",
-          element: (
-            <PublicRoute>
-              <ForgetPassword />
-            </PublicRoute>
-          ),
-        },
-        {
-          path: "reset",
-          element: (
-            <PublicRoute>
-              <ResetPassword />
-            </PublicRoute>
-          ),
-        },
-        // Admin Dashboard
->>>>>>> Stashed changes
         {
           path: "admin",
           element: (
@@ -326,16 +169,9 @@ function App() {
             </ProtectedRoute>
           ),
         },
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
+        // 404 Page
+        { path: "*", element: <NotFoundPage /> },
       ],
     },
   ]);
