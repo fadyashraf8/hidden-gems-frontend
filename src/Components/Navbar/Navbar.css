@@ -25,6 +25,40 @@
   color: var(--dm-text);
 }
 
+.dark-mode .navbar.sticky {
+  background-color: var(--dm-accent);
+}
+
+.dark-mode .navbar.sticky .login-btn {
+  background: var(--dm-bg);
+}
+
+.dark-mode .navbar.sticky a:hover {
+  background: var(--dm-text);
+  color: #000000 !important;
+}
+
+.dark-mode .navbar.sticky .signup-btn {
+  background: var(--dm-text);
+  color: #000000 !important;
+}
+
+.dark-mode .navbar.sticky .signup-btn:hover {
+  background: var(--dm-bg);
+  color: var(--dm-text) !important;
+}
+
+.dark-mode .search-box,
+.dark-mode .mobile-search,
+.dark-mode .icon-btn,
+.dark-mode .hamburger {
+  background: var(--dm-glass);
+  border-color: var(--border-dark);
+}
+.dark-mode .auth-btn {
+  background: var(--dm-accent);
+}
+
 .dark-mode a,
 .dark-mode input {
   color: var(--dm-text) !important;
@@ -62,19 +96,6 @@
 
 .dark-mode .card-res svg:hover {
   color: var(--dm-accent);
-}
-
-.dark-mode .search-box,
-.dark-mode .mobile-search,
-.dark-mode .icon-btn,
-.dark-mode .hamburger {
-  background: var(--dm-glass);
-  border-color: var(--border-dark);
-}
-
-/* Dark mode sticky */
-body.dark-mode .navbar.sticky {
-  background-color: var(--dm-accent);
 }
 
 /* ============ NAVBAR BASE ============ */
