@@ -49,6 +49,9 @@ import ProtectedRoutes from './ProtectedRoutes/ProtectedRoutes';
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import PublicRoute from "./Components/Auth/PublicRoute";
 
+import ProtectedRoute from "./Components/Auth/ProtectedRoute";
+import PublicRoute from "./Components/Auth/PublicRoute";
+
 function App() {
   const dark = useSelector((state) => state.darkMode.enabled);
   const dispatch = useDispatch();
@@ -112,6 +115,7 @@ function App() {
 
         // Login Page
         {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
           path: "/",
           element: <MainLayout></MainLayout>,
@@ -204,6 +208,40 @@ function App() {
           ),
         },
         // Admin Dashboard
+=======
+          path: "signUp",
+          element: (
+            <PublicRoute>
+              <SignUp />
+            </PublicRoute>
+          ),
+        },
+        {
+          path: "login",
+          element: (
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          ),
+        },
+        {
+          path: "forget",
+          element: (
+            <PublicRoute>
+              <ForgetPassword />
+            </PublicRoute>
+          ),
+        },
+        {
+          path: "reset",
+          element: (
+            <PublicRoute>
+              <ResetPassword />
+            </PublicRoute>
+          ),
+        },
+        // Admin Dashboard
+>>>>>>> Stashed changes
         {
           path: "admin",
           element: (
@@ -212,6 +250,9 @@ function App() {
             </ProtectedRoute>
           ),
         },
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       ],
     },
