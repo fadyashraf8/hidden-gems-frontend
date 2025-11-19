@@ -1,8 +1,8 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Menu, X, Search, User, Moon, Sun } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDarkMode } from "../../redux/darkModeSlice";
-import AuthContext from "../../Context/AuthContext";
+import { logoutUser } from "../../redux/userSlice";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { useTranslation } from "react-i18next";
@@ -12,47 +12,16 @@ export default function Navbar() {
   const { t, i18n } = useTranslation()
   const [isOpen, setIsOpen] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
-  const { isloggedin, setisloggedin, user, setUser } = useContext(AuthContext);
+  
+  const { isLoggedIn: isloggedin, userInfo: user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  
   const dropdownRef = useRef(null);
 
-  const dispatch = useDispatch();
   const dark = useSelector((state) => state.darkMode.enabled);
   const handleDarkToggle = () => dispatch(toggleDarkMode());
 
   const navigate = useNavigate();
-
-  // ====== Fetch user data from /auth/me  ======
-  useEffect(() => {
-    if (!isloggedin) return;
-
-    async function fetchUser() {
-      try {
-        const res = await fetch("http://localhost:3000/auth/me", {
-          credentials: "include",
-        });
-
-        if (!res) {
-          console.error("No response from server");
-          return;
-        }
-
-        if (!res.ok) {
-          console.error("Failed to fetch user, status:", res.status);
-          return;
-        }
-
-        const data = await res.json();
-        setUser(data.user);
-      } catch (err) {
-        console.error("Failed to fetch user", err);
-      }
-    }
-
-    fetchUser();
-    // eslint-disable-next-line
-  }, [isloggedin]);
-
-  // ============================================
 
   // Sticky navbar on scroll
   useEffect(() => {
@@ -90,19 +59,8 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch("http://localhost:3000/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (!res.ok) {
-        console.error("Logout failed");
-        return;
-      }
-
-      setisloggedin(false);
+      await dispatch(logoutUser()).unwrap();
       setUserDropdown(false);
-      setUser(null);
       navigate("/");
     } catch (error) {
       console.error("Logout error:", error);

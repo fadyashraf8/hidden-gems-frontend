@@ -5,7 +5,9 @@ import {
   RouterProvider,
   Navigate,
 } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { checkAuth } from "./redux/userSlice";
 
 import Home from "./Pages/Home/Home";
 import Layout from "./Components/Layout/Layout";
@@ -34,11 +36,14 @@ import SignUp from "./Pages/signUp/signUp";
 import Login from "./Pages/Login/Login";
 import ForgetPassword from "./Pages/ForgetPassword/ForgetPassword";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
-// Protect routes
-
 
 function App() {
   const dark = useSelector((state) => state.darkMode.enabled);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
 
   const router = createBrowserRouter([
     {

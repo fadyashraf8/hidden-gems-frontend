@@ -1,27 +1,30 @@
-import React, { useEffect, useState, useContext } from "react";
-import AuthContext from "../../Context/AuthContext";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import "./Admin.css";
 
 export default function Admin() {
-  const { user, isloggedin } = useContext(AuthContext);
+  const { userInfo: user, isLoggedIn: isloggedin } = useSelector((state) => state.user);
+
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
   const [showModal, setShowModal] = useState(false);
   const [newUser, setNewUser] = useState({
     firstName: "",
     lastName: "",
-    phoneNumber: "", // Adjusted position of phoneNumber
+    phoneNumber: "",
     email: "",
     password: "",
-    image: null, // Added image field
+    image: null,
   });
+  const [formErrors, setFormErrors] = useState({});
 
-  // State for editing user
   const [editUser, setEditUser] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [editFormErrors, setEditFormErrors] = useState({});
 
-  // Fetch all users
+  // Fetch users
   useEffect(() => {
     async function fetchUsers() {
       setLoading(true);
@@ -41,42 +44,47 @@ export default function Admin() {
     fetchUsers();
   }, []);
 
-  // Create user
+  // ==================== CREATE USER ====================
+  const validateNewUser = () => {
+    const errors = {};
+    if (!newUser.firstName) errors.firstName = "First name is required";
+    if (!newUser.lastName) errors.lastName = "Last name is required";
+    if (!newUser.phoneNumber) errors.phoneNumber = "Phone number is required";
+    if (!newUser.email) errors.email = "Email is required";
+    if (!newUser.password) errors.password = "Password is required";
+    return errors;
+  };
+
   const handleCreateUser = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
-    console.log("Creating user with data:", newUser); // Debugging log
+    e.preventDefault();
+    const errors = validateNewUser();
+    setFormErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+
     try {
       const formData = new FormData();
-      formData.append("firstName", newUser.firstName);
-      formData.append("lastName", newUser.lastName);
-      formData.append("phoneNumber", newUser.phoneNumber);
-      formData.append("email", newUser.email);
-      formData.append("password", newUser.password);
-      if (newUser.image) {
-        formData.append("image", newUser.image);
-      }
+      Object.entries(newUser).forEach(([key, value]) => {
+        if (value) formData.append(key, value);
+      });
 
       const res = await fetch("http://localhost:3000/auth/signUp", {
         method: "POST",
         credentials: "include",
         body: formData,
       });
-      console.log("Response status:", res.status); // Debugging log
-      if (!res.ok) {
-        const errorData = await res.json();
-        console.error("Backend error details:", errorData);
-        throw new Error("Failed to create user");
-      }
+
       const data = await res.json();
-      console.log("User created successfully:", data); // Debugging log
 
-      // Ensure the new user object has all required properties
-      if (data.result && data.result._id) {
-        setUsers((prev) => [...prev, data.result]);
-      } else {
-        console.error("Invalid user data returned from API:", data);
+      if (!res.ok) {
+        if (data.errors) {
+          setFormErrors(data.errors); // backend field errors
+        } else {
+          throw new Error(data.message || "Failed to create user");
+        }
+        return;
       }
 
+      setUsers((prev) => [...prev, data.result]);
       setShowModal(false);
       setNewUser({
         firstName: "",
@@ -86,85 +94,89 @@ export default function Admin() {
         password: "",
         image: null,
       });
+      setFormErrors({});
     } catch (err) {
-      console.error("Error creating user:", err); // Debugging log
       alert(err.message);
     }
   };
 
-  // Function to delete a user
+  // ==================== DELETE USER ====================
   const handleDeleteUser = async (userId) => {
     try {
       const res = await fetch(`http://localhost:3000/users/${userId}`, {
         method: "DELETE",
         credentials: "include",
       });
-
       if (!res.ok) {
-        const errorData = await res.json();
-        console.error("Error deleting user:", errorData);
-        throw new Error("Failed to delete user");
+        const data = await res.json();
+        throw new Error(data.message || "Failed to delete user");
       }
-
-      setUsers((prev) => prev.filter((user) => user._id !== userId));
-      console.log("User deleted successfully");
+      setUsers((prev) => prev.filter((u) => u._id !== userId));
     } catch (err) {
-      console.error("Error deleting user:", err);
       alert(err.message);
     }
   };
 
-  // Function to edit a user
+  // ==================== EDIT USER ====================
   const openEditModal = (user) => {
     setEditUser(user);
+    setEditFormErrors({});
     setShowEditModal(true);
   };
 
   const handleEditUserSubmit = async (e) => {
     e.preventDefault();
+    const errors = {};
+    if (!editUser.phoneNumber) errors.phoneNumber = "Phone number is required";
+    if (!editUser.email) errors.email = "Email is required";
+    setEditFormErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+
     const allowedUpdates = ["phoneNumber", "email", "password", "image"];
-    const payload = {};
-    allowedUpdates.forEach((key) => {
-        if (editUser[key] !== undefined) payload[key] = editUser[key];
-    });
-    // In handleEditUserSubmit, use FormData if image or password is present
+    let body, headers;
     const isFile = editUser.image instanceof File;
     const isPassword = !!editUser.password;
-    let body, headers;
+
     if (isFile || isPassword) {
-        body = new FormData();
-        allowedUpdates.forEach((key) => {
-            if (editUser[key] !== undefined && editUser[key] !== "") {
-                if (key === "image" && isFile) {
-                    body.append("image", editUser.image);
-                } else {
-                    body.append(key, editUser[key]);
-                }
-            }
-        });
-        headers = undefined; // Let browser set multipart/form-data
-    } else {
-        body = JSON.stringify(payload);
-        headers = { "Content-Type": "application/json" };
-    }
-    try {
-        const res = await fetch(`http://localhost:3000/users/${editUser._id}`, {
-            method: "PUT",
-            headers,
-            credentials: "include",
-            body,
-        });
-        if (!res.ok) {
-            const errorData = await res.json();
-            console.error("Error editing user:", errorData);
-            throw new Error("Failed to edit user");
+      body = new FormData();
+      allowedUpdates.forEach((key) => {
+        if (editUser[key]) {
+          if (key === "image" && isFile) body.append("image", editUser.image);
+          else body.append(key, editUser[key]);
         }
-        const data = await res.json();
-        setUsers((prev) => prev.map((user) => (user._id === editUser._id ? data.result : user)));
-        setShowEditModal(false);
+      });
+      headers = undefined;
+    } else {
+      const payload = {};
+      allowedUpdates.forEach((key) => {
+        if (editUser[key] !== undefined) payload[key] = editUser[key];
+      });
+      body = JSON.stringify(payload);
+      headers = { "Content-Type": "application/json" };
+    }
+
+    try {
+      const res = await fetch(`http://localhost:3000/users/${editUser._id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers,
+        body,
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        if (data.errors) setEditFormErrors(data.errors);
+        else throw new Error(data.message || "Failed to edit user");
+        return;
+      }
+
+      setUsers((prev) =>
+        prev.map((u) => (u._id === editUser._id ? data.result : u))
+      );
+      setShowEditModal(false);
+      setEditFormErrors({});
     } catch (err) {
-        console.error("Error editing user:", err);
-        alert(err.message);
+      alert(err.message);
     }
   };
 
@@ -175,183 +187,190 @@ export default function Admin() {
   }
 
   return (
-    <div className="admin-dashboard">
-      <h1 className="admin-title">Admin Dashboard</h1>
-      <h2 className="admin-subtitle">User Management</h2>
-      {loading ? (
-        <p className="admin-loading">Loading users...</p>
-      ) : error ? (
-        <p className="admin-error">{error}</p>
-      ) : (
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone Number</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((u) => (
-                u && u._id ? (
+    <div className="admin-page">
+      <div className="admin-dashboard">
+        <h1 className="admin-title">Admin Dashboard</h1>
+        <h2 className="admin-subtitle">User Management</h2>
+
+        {loading ? (
+          <p className="admin-loading">Loading users...</p>
+        ) : error ? (
+          <p className="admin-error">{error}</p>
+        ) : (
+          <div className="admin-table-wrapper">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone Number</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((u) =>
+                  u && u._id ? (
                     <tr key={u._id}>
-                        <td>{u._id}</td>
-                        <td>{u.firstName} {u.lastName}</td>
-                        <td>{u.email}</td>
-                        <td>{u.phoneNumber}</td>
-                        <td>
-                            <button className="admin-btn" onClick={() => openEditModal(u)}>Edit</button>
-                            <button className="admin-btn admin-btn-delete" onClick={() => handleDeleteUser(u._id)}>Delete</button>
-                        </td>
+                      <td>{u._id}</td>
+                      <td>
+                        {u.firstName} {u.lastName}
+                      </td>
+                      <td>{u.email}</td>
+                      <td>{u.phoneNumber}</td>
+                      <td>
+                        <button
+                          className="admin-btn"
+                          onClick={() => openEditModal(u)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="admin-btn admin-btn-delete"
+                          onClick={() => handleDeleteUser(u._id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
                     </tr>
-                ) : null
-            ))}
-          </tbody>
-        </table>
-      )}
-      <div className="admin-create-user">
-        <h3>Create New User</h3>
-        <button className="admin-btn" onClick={() => setShowModal(true)}>
-          Create User
-        </button>
+                  ) : null
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* CREATE USER */}
+        <div className="admin-create-user">
+          <h3>Create New User</h3>
+          <button className="admin-btn" onClick={() => setShowModal(true)}>
+            Create User
+          </button>
+        </div>
+
+        {showModal && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <h2>Create User</h2>
+              <form onSubmit={handleCreateUser}>
+                {[
+                  "firstName",
+                  "lastName",
+                  "phoneNumber",
+                  "email",
+                  "password",
+                ].map((field) => (
+                  <label key={field}>
+                    {field
+                      .replace(/([A-Z])/g, " $1")
+                      .replace(/^./, (str) => str.toUpperCase())}
+                    :
+                    <input
+                      type={
+                        field === "email"
+                          ? "email"
+                          : field === "password"
+                          ? "password"
+                          : "text"
+                      }
+                      value={newUser[field]}
+                      onChange={(e) =>
+                        setNewUser({ ...newUser, [field]: e.target.value })
+                      }
+                    />
+                    {formErrors[field] && (
+                      <span className="error">{formErrors[field]}</span>
+                    )}
+                  </label>
+                ))}
+                <label>
+                  Image:
+                  <input
+                    type="file"
+                    onChange={(e) =>
+                      setNewUser({ ...newUser, image: e.target.files[0] })
+                    }
+                  />
+                  {formErrors.image && (
+                    <span className="error">{formErrors.image}</span>
+                  )}
+                </label>
+                <div className="modal-actions">
+                  <button className="admin-btn" type="submit">
+                    Create
+                  </button>
+                  <button
+                    className="admin-btn admin-btn-delete"
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* EDIT USER */}
+        {showEditModal && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <h2>Edit User</h2>
+              <form onSubmit={handleEditUserSubmit}>
+                {["phoneNumber", "email", "password"].map((field) => (
+                  <label key={field}>
+                    {field
+                      .replace(/([A-Z])/g, " $1")
+                      .replace(/^./, (str) => str.toUpperCase())}
+                    :
+                    <input
+                      type={
+                        field === "email"
+                          ? "email"
+                          : field === "password"
+                          ? "password"
+                          : "text"
+                      }
+                      value={editUser[field] || ""}
+                      onChange={(e) =>
+                        setEditUser({ ...editUser, [field]: e.target.value })
+                      }
+                    />
+                    {editFormErrors[field] && (
+                      <span className="error">{editFormErrors[field]}</span>
+                    )}
+                  </label>
+                ))}
+                <label>
+                  Image:
+                  <input
+                    type="file"
+                    onChange={(e) =>
+                      setEditUser({ ...editUser, image: e.target.files[0] })
+                    }
+                  />
+                  {editFormErrors.image && (
+                    <span className="error">{editFormErrors.image}</span>
+                  )}
+                </label>
+                <div className="modal-actions">
+                  <button className="admin-btn" type="submit">
+                    Save Changes
+                  </button>
+                  <button
+                    className="admin-btn admin-btn-delete"
+                    type="button"
+                    onClick={() => setShowEditModal(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
-
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>Create User</h2>
-            <form onSubmit={handleCreateUser}>
-              <label>
-                First Name:
-                <input
-                  type="text"
-                  value={newUser.firstName}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, firstName: e.target.value })
-                  }
-                />
-              </label>
-              <label>
-                Last Name:
-                <input
-                  type="text"
-                  value={newUser.lastName}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, lastName: e.target.value })
-                  }
-                />
-              </label>
-              <label>
-                Phone Number:
-                <input
-                  type="text"
-                  value={newUser.phoneNumber}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, phoneNumber: e.target.value })
-                  }
-                />
-              </label>
-              <label>
-                Email:
-                <input
-                  type="email"
-                  value={newUser.email}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, email: e.target.value })
-                  }
-                />
-              </label>
-              <label>
-                Password:
-                <input
-                  type="password"
-                  value={newUser.password}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, password: e.target.value })
-                  }
-                />
-              </label>
-              <label>
-                Image:
-                <input
-                  type="file"
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, image: e.target.files[0] })
-                  }
-                />
-              </label>
-              <div className="modal-actions">
-                <button className="admin-btn" type="submit">
-                  Create
-                </button>
-                <button
-                  className="admin-btn admin-btn-delete"
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Edit User Modal */}
-      {showEditModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>Edit User</h2>
-            <form onSubmit={handleEditUserSubmit}>
-              <label>
-                Phone Number:
-                <input
-                  type="text"
-                  value={editUser.phoneNumber}
-                  onChange={(e) => setEditUser({ ...editUser, phoneNumber: e.target.value })}
-                />
-              </label>
-              <label>
-                Email:
-                <input
-                  type="email"
-                  value={editUser.email}
-                  onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
-                />
-              </label>
-              <label>
-                Password:
-                <input
-                  type="password"
-                  value={editUser.password || ""}
-                  onChange={(e) => setEditUser({ ...editUser, password: e.target.value })}
-                />
-              </label>
-              <label>
-                Image:
-                <input
-                  type="file"
-                  onChange={(e) => setEditUser({ ...editUser, image: e.target.files[0] })}
-                />
-              </label>
-              <div className="modal-actions">
-                <button className="admin-btn" type="submit">
-                  Save Changes
-                </button>
-                <button
-                  className="admin-btn admin-btn-delete"
-                  type="button"
-                  onClick={() => setShowEditModal(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

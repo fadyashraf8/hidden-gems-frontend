@@ -1,15 +1,18 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Input, Button } from "@heroui/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schema } from "../../Schema/login.js";
 import { loginAPI } from "../../Services/LoginAuth.js";
 import { Link, useNavigate } from "react-router-dom";
-import AuthContext from "../../Context/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../redux/userSlice";
+import "./Login.css";
 
 const LoginPage = () => {
-  const { setisloggedin, setUser } = useContext(AuthContext);
-
+  const dispatch = useDispatch();
+  // We can use useSelector if we need to access user state, but for login we just need dispatch
+  
   const [isloading, setisloading] = useState(false);
   const [errMsg, seterrMsg] = useState("");
   const navigate = useNavigate();
@@ -36,18 +39,19 @@ const LoginPage = () => {
         data &&
         (data.message === "Login successful" || data.message === "success")
       ) {
-        setisloggedin(true);
-        // Fetch user info after login
+        // Fetch user info after login or use data.user if available
+        // Assuming loginAPI returns user data or we need to fetch it. 
+        // The previous code fetched it manually. Let's keep that pattern but dispatch to Redux.
         try {
           const res = await fetch("http://localhost:3000/auth/me", {
             credentials: "include",
           });
           if (res.ok) {
             const userData = await res.json();
-            setUser(userData.user);
+            dispatch(login(userData.user));
           }
         } catch (e) {
-          // fallback: don't set user
+          // fallback
         }
         navigate("/", { replace: true });
         return;
