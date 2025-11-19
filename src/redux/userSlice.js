@@ -42,7 +42,6 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
-    // We can keep a synchronous logout if needed, but the thunk is better for server-side logout
     clearUser: (state) => {
       state.isLoggedIn = false;
       state.userInfo = null;
@@ -66,7 +65,6 @@ const userSlice = createSlice({
         state.isLoggedIn = false;
         state.userInfo = null;
         state.loading = false;
-        // We might not want to set error on initial check failure as it just means not logged in
       })
       // logoutUser
       .addCase(logoutUser.fulfilled, (state) => {

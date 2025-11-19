@@ -12,8 +12,7 @@ import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
-  // We can use useSelector if we need to access user state, but for login we just need dispatch
-  
+
   const [isloading, setisloading] = useState(false);
   const navigate = useNavigate();
   const {
@@ -39,12 +38,15 @@ const LoginPage = () => {
         data &&
         (data.message === "Login successful" || data.message === "success")
       ) {
+<<<<<<< Updated upstream
          toast.success("Logged in successfully!");
         
                 setisloading(true);
         // Fetch user info after login or use data.user if available
         // Assuming loginAPI returns user data or we need to fetch it. 
         // The previous code fetched it manually. Let's keep that pattern but dispatch to Redux.
+=======
+>>>>>>> Stashed changes
         try {
           const res = await fetch("http://localhost:3000/auth/me", {
             credentials: "include",

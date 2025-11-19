@@ -1,4 +1,3 @@
-
 import "./App.css";
 import {
   createBrowserRouter,
@@ -46,6 +45,9 @@ import ProtectedRoutes from './ProtectedRoutes/ProtectedRoutes';
 
 
 
+
+import ProtectedRoute from "./Components/Auth/ProtectedRoute";
+import PublicRoute from "./Components/Auth/PublicRoute";
 
 function App() {
   const dark = useSelector((state) => state.darkMode.enabled);
@@ -95,7 +97,14 @@ function App() {
           children: [
             { index: true, element: <Business /> },
             { path: "business", element: <Business /> },
-            { path: "addPlace", element: <AddPlace /> },
+            {
+              path: "addPlace",
+              element: (
+                <ProtectedRoute>
+                  <AddPlace />
+                </ProtectedRoute>
+              ),
+            },
             { path: "advertising", element: <Advertising /> },
             { path: "partners", element: <Partners /> },
           ],
@@ -103,6 +112,7 @@ function App() {
 
         // Login Page
         {
+<<<<<<< Updated upstream
           path: "/",
           element: <MainLayout></MainLayout>,
           children: [
@@ -161,11 +171,51 @@ function App() {
 
         // 404 Page
         { path: "*", element: <NotFoundPage /> },
+=======
+          path: "signUp",
+          element: (
+            <PublicRoute>
+              <SignUp />
+            </PublicRoute>
+          ),
+        },
+        {
+          path: "login",
+          element: (
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          ),
+        },
+        {
+          path: "forget",
+          element: (
+            <PublicRoute>
+              <ForgetPassword />
+            </PublicRoute>
+          ),
+        },
+        {
+          path: "reset",
+          element: (
+            <PublicRoute>
+              <ResetPassword />
+            </PublicRoute>
+          ),
+        },
+        // Admin Dashboard
+        {
+          path: "admin",
+          element: (
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Admin />
+            </ProtectedRoute>
+          ),
+        },
+>>>>>>> Stashed changes
       ],
     },
   ]);
-
-
 
   return (
     <div className={dark ? "dark-mode" : ""}>

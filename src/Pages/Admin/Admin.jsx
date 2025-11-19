@@ -3,11 +3,43 @@ import { useSelector } from "react-redux";
 import "./Admin.css";
 
 export default function Admin() {
-  const { userInfo: user, isLoggedIn: isloggedin } = useSelector((state) => state.user);
+  const { userInfo: user, isLoggedIn: isloggedin } = useSelector(
+    (state) => state.user
+  );
 
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
+
+  // Fetch users
+  useEffect(() => {
+    async function fetchUsers() {
+      setLoading(true);
+      setError("");
+      try {
+        const res = await fetch(
+          `http://localhost:3000/users?page=${currentPage}`,
+          {
+            credentials: "include",
+          }
+        );
+        if (!res.ok) throw new Error("Failed to fetch users");
+        const data = await res.json();
+        setUsers(data.result || []);
+      } catch (err) {
+        setError(err.message || "Error fetching users");
+      }
+      setLoading(false);
+    }
+    fetchUsers();
+  }, [currentPage]);
+
+  const nextPage = () => setCurrentPage((prev) => prev + 1);
+  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   const [showModal, setShowModal] = useState(false);
   const [newUser, setNewUser] = useState({
@@ -23,26 +55,6 @@ export default function Admin() {
   const [editUser, setEditUser] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editFormErrors, setEditFormErrors] = useState({});
-
-  // Fetch users
-  useEffect(() => {
-    async function fetchUsers() {
-      setLoading(true);
-      setError("");
-      try {
-        const res = await fetch("http://localhost:3000/users", {
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error("Failed to fetch users");
-        const data = await res.json();
-        setUsers(data.result || []);
-      } catch (err) {
-        setError(err.message || "Error fetching users");
-      }
-      setLoading(false);
-    }
-    fetchUsers();
-  }, []);
 
   // ==================== CREATE USER ====================
   const validateNewUser = () => {
@@ -85,6 +97,7 @@ export default function Admin() {
       }
 
       setUsers((prev) => [...prev, data.result]);
+
       setShowModal(false);
       setNewUser({
         firstName: "",
@@ -192,12 +205,19 @@ export default function Admin() {
         <h1 className="admin-title">Admin Dashboard</h1>
         <h2 className="admin-subtitle">User Management</h2>
 
-        {loading ? (
+        {loading && users.length === 0 ? (
           <p className="admin-loading">Loading users...</p>
         ) : error ? (
           <p className="admin-error">{error}</p>
         ) : (
-          <div className="admin-table-wrapper">
+          <div
+            className="admin-table-wrapper"
+            style={{
+              opacity: loading ? 0.5 : 1,
+              pointerEvents: loading ? "none" : "auto",
+              transition: "opacity 0.2s",
+            }}
+          >
             <table className="admin-table">
               <thead>
                 <tr>
@@ -237,6 +257,28 @@ export default function Admin() {
                 )}
               </tbody>
             </table>
+
+            {/* Pagination Controls */}
+            <div className="pagination-container">
+              <p className="pagination-info">Page {currentPage}</p>
+              <div className="pagination-buttons">
+                <button
+                  className="pagination-btn"
+                  onClick={prevPage}
+                  disabled={currentPage === 1 || loading}
+                >
+                  Previous
+                </button>
+
+                <button
+                  className="pagination-btn"
+                  onClick={nextPage}
+                  disabled={users.length < itemsPerPage || loading}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
