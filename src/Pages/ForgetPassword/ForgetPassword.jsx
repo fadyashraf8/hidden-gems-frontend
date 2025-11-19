@@ -49,7 +49,6 @@ const ForgetPassword = () => {
     <div className=" flex justify-center items-center min-h-screen bg-gray-100  ">
       <div className=" bg-white p-10 rounded-2xl shadow-lg w-full max-w-md  ">
         {" "}
-        <Toaster position="top-center" />
         <form onSubmit={handleSubmit(handle)}>
           <h1 className="text-3xl font-bold text-center mb-9 ">
             Forget Password
