@@ -41,12 +41,15 @@ const LoginPage = () => {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
          toast.success("Logged in successfully!");
         
                 setisloading(true);
         // Fetch user info after login or use data.user if available
         // Assuming loginAPI returns user data or we need to fetch it. 
         // The previous code fetched it manually. Let's keep that pattern but dispatch to Redux.
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
