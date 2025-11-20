@@ -35,11 +35,15 @@ import SignUp from "./Pages/signUp/signUp";
 import Login from "./Pages/Login/Login";
 import ForgetPassword from "./Pages/ForgetPassword/ForgetPassword";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
+<<<<<<< HEAD
 import Places from "./Pages/Gems/Gems";
+// Protect routes
+=======
 import UserProfile from "./Pages/UserProfile/UserProfile";
 import NotFoundPage from "./Pages/NotFound/NotFoundPage";
 import AuthLayout from "./Components/Layout/AuthLayout";
 import MainLayout from "./Components/Layout/MainLayout";
+>>>>>>> f3b07bb9ba12d7a06cd4189009f5bd4f6b293101
 
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import PublicRoute from "./Components/Auth/PublicRoute";
@@ -109,10 +113,83 @@ function App() {
         { path: "signUp", element: <SignUp /> },
         { path: "login", element: <Login />, },
         { path: "forget", element: <ForgetPassword /> },
-        {path:"reset", element:<ResetPassword/>}
+        { path: "reset", element:<ResetPassword/> },
+
+        // Places Page
+        { path: "places", element: <Places /> }
       
     
         
+=======
+        // User Profile
+        {
+          path: "/",
+          element: <MainLayout></MainLayout>,
+          children: [
+            {
+              path: "profile",
+              element: (
+                <ProtectedRoute>
+                  <UserProfile></UserProfile>
+                </ProtectedRoute>
+              ),
+            },
+          ],
+        },
+
+        // Auth Pages
+        {
+          path: "/",
+          element: <AuthLayout></AuthLayout>,
+          children: [
+            {
+              path: "signUp",
+              element: (
+                <PublicRoute>
+                  <SignUp></SignUp>
+                </PublicRoute>
+              ),
+            },
+            {
+              path: "login",
+              element: (
+                <PublicRoute>
+                  <Login></Login>
+                </PublicRoute>
+              ),
+            },
+            {
+              path: "forget",
+              element: (
+                <PublicRoute>
+                  <ForgetPassword></ForgetPassword>
+                </PublicRoute>
+              ),
+            },
+            {
+              path: "reset",
+              element: (
+                <PublicRoute>
+                  <ResetPassword></ResetPassword>
+                </PublicRoute>
+              ),
+            },
+          ],
+        },
+
+        // Admin Dashboard
+        {
+          path: "admin",
+          element: (
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Admin />
+            </ProtectedRoute>
+          ),
+        },
+
+        // 404 Page
+        { path: "*", element: <NotFoundPage /> },
+>>>>>>> f3b07bb9ba12d7a06cd4189009f5bd4f6b293101
       ],
     },
   ]);
