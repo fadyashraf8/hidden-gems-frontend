@@ -5,11 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { schema } from "../../Schema/register.js";
 import { registerAPI } from "../../Services/RegisterAuth.js";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const RegisterPage = () => {
   const [isloading, setisloading] = useState(false);
-  const [errMsg, seterrMsg] = useState("");
-  const [successMsg, setsuccessMsg] = useState("");
   const navigate = useNavigate();
 
   const {
@@ -48,13 +47,13 @@ const RegisterPage = () => {
     setisloading(false);
 
     if (data.error) {
-      seterrMsg(data.error);
-      setsuccessMsg("");
+            toast.error(data.error);
+      
     } else {
-      reset();
-      setsuccessMsg(data.message);
-      setTimeout(() => navigate("/login"), 800);
-      seterrMsg("");
+    toast.success(data.message || "Account created successfully!");
+        reset();
+    
+        setTimeout(() => navigate("/login"), 1000);
     }
   }
 
@@ -62,114 +61,110 @@ const RegisterPage = () => {
   const FACEBOOK_URL = "https://your-backend.com/auth/facebook";
 
   return (
-    <div className="max-w-xl py-8 flex flex-col justify-center shadow-xl gap-2 p-4 rounded-xl mx-auto mt-20 border border-gray-300">
-      <form onSubmit={handleSubmit(handle)}>
-        <h1 className="text-3xl font-bold text-center my-2">Register</h1>
-
-        <div className="flex flex-col gap-2">
-          <Input
-            isInvalid={Boolean(errors.firstName?.message)}
-            errorMessage={errors.firstName?.message}
-            variant="bordered"
-            label="First Name"
-            {...register("firstName")}
-          />
-
-          <Input
-            isInvalid={Boolean(errors.lastName?.message)}
-            errorMessage={errors.lastName?.message}
-            variant="bordered"
-            label="Last Name"
-            {...register("lastName")}
-          />
-
-          <Input
-            isInvalid={Boolean(errors.email?.message)}
-            errorMessage={errors.email?.message}
-            variant="bordered"
-            label="Email"
-            type="email"
-            {...register("email")}
-          />
-
-          <Input
-            isInvalid={Boolean(errors.password?.message)}
-            errorMessage={errors.password?.message}
-            variant="bordered"
-            label="Password"
-            type="password"
-            {...register("password")}
-          />
-
-          <Input
-            isInvalid={Boolean(errors.phoneNumber?.message)}
-            errorMessage={errors.phoneNumber?.message}
-            variant="bordered"
-            label="Phone Number"
-            type="tel"
-            {...register("phoneNumber")}
-          />
-
-          <Input
-            isInvalid={Boolean(errors.image?.message)}
-            errorMessage={errors.image?.message}
-            variant="bordered"
-            label="Profile Picture"
-            type="file"
-            accept="image/*"
-            {...register("image")}
-          />
-
-          <Button
-            isLoading={isloading}
-            type="submit"
-            color="danger"
-            variant="bordered"
-          >
-            Register
-          </Button>
-
-          {/* ======= SOCIAL REGISTER (Google & Facebook) ======= */}
-          <div className="flex flex-col gap-4 mt-2">
-            <Button
-              color="primary"
-              variant="flat"
-              onClick={() => (window.location.href = GOOGLE_URL)}
-            >
-              Continue with Google
-            </Button>
-
-            <Button
-              color="secondary"
-              variant="flat"
-              onClick={() => (window.location.href = FACEBOOK_URL)}
-            >
-              Continue with Facebook
-            </Button>
-          </div>
-          {/* =================================================== */}
-
-          <p className="mb-3">
-            Already have an account?
-            <Link to={"/login"} className="ps-1 text-[#DD0303]">
-              Login
-            </Link>
-          </p>
-
-          {errMsg && (
-            <p className="text-red-500 text-center mt-0 bg-red-200 rounded-3xl">
-              {errMsg}
-            </p>
-          )}
-
-          {successMsg && (
-            <p className="text-green-500 text-center mt-0 bg-green-200 rounded-3xl">
-              {successMsg}
-            </p>
-          )}
-        </div>
-      </form>
-    </div>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 mt-12">
+         <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md mt-8 ">
+           <form onSubmit={handleSubmit(handle)}>
+             <h1 className="text-2xl font-bold mb-1 text-center">SignUp</h1>
+   
+             <div className="flex flex-col gap-4">
+               <Input
+                 isInvalid={Boolean(errors.firstName?.message)}
+                 errorMessage={errors.firstName?.message}
+                 variant="bordered"
+                 label="First Name"
+                 {...register("firstName")}
+               />
+   
+               <Input
+                 isInvalid={Boolean(errors.lastName?.message)}
+                 errorMessage={errors.lastName?.message}
+                 variant="bordered"
+                 label="Last Name"
+                 {...register("lastName")}
+               />
+   
+               <Input
+                 isInvalid={Boolean(errors.email?.message)}
+                 errorMessage={errors.email?.message}
+                 variant="bordered"
+                 label="Email"
+                 type="email"
+                 {...register("email")}
+               />
+   
+               <Input
+                 isInvalid={Boolean(errors.password?.message)}
+                 errorMessage={errors.password?.message}
+                 variant="bordered"
+                 label="Password"
+                 type="password"
+                 {...register("password")}
+               />
+   
+               <Input
+                 isInvalid={Boolean(errors.phoneNumber?.message)}
+                 errorMessage={errors.phoneNumber?.message}
+                 variant="bordered"
+                 label="Phone Number"
+                 type="tel"
+                 {...register("phoneNumber")}
+               />
+   
+               <Input
+                 isInvalid={Boolean(errors.image?.message)}
+                 errorMessage={errors.image?.message}
+                 variant="bordered"
+                 label="Profile Picture"
+                 type="file"
+                 accept="image/*"
+                 {...register("image")}
+               />
+   
+               <Button
+                 isLoading={isloading}
+                 type="submit"
+                 variant="bordered"
+                 className="w-full border border-[#DD0303] text-black py-2 rounded-lg hover:bg-[#DD0303] transition cursor-pointer hover:text-white"
+               >
+                 SignUp
+               </Button>
+   
+               <div className="my-2 flex items-center">
+                 <span className="flex-1 h-[0.5px] bg-gray-300"></span>
+                 <span className="px-3 text-gray-500">OR</span>
+                 <span className="flex-1 h-px bg-gray-300"></span>
+               </div>
+   
+               <div className="flex flex-col mt-1">
+                 <Button
+                   color="primary"
+                   variant="flat"
+                   onClick={() => (window.location.href = GOOGLE_URL)}
+                   className="w-full bg-gray-200 text-[#DD0303] rounded-lg hover:bg-gray-100 transition cursor-pointer"
+                 >
+                   Continue with Google
+                 </Button>
+   
+                 <Button
+                   color="secondary"
+                   variant="flat"
+                   onClick={() => (window.location.href = FACEBOOK_URL)}
+                   className="w-full mt-4 bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition cursor-pointer"
+                 >
+                   Continue with Facebook
+                 </Button>
+               </div>
+   
+               <p className="mb-3">
+                 Already have an account?
+                 <Link to={"/login"} className="ps-1 text-[#DD0303]">
+                   Login
+                 </Link>
+               </p>
+             </div>
+           </form>
+         </div>
+       </div>
   );
 };
 

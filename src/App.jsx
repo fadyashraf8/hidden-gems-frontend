@@ -1,15 +1,17 @@
-
 import "./App.css";
 import {
   createBrowserRouter,
   RouterProvider,
   Navigate,
 } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { checkAuth } from "./redux/userSlice";
 
 import Home from "./Pages/Home/Home";
 import Layout from "./Components/Layout/Layout";
-
+import Admin from "./Pages/Admin/Admin";
+import { Toaster } from "react-hot-toast";
 import AboutLayout from "./Components/Layout/AboutLayout/AboutLayout";
 import AboutUs from "./Pages/Footer/About/AboutUs";
 import Careers from "./Pages/Footer/About/Careers";
@@ -34,11 +36,21 @@ import Login from "./Pages/Login/Login";
 import ForgetPassword from "./Pages/ForgetPassword/ForgetPassword";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import Places from "./Pages/Gems/Gems";
-// Protect routes
+import UserProfile from "./Pages/UserProfile/UserProfile";
+import NotFoundPage from "./Pages/NotFound/NotFoundPage";
+import AuthLayout from "./Components/Layout/AuthLayout";
+import MainLayout from "./Components/Layout/MainLayout";
 
+import ProtectedRoute from "./Components/Auth/ProtectedRoute";
+import PublicRoute from "./Components/Auth/PublicRoute";
 
 function App() {
   const dark = useSelector((state) => state.darkMode.enabled);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
 
   const router = createBrowserRouter([
     {
@@ -80,7 +92,14 @@ function App() {
           children: [
             { index: true, element: <Business /> },
             { path: "business", element: <Business /> },
-            { path: "addPlace", element: <AddPlace /> },
+            {
+              path: "addPlace",
+              element: (
+                <ProtectedRoute>
+                  <AddPlace />
+                </ProtectedRoute>
+              ),
+            },
             { path: "advertising", element: <Advertising /> },
             { path: "partners", element: <Partners /> },
           ],
@@ -90,10 +109,7 @@ function App() {
         { path: "signUp", element: <SignUp /> },
         { path: "login", element: <Login />, },
         { path: "forget", element: <ForgetPassword /> },
-        { path: "reset", element:<ResetPassword/> },
-
-        // Places Page
-        { path: "places", element: <Places /> }
+        {path:"reset", element:<ResetPassword/>}
       
     
         
@@ -101,10 +117,45 @@ function App() {
     },
   ]);
 
-
-
   return (
     <div className={dark ? "dark-mode" : ""}>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 2000,
+
+          // 🔴 ERROR STYLE
+          error: {
+            style: {
+              background: "#DD0303",
+              color: "white",
+              borderRadius: "12px",
+              padding: "14px 18px",
+              fontSize: "15px",
+            },
+            iconTheme: {
+              primary: "white",
+              secondary: "#DD0303",
+            },
+          },
+
+          // 🟢 SUCCESS STYLE
+          success: {
+            style: {
+              background: "#22c55e", // Tailwind green-500
+              color: "white",
+              borderRadius: "12px",
+              padding: "14px 18px",
+              fontSize: "15px",
+            },
+            iconTheme: {
+              primary: "white",
+              secondary: "#22c55e",
+            },
+          },
+        }}
+      />
+
       <RouterProvider router={router} />
     </div>
   );
