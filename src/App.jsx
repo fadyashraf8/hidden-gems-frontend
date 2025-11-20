@@ -33,6 +33,7 @@ import SignUp from "./Pages/signUp/signUp";
 import Login from "./Pages/Login/Login";
 import ForgetPassword from "./Pages/ForgetPassword/ForgetPassword";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
+import Places from "./Pages/Gems/Gems";
 // Protect routes
 
 
@@ -89,7 +90,10 @@ function App() {
         { path: "signUp", element: <SignUp /> },
         { path: "login", element: <Login />, },
         { path: "forget", element: <ForgetPassword /> },
-        {path:"reset", element:<ResetPassword/>}
+        { path: "reset", element:<ResetPassword/> },
+
+        // Places Page
+        { path: "places", element: <Places /> }
       
     
         
