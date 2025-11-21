@@ -19,6 +19,13 @@ export default function AdminSidebar({ isOpen, toggleSidebar }) {
         >
           Users
         </NavLink>
+           <NavLink
+          to="/admin/categories"
+          className={({ isActive }) => (isActive ? "active-link" : "")}
+          onClick={() => window.innerWidth < 768 && toggleSidebar()}
+        >
+          Categories
+        </NavLink>
         <NavLink
           to="/admin/gems"
           className={({ isActive }) => (isActive ? "active-link" : "")}
@@ -26,13 +33,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar }) {
         >
           Gems
         </NavLink>
-        <NavLink
-          to="/admin/categories"
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-          onClick={() => window.innerWidth < 768 && toggleSidebar()}
-        >
-          Categories
-        </NavLink>
+     
       </nav>
     </div>
   );

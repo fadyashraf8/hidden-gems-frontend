@@ -21,6 +21,7 @@ export default function UserProfile() {
         }
 
         const data = await res.json();
+        console.log(data.user);
         setUser(data.user);
       } finally {
         setLoading(false);
@@ -45,8 +46,8 @@ export default function UserProfile() {
         <div>
           <img
             onError={(e) => (e.target.src = userImage)}
-            src={`http://localhost:3000/${user.image}`}
             className=" rounded-xl object-cover"
+            src={`http://localhost:3000/uploads/user/${user.image}`}
           />
         </div>
 
