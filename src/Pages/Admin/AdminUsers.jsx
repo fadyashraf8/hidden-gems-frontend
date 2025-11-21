@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import "./Admin.css";
 
-export default function Admin() {
+export default function AdminUsers() {
   const { userInfo: user, isLoggedIn: isloggedin } = useSelector(
     (state) => state.user
   );
@@ -14,6 +14,9 @@ export default function Admin() {
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [sortOrder, setSortOrder] = useState(""); 
 
   // Fetch users
   useEffect(() => {
@@ -22,7 +25,7 @@ export default function Admin() {
       setError("");
       try {
         const res = await fetch(
-          `http://localhost:3000/users?page=${currentPage}`,
+          `http://localhost:3000/users?page=${currentPage}&sort=${sortOrder}`,
           {
             credentials: "include",
           }
@@ -30,13 +33,19 @@ export default function Admin() {
         if (!res.ok) throw new Error("Failed to fetch users");
         const data = await res.json();
         setUsers(data.result || []);
+        setTotalPages(data.totalPages || 1);
       } catch (err) {
         setError(err.message || "Error fetching users");
       }
       setLoading(false);
     }
     fetchUsers();
-  }, [currentPage]);
+  }, [currentPage, refreshTrigger, sortOrder]);
+
+  // Sort handler for dropdown
+  const handleSortChange = (e) => {
+    setSortOrder(e.target.value);
+  };
 
   const nextPage = () => setCurrentPage((prev) => prev + 1);
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -89,14 +98,14 @@ export default function Admin() {
 
       if (!res.ok) {
         if (data.errors) {
-          setFormErrors(data.errors); // backend field errors
+          setFormErrors(data.errors);
         } else {
-          throw new Error(data.message || "Failed to create user");
+          throw new Error(data.error || "Failed to create user");
         }
         return;
       }
 
-      setUsers((prev) => [...prev, data.result]);
+      setRefreshTrigger((prev) => prev + 1);
 
       setShowModal(false);
       setNewUser({
@@ -145,12 +154,11 @@ export default function Admin() {
     setEditFormErrors(errors);
     if (Object.keys(errors).length > 0) return;
 
-    const allowedUpdates = ["phoneNumber", "email", "password", "image"];
+    const allowedUpdates = ["phoneNumber", "email", "image"];
     let body, headers;
     const isFile = editUser.image instanceof File;
-    const isPassword = !!editUser.password;
 
-    if (isFile || isPassword) {
+    if (isFile) {
       body = new FormData();
       allowedUpdates.forEach((key) => {
         if (editUser[key]) {
@@ -179,7 +187,8 @@ export default function Admin() {
       const data = await res.json();
       if (!res.ok) {
         if (data.errors) setEditFormErrors(data.errors);
-        else throw new Error(data.message || "Failed to edit user");
+        else
+          throw new Error(data.error || data.message || "Failed to edit user");
         return;
       }
 
@@ -202,8 +211,22 @@ export default function Admin() {
   return (
     <div className="admin-page">
       <div className="admin-dashboard">
-        <h1 className="admin-title">Admin Dashboard</h1>
-        <h2 className="admin-subtitle">User Management</h2>
+        <div className="admin-header-actions">
+          <h1 className="admin-title">User Management</h1>
+          <div className="admin-sort-wrapper">
+            <label htmlFor="sortUsers">Sort by:</label>
+            <select
+              id="sortUsers"
+              value={sortOrder}
+              onChange={handleSortChange}
+              className="admin-sort-select"
+            >
+              <option value="">Default</option>
+              <option value="firstName">Name (A-Z)</option>
+              <option value="-firstName">Name (Z-A)</option>
+            </select>
+          </div>
+        </div>
 
         {loading && users.length === 0 ? (
           <p className="admin-loading">Loading users...</p>
@@ -221,7 +244,6 @@ export default function Admin() {
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>ID</th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Phone Number</th>
@@ -232,7 +254,6 @@ export default function Admin() {
                 {users.map((u) =>
                   u && u._id ? (
                     <tr key={u._id}>
-                      <td>{u._id}</td>
                       <td>
                         {u.firstName} {u.lastName}
                       </td>
@@ -260,7 +281,9 @@ export default function Admin() {
 
             {/* Pagination Controls */}
             <div className="pagination-container">
-              <p className="pagination-info">Page {currentPage}</p>
+              <p className="pagination-info">
+                Page {currentPage} of {totalPages}
+              </p>
               <div className="pagination-buttons">
                 <button
                   className="pagination-btn"
@@ -273,7 +296,7 @@ export default function Admin() {
                 <button
                   className="pagination-btn"
                   onClick={nextPage}
-                  disabled={users.length < itemsPerPage || loading}
+                  disabled={currentPage === totalPages || loading}
                 >
                   Next
                 </button>
@@ -360,7 +383,7 @@ export default function Admin() {
             <div className="modal">
               <h2>Edit User</h2>
               <form onSubmit={handleEditUserSubmit}>
-                {["phoneNumber", "email", "password"].map((field) => (
+                {["phoneNumber", "email"].map((field) => (
                   <label key={field}>
                     {field
                       .replace(/([A-Z])/g, " $1")

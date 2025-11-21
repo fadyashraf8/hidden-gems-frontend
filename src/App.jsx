@@ -10,7 +10,10 @@ import { checkAuth } from "./redux/userSlice";
 
 import Home from "./Pages/Home/Home";
 import Layout from "./Components/Layout/Layout";
-import Admin from "./Pages/Admin/Admin";
+import AdminLayout from "./Pages/Admin/AdminLayout";
+import AdminUsers from "./Pages/Admin/AdminUsers";
+import AdminGems from "./Pages/Admin/AdminGems";
+import AdminCategories from "./Pages/Admin/AdminCategories";
 import { Toaster } from "react-hot-toast";
 import AboutLayout from "./Components/Layout/AboutLayout/AboutLayout";
 import AboutUs from "./Pages/Footer/About/AboutUs";
@@ -35,15 +38,10 @@ import SignUp from "./Pages/signUp/signUp";
 import Login from "./Pages/Login/Login";
 import ForgetPassword from "./Pages/ForgetPassword/ForgetPassword";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
-<<<<<<< HEAD
-import Places from "./Pages/Gems/Gems";
-// Protect routes
-=======
 import UserProfile from "./Pages/UserProfile/UserProfile";
 import NotFoundPage from "./Pages/NotFound/NotFoundPage";
 import AuthLayout from "./Components/Layout/AuthLayout";
 import MainLayout from "./Components/Layout/MainLayout";
->>>>>>> f3b07bb9ba12d7a06cd4189009f5bd4f6b293101
 
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import PublicRoute from "./Components/Auth/PublicRoute";
@@ -109,18 +107,6 @@ function App() {
           ],
         },
 
-        // Login Page
-        { path: "signUp", element: <SignUp /> },
-        { path: "login", element: <Login />, },
-        { path: "forget", element: <ForgetPassword /> },
-        { path: "reset", element:<ResetPassword/> },
-
-        // Places Page
-        { path: "places", element: <Places /> }
-      
-    
-        
-=======
         // User Profile
         {
           path: "/",
@@ -177,19 +163,23 @@ function App() {
           ],
         },
 
-        // Admin Dashboard
         {
           path: "admin",
           element: (
             <ProtectedRoute allowedRoles={["admin"]}>
-              <Admin />
+              <AdminLayout />
             </ProtectedRoute>
           ),
+          children: [
+            { index: true, element: <Navigate to="users" replace /> },
+            { path: "users", element: <AdminUsers /> },
+            { path: "gems", element: <AdminGems /> },
+            { path: "categories", element: <AdminCategories /> },
+          ],
         },
 
         // 404 Page
         { path: "*", element: <NotFoundPage /> },
->>>>>>> f3b07bb9ba12d7a06cd4189009f5bd4f6b293101
       ],
     },
   ]);
