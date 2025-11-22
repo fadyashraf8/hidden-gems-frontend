@@ -9,17 +9,44 @@
   --dm-bg: #060b15;
   --dm-card-bg: #131620;
   --dm-accent: #ff6500;
-
+  --dm-btn: #5e8ee0;
+  --dm-btn-text: #00031c;
   --dm-text: #ffffff;
   --dm-subtext: #999ba8;
 }
 
 /* ============ GLOBAL DARK MODE ============ */
+/* Base dark mode */
 .dark-mode {
   background: var(--dm-bg);
   color: var(--dm-text);
 }
 
+/* Generic elements */
+.dark-mode a,
+.dark-mode input,
+.dark-mode .cat-mui svg,
+.dark-mode .card-res svg {
+  color: var(--dm-text) !important;
+}
+
+.dark-mode .card-res p,
+.dark-mode .cat-mui span,
+.dark-mode footer a span {
+  color: var(--dm-subtext) !important;
+}
+
+.dark-mode .card-res,
+.dark-mode .cat-mui,
+.dark-mode .user-dropdown-menu {
+  background: var(--dm-card-bg);
+}
+
+.dark-mode .user-dropdown-menu button:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Navbar */
 .dark-mode .navbar {
   background: rgba(0, 0, 0, 0.4);
   color: var(--dm-text);
@@ -35,12 +62,12 @@
 
 .dark-mode .navbar.sticky a:hover {
   background: var(--dm-text);
-  color: #000000 !important;
+  color: #000 !important;
 }
 
 .dark-mode .navbar.sticky .signup-btn {
   background: var(--dm-text);
-  color: #000000 !important;
+  color: #000 !important;
 }
 
 .dark-mode .navbar.sticky .signup-btn:hover {
@@ -48,6 +75,7 @@
   color: var(--dm-text) !important;
 }
 
+/* Search & Icons */
 .dark-mode .search-box,
 .dark-mode .mobile-search,
 .dark-mode .icon-btn,
@@ -55,47 +83,76 @@
   background: var(--dm-glass);
   border-color: var(--border-dark);
 }
+
+/* Auth Buttons */
 .dark-mode .auth-btn {
   background: var(--dm-accent);
 }
 
-.dark-mode a,
-.dark-mode input {
-  color: var(--dm-text) !important;
-}
-
-.dark-mode footer {
-  background: var(--dm-bg);
-}
-
-.dark-mode .cat-mui {
-  background: var(--dm-card-bg);
-}
-
-.dark-mode .cat-mui svg {
-  color: var(--dm-text);
-}
-
-.dark-mode .cat-mui span {
-  color: var(--dm-subtext);
-}
-
+/* Cards */
 .dark-mode .card-res {
-  background: var(--dm-card-bg);
   color: var(--dm-text);
-}
-
-.dark-mode .card-res p {
-  color: var(--dm-subtext);
-  background: var(--dm-card-bg);
-}
-
-.dark-mode .card-res svg {
-  color: var(--dm-subtext);
 }
 
 .dark-mode .card-res svg:hover {
   color: var(--dm-accent);
+}
+
+/* Footer */
+.dark-mode footer {
+  background: var(--dm-bg);
+}
+
+.dark-mode footer h3 {
+  color: var(--dm-text) !important;
+}
+
+.dark-mode footer a {
+  color: var(--dm-accent) !important;
+}
+
+.dark-mode .admin-dashboard {
+  background: var(--dm-card-bg);
+}
+
+.dark-mode .admin-dashboard h1 {
+  color: var(--dm-text);
+}
+
+.dark-mode .admin-dashboard .create-user-button {
+  background: var(--dm-btn);
+  color: var(--dm-btn-text);
+}
+
+.dark-mode .admin-dashboard select {
+  background: var(--dm-btn);
+  color: var(--dm-card-bg);
+}
+
+.dark-mode .admin-dashboard table,
+.dark-mode th {
+  background: var(--dm-card-bg) !important;
+  color: var(--dm-text) !important;
+}
+
+.dark-mode tr:hover {
+  background: rgba(255, 255, 255, 0.4) !important;
+}
+
+.dark-mode .admin-sidebar {
+  background: var(--dm-card-bg);
+}
+.dark-mode .profile h2 {
+  color: var(--dm-text);
+}
+.dark-mode .profile .user-info {
+  background: var(--dm-card-bg);
+  color: var(--dm-text);
+}
+
+.dark-mode .profile .user-info p {
+  background: var(--dm-card-bg);
+  color: var(--dm-text);
 }
 
 /* ============ NAVBAR BASE ============ */

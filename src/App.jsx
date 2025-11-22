@@ -163,23 +163,22 @@ function App() {
           ],
         },
 
-        {
-          path: "admin",
-          element: (
-            <ProtectedRoute allowedRoles={["admin"]}>
-              <AdminLayout />
-            </ProtectedRoute>
-          ),
-          children: [
-            { index: true, element: <Navigate to="users" replace /> },
-            { path: "users", element: <AdminUsers /> },
-            { path: "gems", element: <AdminGems /> },
-            { path: "categories", element: <AdminCategories /> },
-          ],
-        },
-
         // 404 Page
         { path: "*", element: <NotFoundPage /> },
+      ],
+    },
+    {
+      path: "admin",
+      element: (
+        <ProtectedRoute allowedRoles={["admin"]}>
+          <AdminLayout />
+        </ProtectedRoute>
+      ),
+      children: [
+        { index: true, element: <Navigate to="users" replace /> },
+        { path: "users", element: <AdminUsers /> },
+        { path: "gems", element: <AdminGems /> },
+        { path: "categories", element: <AdminCategories /> },
       ],
     },
   ]);
