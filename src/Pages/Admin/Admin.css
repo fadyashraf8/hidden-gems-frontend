@@ -461,3 +461,21 @@
     display: block;
   }
 }
+
+
+/* ============= Category  handel error ============= */.error {
+  color: #DD0303;        /* اللون الأحمر اللي بتحبه */
+  font-size: 14px;
+  margin-top: 4px;
+  display: block;
+  font-weight: 600;
+}
+.error-box {
+  background-color: #ffe1e1;
+  color: #DD0303;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin: 10px 0;
+  border: 1px solid #DD0303;
+  font-weight: 600;
+}

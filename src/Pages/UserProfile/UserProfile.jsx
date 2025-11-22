@@ -46,7 +46,7 @@ export default function UserProfile() {
         <div>
           <img
             onError={(e) => (e.target.src = userImage)}
-            className=" rounded-xl object-cover"
+            className=" rounded-xl object-cover "
             src={`http://localhost:3000/uploads/user/${user.image}`}
           />
         </div>
@@ -95,6 +95,7 @@ export default function UserProfile() {
                 {user.email}
               </p>
             </div>
+            
 
             {/* Username */}
             <div className="group">
