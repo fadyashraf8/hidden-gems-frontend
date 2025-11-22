@@ -50,6 +50,7 @@ export default function AdminCategories() {
         if (!res.ok) throw new Error("Failed to fetch categories");
 
         const data = await res.json();
+        console.log(data.result);
 
         setCategories(data.result || []);
         setTotalPages(data.totalPages || 1);
@@ -251,7 +252,11 @@ export default function AdminCategories() {
                       />
                     </td>
 
-                    <td>{cat.createdBy}</td>
+                    <td>
+                      {cat.createdBy?.email} <br /> 
+                      {/* {cat.createdBy?.firstName} */}
+                      {/* {cat.createdBy?.lastName} */}
+                    </td>
 
                     <td>
                       <button
