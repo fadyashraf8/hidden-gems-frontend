@@ -1,8 +1,21 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../redux/userSlice";
+import { toggleDarkMode } from "../../redux/darkModeSlice";
 import "./Admin.css";
 
 export default function AdminSidebar({ isOpen, toggleSidebar }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isDarkMode = useSelector((state) => state.darkMode.enabled);
+
+  const handleLogout = () => {
+    dispatch(logoutUser()).then(() => {
+      navigate("/");
+    });
+  };
+
   return (
     <div className={`admin-sidebar ${isOpen ? "open" : ""}`}>
       <div className="sidebar-header">
@@ -12,28 +25,48 @@ export default function AdminSidebar({ isOpen, toggleSidebar }) {
         </button>
       </div>
       <nav className="sidebar-nav">
-        <NavLink
-          to="/admin/users"
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-          onClick={() => window.innerWidth < 768 && toggleSidebar()}
-        >
-          Users
-        </NavLink>
-           <NavLink
-          to="/admin/categories"
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-          onClick={() => window.innerWidth < 768 && toggleSidebar()}
-        >
-          Categories
-        </NavLink>
-        <NavLink
-          to="/admin/gems"
-          className={({ isActive }) => (isActive ? "active-link" : "")}
-          onClick={() => window.innerWidth < 768 && toggleSidebar()}
-        >
-          Gems
-        </NavLink>
-     
+        <div className="nav-group">
+          <NavLink
+            to="/admin/users"
+            className={({ isActive }) => (isActive ? "active-link" : "")}
+            onClick={() => window.innerWidth < 768 && toggleSidebar()}
+          >
+            Users
+          </NavLink>
+          <NavLink
+            to="/admin/categories"
+            className={({ isActive }) => (isActive ? "active-link" : "")}
+            onClick={() => window.innerWidth < 768 && toggleSidebar()}
+          >
+            Categories
+          </NavLink>
+          <NavLink
+            to="/admin/gems"
+            className={({ isActive }) => (isActive ? "active-link" : "")}
+            onClick={() => window.innerWidth < 768 && toggleSidebar()}
+          >
+            Gems
+          </NavLink>
+        </div>
+
+        <div className="nav-group bottom-actions">
+          <button
+            className="sidebar-btn dark-mode-toggle"
+            onClick={() => dispatch(toggleDarkMode())}
+          >
+            {isDarkMode ? "☀️ Light Mode" : "⏾ Dark Mode"}
+          </button>
+          <NavLink
+            to="/"
+            className="return-home-link"
+            onClick={() => window.innerWidth < 768 && toggleSidebar()}
+          >
+            Return to Home
+          </NavLink>
+          <button className="signout-btn" onClick={handleLogout}>
+            Sign Out
+          </button>
+        </div>
       </nav>
     </div>
   );

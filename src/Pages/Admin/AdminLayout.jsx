@@ -12,9 +12,11 @@ export default function AdminLayout() {
 
   return (
     <div className="admin-layout">
-      <button className="menu-toggle-btn" onClick={toggleSidebar}>
-        &#9776;
-      </button>
+      {!isSidebarOpen && (
+        <button className="menu-toggle-btn" onClick={toggleSidebar}>
+          &#9776;
+        </button>
+      )}
       <AdminSidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <div className={`admin-content ${isSidebarOpen ? "shifted" : ""}`}>
         <Outlet />

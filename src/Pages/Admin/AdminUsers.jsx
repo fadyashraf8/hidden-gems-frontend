@@ -16,7 +16,7 @@ export default function AdminUsers() {
   const [itemsPerPage] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [sortOrder, setSortOrder] = useState(""); 
+  const [sortOrder, setSortOrder] = useState("");
 
   // Fetch users
   useEffect(() => {
@@ -88,7 +88,7 @@ export default function AdminUsers() {
         if (value) formData.append(key, value);
       });
 
-      const res = await fetch("http://localhost:3000/auth/signUp", {
+      const res = await fetch("http://localhost:3000/users", {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -213,18 +213,27 @@ export default function AdminUsers() {
       <div className="admin-dashboard">
         <div className="admin-header-actions">
           <h1 className="admin-title">User Management</h1>
-          <div className="admin-sort-wrapper">
-            <label htmlFor="sortUsers">Sort by:</label>
-            <select
-              id="sortUsers"
-              value={sortOrder}
-              onChange={handleSortChange}
-              className="admin-sort-select"
+          <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+            <button
+              className="admin-btn create-user-button"
+              onClick={() => setShowModal(true)}
+              style={{ marginTop: 0 }}
             >
-              <option value="">Default</option>
-              <option value="firstName">Name (A-Z)</option>
-              <option value="-firstName">Name (Z-A)</option>
-            </select>
+              Create User
+            </button>
+            <div className="admin-sort-wrapper">
+              <label htmlFor="sortUsers">Sort by:</label>
+              <select
+                id="sortUsers"
+                value={sortOrder}
+                onChange={handleSortChange}
+                className="admin-sort-select"
+              >
+                <option value="">Default</option>
+                <option value="firstName">Name (A-Z)</option>
+                <option value="-firstName">Name (Z-A)</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -264,13 +273,13 @@ export default function AdminUsers() {
                           className="admin-btn"
                           onClick={() => openEditModal(u)}
                         >
-                          Edit
+                          ✎
                         </button>
                         <button
                           className="admin-btn admin-btn-delete"
                           onClick={() => handleDeleteUser(u._id)}
                         >
-                          Delete
+                          🗑️
                         </button>
                       </td>
                     </tr>
@@ -278,39 +287,30 @@ export default function AdminUsers() {
                 )}
               </tbody>
             </table>
-
-            {/* Pagination Controls */}
-            <div className="pagination-container">
-              <p className="pagination-info">
-                Page {currentPage} of {totalPages}
-              </p>
-              <div className="pagination-buttons">
-                <button
-                  className="pagination-btn"
-                  onClick={prevPage}
-                  disabled={currentPage === 1 || loading}
-                >
-                  Previous
-                </button>
-
-                <button
-                  className="pagination-btn"
-                  onClick={nextPage}
-                  disabled={currentPage === totalPages || loading}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
           </div>
         )}
+        {/* Pagination Controls */}
+        <div className="pagination-container">
+          <p className="pagination-info">
+            Page {currentPage} of {totalPages}
+          </p>
+          <div className="pagination-buttons">
+            <button
+              className="pagination-btn"
+              onClick={prevPage}
+              disabled={currentPage === 1 || loading}
+            >
+              Previous
+            </button>
 
-        {/* CREATE USER */}
-        <div className="admin-create-user">
-          <h3>Create New User</h3>
-          <button className="admin-btn" onClick={() => setShowModal(true)}>
-            Create User
-          </button>
+            <button
+              className="pagination-btn"
+              onClick={nextPage}
+              disabled={currentPage === totalPages || loading}
+            >
+              Next
+            </button>
+          </div>
         </div>
 
         {showModal && (
