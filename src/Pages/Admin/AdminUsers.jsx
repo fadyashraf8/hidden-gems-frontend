@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import "./Admin.css";
+import LoadingScreen from "../LoadingScreen";
 
 export default function AdminUsers() {
   const { userInfo: user, isLoggedIn: isloggedin } = useSelector(
@@ -208,7 +209,9 @@ export default function AdminUsers() {
     );
   }
 
-  return (
+  return loading ? (
+    <LoadingScreen />
+  ) : (
     <div className="admin-page">
       <div className="admin-dashboard">
         <div className="admin-header-actions">
