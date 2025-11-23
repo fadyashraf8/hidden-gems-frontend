@@ -18,7 +18,7 @@ export default function AdminUsers() {
   const [totalPages, setTotalPages] = useState(1);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [sortOrder, setSortOrder] = useState(""); 
-
+  const baseURL = import.meta.env.VITE_Base_URL;
   // Fetch users
   useEffect(() => {
     async function fetchUsers() {
@@ -126,7 +126,7 @@ export default function AdminUsers() {
   // ==================== DELETE USER ====================
   const handleDeleteUser = async (userId) => {
     try {
-      const res = await fetch(`http://localhost:3000/users/${userId}`, {
+      const res = await fetch(baseURL + `/users/${userId}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -178,7 +178,7 @@ export default function AdminUsers() {
     }
 
     try {
-      const res = await fetch(`http://localhost:3000/users/${editUser._id}`, {
+      const res = await fetch(baseURL + `/users/${editUser._id}`, {
         method: "PUT",
         credentials: "include",
         headers,

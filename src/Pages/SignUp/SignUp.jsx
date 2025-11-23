@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 const RegisterPage = () => {
   const [isloading, setisloading] = useState(false);
   const navigate = useNavigate();
-
+ const baseURL = import.meta.env.VITE_Base_URL;
   const {
     handleSubmit,
     register,
@@ -57,8 +57,8 @@ const RegisterPage = () => {
     }
   }
 
-  const GOOGLE_URL = "https://your-backend.com/auth/google";
-  const FACEBOOK_URL = "https://your-backend.com/auth/facebook";
+  const GOOGLE_URL = baseURL+"/auth/google";
+  const FACEBOOK_URL = baseURL+"/auth/facebook";
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 mt-12">

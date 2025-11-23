@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseURL = "http://localhost:3000";
+const baseURL = import.meta.env.VITE_Base_URL;
 export async function loginAPI(formData) {
   try {
     const { data } = await axios.post(baseURL + "/auth/signIn", formData, {

@@ -11,6 +11,7 @@ import "./Login.css";
 import toast from "react-hot-toast";
 
 const LoginPage = () => {
+  const authURL = import.meta.env.VITE_Auth_URL
   const dispatch = useDispatch();
 
   const [isloading, setisloading] = useState(false);
@@ -41,7 +42,7 @@ const LoginPage = () => {
 
         // Fetch user info after login
         try {
-          const res = await fetch("http://localhost:3000/auth/me", {
+          const res = await fetch(authURL+ "/me", {
             credentials: "include",
           });
           if (res.ok) {
@@ -67,8 +68,8 @@ const LoginPage = () => {
   }
 
   // ========= GOOGLE & FACEBOOK URLs =========
-  const GOOGLE_URL = "https://your-backend.com/auth/google";
-  const FACEBOOK_URL = "https://your-backend.com/auth/facebook";
+  const GOOGLE_URL = authURL+"/google";
+  const FACEBOOK_URL = authURL+"/facebook";
 
   return (
     <div className=" flex justify-center items-center min-h-screen bg-gray-100 px-4 ">
