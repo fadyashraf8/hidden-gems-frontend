@@ -8,7 +8,7 @@
   /* ==== DARK MODE COLORS ==== */
   --dm-bg: #060b15;
   --dm-card-bg: #131620;
-  --dm-accent: #ff6500;
+  --dm-accent: #c05107;
   --dm-btn: #5e8ee0;
   --dm-btn-text: #00031c;
   --dm-text: #ffffff;
@@ -30,6 +30,14 @@
   color: var(--dm-text) !important;
 }
 
+.dark-mode .addPlace {
+  background: var(--dm-card-bg);
+}
+
+.dark-mode .addPlace .placeSelect {
+  background: var(--dm-card-bg);
+}
+
 .dark-mode .card-res p,
 .dark-mode .cat-mui span,
 .dark-mode footer a span {
@@ -43,7 +51,8 @@
 }
 
 .dark-mode .user-dropdown-menu button:hover {
-  background-color: rgba(255, 255, 255, 0.4);
+  background: var(--dm-subtext);
+  color: var(--lm-text);
 }
 
 /* Navbar */
@@ -268,7 +277,6 @@
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
 }
 
 .icon-btn:hover,
@@ -423,4 +431,191 @@
   .search-box {
     display: flex;
   }
+}
+
+/* ============ FOOTER PAGES ============ */
+.footer-page-wrapper {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background-color: #ffffff;
+  transition: background-color 0.3s;
+}
+
+.footer-page-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  color: #333;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.footer-page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.footer-page-content {
+  line-height: 1.7;
+  font-size: 1.1rem;
+  color: #4a4a4a;
+}
+
+.footer-page-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  color: #dd0303;
+}
+
+.footer-page-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  color: #2c3e50;
+}
+
+.footer-page-content p {
+  margin-bottom: 16px;
+}
+
+.footer-page-content ul {
+  margin-bottom: 16px;
+  padding-left: 24px;
+  list-style-type: disc;
+}
+
+.footer-page-content li {
+  margin-bottom: 8px;
+}
+
+/* Dark Mode Overrides */
+.dark-mode .footer-page-wrapper {
+  background-color: var(--dm-bg);
+}
+
+.dark-mode .footer-page-container {
+  background-color: var(--dm-card-bg);
+  color: var(--dm-text);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .footer-page-title {
+  color: var(--dm-text);
+}
+
+.dark-mode .footer-page-content {
+  color: var(--dm-subtext);
+}
+
+.dark-mode .footer-page-content h2 {
+  color: var(--dm-accent);
+}
+
+.dark-mode .footer-page-content h3 {
+  color: var(--dm-text);
+}
+
+/* ============ AUTH & GENERAL PAGES ============ */
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f3f4f6; /* bg-gray-100 */
+  padding: 1rem;
+  transition: background-color 0.3s;
+}
+
+.auth-card {
+  background-color: #ffffff; /* bg-white */
+  padding: 2rem;
+  border-radius: 1rem; /* rounded-2xl */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); /* shadow-lg */
+  width: 100%;
+  max-width: 28rem; /* max-w-md */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.auth-title {
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 700; /* font-bold */
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #000000;
+}
+
+/* Dark Mode Overrides */
+.dark-mode .page-wrapper {
+  background-color: var(--dm-bg);
+}
+
+.dark-mode .auth-card {
+  background-color: var(--dm-card-bg);
+  color: var(--dm-text);
+}
+
+.dark-mode .auth-title {
+  color: var(--dm-text);
+}
+
+.dark-mode .auth-card .text-gray-500 {
+  color: var(--dm-subtext);
+}
+
+.dark-mode .text-gray-600 {
+  color: var(--dm-subtext);
+}
+
+.dark-mode .text-gray-700 {
+  color: var(--dm-subtext);
+}
+
+/* Fix for Chrome/Edge Autofill Background in Dark Mode */
+.dark-mode input:-webkit-autofill,
+.dark-mode input:-webkit-autofill:hover,
+.dark-mode input:-webkit-autofill:focus,
+.dark-mode input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--dm-card-bg) inset !important;
+  -webkit-text-fill-color: var(--dm-text) !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: var(--dm-text);
+}
+
+/* Auth Buttons Dark Mode */
+.dark-mode .auth-submit-btn {
+  color: var(--dm-text);
+  border-color: #dd0303;
+}
+
+.dark-mode .auth-submit-btn:hover {
+  background-color: #dd0303;
+  color: #ffffff;
+}
+
+.dark-mode .google-btn {
+  background-color: var(--dm-bg);
+  color: var(--dm-text);
+  border: 1px solid var(--dm-subtext);
+}
+
+.dark-mode .google-btn:hover {
+  background-color: #2a2d3d;
+}
+
+.dark-mode .facebook-btn {
+  background-color: #1877f2;
+  color: #ffffff;
+}
+
+.dark-mode .facebook-btn:hover {
+  background-color: #155db5;
 }

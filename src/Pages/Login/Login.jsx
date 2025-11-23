@@ -7,7 +7,6 @@ import { loginAPI } from "../../Services/LoginAuth.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/userSlice";
-import "./Login.css";
 import toast from "react-hot-toast";
 
 const LoginPage = () => {
@@ -72,10 +71,10 @@ const LoginPage = () => {
   const FACEBOOK_URL = authURL+"/facebook";
 
   return (
-    <div className=" flex justify-center items-center min-h-screen bg-gray-100 px-4 ">
-      <div className=" bg-white p-8 rounded-2xl shadow-lg w-full max-w-md mt-8 ">
+    <div className="page-wrapper">
+      <div className="auth-card mt-8">
         <form className="space-y-4" onSubmit={handleSubmit(handle)}>
-          <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
+          <h1 className="auth-title">Login</h1>
 
           <div className="flex flex-col gap-6 ">
             <Input
@@ -100,7 +99,7 @@ const LoginPage = () => {
               isLoading={isloading}
               type="submit"
               variant="bordered"
-              className="w-full border border-[#DD0303] text-black py-2 rounded-lg hover:bg-[#ff0303] transition cursor-pointer hover:text-white"
+              className="w-full border border-[#DD0303] text-black py-2 rounded-lg hover:bg-[#ff0303] transition cursor-pointer hover:text-white auth-submit-btn"
             >
               Login
             </Button>
@@ -116,7 +115,7 @@ const LoginPage = () => {
                 color="primary"
                 variant="flat"
                 onClick={() => (window.location.href = GOOGLE_URL)}
-                className="w-full bg-white text-[#DD0303] py-2 rounded-lg hover:bg-gray-100 transition cursor-pointer"
+                className="w-full bg-white text-[#DD0303] py-2 rounded-lg hover:bg-gray-100 transition cursor-pointer google-btn"
               >
                 Continue with Google
               </Button>
@@ -125,7 +124,7 @@ const LoginPage = () => {
                 color="secondary"
                 variant="flat"
                 onClick={() => (window.location.href = FACEBOOK_URL)}
-                className="w-full mt-4 bg-blue-800 text-white py-2 rounded-lg hover:bg-blue-900 transition cursor-pointer"
+                className="w-full mt-4 bg-blue-800 text-white py-2 rounded-lg hover:bg-blue-900 transition cursor-pointer facebook-btn"
               >
                 Continue with Facebook
               </Button>

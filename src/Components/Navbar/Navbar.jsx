@@ -6,16 +6,18 @@ import { logoutUser } from "../../redux/userSlice";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { useTranslation } from "react-i18next";
-import TranslateTwoToneIcon from '@mui/icons-material/TranslateTwoTone';
+import TranslateTwoToneIcon from "@mui/icons-material/TranslateTwoTone";
 
 export default function Navbar() {
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
-  
-  const { isLoggedIn: isloggedin, userInfo: user } = useSelector((state) => state.user);
+
+  const { isLoggedIn: isloggedin, userInfo: user } = useSelector(
+    (state) => state.user
+  );
   const dispatch = useDispatch();
-  
+
   const dropdownRef = useRef(null);
 
   const dark = useSelector((state) => state.darkMode.enabled);
@@ -58,12 +60,14 @@ export default function Navbar() {
   }, []);
 
   const handleLogout = async () => {
-    try {
-      await dispatch(logoutUser()).unwrap();
-      setUserDropdown(false);
-      navigate("/");
-    } catch (error) {
-      console.error("Logout error:", error);
+    if (window.confirm("Are you sure you want to sign out?")) {
+      try {
+        await dispatch(logoutUser()).unwrap();
+        setUserDropdown(false);
+        navigate("/");
+      } catch (error) {
+        console.error("Logout error:", error);
+      }
     }
   };
 
@@ -73,9 +77,9 @@ export default function Navbar() {
     <nav id="nav" className="navbar normal">
       <div className="navbar-container">
         {/* Logo */}
-        <a href="/" className="navbar-logo">
+        <Link to="/" className="navbar-logo">
           {t("app_name")}
-        </a>
+        </Link>
 
         <div className="search-box">
           <Search size={18} />
@@ -84,10 +88,10 @@ export default function Navbar() {
 
         <ul className="navbar-links">
           <li>
-            <a href="/places">{t("nav_link_places")}</a>
+            <NavLink to="/places">{t("nav_link_places")}</NavLink>
           </li>
           <li>
-            <a href="/surprise">{t("nav_link_surprise")}</a>
+            <NavLink to="/surprise">{t("nav_link_surprise")}</NavLink>
           </li>
           <li>
             <NavLink to="/contact">{t("nav_link_contact")}</NavLink>
@@ -96,10 +100,13 @@ export default function Navbar() {
 
         <div className="navbar-actions">
           {/* Dark Mode */}
-          <TranslateTwoToneIcon style={{ cursor: 'pointer', marginRight: '10px' }} onClick={() => {
-            const newLang = i18n.language === 'en' ? 'ar' : 'en';
-            i18n.changeLanguage(newLang);
-          }} />
+          <TranslateTwoToneIcon
+            style={{ cursor: "pointer", marginRight: "10px" }}
+            onClick={() => {
+              const newLang = i18n.language === "en" ? "ar" : "en";
+              i18n.changeLanguage(newLang);
+            }}
+          />
           <button className="icon-btn" onClick={handleDarkToggle}>
             {dark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
@@ -107,10 +114,10 @@ export default function Navbar() {
           {!isloggedin ? (
             <>
               <Link to="/login" className="auth-btn login-btn">
-                { t("nav_auth_login")}
+                {t("nav_auth_login")}
               </Link>
               <Link to="/signUp" className="auth-btn signup-btn">
-                { t("nav_auth_signup")}
+                {t("nav_auth_signup")}
               </Link>
             </>
           ) : (
@@ -121,12 +128,7 @@ export default function Navbar() {
               >
                 <User size={20} />
 
-               
-                {user && (
-                  <p style={{ marginLeft: "6px" }}>
-                    {user.firstName }
-                  </p>
-                )}
+                {user && <p style={{ marginLeft: "6px" }}>{user.firstName}</p>}
               </button>
 
               {userDropdown && (
@@ -134,7 +136,6 @@ export default function Navbar() {
                   {user && (
                     <p
                       style={{
-                        
                         padding: "8px 10px",
                         opacity: 0.8,
                       }}
@@ -144,7 +145,14 @@ export default function Navbar() {
                   )}
                   <button onClick={() => navigate("/profile")}>Profile</button>
                   {user && user.role === "admin" && (
-                    <button onClick={() => navigate("/admin")}>Admin Dashboard</button>
+                    <button onClick={() => navigate("/admin")}>
+                      Admin Dashboard
+                    </button>
+                  )}
+                  {user && user.role === "owner" && (
+                    <button onClick={() => navigate("/owner/dashboard")}>
+                      Owner Dashboard
+                    </button>
                   )}
                   <button onClick={handleLogout}>Sign Out</button>
                 </div>
@@ -190,4 +198,3 @@ export default function Navbar() {
     </nav>
   );
 }
-

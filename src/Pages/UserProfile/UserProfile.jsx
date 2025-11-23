@@ -38,21 +38,21 @@ export default function UserProfile() {
       User data not available
     </div>
   ) : (
-    <div className="max-w-5xl mx-auto mt-16 p-6">
+    <div className="max-w-5xl mx-auto mt-16 p-6  profile">
       <h2 className="text-lg font-semibold text-[#DD0303] mb-6">Profile</h2>
 
-      <div className="flex flex-col md:flex-row gap-10 items-start">
+      <div className="flex flex-col md:flex-row gap-10 items-start user">
         {/* Left: Photo */}
         <div>
           <img
             onError={(e) => (e.target.src = userImage)}
-            className=" rounded-xl object-cover "
+            className=" rounded-xl object-cover user-img"
             src={`${baseURL}/uploads/user/${user.image}`}
           />
         </div>
 
         {/* Right: Info */}
-        <Card className="w-full shadow-sm p-4 bg-white">
+        <Card className="w-full shadow-sm p-4 bg-white user-info">
           <CardBody className="space-y-5">
             {/* First Name */}
             <div className="group">

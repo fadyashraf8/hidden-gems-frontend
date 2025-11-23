@@ -46,13 +46,11 @@ const ForgetPassword = () => {
   }
 
   return (
-    <div className=" flex justify-center items-center min-h-screen bg-gray-100  ">
-      <div className=" bg-white p-10 rounded-2xl shadow-lg w-full max-w-md  ">
+    <div className="page-wrapper">
+      <div className="auth-card">
         {" "}
         <form onSubmit={handleSubmit(handle)}>
-          <h1 className="text-3xl font-bold text-center mb-9 ">
-            Forget Password
-          </h1>
+          <h1 className="auth-title mb-9">Forget Password</h1>
 
           <div className="flex flex-col gap-6">
             <Input
@@ -69,7 +67,7 @@ const ForgetPassword = () => {
               type="submit"
               color="danger"
               variant="bordered"
-              className="w-full border border-[#DD0303] text-[#DD0303] py-2 rounded-lg hover:bg-[#ff0303] transition cursor-pointer hover:text-white"
+              className="w-full border border-[#DD0303] text-[#DD0303] py-2 rounded-lg hover:bg-[#ff0303] transition cursor-pointer hover:text-white auth-submit-btn"
             >
               Send Request
             </Button>

@@ -2,7 +2,7 @@ import { Button, Divider } from "@heroui/react";
 
 export default function NotFoundPage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4 text-center">
+    <div className="page-wrapper text-center">
       <h1 className="text-7xl font-extrabold text-red-600">404</h1>
 
       <h2 className="text-3xl font-semibold mt-4">Page Not Found</h2>
