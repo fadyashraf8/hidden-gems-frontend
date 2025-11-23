@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-import AdminSidebar from "./AdminSidebar";
-import "./Admin.css";
+import OwnerSidebar from "./OwnerSidebar";
+import "../Admin/Admin.css"; // Reusing layout styles
+import "./Owner.css";
 
-export default function AdminLayout() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 768);
+export default function OwnerLayout() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -17,13 +18,16 @@ export default function AdminLayout() {
           &#9776;
         </button>
       )}
-      <AdminSidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-      <div className={`admin-content ${isSidebarOpen ? "shifted" : ""}`}>
-        <Outlet />
-      </div>
+      <OwnerSidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      
+      {/* Overlay for mobile */}
       {isSidebarOpen && (
         <div className="sidebar-overlay" onClick={toggleSidebar}></div>
       )}
+
+      <div className={`admin-content ${isSidebarOpen ? "shifted" : ""}`}>
+        <Outlet />
+      </div>
     </div>
   );
 }

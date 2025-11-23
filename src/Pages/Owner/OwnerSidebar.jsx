@@ -3,9 +3,10 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/userSlice";
 import { toggleDarkMode } from "../../redux/darkModeSlice";
-import "./Admin.css";
+import "../Admin/Admin.css"; // Reusing Admin sidebar styles
+import "./Owner.css";
 
-export default function AdminSidebar({ isOpen, toggleSidebar }) {
+export default function OwnerSidebar({ isOpen, toggleSidebar }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isDarkMode = useSelector((state) => state.darkMode.enabled);
@@ -18,10 +19,22 @@ export default function AdminSidebar({ isOpen, toggleSidebar }) {
     }
   };
 
+  const handleDeleteRestaurant = () => {
+    if (
+      window.confirm(
+        "Are you sure you want to delete your restaurant? This action cannot be undone."
+      )
+    ) {
+      localStorage.removeItem("ownerRestaurants");
+      // Force a reload or navigate to refresh the dashboard state
+      window.location.reload();
+    }
+  };
+
   return (
     <div className={`admin-sidebar ${isOpen ? "open" : ""}`}>
       <div className="sidebar-header">
-        <h2>Admin Panel</h2>
+        <h2>Owner Panel</h2>
         <button className="close-sidebar-btn" onClick={toggleSidebar}>
           &times;
         </button>
@@ -29,26 +42,24 @@ export default function AdminSidebar({ isOpen, toggleSidebar }) {
       <nav className="sidebar-nav">
         <div className="nav-group">
           <NavLink
-            to="/admin/users"
+            to="/owner/dashboard"
             className={({ isActive }) => (isActive ? "active-link" : "")}
             onClick={() => window.innerWidth < 768 && toggleSidebar()}
           >
-            Users
+            My Restaurant
           </NavLink>
-          <NavLink
-            to="/admin/categories"
-            className={({ isActive }) => (isActive ? "active-link" : "")}
-            onClick={() => window.innerWidth < 768 && toggleSidebar()}
+          <button
+            className="sidebar-btn"
+            style={{
+              color: "#dc3545",
+              marginTop: "10px",
+              textAlign: "left",
+              paddingLeft: "15px",
+            }}
+            onClick={handleDeleteRestaurant}
           >
-            Categories
-          </NavLink>
-          <NavLink
-            to="/admin/gems"
-            className={({ isActive }) => (isActive ? "active-link" : "")}
-            onClick={() => window.innerWidth < 768 && toggleSidebar()}
-          >
-            Gems
-          </NavLink>
+            Delete Restaurant
+          </button>
         </div>
 
         <div className="nav-group bottom-actions">
@@ -56,7 +67,7 @@ export default function AdminSidebar({ isOpen, toggleSidebar }) {
             className="sidebar-btn dark-mode-toggle"
             onClick={() => dispatch(toggleDarkMode())}
           >
-            {isDarkMode ? "☀️ Light Mode" : "⏾ Dark Mode"}
+            {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
           </button>
           <NavLink
             to="/"

@@ -1,11 +1,11 @@
 import React from "react";
 
 const Terms = () => (
-  <div className="min-h-screen bg-white py-2 px-4">
-    <div className="max-w-4xl mx-auto py-6">
-      <h1 className="font-bold text-6xl   mb-8">Terms of Service</h1>
-      
-        <p className="text-gray-700 leading-relaxed">
+  <div className="footer-page-wrapper">
+    <div className="footer-page-container">
+      <h1 className="footer-page-title">Terms of Service</h1>
+      <div className="footer-page-content">
+        <p className="leading-relaxed">
           Last updated: Novmber 20, 2025
         </p>
 
@@ -33,7 +33,7 @@ const Terms = () => (
           you grant Gemsy a worldwide license to use, display, and distribute
           that content.
         </p>
-     
+      </div>
     </div>
   </div>
 );

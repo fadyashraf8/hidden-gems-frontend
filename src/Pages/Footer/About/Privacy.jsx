@@ -1,10 +1,10 @@
 import React from "react";
 
 const Privacy = () => (
-  <div className="min-h-screen bg-white py-2 px-4">
-    <div className="max-w-4xl mx-auto py-6">
-      <h1 className="text-6xl font-bold mb-8">Privacy Policy</h1>
-     
+  <div className="footer-page-wrapper">
+    <div className="footer-page-container">
+      <h1 className="footer-page-title">Privacy Policy</h1>
+      <div className="footer-page-content">
         <p>Last updated: Novmber 20, 2025</p>
 
         <h2 className="text-2xl font-semibold mt-2 text-[#DD0303]">
@@ -30,7 +30,7 @@ const Privacy = () => (
           We do not sell your personal information to third parties. We may
           share information in specific circumstances described in this policy.
         </p>
-     
+      </div>
     </div>
   </div>
 );

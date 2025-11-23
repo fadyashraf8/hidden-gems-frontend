@@ -14,12 +14,16 @@ import AdminLayout from "./Pages/Admin/AdminLayout";
 import AdminUsers from "./Pages/Admin/AdminUsers";
 import AdminGems from "./Pages/Admin/AdminGems";
 import AdminCategories from "./Pages/Admin/AdminCategories";
+import OwnerLayout from "./Pages/Owner/OwnerLayout";
+import OwnerDashboard from "./Pages/Owner/OwnerDashboard";
+import AddRestaurant from "./Pages/Owner/AddRestaurant";
+import EditRestaurant from "./Pages/Owner/EditRestaurant";
 import { Toaster } from "react-hot-toast";
 import AboutLayout from "./Components/Layout/AboutLayout/AboutLayout";
 import AboutUs from "./Pages/Footer/About/AboutUs";
 import Careers from "./Pages/Footer/About/Careers";
 import Press from "./Pages/Footer/About/Press";
-import Terms from "./Pages/Footer/About/terms";
+import Terms from "./Pages/Footer/About/Terms";
 import Privacy from "./Pages/Footer/About/Privacy";
 import Content from "./Pages/Footer/About/Content";
 
@@ -53,6 +57,14 @@ function App() {
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.classList.add("dark-mode");
+    } else {
+      document.documentElement.classList.remove("dark-mode");
+    }
+  }, [dark]);
 
   const router = createBrowserRouter([
     {
@@ -163,29 +175,41 @@ function App() {
           ],
         },
 
-        {
-          path: "admin",
-          element: (
-            <ProtectedRoute allowedRoles={["admin"]}>
-              <AdminLayout />
-            </ProtectedRoute>
-          ),
-          children: [
-            { index: true, element: <Navigate to="users" replace /> },
-            { path: "users", element: <AdminUsers /> },
-            { path: "gems", element: <AdminGems /> },
-            { path: "categories", element: <AdminCategories /> },
-          ],
-        },
-
         // 404 Page
         { path: "*", element: <NotFoundPage /> },
+      ],
+    },
+    {
+      path: "admin",
+      element: (
+        <ProtectedRoute allowedRoles={["admin"]}>
+          <AdminLayout />
+        </ProtectedRoute>
+      ),
+      children: [
+        { index: true, element: <Navigate to="users" replace /> },
+        { path: "users", element: <AdminUsers /> },
+        { path: "gems", element: <AdminGems /> },
+        { path: "categories", element: <AdminCategories /> },
+      ],
+    },
+    {
+      path: "owner",
+      element: (
+        <ProtectedRoute allowedRoles={["owner"]}>
+          <OwnerLayout />
+        </ProtectedRoute>
+      ),
+      children: [
+        { path: "dashboard", element: <OwnerDashboard /> },
+        { path: "add-restaurant", element: <AddRestaurant /> },
+        { path: "edit-restaurant", element: <EditRestaurant /> },
       ],
     },
   ]);
 
   return (
-    <div className={dark ? "dark-mode" : ""}>
+    <div>
       <Toaster
         position="top-center"
         toastOptions={{

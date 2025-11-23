@@ -1,0 +1,170 @@
+/* Owner Dashboard Styles */
+
+.owner-dashboard {
+  padding: 40px;
+  padding-top: 80px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.owner-title {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.owner-subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* Single Restaurant View */
+.restaurant-detail-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.restaurant-hero-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  background-color: #eee;
+}
+
+.restaurant-info-body {
+  padding: 30px;
+}
+
+.restaurant-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.restaurant-name-large {
+  font-size: 2rem;
+  margin: 0;
+  color: #333;
+}
+
+.restaurant-category-badge {
+  background-color: #e0f7fa;
+  color: #006064;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.restaurant-meta {
+  display: flex;
+  gap: 20px;
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 1rem;
+}
+
+.restaurant-description {
+  line-height: 1.6;
+  color: #444;
+  font-size: 1.1rem;
+}
+
+/* Form Styles */
+.owner-form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: #218838;
+}
+
+/* Dark Mode Overrides */
+.dark-mode .owner-dashboard {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+.dark-mode .owner-title,
+.dark-mode .restaurant-name-large,
+.dark-mode .form-group label {
+  color: #fff;
+}
+
+.dark-mode .owner-subtitle,
+.dark-mode .restaurant-meta,
+.dark-mode .restaurant-description {
+  color: #aaa;
+}
+
+.dark-mode .restaurant-detail-card,
+.dark-mode .owner-form-container {
+  background-color: #2d2d2d;
+  color: #e0e0e0;
+}
+
+.dark-mode .form-group input,
+.dark-mode .form-group textarea,
+.dark-mode .form-group select {
+  background-color: #333;
+  border-color: #555;
+  color: #fff;
+}
+
+.dark-mode .restaurant-category-badge {
+  background-color: #004d40;
+  color: #80cbc4;
+}

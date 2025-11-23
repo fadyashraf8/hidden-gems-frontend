@@ -53,12 +53,10 @@ const ResetPassword = () => {
   });
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 ">
-      <div className=" bg-white p-8 rounded-2xl shadow-lg w-full max-w-md mt-8 ">
+    <div className="page-wrapper">
+      <div className="auth-card mt-8">
         <form onSubmit={handleSubmit(handle)}>
-          <h1 className="text-3xl font-bold text-center my-3">
-            Reset Password
-          </h1>
+          <h1 className="auth-title my-3">Reset Password</h1>
 
           <div className="flex flex-col gap-6">
             <Input
@@ -88,7 +86,7 @@ const ResetPassword = () => {
             <Button
               isLoading={isLoading}
               type="submit"
-              className="w-full border border-[#DD0303] text-black py-2 rounded-lg hover:bg-[#ff0303] transition cursor-pointer hover:text-white"
+              className="w-full border border-[#DD0303] text-black py-2 rounded-lg hover:bg-[#ff0303] transition cursor-pointer hover:text-white auth-submit-btn"
               variant="bordered"
             >
               Reset Password
