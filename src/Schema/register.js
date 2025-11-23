@@ -22,7 +22,7 @@ export const schema = zod.object({
     .string()
     .regex(
       /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-      "Password must contain at least one letter and one number"
+      "Password must contain at least one letter and one number and one special character"
     )
     .min(6)
     .nonempty("Password is required"),

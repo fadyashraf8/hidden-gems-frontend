@@ -95,6 +95,7 @@ export default function UserProfile() {
                 {user.email}
               </p>
             </div>
+            
 
             {/* Username */}
             <div className="group">
