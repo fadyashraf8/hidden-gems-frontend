@@ -92,7 +92,7 @@ function App() {
       children: [
         { index: true, element: <Home /> },
         { path: "home", element: <Home /> },
-
+        { path: "contact-us", element: <ContactUsPage />},
         {
           path: "about",
           element: <AboutLayout />,
@@ -134,7 +134,7 @@ function App() {
               ),
             },
             { path: "advertising", element: <Advertising /> },
-            { path: "partners", element: <Partners /> },
+            { path: "partners", element: <Partners /> }
           ],
         },
 
@@ -228,13 +228,6 @@ function App() {
       element: (
         <CategoriesPage/>
       )
-    },
-    {
-      path: "contact-us",
-      element: (
-        <ContactUsPage/>
-      )
-
     }
   ]);
 
