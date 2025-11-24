@@ -9,8 +9,9 @@ import { useDispatch } from "react-redux";
 import { login } from "../../redux/userSlice";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-
+import { Eye, EyeOff } from "lucide-react";
 const LoginPage = () => {
+const [showPassword, setShowPassword] = useState(false);
 
   const { t } = useTranslation("login");
 
@@ -92,6 +93,10 @@ const LoginPage = () => {
               label={t("email-placeholder")}
               type="email"
               {...register("email")}
+              classNames={{
+                errorMessage: "text-[#DD0303]", 
+         
+              }}
             />
 
             <Input
@@ -99,8 +104,21 @@ const LoginPage = () => {
               errorMessage={t("password-error")}
               variant="bordered"
               label={t("password-placeholder")}
-              type="password"
+              type={showPassword ? "text" : "password"}
               {...register("password")}
+              classNames={{
+                errorMessage: "text-[#DD0303] ", 
+             
+              }}
+              endContent={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="focus:outline-none"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              }
             />
 
             <Button

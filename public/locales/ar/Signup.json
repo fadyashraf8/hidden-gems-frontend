@@ -17,6 +17,7 @@
   "phoneNumber-placeholder": "رقم الهاتف",
   "phoneNumber-error": "رقم الهاتف مطلوب",
   "image-placeholder": "صورة الملف الشخصي",
+  "image-error": "صورة الملف الشخصي مطلوب",
 
   "Signup-button": "التسجيل",
   "hr": "أو",
