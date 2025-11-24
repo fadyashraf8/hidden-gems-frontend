@@ -11,6 +11,10 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
 const LoginPage = () => {
+
+  const { t } = useTranslation("login");
+
+  const baseUrl = import.meta.env.VITE_Base_URL
   const dispatch = useDispatch();
 
   const [isloading, setisloading] = useState(false);
@@ -39,7 +43,10 @@ const LoginPage = () => {
       ) {
         toast.success(t("Toaster-success"));
 
+
         // Fetch user info after login
+
+        // this was authUrl and i changed to baseUrl
         try {
           const res = await fetch(baseUrl+ "/auth/me", {
             credentials: "include",
@@ -66,9 +73,10 @@ const LoginPage = () => {
     }
   }
 
+
   // ========= GOOGLE & FACEBOOK URLs =========
-  const GOOGLE_URL = "https://your-backend.com/auth/google";
-  const FACEBOOK_URL = "https://your-backend.com/auth/facebook";
+  const GOOGLE_URL = baseUrl+"/google";
+  const FACEBOOK_URL = baseUrl+"/facebook";
 
   return (
     <div className="page-wrapper">

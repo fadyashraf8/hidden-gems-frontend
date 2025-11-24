@@ -253,7 +253,7 @@ export default function AdminCategories() {
                     </td>
 
                     <td>
-                      {cat.createdBy?.email} <br /> 
+                      {cat.createdBy?.email} <br />
                       {/* {cat.createdBy?.firstName} */}
                       {/* {cat.createdBy?.lastName} */}
                     </td>
@@ -263,14 +263,14 @@ export default function AdminCategories() {
                         className="admin-btn"
                         onClick={() => openEditModal(cat)}
                       >
-                        Edit
+                        ✎
                       </button>
 
                       <button
                         className="admin-btn admin-btn-delete"
                         onClick={() => handleDelete(cat._id)}
                       >
-                        Delete
+                        🗑️
                       </button>
                     </td>
                   </tr>
