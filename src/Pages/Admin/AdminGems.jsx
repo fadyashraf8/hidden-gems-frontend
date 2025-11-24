@@ -270,6 +270,7 @@ const res = await fetch(`${baseURL}/gems`, { // Changed path and ID format
                     <th>Status</th>
                     <th>Subscribed</th>
                     <th>Disc. / Prem.</th>
+                    <th>Created By</th>
                     <th>Actions</th>
                     </tr>
                 </thead>
@@ -294,6 +295,9 @@ const res = await fetch(`${baseURL}/gems`, { // Changed path and ID format
                         <td>{g.isSubscribed ? "✅" : "❌"}</td>
                         <td>
                             {g.discount}% / {g.discountPremium || 0}%
+                        </td>
+                               <td>
+                            {g.createdBy?.email || "N/A"}
                         </td>
                         <td>
                             <button className="admin-btn" onClick={() => openEditModal(g)}>
