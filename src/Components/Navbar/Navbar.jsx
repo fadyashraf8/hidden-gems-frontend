@@ -78,7 +78,8 @@ export default function Navbar() {
       <div className="navbar-container">
         {/* Logo */}
         <Link to="/" className="navbar-logo">
-          {t("app_name")}
+          {/* {t("app_name")} */}
+          Gemsy
         </Link>
 
         <div className="search-box">
@@ -94,7 +95,7 @@ export default function Navbar() {
             <NavLink to="/surprise">{t("nav_link_surprise")}</NavLink>
           </li>
           <li>
-            <NavLink to="/contact">{t("nav_link_contact")}</NavLink>
+            <NavLink to="/contact-us">{t("nav_link_contact")}</NavLink>
           </li>
         </ul>
 

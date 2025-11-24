@@ -6,8 +6,8 @@ import { Typography } from '@mui/material';
 // --- Configuration ---
 const TOTAL_STARS = 5;
 const STAR_COLOR = 'white'; // Stars are always white
-const STAR_SIZE = 10; // Size of the star icon
-const BOX_SIZE = 15; // Size of the colored box container
+const STAR_SIZE = '1rem'; // Size of the star icon
+const BOX_SIZE = '1.5rem'; // Fixed size for better visibility
 
 // --- Color Logic Helper (No Change) ---
 const getRatingColor = (ratingValue) => {
@@ -37,35 +37,37 @@ const labels = {
 const getLabel = (value) => labels[value] || 'Select a rating';
 
 export default function RatingStarsIndividualBoxes() {
-  // Using a full integer value for display simplicity since we can't easily draw half-boxes
   const [value, setValue] = React.useState(3); 
   const [hover, setHover] = React.useState(-1);
 
-  // Determine the value to use for display and logic
   const displayValue = hover !== -1 ? hover : value;
-  
-  // Determine the overall color based on the current rating
   const overallColor = getRatingColor(displayValue);
 
-  // Function to handle click/selection
   const handleStarClick = (starValue) => {
-    setValue(starValue === value ? 0 : starValue); // Toggle off if clicked again
+    setValue(starValue === value ? 0 : starValue); 
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2, width: '100%', margin: '0 auto' }}>
+    <Box sx={{ 
+        display: 'flex', 
+        // CHANGED: 'row' puts them side-by-side
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        // CHANGED: 'gap' adds space between the stars and the text
+        gap: 2, 
+        p: '0.5rem', 
+        width: 'fit-content', 
+        justifyContent: 'center' 
+    }}>
         
         {/* --- Individual Star Boxes Row --- */}
-        <Box sx={{ display: 'flex', gap: 0.5, mb: 2 }}>
+        <Box sx={{ display: 'flex', gap: 0.5 }}>
             {Array.from({ length: TOTAL_STARS }).map((_, index) => {
                 const starValue = index + 1;
                 const isFilled = starValue <= displayValue;
-
-                // The color of the box is determined by the star's index and the current value
-                const boxColor = isFilled ? overallColor : '#E0E0E0'; // Grey for unrated boxes
+                const boxColor = isFilled ? overallColor : '#E0E0E0'; 
 
                 return (
-                    // 📌 PINPOINT 1: The individual colored Box container
                     <Box
                         key={index}
                         onClick={() => handleStarClick(starValue)}
@@ -74,7 +76,7 @@ export default function RatingStarsIndividualBoxes() {
                         sx={{
                             width: BOX_SIZE,
                             height: BOX_SIZE,
-                            bgcolor: boxColor, // Dynamic color for the box background
+                            bgcolor: boxColor, 
                             borderRadius: 1,
                             display: 'flex',
                             justifyContent: 'center',
@@ -83,12 +85,11 @@ export default function RatingStarsIndividualBoxes() {
                             transition: 'background-color 0.2s',
                         }}
                     >
-                        {/* 📌 PINPOINT 2: The white star icon inside the box */}
                         <StarIcon 
                             sx={{ 
-                                color: STAR_COLOR, // Always white
+                                color: STAR_COLOR, 
                                 fontSize: STAR_SIZE,
-                                opacity: isFilled ? 1 : 0.6 // Slightly dim the star in unrated boxes
+                                opacity: isFilled ? 1 : 0.6 
                             }} 
                         />
                     </Box>
@@ -98,14 +99,15 @@ export default function RatingStarsIndividualBoxes() {
 
         {/* --- Rating Label --- */}
         <Typography 
-          variant="body1" 
+          // variant='h6'
           sx={{ 
-            fontSize: '1rem',
             fontWeight: 'bold',
-            color: overallColor, // Text color matches the main box color idea
+            fontSize: STAR_SIZE,
+            color: overallColor, 
+            minWidth: '150px' // Optional: prevents jumping when text length changes
           }}
         >
-          {getLabel(displayValue)} ({displayValue} Stars)
+          {getLabel(displayValue)} ({displayValue})
         </Typography>
     </Box>
   );

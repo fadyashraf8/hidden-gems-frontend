@@ -47,6 +47,10 @@ import MainLayout from "./Components/Layout/MainLayout";
 
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import PublicRoute from "./Components/Auth/PublicRoute";
+import { Cat } from "lucide-react";
+
+import ContactUsPage from "./Pages/ContactUs";
+import CategoriesPage from "./Pages/CategoriesPage/CategoriesPage";
 
 import { Toaster } from "react-hot-toast";
 
@@ -88,7 +92,7 @@ function App() {
       children: [
         { index: true, element: <Home /> },
         { path: "home", element: <Home /> },
-
+        { path: "contact-us", element: <ContactUsPage />},
         {
           path: "about",
           element: <AboutLayout />,
@@ -130,7 +134,7 @@ function App() {
               ),
             },
             { path: "advertising", element: <Advertising /> },
-            { path: "partners", element: <Partners /> },
+            { path: "partners", element: <Partners /> }
           ],
         },
 
@@ -219,6 +223,12 @@ function App() {
         { path: "edit-restaurant", element: <EditRestaurant /> },
       ],
     },
+    {
+      path: "shopping",
+      element: (
+        <CategoriesPage/>
+      )
+    }
   ]);
 
   return (
