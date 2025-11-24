@@ -10,16 +10,16 @@ import { login } from "../../redux/userSlice";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { Eye, EyeOff } from "lucide-react";
+import { GoogleLogin } from '@react-oauth/google'; 
+
 const LoginPage = () => {
-const [showPassword, setShowPassword] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const { t } = useTranslation("login");
-
-  const baseUrl = import.meta.env.VITE_Base_URL
+  const baseUrl = import.meta.env.VITE_Base_URL;
   const dispatch = useDispatch();
-
   const [isloading, setisloading] = useState(false);
   const navigate = useNavigate();
+
   const {
     handleSubmit,
     register,
@@ -44,12 +44,8 @@ const [showPassword, setShowPassword] = useState(false);
       ) {
         toast.success(t("Toaster-success"));
 
-
-        // Fetch user info after login
-
-        // this was authUrl and i changed to baseUrl
         try {
-          const res = await fetch(baseUrl+ "/auth/me", {
+          const res = await fetch(baseUrl + "/auth/me", {
             credentials: "include",
           });
           if (res.ok) {
@@ -74,10 +70,55 @@ const [showPassword, setShowPassword] = useState(false);
     }
   }
 
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      setisloading(true);
+      
+      const response = await fetch(baseUrl + '/auth/google', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          token: credentialResponse.credential
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok && data.message === "Login successful") {
+        toast.success("Logged in with Google successfully!");
+        
+        try {
+          const res = await fetch(baseUrl + "/auth/me", {
+            credentials: "include",
+          });
+          if (res.ok) {
+            const userData = await res.json();
+            dispatch(login(userData.user));
+          }
+        } catch (e) {
+          console.error("Failed to fetch user data", e);
+        }
+        
+        navigate("/", { replace: true });
+      } else {
+        toast.error(data.error || "Google login failed");
+      }
+      
+    } catch (error) {
+      console.error("Google login error:", error);
+      toast.error("Something went wrong with Google login!");
+    } finally {
+      setisloading(false);
+    }
+  };
 
-  // ========= GOOGLE & FACEBOOK URLs =========
-  const GOOGLE_URL = baseUrl+"/google";
-  const FACEBOOK_URL = baseUrl+"/facebook";
+  const handleGoogleError = () => {
+    toast.error("Google login failed!");
+  };
+
 
   return (
     <div className="page-wrapper">
@@ -85,7 +126,7 @@ const [showPassword, setShowPassword] = useState(false);
         <form className="space-y-4" onSubmit={handleSubmit(handle)}>
           <h1 className="auth-title">{t("title")}</h1>
 
-          <div className="flex flex-col gap-6 ">
+          <div className="flex flex-col gap-6">
             <Input
               isInvalid={Boolean(errors.email?.message)}
               errorMessage={t("email-error")}
@@ -94,8 +135,7 @@ const [showPassword, setShowPassword] = useState(false);
               type="email"
               {...register("email")}
               classNames={{
-                errorMessage: "text-[#DD0303]", 
-         
+                errorMessage: "text-[#DD0303]",
               }}
             />
 
@@ -107,8 +147,7 @@ const [showPassword, setShowPassword] = useState(false);
               type={showPassword ? "text" : "password"}
               {...register("password")}
               classNames={{
-                errorMessage: "text-[#DD0303] ", 
-             
+                errorMessage: "text-[#DD0303]",
               }}
               endContent={
                 <button
@@ -137,28 +176,23 @@ const [showPassword, setShowPassword] = useState(false);
             </div>
 
             <div className="flex flex-col gap-4">
-              <Button
-                color="primary"
-                variant="flat"
-                onClick={() => (window.location.href = GOOGLE_URL)}
-                className="w-full bg-white text-[#DD0303] py-2 rounded-lg hover:bg-gray-100 transition cursor-pointer google-btn"
-              >
-                {t("link-google")}
-              </Button>
+              <div className="w-full flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleError}
+                  size="large"
+                  width="100%"
+                  text="continue_with"
+                  shape="rectangular"
+                />
+              </div>
 
-              <Button
-                color="secondary"
-                variant="flat"
-                onClick={() => (window.location.href = FACEBOOK_URL)}
-                className="w-full mt-4 bg-blue-800 text-white py-2 rounded-lg hover:bg-blue-900 transition cursor-pointer facebook-btn"
-              >
-                {t("link-facebook")}
-              </Button>
+         
             </div>
 
             <p>
               {t("text-signup")}{" "}
-              <Link to={"/signUp"} className="text-[#DD0303]   ">
+              <Link to={"/signUp"} className="text-[#DD0303]">
                 {t("link-signup")}
               </Link>
             </p>
