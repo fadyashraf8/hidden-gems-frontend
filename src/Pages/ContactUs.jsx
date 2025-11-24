@@ -137,7 +137,7 @@ export default function ContactUsPage() {
       {/* <NavBar /> */}
       
       {/* Header Section */}
-      <Box sx={{ bgcolor: BRAND_RED, py: 8, textAlign: 'center', color: 'white' }}>
+      <Box sx={{ bgcolor: "white", py: 8, textAlign: 'center', color: 'black' }}>
         <Container maxWidth="md">
           <Typography variant="h3" component="h1" sx={{ fontWeight: 900, mb: 2 }}>
             Get in Touch
