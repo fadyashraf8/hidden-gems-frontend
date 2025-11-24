@@ -9,10 +9,10 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
 const RegisterPage = () => {
-  const { t } = useTranslation("Signup"); 
+  const { t } = useTranslation("Signup");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
- const baseURL = import.meta.env.VITE_Base_URL;
+  const baseURL = import.meta.env.VITE_Base_URL;
   const {
     handleSubmit,
     register,
@@ -44,27 +44,29 @@ const RegisterPage = () => {
       formData.append("image", data.image[0]);
     }
 
-  try {
-    const res = await registerAPI(formData);
+    try {
+      console.log("Sending registration data:", formData);
+      const res = await registerAPI(formData);
+      console.log("Registration response:", res);
 
-    if (res.error) {
-      toast.error(t("Toaster-error"));
-    } else {
-      toast.success(t("Toaster-success"));
-      reset();
-      setTimeout(() => navigate("/login"), 1000);
+      if (res.error) {
+        console.error("Registration error:", res.error);
+        toast.error(res.error || t("Toaster-error"));
+      } else {
+        console.log("Registration success, redirecting to verify...");
+        toast.success(res.message || t("Toaster-success"));
+        navigate("/verify", { state: { email: data.email } });
+      }
+    } catch (err) {
+      console.error("Registration exception:", err);
+      toast.error(t("Toaster-error") || err.message);
+    } finally {
+      setIsLoading(false);
     }
-  } catch (err) {
-    toast.error(t("Toaster-error") || err);
-     
-  } finally {
-    setIsLoading(false);
-  }
-
   };
 
-  const GOOGLE_URL = baseURL+"/auth/google";
-  const FACEBOOK_URL = baseURL+"/auth/facebook";
+  const GOOGLE_URL = baseURL + "/auth/google";
+  const FACEBOOK_URL = baseURL + "/auth/facebook";
 
   return (
     <div className="page-wrapper mt-12">

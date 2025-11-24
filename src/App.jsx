@@ -5,12 +5,16 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useEffect } from "react";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 import { useSelector, useDispatch } from "react-redux";
 import { checkAuth } from "./redux/userSlice";
 import { useTranslation } from "react-i18next";
 
 import Home from "./Pages/Home/Home";
 import Layout from "./Components/Layout/Layout";
+import MainLayout from "./Components/Layout/MainLayout";
+import AuthLayout from "./Components/Layout/AuthLayout";
 import AdminLayout from "./Pages/Admin/AdminLayout";
 import AdminUsers from "./Pages/Admin/AdminUsers";
 import AdminGems from "./Pages/Admin/AdminGems";
@@ -40,14 +44,13 @@ import SignUp from "./Pages/SignUp/SignUp";
 import Login from "./Pages/Login/Login";
 import ForgetPassword from "./Pages/ForgetPassword/ForgetPassword";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
-import UserProfile from "./Pages/UserProfile/UserProfile";
 import NotFoundPage from "./Pages/NotFound/NotFoundPage";
-import AuthLayout from "./Components/Layout/AuthLayout";
-import MainLayout from "./Components/Layout/MainLayout";
-
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import PublicRoute from "./Components/Auth/PublicRoute";
 import { Cat } from "lucide-react";
+
+import GemDetails from "./Pages/GemDetails/GemDetails";
+import UserProfile from "./Pages/UserProfile/UserProfile";
 
 import ContactUsPage from "./Pages/ContactUs";
 import CategoriesPage from "./Pages/CategoriesPage/CategoriesPage";
@@ -55,6 +58,8 @@ import CategoriesPage from "./Pages/CategoriesPage/CategoriesPage";
 import { Toaster } from "react-hot-toast";
 
 function App() {
+  console.log(import.meta.env.VITE_CLIENT_ID);
+
   const dark = useSelector((state) => state.darkMode.enabled);
   const dispatch = useDispatch();
   const { i18n } = useTranslation();
@@ -92,7 +97,8 @@ function App() {
       children: [
         { index: true, element: <Home /> },
         { path: "home", element: <Home /> },
-        { path: "contact-us", element: <ContactUsPage />},
+        { path: "gems/:id", element: <GemDetails /> },
+        { path: "contact-us", element: <ContactUsPage /> },
         {
           path: "about",
           element: <AboutLayout />,
@@ -134,7 +140,7 @@ function App() {
               ),
             },
             { path: "advertising", element: <Advertising /> },
-            { path: "partners", element: <Partners /> }
+            { path: "partners", element: <Partners /> },
           ],
         },
 
@@ -225,47 +231,47 @@ function App() {
     },
     {
       path: "shopping",
-      element: (
-        <CategoriesPage/>
-      )
-    }
+      element: <CategoriesPage />,
+    },
   ]);
 
   return (
     <div>
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          duration: 2000,
-          error: {
-            style: {
-              background: "#DD0303",
-              color: "white",
-              borderRadius: "12px",
-              padding: "14px 18px",
-              fontSize: "15px",
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 2000,
+            error: {
+              style: {
+                background: "#DD0303",
+                color: "white",
+                borderRadius: "12px",
+                padding: "14px 18px",
+                fontSize: "15px",
+              },
+              iconTheme: {
+                primary: "white",
+                secondary: "#DD0303",
+              },
             },
-            iconTheme: {
-              primary: "white",
-              secondary: "#DD0303",
+            success: {
+              style: {
+                background: "#22c55e",
+                color: "white",
+                borderRadius: "12px",
+                padding: "14px 18px",
+                fontSize: "15px",
+              },
+              iconTheme: {
+                primary: "white",
+                secondary: "#22c55e",
+              },
             },
-          },
-          success: {
-            style: {
-              background: "#22c55e",
-              color: "white",
-              borderRadius: "12px",
-              padding: "14px 18px",
-              fontSize: "15px",
-            },
-            iconTheme: {
-              primary: "white",
-              secondary: "#22c55e",
-            },
-          },
-        }}
-      />
-      <RouterProvider router={router} />
+          }}
+        />
+        <RouterProvider router={router} />
+      </GoogleOAuthProvider>
     </div>
   );
 }

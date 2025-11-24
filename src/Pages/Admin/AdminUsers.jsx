@@ -17,7 +17,7 @@ export default function AdminUsers() {
   const [itemsPerPage] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [sortOrder, setSortOrder] = useState(""); 
+  const [sortOrder, setSortOrder] = useState("");
   const baseURL = import.meta.env.VITE_Base_URL;
   // Fetch users
   useEffect(() => {
@@ -142,7 +142,14 @@ export default function AdminUsers() {
         const data = await res.json();
         throw new Error(data.message || "Failed to delete user");
       }
-      setUsers((prev) => prev.filter((u) => u._id !== userId));
+
+      // Check if we need to go back a page (if this was the last user on the current page)
+      if (users.length === 1 && currentPage > 1) {
+        setCurrentPage((prev) => prev - 1);
+      } else {
+        // Otherwise, just refresh the current page to fill the gap
+        setRefreshTrigger((prev) => prev + 1);
+      }
     } catch (err) {
       alert(err.message);
     }
