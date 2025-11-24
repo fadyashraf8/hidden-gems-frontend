@@ -194,18 +194,26 @@ export default function AdminCategories() {
       <div className="admin-dashboard">
         <div className="admin-header-actions">
           <h1 className="admin-title">Category Management</h1>
-
-          <div className="admin-sort-wrapper">
-            <label>Sort by:</label>
-            <select
-              value={sortOrder}
-              onChange={handleSortChange}
-              className="admin-sort-select"
+          <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+            <button
+              style={{ marginTop: 0 }}
+              className="admin-btn create-user-button "
+              onClick={() => setShowCreateModal(true)}
             >
-              <option value="">Default</option>
-              <option value="categoryName">Name (A-Z)</option>
-              <option value="-categoryName">Name (Z-A)</option>
-            </select>
+              Create Category
+            </button>
+            <div className="admin-sort-wrapper ">
+              <label>Sort by:</label>
+              <select
+                value={sortOrder}
+                onChange={handleSortChange}
+                className="admin-sort-select"
+              >
+                <option value="">Default</option>
+                <option value="categoryName">Name (A-Z)</option>
+                <option value="-categoryName">Name (Z-A)</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -306,15 +314,6 @@ export default function AdminCategories() {
         )}
 
         {/* CREATE Category */}
-        <div className="admin-create-user">
-          <h3>Create New Category</h3>
-          <button
-            className="admin-btn"
-            onClick={() => setShowCreateModal(true)}
-          >
-            Create Category
-          </button>
-        </div>
 
         {/* CREATE MODAL */}
         {showCreateModal && (
