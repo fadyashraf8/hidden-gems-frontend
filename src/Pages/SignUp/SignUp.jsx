@@ -7,8 +7,11 @@ import { registerAPI } from "../../Services/RegisterAuth.js";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { Eye, EyeOff } from "lucide-react";
 
 const RegisterPage = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const { t } = useTranslation("Signup"); 
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -81,6 +84,9 @@ const RegisterPage = () => {
               variant="bordered"
               label={t("firstName-placeholder")}
               {...register("firstName")}
+              classNames={{
+                errorMessage: "text-[#DD0303] ",
+              }}
             />
 
             <Input
@@ -91,6 +97,9 @@ const RegisterPage = () => {
               variant="bordered"
               label={t("lastName-placeholder")}
               {...register("lastName")}
+              classNames={{
+                errorMessage: "text-[#DD0303] ",
+              }}
             />
             <Input
               isInvalid={!!errors.email?.message}
@@ -98,16 +107,36 @@ const RegisterPage = () => {
               variant="bordered"
               label={t("email-placeholder")}
               {...register("email")}
+              classNames={{
+                errorMessage: "text-[#DD0303] ",
+              }}
             />
             <Input
               isInvalid={!!errors.password?.message}
               errorMessage={
                 errors.password?.message && t(errors.password?.message)
               }
-              type="password"
+              type={showPassword ? "text" : "password"} // هنا بنغير النوع
               variant="bordered"
               label={t("password-placeholder")}
               {...register("password")}
+              endContent={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="focus:outline-none"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              }
+              classNames={{
+                errorMessage: "text-[#DD0303]",
+                inputWrapper: [
+                  "data-[invalid=true]:border-[#DD0303]",
+                  "data-[invalid=true]:hover:border-[#DD0303]",
+                  "group-data-[focus=true]:data-[invalid=true]:border-[#DD0303]",
+                ],
+              }}
             />
             <Input
               isInvalid={!!errors.phoneNumber?.message}
@@ -117,6 +146,9 @@ const RegisterPage = () => {
               variant="bordered"
               label={t("phoneNumber-placeholder")}
               {...register("phoneNumber")}
+              classNames={{
+                errorMessage: "text-[#DD0303] ",
+              }}
             />
             <Input
               isInvalid={!!errors.image?.message}
@@ -126,6 +158,14 @@ const RegisterPage = () => {
               type="file"
               accept="image/*"
               {...register("image")}
+              classNames={{
+                errorMessage: "text-[#DD0303]",
+                inputWrapper: [
+                  "data-[invalid=true]:border-[#DD0303]",
+                  "data-[invalid=true]:hover:border-[#DD0303]",
+                  "group-data-[focus=true]:data-[invalid=true]:border-[#DD0303]",
+                ],
+              }}
             />
 
             <Button

@@ -5,6 +5,8 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useEffect } from "react";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 import { useSelector, useDispatch } from "react-redux";
 import { checkAuth } from "./redux/userSlice";
 import { useTranslation } from "react-i18next";
@@ -55,6 +57,9 @@ import CategoriesPage from "./Pages/CategoriesPage/CategoriesPage";
 import { Toaster } from "react-hot-toast";
 
 function App() {
+
+  console.log(import.meta.env.VITE_CLIENT_ID);
+
   const dark = useSelector((state) => state.darkMode.enabled);
   const dispatch = useDispatch();
   const { i18n } = useTranslation();
@@ -233,6 +238,8 @@ function App() {
 
   return (
     <div>
+          <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
+
       <Toaster
         position="top-center"
         toastOptions={{
@@ -266,6 +273,8 @@ function App() {
         }}
       />
       <RouterProvider router={router} />
+          </GoogleOAuthProvider>
+
     </div>
   );
 }
