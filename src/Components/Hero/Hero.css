@@ -73,6 +73,6 @@
 @media (max-width: 768px) {
   .progress-container {
     right: 10px !important;
-    left: 10px !important;  /* for RTL mode */
+    left: 10px !important;  
   }
 }
