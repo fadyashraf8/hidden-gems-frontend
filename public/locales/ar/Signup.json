@@ -1,0 +1,30 @@
+{
+  "title": "التسجيل",
+  "firstName-placeholder": "الاسم الاول",
+  "firstName-error": "الاسم الاول مطلوب",
+  "firstName-error-min": "الاسم الاول يجب ان يكون على الاقل 3 حروف",
+  "firstName-error-max": "الاسم الاول يجب ان يكون على الاكثر 20 حرف",
+  "lastName-placeholder": "الاسم الاخير",
+  "lastName-error": "الاسم الاخير مطلوب",
+  "lastName-error-min": "الاسم الاخير يجب ان يكون على الاقل 3 حروف",
+  "lastName-error-max": "الاسم الاخير يجب ان يكون على الاكثر 20 حرف",
+  "email-placeholder": "البريد الالكتروني",
+  "email-error": "البريد الالكتروني مطلوب",
+  "email-error-invalid": "البريد الالكتروني غير صحيح",
+  "password-placeholder": "كلمة المرور",
+  "password-error": "كلمة المرور  مطلوب",
+  "password-error-enter": "كلمة المرور يجب ان تحتوي على حرف كبير، حرف صغير، رقم و حرف خاص",
+  "phoneNumber-placeholder": "رقم الهاتف",
+  "phoneNumber-error": "رقم الهاتف مطلوب",
+  "image-placeholder": "صورة الملف الشخصي",
+
+  "Signup-button": "التسجيل",
+  "hr": "أو",
+
+  "link-google": "الاكمال عن طريق جوجل",
+  "link-facebook": "الاكمال عن طريق فيسبوك",
+  "link-login": "تسجيل الدخول",
+  "text-login": "لديك حساب؟",
+  "Toaster-success": "تم تسجيل المستخدم بنجاح. يُرجى تأكيد بريدك الإلكتروني.",
+  "Toaster-error": "البريد الالكتروني موجود بالفعل"
+}

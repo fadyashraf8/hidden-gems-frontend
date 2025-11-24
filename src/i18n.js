@@ -19,31 +19,32 @@ import Backend from "i18next-http-backend"
 //     }
 // };
 
-i18n.use(Backend)
-    .use(Languagedetector) //gets current language users' browser 
-    .use(initReactI18next)
-    .init({
-        fallbackLng: "en",
-        supportedLngs: ['en', 'ar'], // Essential for filtering detected languages
-        //List all 'translation' namespaces 
-        ns: ['categories', 'common', 'home'],
-        
-        // use if none is specified in useTranslation()
-        defaultNS: 'common',
-        interpolation: {
-            escapeValue: false //react already safes from xss
-        },
-    
-        detection: {
-            order: ['querystring', 'cookie', 'localStorage', 'navigator'],
-            // Caches where the language is saved after detection/changeLanguage()
-            caches: ['localStorage', 'cookie']
-        },
-        backend: {
-            // Change .json to .js to match your file name
-            loadPath: '/locales/{{lng}}/{{ns}}.json', 
-        },
-        // debug: true // <--- IMPORTANT: for troubleshooting
-    })
+i18n
+  .use(Backend)
+  .use(Languagedetector) //gets current language users' browser
+  .use(initReactI18next)
+  .init({
+    fallbackLng: "en",
+    supportedLngs: ["en", "ar"], // Essential for filtering detected languages
+    //List all 'translation' namespaces
+    ns: ["categories", "common", "home", "login", "Signup"],
+
+    // use if none is specified in useTranslation()
+    defaultNS: "common",
+    interpolation: {
+      escapeValue: false, //react already safes from xss
+    },
+
+    detection: {
+      order: ["querystring", "cookie", "localStorage", "navigator"],
+      // Caches where the language is saved after detection/changeLanguage()
+      caches: ["localStorage", "cookie"],
+    },
+    backend: {
+      // Change .json to .js to match your file name
+      loadPath: "/locales/{{lng}}/{{ns}}.json",
+    },
+    // debug: true // <--- IMPORTANT: for troubleshooting
+  });
 
 export default i18n;
