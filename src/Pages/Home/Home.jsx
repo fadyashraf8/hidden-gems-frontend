@@ -32,7 +32,7 @@ const slides = [
        <Hero slides={slides} duration={5000} />
        <Stack direction="column" spacing={5} sx={{ width: '100%', margin: '0 auto', p: 1 }}>
             <br></br>
-            <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', mb: 3 }}>
+            <Typography variant="h3" component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', mb: 3 }}>
                 {t('section_recent_title')}
             </Typography>
             <Stack 

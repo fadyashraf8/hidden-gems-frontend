@@ -100,7 +100,7 @@ export default function ReviewCard() {
                 <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 'bold', mt: 0.5 }}>
                     Read more
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', mb: 1, width: '100%', mt: 1 }}>
                     <RatingStars rating={reviewData.rating} readOnly={true} color={REVIEW_RED_COLOR} />
                 </Box>
             </CardContent>

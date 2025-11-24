@@ -49,6 +49,10 @@ import MainLayout from "./Components/Layout/MainLayout";
 
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import PublicRoute from "./Components/Auth/PublicRoute";
+import { Cat } from "lucide-react";
+
+import ContactUsPage from "./Pages/ContactUs";
+import CategoriesPage from "./Pages/CategoriesPage/CategoriesPage";
 
 function App() {
   const dark = useSelector((state) => state.darkMode.enabled);
@@ -206,6 +210,19 @@ function App() {
         { path: "edit-restaurant", element: <EditRestaurant /> },
       ],
     },
+    {
+      path: "shopping",
+      element: (
+        <CategoriesPage/>
+      )
+    },
+    {
+      path: "contact-us",
+      element: (
+        <ContactUsPage/>
+      )
+
+    }
   ]);
 
   return (
