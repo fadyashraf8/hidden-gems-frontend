@@ -6,9 +6,11 @@ import { schema } from "../../Schema/register.js";
 import { registerAPI } from "../../Services/RegisterAuth.js";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 const RegisterPage = () => {
-  const [isloading, setisloading] = useState(false);
+  const { t } = useTranslation("Signup"); 
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
  const baseURL = import.meta.env.VITE_Base_URL;
   const {
@@ -20,41 +22,46 @@ const RegisterPage = () => {
     defaultValues: {
       firstName: "",
       lastName: "",
-      phoneNumber: "",
       email: "",
       password: "",
+      phoneNumber: "",
       image: null,
     },
     resolver: zodResolver(schema),
     mode: "onBlur",
   });
 
-  async function handle(Data) {
-    setisloading(true);
+  const handle = async (data) => {
+    setIsLoading(true);
 
     const formData = new FormData();
-    formData.append("firstName", Data.firstName);
-    formData.append("lastName", Data.lastName);
-    formData.append("email", Data.email);
-    formData.append("password", Data.password);
-    formData.append("phoneNumber", Data.phoneNumber);
-
-    if (Data.image && Data.image.length > 0) {
-      formData.append("image", Data.image[0]);
+    formData.append("firstName", data.firstName);
+    formData.append("lastName", data.lastName);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("phoneNumber", data.phoneNumber);
+    if (data.image && data.image.length > 0) {
+      formData.append("image", data.image[0]);
     }
 
-    const data = await registerAPI(formData);
-    setisloading(false);
+  try {
+    const res = await registerAPI(formData);
 
-    if (data.error) {
-      toast.error(data.error);
+    if (res.error) {
+      toast.error(t("Toaster-error"));
     } else {
-      toast.success(data.message || "Account created successfully!");
+      toast.success(t("Toaster-success"));
       reset();
-
       setTimeout(() => navigate("/login"), 1000);
     }
+  } catch (err) {
+    toast.error(t("Toaster-error") || err);
+     
+  } finally {
+    setIsLoading(false);
   }
+
+  };
 
   const GOOGLE_URL = baseURL+"/auth/google";
   const FACEBOOK_URL = baseURL+"/auth/facebook";
@@ -63,74 +70,76 @@ const RegisterPage = () => {
     <div className="page-wrapper mt-12">
       <div className="auth-card mt-8">
         <form onSubmit={handleSubmit(handle)}>
-          <h1 className="auth-title mb-1">SignUp</h1>
+          <h1 className="auth-title mb-1">{t("title")}</h1>
 
           <div className="flex flex-col gap-4">
             <Input
-              isInvalid={Boolean(errors.firstName?.message)}
-              errorMessage={errors.firstName?.message}
+              isInvalid={!!errors.firstName?.message}
+              errorMessage={
+                errors.firstName?.message && t(errors.firstName?.message)
+              }
               variant="bordered"
-              label="First Name"
+              label={t("firstName-placeholder")}
               {...register("firstName")}
             />
 
             <Input
-              isInvalid={Boolean(errors.lastName?.message)}
-              errorMessage={errors.lastName?.message}
+              isInvalid={!!errors.lastName?.message}
+              errorMessage={
+                errors.lastName?.message && t(errors.lastName?.message)
+              }
               variant="bordered"
-              label="Last Name"
+              label={t("lastName-placeholder")}
               {...register("lastName")}
             />
-
             <Input
-              isInvalid={Boolean(errors.email?.message)}
-              errorMessage={errors.email?.message}
+              isInvalid={!!errors.email?.message}
+              errorMessage={errors.email?.message && t(errors.email?.message)}
               variant="bordered"
-              label="Email"
-              type="email"
+              label={t("email-placeholder")}
               {...register("email")}
             />
-
             <Input
-              isInvalid={Boolean(errors.password?.message)}
-              errorMessage={errors.password?.message}
-              variant="bordered"
-              label="Password"
+              isInvalid={!!errors.password?.message}
+              errorMessage={
+                errors.password?.message && t(errors.password?.message)
+              }
               type="password"
+              variant="bordered"
+              label={t("password-placeholder")}
               {...register("password")}
             />
-
             <Input
-              isInvalid={Boolean(errors.phoneNumber?.message)}
-              errorMessage={errors.phoneNumber?.message}
+              isInvalid={!!errors.phoneNumber?.message}
+              errorMessage={
+                errors.phoneNumber?.message && t(errors.phoneNumber?.message)
+              }
               variant="bordered"
-              label="Phone Number"
-              type="tel"
+              label={t("phoneNumber-placeholder")}
               {...register("phoneNumber")}
             />
-
             <Input
-              isInvalid={Boolean(errors.image?.message)}
-              errorMessage={errors.image?.message}
+              isInvalid={!!errors.image?.message}
+              errorMessage={errors.image?.message && t(errors.image?.message)}
               variant="bordered"
-              label="Profile Picture"
+              label={t("image-placeholder")}
               type="file"
               accept="image/*"
               {...register("image")}
             />
 
             <Button
-              isLoading={isloading}
+              isLoading={isLoading}
               type="submit"
               variant="bordered"
-              className="w-full border border-[#DD0303] text-black py-2 rounded-lg hover:bg-[#DD0303] transition cursor-pointer hover:text-white auth-submit-btn"
+              className="w-full border border-[#DD0303] text-black py-2 rounded-lg hover:bg-[#DD0303] hover:text-white transition cursor-pointer"
             >
-              SignUp
+              {t("Signup-button")}
             </Button>
 
             <div className="my-2 flex items-center">
               <span className="flex-1 h-[0.5px] bg-gray-300"></span>
-              <span className="px-3 text-gray-500">OR</span>
+              <span className="px-3 text-gray-500">{t("hr")}</span>
               <span className="flex-1 h-px bg-gray-300"></span>
             </div>
 
@@ -139,25 +148,25 @@ const RegisterPage = () => {
                 color="primary"
                 variant="flat"
                 onClick={() => (window.location.href = GOOGLE_URL)}
-                className="w-full bg-gray-200 text-[#DD0303] rounded-lg hover:bg-gray-100 transition cursor-pointer google-btn"
+                className="w-full bg-gray-200 text-[#DD0303] rounded-lg hover:bg-gray-100 transition cursor-pointer"
               >
-                Continue with Google
+                {t("link-google")}
               </Button>
 
               <Button
                 color="secondary"
                 variant="flat"
                 onClick={() => (window.location.href = FACEBOOK_URL)}
-                className="w-full mt-4 bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition cursor-pointer facebook-btn"
+                className="w-full mt-4 bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition cursor-pointer"
               >
-                Continue with Facebook
+                {t("link-facebook")}
               </Button>
             </div>
 
             <p className="mb-3">
-              Already have an account?
-              <Link to={"/login"} className="ps-1 text-[#DD0303]">
-                Login
+              {t("text-login")}{" "}
+              <Link to="/login" className="ps-1 text-[#DD0303]">
+                {t("link-login")}
               </Link>
             </p>
           </div>

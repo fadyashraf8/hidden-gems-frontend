@@ -7,6 +7,7 @@ import {
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { checkAuth } from "./redux/userSlice";
+import { useTranslation } from "react-i18next";
 
 import Home from "./Pages/Home/Home";
 import Layout from "./Components/Layout/Layout";
@@ -18,7 +19,6 @@ import OwnerLayout from "./Pages/Owner/OwnerLayout";
 import OwnerDashboard from "./Pages/Owner/OwnerDashboard";
 import AddRestaurant from "./Pages/Owner/AddRestaurant";
 import EditRestaurant from "./Pages/Owner/EditRestaurant";
-import { Toaster } from "react-hot-toast";
 import AboutLayout from "./Components/Layout/AboutLayout/AboutLayout";
 import AboutUs from "./Pages/Footer/About/AboutUs";
 import Careers from "./Pages/Footer/About/Careers";
@@ -26,19 +26,17 @@ import Press from "./Pages/Footer/About/Press";
 import Terms from "./Pages/Footer/About/Terms";
 import Privacy from "./Pages/Footer/About/Privacy";
 import Content from "./Pages/Footer/About/Content";
-
 import DiscoverLayout from "./Components/Layout/DiscoverLayout/DiscoverLayout";
 import Blog from "./Pages/Footer/Discover/Blog";
 import Support from "./Pages/Footer/Discover/Support";
 import Hidden from "./Pages/Footer/Discover/Hidden";
 import Cities from "./Pages/Footer/Discover/Cities";
-
 import BusinessesLayout from "./Components/Layout/BusinessesLayout/BusinessesLayout";
 import Business from "./Pages/Footer/Business/Business";
 import AddPlace from "./Pages/Footer/Business/AddPlace";
 import Advertising from "./Pages/Footer/Business/Advertising";
 import Partners from "./Pages/Footer/Business/Partners";
-import SignUp from "./Pages/signUp/signUp";
+import SignUp from "./Pages/SignUp/SignUp";
 import Login from "./Pages/Login/Login";
 import ForgetPassword from "./Pages/ForgetPassword/ForgetPassword";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
@@ -54,14 +52,20 @@ import { Cat } from "lucide-react";
 import ContactUsPage from "./Pages/ContactUs";
 import CategoriesPage from "./Pages/CategoriesPage/CategoriesPage";
 
+import { Toaster } from "react-hot-toast";
+
 function App() {
   const dark = useSelector((state) => state.darkMode.enabled);
   const dispatch = useDispatch();
+  const { i18n } = useTranslation();
+  const language = i18n.language || "en";
 
+  // Check Auth on App load
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
 
+  // Dark Mode toggle
   useEffect(() => {
     if (dark) {
       document.documentElement.classList.add("dark-mode");
@@ -70,17 +74,28 @@ function App() {
     }
   }, [dark]);
 
+  // RTL / LTR based on language
+  useEffect(() => {
+    if (language === "ar") {
+      document.documentElement.setAttribute("dir", "rtl");
+      document.documentElement.setAttribute("lang", "ar");
+    } else {
+      document.documentElement.setAttribute("dir", "ltr");
+      document.documentElement.setAttribute("lang", "en");
+    }
+  }, [language]);
+
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout />, // Main layout
+      element: <Layout />,
       children: [
         { index: true, element: <Home /> },
         { path: "home", element: <Home /> },
 
         {
           path: "about",
-          element: <AboutLayout />, // layout wrapper
+          element: <AboutLayout />,
           children: [
             { index: true, element: <AboutUs /> },
             { path: "aboutUS", element: <AboutUs /> },
@@ -123,32 +138,30 @@ function App() {
           ],
         },
 
-        // User Profile
         {
           path: "/",
-          element: <MainLayout></MainLayout>,
+          element: <MainLayout />,
           children: [
             {
               path: "profile",
               element: (
                 <ProtectedRoute>
-                  <UserProfile></UserProfile>
+                  <UserProfile />
                 </ProtectedRoute>
               ),
             },
           ],
         },
 
-        // Auth Pages
         {
           path: "/",
-          element: <AuthLayout></AuthLayout>,
+          element: <AuthLayout />,
           children: [
             {
               path: "signUp",
               element: (
                 <PublicRoute>
-                  <SignUp></SignUp>
+                  <SignUp />
                 </PublicRoute>
               ),
             },
@@ -156,7 +169,7 @@ function App() {
               path: "login",
               element: (
                 <PublicRoute>
-                  <Login></Login>
+                  <Login />
                 </PublicRoute>
               ),
             },
@@ -164,7 +177,7 @@ function App() {
               path: "forget",
               element: (
                 <PublicRoute>
-                  <ForgetPassword></ForgetPassword>
+                  <ForgetPassword />
                 </PublicRoute>
               ),
             },
@@ -172,7 +185,7 @@ function App() {
               path: "reset",
               element: (
                 <PublicRoute>
-                  <ResetPassword></ResetPassword>
+                  <ResetPassword />
                 </PublicRoute>
               ),
             },
@@ -231,8 +244,6 @@ function App() {
         position="top-center"
         toastOptions={{
           duration: 2000,
-
-          // 🔴 ERROR STYLE
           error: {
             style: {
               background: "#DD0303",
@@ -246,11 +257,9 @@ function App() {
               secondary: "#DD0303",
             },
           },
-
-          // 🟢 SUCCESS STYLE
           success: {
             style: {
-              background: "#22c55e", // Tailwind green-500
+              background: "#22c55e",
               color: "white",
               borderRadius: "12px",
               padding: "14px 18px",
@@ -263,7 +272,6 @@ function App() {
           },
         }}
       />
-
       <RouterProvider router={router} />
     </div>
   );

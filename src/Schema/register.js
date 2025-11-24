@@ -3,36 +3,31 @@ import * as zod from "zod";
 export const schema = zod.object({
   firstName: zod
     .string()
-    .min(3, "Name must be at least 3 characters long")
-    .max(20, "Name must be at most 20 characters long")
-    .nonempty("Name is required"),
+    .nonempty("firstName-error")
+    .min(3, "firstName-error-min")
+    .max(20, "firstName-error-max"),
   lastName: zod
     .string()
-    .min(3, "Name must be at least 3 characters long")
-    .max(20, "Name must be at most 20 characters long")
-    .nonempty("Name is required"),
+    .nonempty("lastName-error")
+    .min(3, "lastName-error-min")
+    .max(20, "lastName-error-max"),
   email: zod
     .string()
-    .nonempty("Email is required")
+    .nonempty("email-error")
     .regex(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      "Invalid email address"
+      "email-error-invalid"
     ),
   password: zod
     .string()
+    .nonempty("password-error")
     .regex(
       /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-      "Password must contain at least one letter and one number and one special character"
-    )
-    .min(6)
-    .nonempty("Password is required"),
+      "password-error-enter"
+    ),
   phoneNumber: zod
     .string()
-    .nonempty("Phone number is required")
-    .regex(
-      /^01[0125][0-9]{8}$/,
-      "Invalid phone number"
-    ),
+    .nonempty("phoneNumber-error")
+    .regex(/^01[0125][0-9]{8}$/, "phoneNumber-error"),
   image: zod.any().optional(),
 });
-  

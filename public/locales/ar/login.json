@@ -1,0 +1,21 @@
+{
+  "title": "تسجيل الدخول",
+
+  "email-placeholder": "بريد الكتروني",
+  "email-error": "البريد الالكتروني مطلوب",
+  "password-placeholder": "كلمة المرور",
+  "password-error": "كلمة المرور مطلوبة",
+  "Login-button": "تسجيل الدخول",
+  "hr": "أو",
+
+  "link-google": "الاكمال عن طريق جوجل",
+  "link-facebook": "الاكمال عن طريق فيسبوك",
+  "text-signup": "ليس لديك حساب؟",
+"link-signup": "انشاء حساب جديد",
+"text-forgot-password": "لا تتذكر كلمة المرور؟",
+  "link-forgot-password": "نسيت كلمة المرور؟",
+
+  "Toaster-error": "البريد الالكتروني او كلمة المرور غير صحيحة",
+  "Toaster-success": "تم تسجيل الدخول بنجاح!"
+  
+}
