@@ -10,7 +10,7 @@ import { login } from "../../redux/userSlice";
 import toast from "react-hot-toast";
 
 const LoginPage = () => {
-  const authURL = import.meta.env.VITE_Auth_URL
+  const baseUrl = import.meta.env.VITE_Base_URL
   const dispatch = useDispatch();
 
   const [isloading, setisloading] = useState(false);
@@ -40,8 +40,10 @@ const LoginPage = () => {
         toast.success("Logged in successfully!");
 
         // Fetch user info after login
+
+        // this was authUrl and i changed to baseUrl
         try {
-          const res = await fetch(authURL+ "/me", {
+          const res = await fetch(baseUrl+ "/auth/me", {
             credentials: "include",
           });
           if (res.ok) {
@@ -67,8 +69,8 @@ const LoginPage = () => {
   }
 
   // ========= GOOGLE & FACEBOOK URLs =========
-  const GOOGLE_URL = authURL+"/google";
-  const FACEBOOK_URL = authURL+"/facebook";
+  const GOOGLE_URL = baseUrl+"/google";
+  const FACEBOOK_URL = baseUrl+"/facebook";
 
   return (
     <div className="page-wrapper">
