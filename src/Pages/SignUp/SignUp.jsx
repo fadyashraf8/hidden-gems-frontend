@@ -12,7 +12,7 @@ const RegisterPage = () => {
   const { t } = useTranslation("Signup"); 
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
+ const baseURL = import.meta.env.VITE_Base_URL;
   const {
     handleSubmit,
     register,
@@ -63,8 +63,8 @@ const RegisterPage = () => {
 
   };
 
-  const GOOGLE_URL = "https://your-backend.com/auth/google";
-  const FACEBOOK_URL = "https://your-backend.com/auth/facebook";
+  const GOOGLE_URL = baseURL+"/auth/google";
+  const FACEBOOK_URL = baseURL+"/auth/facebook";
 
   return (
     <div className="page-wrapper mt-12">

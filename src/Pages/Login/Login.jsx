@@ -11,7 +11,6 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
 const LoginPage = () => {
-  const { t } = useTranslation("login");
   const dispatch = useDispatch();
 
   const [isloading, setisloading] = useState(false);
@@ -40,8 +39,9 @@ const LoginPage = () => {
       ) {
         toast.success(t("Toaster-success"));
 
+        // Fetch user info after login
         try {
-          const res = await fetch("http://localhost:3000/auth/me", {
+          const res = await fetch(baseUrl+ "/auth/me", {
             credentials: "include",
           });
           if (res.ok) {
@@ -66,6 +66,7 @@ const LoginPage = () => {
     }
   }
 
+  // ========= GOOGLE & FACEBOOK URLs =========
   const GOOGLE_URL = "https://your-backend.com/auth/google";
   const FACEBOOK_URL = "https://your-backend.com/auth/facebook";
 

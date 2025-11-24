@@ -7,11 +7,11 @@ const initialState = {
   loading: true,
   error: null,
 };
-
+const baseURL = import.meta.env.VITE_Base_URL;
 // Async thunk to check authentication status
 export const checkAuth = createAsyncThunk("user/checkAuth", async (_, { rejectWithValue }) => {
   try {
-    const res = await axios.get("http://localhost:3000/auth/me", {
+    const res = await axios.get(baseURL + "/auth/me", {
       withCredentials: true,
     });
     return res.data.user;
@@ -23,7 +23,7 @@ export const checkAuth = createAsyncThunk("user/checkAuth", async (_, { rejectWi
 // Async thunk to logout
 export const logoutUser = createAsyncThunk("user/logout", async (_, { rejectWithValue }) => {
   try {
-    await axios.post("http://localhost:3000/auth/logout", {}, {
+    await axios.post(baseURL + "/auth/logout", {}, {
       withCredentials: true,
     });
     return;

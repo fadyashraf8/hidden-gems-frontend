@@ -7,11 +7,11 @@ import LoadingScreen from "../LoadingScreen";
 export default function UserProfile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const baseURL = import.meta.env.VITE_Base_URL;
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await fetch("http://localhost:3000/auth/me", {
+        const res = await fetch(baseURL + "/auth/me", {
           credentials: "include",
         });
 
@@ -47,7 +47,7 @@ export default function UserProfile() {
           <img
             onError={(e) => (e.target.src = userImage)}
             className=" rounded-xl object-cover user-img"
-            src={`http://localhost:3000/uploads/user/${user.image}`}
+            src={`${baseURL}/uploads/user/${user.image}`}
           />
         </div>
 
