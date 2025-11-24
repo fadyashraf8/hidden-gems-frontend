@@ -29,5 +29,8 @@ export const schema = zod.object({
     .string()
     .nonempty("phoneNumber-error")
     .regex(/^01[0125][0-9]{8}$/, "phoneNumber-error"),
-  image: zod.any().optional(),
+
+  image: zod
+    .any()
+    .refine((files) => files && files.length > 0, { message: "image-error" }),
 });

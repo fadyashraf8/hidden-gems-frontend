@@ -5,7 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useEffect } from "react";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import { useSelector, useDispatch } from "react-redux";
 import { checkAuth } from "./redux/userSlice";
@@ -237,23 +237,19 @@ function App() {
 
   return (
     <div>
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            duration: 2000,
-            error: {
-              style: {
-                background: "#DD0303",
-                color: "white",
-                borderRadius: "12px",
-                padding: "14px 18px",
-                fontSize: "15px",
-              },
-              iconTheme: {
-                primary: "white",
-                secondary: "#DD0303",
-              },
+          <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
+
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 2000,
+          error: {
+            style: {
+              background: "#DD0303",
+              color: "white",
+              borderRadius: "12px",
+              padding: "14px 18px",
+              fontSize: "15px",
             },
             success: {
               style: {
@@ -268,10 +264,25 @@ function App() {
                 secondary: "#22c55e",
               },
             },
-          }}
-        />
-        <RouterProvider router={router} />
-      </GoogleOAuthProvider>
+          },
+          success: {
+            style: {
+              background: "#22c55e",
+              color: "white",
+              borderRadius: "12px",
+              padding: "14px 18px",
+              fontSize: "15px",
+            },
+            iconTheme: {
+              primary: "white",
+              secondary: "#22c55e",
+            },
+          },
+        }}
+      />
+      <RouterProvider router={router} />
+          </GoogleOAuthProvider>
+
     </div>
   );
 }

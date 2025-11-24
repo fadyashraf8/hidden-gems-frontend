@@ -10,7 +10,7 @@ import { login } from "../../redux/userSlice";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { Eye, EyeOff } from "lucide-react";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin } from '@react-oauth/google'; 
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -73,23 +73,23 @@ const LoginPage = () => {
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       setisloading(true);
-
-      const response = await fetch(baseUrl + "/auth/google", {
-        method: "POST",
+      
+      const response = await fetch(baseUrl + '/auth/google', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        credentials: "include",
+        credentials: 'include',
         body: JSON.stringify({
-          token: credentialResponse.credential,
-        }),
+          token: credentialResponse.credential
+        })
       });
-
+      
       const data = await response.json();
-
+      
       if (response.ok && data.message === "Login successful") {
         toast.success("Logged in with Google successfully!");
-
+        
         try {
           const res = await fetch(baseUrl + "/auth/me", {
             credentials: "include",
@@ -101,11 +101,12 @@ const LoginPage = () => {
         } catch (e) {
           console.error("Failed to fetch user data", e);
         }
-
+        
         navigate("/", { replace: true });
       } else {
         toast.error(data.error || "Google login failed");
       }
+      
     } catch (error) {
       console.error("Google login error:", error);
       toast.error("Something went wrong with Google login!");
@@ -117,6 +118,7 @@ const LoginPage = () => {
   const handleGoogleError = () => {
     toast.error("Google login failed!");
   };
+
 
   return (
     <div className="page-wrapper">
@@ -184,6 +186,8 @@ const LoginPage = () => {
                   shape="rectangular"
                 />
               </div>
+
+         
             </div>
 
             <p>
