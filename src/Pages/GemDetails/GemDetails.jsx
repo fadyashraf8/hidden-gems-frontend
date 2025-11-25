@@ -126,6 +126,28 @@ const GemDetails = () => {
                       Visit Website
                     </a>
                   </div>
+                  {/* Discount Section */}
+                  {(gem.discount > 0 || gem.discountPremium > 0) && (
+                    <div className="pt-4 border-t border-gray-100 dark:border-zinc-700">
+                      <h4 className="font-semibold mb-2 dark:text-white">
+                        Discounts
+                      </h4>
+                      {gem.discount > 0 && (
+                        <div className="flex justify-between items-center text-green-600 dark:text-green-400">
+                          <span>Standard Discount</span>
+                          <span className="font-bold">{gem.discount}%</span>
+                        </div>
+                      )}
+                      {gem.discountPremium > 0 && (
+                        <div className="flex justify-between items-center text-[#DD0303] font-medium">
+                          <span>Premium Discount</span>
+                          <span className="font-bold">
+                            {gem.discountPremium}%
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 

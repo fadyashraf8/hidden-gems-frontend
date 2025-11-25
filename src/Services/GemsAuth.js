@@ -13,3 +13,15 @@ export async function getGemByIdAPI(id) {
     return error.response ? error.response.data : { error: "Network error" };
   }
 }
+
+export async function getGemsAPI(params = {}) {
+  try {
+    const queryString = new URLSearchParams(params).toString();
+    console.log("Fetching Gems with params:", queryString);
+    const { data } = await axios.get(baseURL + `/gems?${queryString}`);
+    return data;
+  } catch (error) {
+    console.error("API Error:", error);
+    return error.response ? error.response.data : { error: "Network error" };
+  }
+}
