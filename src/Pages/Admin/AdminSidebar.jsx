@@ -47,7 +47,14 @@ export default function AdminSidebar({ isOpen, toggleSidebar }) {
             className={({ isActive }) => (isActive ? "active-link" : "")}
             onClick={() => window.innerWidth < 768 && toggleSidebar()}
           >
-            Gems
+            All Gems
+          </NavLink>
+          <NavLink
+            to="/admin/my-gems"
+            className={({ isActive }) => (isActive ? "active-link" : "")}
+            onClick={() => window.innerWidth < 768 && toggleSidebar()}
+          >
+            My Gems
           </NavLink>
         </div>
 

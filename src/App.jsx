@@ -18,6 +18,7 @@ import AuthLayout from "./Components/Layout/AuthLayout";
 import AdminLayout from "./Pages/Admin/AdminLayout";
 import AdminUsers from "./Pages/Admin/AdminUsers";
 import AdminGems from "./Pages/Admin/AdminGems";
+import AdminMyGems from "./Pages/Admin/AdminMyGems";
 import AdminCategories from "./Pages/Admin/AdminCategories";
 import OwnerLayout from "./Pages/Owner/OwnerLayout";
 import OwnerDashboard from "./Pages/Owner/OwnerDashboard";
@@ -100,8 +101,8 @@ function App() {
         { path: "home", element: <Home /> },
         { path: "gems/:id", element: <GemDetails /> },
         { path: "contact-us", element: <ContactUsPage /> },
-        { path: "places", element: <CategoriesPage />},
-        { path: "places/:categoryName", element: <CategoriesPage />},
+        { path: "places", element: <CategoriesPage /> },
+        { path: "places/:categoryName", element: <CategoriesPage /> },
         {
           path: "about",
           element: <AboutLayout />,
@@ -162,7 +163,7 @@ function App() {
             {
               path: "created-by-you",
               element: (
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <CreatedByYou />
                 </ProtectedRoute>
               ),
@@ -224,6 +225,7 @@ function App() {
         { index: true, element: <Navigate to="users" replace /> },
         { path: "users", element: <AdminUsers /> },
         { path: "gems", element: <AdminGems /> },
+        { path: "my-gems", element: <AdminMyGems /> },
         { path: "categories", element: <AdminCategories /> },
       ],
     },
