@@ -5,11 +5,16 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useEffect } from "react";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 import { useSelector, useDispatch } from "react-redux";
 import { checkAuth } from "./redux/userSlice";
+import { useTranslation } from "react-i18next";
 
 import Home from "./Pages/Home/Home";
 import Layout from "./Components/Layout/Layout";
+import MainLayout from "./Components/Layout/MainLayout";
+import AuthLayout from "./Components/Layout/AuthLayout";
 import AdminLayout from "./Pages/Admin/AdminLayout";
 import AdminUsers from "./Pages/Admin/AdminUsers";
 import AdminGems from "./Pages/Admin/AdminGems";
@@ -18,7 +23,6 @@ import OwnerLayout from "./Pages/Owner/OwnerLayout";
 import OwnerDashboard from "./Pages/Owner/OwnerDashboard";
 import AddRestaurant from "./Pages/Owner/AddRestaurant";
 import EditRestaurant from "./Pages/Owner/EditRestaurant";
-import { Toaster } from "react-hot-toast";
 import AboutLayout from "./Components/Layout/AboutLayout/AboutLayout";
 import AboutUs from "./Pages/Footer/About/AboutUs";
 import Careers from "./Pages/Footer/About/Careers";
@@ -26,38 +30,47 @@ import Press from "./Pages/Footer/About/Press";
 import Terms from "./Pages/Footer/About/Terms";
 import Privacy from "./Pages/Footer/About/Privacy";
 import Content from "./Pages/Footer/About/Content";
-
 import DiscoverLayout from "./Components/Layout/DiscoverLayout/DiscoverLayout";
 import Blog from "./Pages/Footer/Discover/Blog";
 import Support from "./Pages/Footer/Discover/Support";
 import Hidden from "./Pages/Footer/Discover/Hidden";
 import Cities from "./Pages/Footer/Discover/Cities";
-
 import BusinessesLayout from "./Components/Layout/BusinessesLayout/BusinessesLayout";
 import Business from "./Pages/Footer/Business/Business";
 import AddPlace from "./Pages/Footer/Business/AddPlace";
 import Advertising from "./Pages/Footer/Business/Advertising";
 import Partners from "./Pages/Footer/Business/Partners";
-import SignUp from "./Pages/signUp/signUp";
+import SignUp from "./Pages/SignUp/SignUp";
 import Login from "./Pages/Login/Login";
 import ForgetPassword from "./Pages/ForgetPassword/ForgetPassword";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
-import UserProfile from "./Pages/UserProfile/UserProfile";
 import NotFoundPage from "./Pages/NotFound/NotFoundPage";
-import AuthLayout from "./Components/Layout/AuthLayout";
-import MainLayout from "./Components/Layout/MainLayout";
-
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import PublicRoute from "./Components/Auth/PublicRoute";
+import { Cat } from "lucide-react";
+
+import GemDetails from "./Pages/GemDetails/GemDetails";
+import UserProfile from "./Pages/UserProfile/UserProfile";
+
+import ContactUsPage from "./Pages/ContactUs";
+import CategoriesPage from "./Pages/CategoriesPage/CategoriesPage";
+
+import { Toaster } from "react-hot-toast";
 
 function App() {
+  console.log(import.meta.env.VITE_CLIENT_ID);
+
   const dark = useSelector((state) => state.darkMode.enabled);
   const dispatch = useDispatch();
+  const { i18n } = useTranslation();
+  const language = i18n.language || "en";
 
+  // Check Auth on App load
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
 
+  // Dark Mode toggle
   useEffect(() => {
     if (dark) {
       document.documentElement.classList.add("dark-mode");
@@ -66,17 +79,29 @@ function App() {
     }
   }, [dark]);
 
+  // RTL / LTR based on language
+  useEffect(() => {
+    if (language === "ar") {
+      document.documentElement.setAttribute("dir", "rtl");
+      document.documentElement.setAttribute("lang", "ar");
+    } else {
+      document.documentElement.setAttribute("dir", "ltr");
+      document.documentElement.setAttribute("lang", "en");
+    }
+  }, [language]);
+
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout />, // Main layout
+      element: <Layout />,
       children: [
         { index: true, element: <Home /> },
         { path: "home", element: <Home /> },
-
+        { path: "gems/:id", element: <GemDetails /> },
+        { path: "contact-us", element: <ContactUsPage /> },
         {
           path: "about",
-          element: <AboutLayout />, // layout wrapper
+          element: <AboutLayout />,
           children: [
             { index: true, element: <AboutUs /> },
             { path: "aboutUS", element: <AboutUs /> },
@@ -119,32 +144,30 @@ function App() {
           ],
         },
 
-        // User Profile
         {
           path: "/",
-          element: <MainLayout></MainLayout>,
+          element: <MainLayout />,
           children: [
             {
               path: "profile",
               element: (
                 <ProtectedRoute>
-                  <UserProfile></UserProfile>
+                  <UserProfile />
                 </ProtectedRoute>
               ),
             },
           ],
         },
 
-        // Auth Pages
         {
           path: "/",
-          element: <AuthLayout></AuthLayout>,
+          element: <AuthLayout />,
           children: [
             {
               path: "signUp",
               element: (
                 <PublicRoute>
-                  <SignUp></SignUp>
+                  <SignUp />
                 </PublicRoute>
               ),
             },
@@ -152,7 +175,7 @@ function App() {
               path: "login",
               element: (
                 <PublicRoute>
-                  <Login></Login>
+                  <Login />
                 </PublicRoute>
               ),
             },
@@ -160,7 +183,7 @@ function App() {
               path: "forget",
               element: (
                 <PublicRoute>
-                  <ForgetPassword></ForgetPassword>
+                  <ForgetPassword />
                 </PublicRoute>
               ),
             },
@@ -168,7 +191,7 @@ function App() {
               path: "reset",
               element: (
                 <PublicRoute>
-                  <ResetPassword></ResetPassword>
+                  <ResetPassword />
                 </PublicRoute>
               ),
             },
@@ -206,16 +229,20 @@ function App() {
         { path: "edit-restaurant", element: <EditRestaurant /> },
       ],
     },
+    {
+      path: "shopping",
+      element: <CategoriesPage />,
+    },
   ]);
 
   return (
     <div>
+          <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
+
       <Toaster
         position="top-center"
         toastOptions={{
           duration: 2000,
-
-          // 🔴 ERROR STYLE
           error: {
             style: {
               background: "#DD0303",
@@ -224,16 +251,23 @@ function App() {
               padding: "14px 18px",
               fontSize: "15px",
             },
-            iconTheme: {
-              primary: "white",
-              secondary: "#DD0303",
+            success: {
+              style: {
+                background: "#22c55e",
+                color: "white",
+                borderRadius: "12px",
+                padding: "14px 18px",
+                fontSize: "15px",
+              },
+              iconTheme: {
+                primary: "white",
+                secondary: "#22c55e",
+              },
             },
           },
-
-          // 🟢 SUCCESS STYLE
           success: {
             style: {
-              background: "#22c55e", // Tailwind green-500
+              background: "#22c55e",
               color: "white",
               borderRadius: "12px",
               padding: "14px 18px",
@@ -246,8 +280,9 @@ function App() {
           },
         }}
       />
-
       <RouterProvider router={router} />
+          </GoogleOAuthProvider>
+
     </div>
   );
 }

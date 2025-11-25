@@ -1,0 +1,31 @@
+{
+  "title": "Signup",
+  "firstName-placeholder": "first Name",
+  "firstName-error": "First name is required",
+  "firstName-error-min": "First name must be at least 3 characters long",
+  "firstName-error-max": "First name must be at most 20 characters long",
+  "lastName-placeholder": "last Name",
+  "lastName-error": "Last name is required",
+  "lastName-error-min": "Last name must be at least 3 characters long",
+  "lastName-error-max": "Last name must be at most 20 characters long",
+  "email-placeholder": "Email",
+  "email-error": "Email is required",
+  "email-error-invalid": "Invalid email address",
+  "password-placeholder": "Password",
+  "password-error": "Password is required",
+  "password-error-enter": "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character",
+  "phoneNumber-placeholder": "Phone Number",
+  "phoneNumber-error": "Phone Number is required",
+  "image-placeholder": "Profile Picture",
+  "image-error": "Profile Picture is required",
+
+  "Signup-button": "Signup",
+  "hr": "Or",
+
+  "link-google": "Continue with Google",
+  "link-facebook": "Continue with Facebook",
+  "link-login": "Login",
+  "text-login": "Already have an account?",
+  "Toaster-success": "User registered successfully. Please verify your email.",
+  "Toaster-error": "Email already exists"
+}

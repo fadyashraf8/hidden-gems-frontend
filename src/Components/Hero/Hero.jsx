@@ -2,11 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
 import "./Hero.css";
+import { useTranslation } from "react-i18next";
 
 export default function Hero({ slides = [], duration = 5000 }) {
   const [index, setIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const rafRef = useRef(null);
+  const {i18n} = useTranslation();
+  let [isRTL, setRlt] = useState(false);
+  
 
   const startProgress = (startTime) => {
     const tick = (now) => {
@@ -28,9 +32,10 @@ export default function Hero({ slides = [], duration = 5000 }) {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
     setProgress(0);
     startProgress(performance.now());
+    setRlt(i18n.language === "ar"); 
 
     return () => cancelAnimationFrame(rafRef.current);
-  }, [index, slides, duration]);
+  }, [index, slides, duration, i18n.language]);
 
   const goTo = (i) => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -47,7 +52,7 @@ export default function Hero({ slides = [], duration = 5000 }) {
           className={`hero-slide ${i === index ? "active" : ""}`}
           style={{ backgroundImage: `url(${s.image})` }}
         >
-          <div className="hero-overlay">
+          <div className={`hero-overlay ${isRTL ? 'right' : 'left'}`}>
             <h1 className="hero-title">{s.title}</h1>
             {s.subtitle && <p className="hero-subtitle">{s.subtitle}</p>}
           </div>
@@ -55,7 +60,7 @@ export default function Hero({ slides = [], duration = 5000 }) {
       ))}
 
       {/* Horizontal MUI Progress Bars */}
-      <div className="progress-container">
+      <div className={`progress-container ${isRTL ? 'left-dots' : '' }`}>
         {slides.slice(0, 4).map((_, i) => (
           <Box
             key={i}

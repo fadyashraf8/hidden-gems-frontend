@@ -1,0 +1,21 @@
+{
+  "title": "Login",
+
+  "email-placeholder": "Email",
+  "email-error": "Email is required",
+  "password-placeholder": "Password",
+  "password-error": "Password is required",
+  "Login-button": "Login",
+  "hr": "Or",
+
+  "link-google": "Continue with Google",
+  "link-facebook": "Continue with Facebook",
+  "text-signup": "U don't have an account?",
+   "link-signup": "Create new account",
+   "text-forgot-password": "don't remember your password?",
+  "link-forgot-password": "Forgot Password?",
+
+  "Toaster-error": "Email or password is incorrect",
+  "Toaster-success": "Logged in successfully!"
+  
+}

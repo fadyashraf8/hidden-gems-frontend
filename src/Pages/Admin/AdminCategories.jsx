@@ -139,47 +139,47 @@ export default function AdminCategories() {
     setShowEditModal(true);
   };
 
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
+ const handleEditSubmit = async (e) => {
+   e.preventDefault();
 
-    const errors = {};
-    if (!editCategory.categoryName)
-      errors.categoryName = "Category name is required";
-    setEditFormErrors(errors);
-    if (Object.keys(errors).length > 0) return;
+   const errors = {};
+   if (!editCategory.categoryName)
+     errors.categoryName = "Category name is required";
+   setEditFormErrors(errors);
+   if (Object.keys(errors).length > 0) return;
 
-    try {
-      const formData = new FormData();
-      formData.append("categoryName", editCategory.categoryName);
+   try {
+     const formData = new FormData();
+     formData.append("categoryName", editCategory.categoryName);
 
-      if (editCategory.categoryImage instanceof File) {
-        formData.append("categoryImage", editCategory.categoryImage);
-      }
+           
+     if (editCategory.categoryImage) {
+       formData.append("categoryImage", editCategory.categoryImage);
+     }
 
-      const res = await fetch(
-        `http://localhost:3000/categories/${editCategory._id}`,
-        {
-          method: "PUT",
-          credentials: "include",
-          body: formData,
-        }
-      );
+     const res = await fetch(
+       `http://localhost:3000/categories/${editCategory._id}`,
+       {
+         method: "PUT",
+         credentials: "include",
+         body: formData,
+       }
+     );
 
-      const data = await res.json();
+     const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.message || "Failed to update category");
-      }
+     if (!res.ok) {
+       throw new Error(data.message || "Failed to update category");
+     }
 
-      setCategories((prev) =>
-        prev.map((c) => (c._id === editCategory._id ? data.result : c))
-      );
+     // نحدث الجدول
+     setShowEditModal(false);
+     setRefreshTrigger((prev) => prev + 1);
+   } catch (err) {
+     alert(err.message);
+   }
+ };
 
-      setShowEditModal(false);
-    } catch (err) {
-      alert(err.message);
-    }
-  };
 
   if (!isloggedin || !user || user.role !== "admin") {
     return (
@@ -194,18 +194,26 @@ export default function AdminCategories() {
       <div className="admin-dashboard">
         <div className="admin-header-actions">
           <h1 className="admin-title">Category Management</h1>
-
-          <div className="admin-sort-wrapper">
-            <label>Sort by:</label>
-            <select
-              value={sortOrder}
-              onChange={handleSortChange}
-              className="admin-sort-select"
+          <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+            <button
+              style={{ marginTop: 0 }}
+              className="admin-btn create-user-button "
+              onClick={() => setShowCreateModal(true)}
             >
-              <option value="">Default</option>
-              <option value="categoryName">Name (A-Z)</option>
-              <option value="-categoryName">Name (Z-A)</option>
-            </select>
+              Create Category
+            </button>
+            <div className="admin-sort-wrapper ">
+              <label>Sort by:</label>
+              <select
+                value={sortOrder}
+                onChange={handleSortChange}
+                className="admin-sort-select"
+              >
+                <option value="">Default</option>
+                <option value="categoryName">Name (A-Z)</option>
+                <option value="-categoryName">Name (Z-A)</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -253,7 +261,7 @@ export default function AdminCategories() {
                     </td>
 
                     <td>
-                      {cat.createdBy?.email} <br /> 
+                      {cat.createdBy?.email} <br />
                       {/* {cat.createdBy?.firstName} */}
                       {/* {cat.createdBy?.lastName} */}
                     </td>
@@ -263,14 +271,14 @@ export default function AdminCategories() {
                         className="admin-btn"
                         onClick={() => openEditModal(cat)}
                       >
-                        Edit
+                        ✎
                       </button>
 
                       <button
                         className="admin-btn admin-btn-delete"
                         onClick={() => handleDelete(cat._id)}
                       >
-                        Delete
+                        🗑️
                       </button>
                     </td>
                   </tr>
@@ -306,15 +314,6 @@ export default function AdminCategories() {
         )}
 
         {/* CREATE Category */}
-        <div className="admin-create-user">
-          <h3>Create New Category</h3>
-          <button
-            className="admin-btn"
-            onClick={() => setShowCreateModal(true)}
-          >
-            Create Category
-          </button>
-        </div>
 
         {/* CREATE MODAL */}
         {showCreateModal && (
