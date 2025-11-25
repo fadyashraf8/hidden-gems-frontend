@@ -38,6 +38,10 @@
   pointer-events: none;
 }
 
+.hero-overlay.right {
+  padding-left: 0;
+  padding-right: 80px;
+}
 .hero-title {
   font-size: clamp(2rem, 5vw, 4rem);
   font-weight: 700;
@@ -59,4 +63,16 @@
   gap: 20px;
   z-index: 50;
   cursor: pointer;
+}
+
+.progress-container.left-dots {
+  right: auto;
+  left: 40px;
+}
+
+@media (max-width: 768px) {
+  .progress-container {
+    right: 10px !important;
+    left: 10px !important;  
+  }
 }
