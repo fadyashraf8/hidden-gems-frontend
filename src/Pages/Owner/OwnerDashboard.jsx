@@ -11,7 +11,6 @@ import { MapPin, Phone, Globe, Camera, Save } from "lucide-react";
 import toast from "react-hot-toast";
 import RatingStars from "../../Components/RatingStars/RatingStars";
 import LoadingScreen from "../LoadingScreen";
-import { getGemByIdAPI } from "../../Services/GemsAuth"; // Assuming we can fetch by ID or user
 import axios from "axios";
 import { useSelector } from "react-redux";
 
