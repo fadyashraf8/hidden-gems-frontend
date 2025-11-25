@@ -1,38 +1,24 @@
 import { Container, Box, Typography } from "@mui/material";
 import { Link } from 'react-router-dom'; 
+import '../NavBar/NavBar.css'
 
-import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone';
-import TapasTwoToneIcon from '@mui/icons-material/TapasTwoTone';
-import StadiumTwoToneIcon from '@mui/icons-material/StadiumTwoTone';
-import SpaTwoToneIcon from '@mui/icons-material/SpaTwoTone';
-import CoffeeMakerTwoToneIcon from '@mui/icons-material/CoffeeMakerTwoTone';
-import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
 
 const ICON_COLOR = '#DD0303';
 
-const CategoryItem = ({ Icon, label, path }) => (
+const CategoryItem = ({ label, path, lightBg, darkBg }) => (
     <Box 
-        // NAVIGATION: Use 'component={Link}' to make the MUI Box act like a React Router Link
         component={Link} 
         to={path}
-        
         sx={{ 
-            // STYLE RESET: Remove default link underlining and blue color
             textDecoration: 'none',
-            color: 'inherit',
-
-            // SIZE & SHAPE:
+            color: 'white',
             width: '100%',
-            aspectRatio: '1 / 1', 
-            
-            bgcolor: '#FFFFFF', 
+            aspectRatio: '1 / 1', //square
             display: 'flex', 
             flexDirection: 'column', 
             justifyContent: 'center', 
             alignItems: 'center',
             borderRadius: 2,
-            
-            // 3D Hover Effects
             boxShadow: 3,
             transition: 'transform 0.2s, box-shadow 0.2s',
             cursor: 'pointer',
@@ -40,16 +26,30 @@ const CategoryItem = ({ Icon, label, path }) => (
             '&:hover': {
                 transform: 'translateY(-6px)',
                 boxShadow: 10,
+            },
+                                                    // --- 2. Background Image Settings (Light Mode Default) ---
+            backgroundImage: `url(${lightBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+                                
+                                // --- 4. Dark Mode Override ---
+                                // This selector says: "When a parent (like body) has class .dark, apply these styles to ME (&)"
+            '.dark-mode &': {
+             backgroundImage: `url(${darkBg})`,
+             color: "black"
             }
+         
+
         }}
     >
-        <Icon sx={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', color: ICON_COLOR, mb: 1 }} />
-        
+        {/* <Icon sx={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', color: ICON_COLOR, mb: 1 }} />
+         */}
         <Typography 
-            variant="h5" 
+            variant="h4" 
             sx={{ 
                 fontWeight: 'bold',
-                fontSize: 'clamp(0.7rem, 1.4vw, 1.1rem)', 
+                fontSize: 'clamp(0.7rem, 1.4vw, 2rem)', 
                 textAlign: 'center',
                 px: 0.5,
                 lineHeight: 1.1,
@@ -63,13 +63,13 @@ const CategoryItem = ({ Icon, label, path }) => (
 
 export default function Categories() {
     
-    const categoriesData = [
-        { Icon: TapasTwoToneIcon, label: 'Restaurants', path: '/restaurants' },
-        { Icon: ShoppingCartTwoToneIcon, label: 'Shopping', path: '/shopping' },
-        { Icon: StadiumTwoToneIcon, label: 'Active Life', path: '/active-life' },
-        { Icon: SpaTwoToneIcon, label: 'Spa & Wellness', path: '/spa' },
-        { Icon: CoffeeMakerTwoToneIcon, label: 'Coffee Shops', path: '/coffee' },
-        { Icon: MoreHorizTwoToneIcon, label: 'More', path: '/more' },
+        const categoriesData = [
+        { lightBg: "images/DFood1.jpg",darkBg: "images/DFood1.jpg",label: 'Restaurants', path: '/restaurants' },
+        { lightBg: "images/LShopping1.jpg",darkBg: "images/LShopping1.jpg",label: 'Shopping', path: '/shopping' },
+        { lightBg: "images/LActive1.jpg",darkBg: "images/LActive2.jpg",label: 'Active Life', path: '/active-life' },
+        { lightBg: "images/LSpa.jpg",darkBg: "images/DSpa1.jpg",label: 'Spa & Wellness', path: '/spa' },
+        { lightBg: "images/LCoffee1.jpg",darkBg: "images/DCoffee1.jpg",label: 'Coffee Shops', path: '/coffee' },
+        { lightBg: "images/LMore1.jpg",darkBg: "images/DMore1.jpg",label: 'More', path: '/more' },
     ];
 
     return (
@@ -100,9 +100,11 @@ export default function Categories() {
                     {categoriesData.map((category, index) => (
                         <CategoryItem 
                             key={index}
-                            Icon={category.Icon} 
+                            // Icon={category.Icon} 
                             label={category.label}
-                            path={category.path}
+                            path={'places/' + category.path}
+                            lightBg={category.lightBg}
+                            darkBg={category.darkBg}
                         />
                     ))}
                 </Box>

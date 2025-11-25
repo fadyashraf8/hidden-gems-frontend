@@ -51,7 +51,7 @@ import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import PublicRoute from "./Components/Auth/PublicRoute";
 import { Cat } from "lucide-react";
 
-import ContactUsPage from "./Pages/ContactUs";
+import ContactUsPage from "./Pages/ContactUs/ContactUs";
 import CategoriesPage from "./Pages/CategoriesPage/CategoriesPage";
 
 import { Toaster } from "react-hot-toast";
@@ -98,6 +98,8 @@ function App() {
         { index: true, element: <Home /> },
         { path: "home", element: <Home /> },
         { path: "contact-us", element: <ContactUsPage />},
+        { path: "places", element: <CategoriesPage />},
+        { path: "places/:categoryName", element: <CategoriesPage />},
         {
           path: "about",
           element: <AboutLayout />,
