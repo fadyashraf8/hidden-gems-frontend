@@ -4,6 +4,7 @@ import { getGemsAPI } from "../../Services/GemsAuth";
 import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../LoadingScreen";
 import "../Admin/Admin.css";
+import "./AdminMyGems.css";
 
 const baseURL = import.meta.env.VITE_Base_URL;
 
@@ -66,7 +67,7 @@ export default function AdminMyGems() {
           style={{ textAlign: "center", padding: "3rem" }}
         >
           <h3>No gems created yet</h3>
-          <p style={{ color: "#666", marginTop: "0.5rem" }}>
+          <p style={{ marginTop: "0.5rem" }}>
             You haven't created any gems personally.
           </p>
         </div>
@@ -85,21 +86,16 @@ export default function AdminMyGems() {
               key={gem._id}
               className="gem-card"
               style={{
-                backgroundColor: "var(--card-bg)",
                 borderRadius: "12px",
                 overflow: "hidden",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                 cursor: "pointer",
-                transition: "transform 0.2s, box-shadow 0.2s",
               }}
               onClick={() => navigate(`/gems/${gem._id}`)}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.15)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
               }}
             >
               <div
@@ -144,28 +140,28 @@ export default function AdminMyGems() {
               </div>
               <div style={{ padding: "1rem" }}>
                 <h3
+                  className="gem-card-title"
                   style={{
                     fontSize: "1.125rem",
                     fontWeight: "600",
                     marginBottom: "0.5rem",
-                    color: "var(--text-primary)",
                   }}
                 >
                   {gem.name}
                 </h3>
                 <p
+                  className="gem-card-text"
                   style={{
                     fontSize: "0.875rem",
-                    color: "#666",
                     marginBottom: "0.5rem",
                   }}
                 >
                   📍 {gem.gemLocation}
                 </p>
                 <p
+                  className="gem-card-text"
                   style={{
                     fontSize: "0.875rem",
-                    color: "#666",
                   }}
                 >
                   ⭐ {gem.avgRating?.toFixed(1) || "N/A"} •{" "}

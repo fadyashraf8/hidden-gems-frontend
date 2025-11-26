@@ -76,8 +76,10 @@ function App() {
   useEffect(() => {
     if (dark) {
       document.documentElement.classList.add("dark-mode");
+      document.body.classList.add("dark-mode");
     } else {
       document.documentElement.classList.remove("dark-mode");
+      document.body.classList.remove("dark-mode");
     }
   }, [dark]);
 
@@ -253,6 +255,7 @@ function App() {
       <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
         <Toaster
           position="top-center"
+          containerStyle={{ top: 80 }}
           toastOptions={{
             duration: 2000,
             error: {
