@@ -1,7 +1,7 @@
 import React from "react";
 import Hero from "../../Components/Hero/Hero.jsx";
 import Categories from "../../Components/Categories/Categories.jsx";
-import RestaurantCard from "../../Components/RestaurantCard/RestaurantCard.jsx";
+import RestaurantCard from "../../Components/ReviewCard/ReviewCard.jsx";
 import { Stack, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 

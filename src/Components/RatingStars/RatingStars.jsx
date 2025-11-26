@@ -36,15 +36,15 @@ const labels = {
 // Helper to get the correct label text
 const getLabel = (value) => labels[value] || 'Select a rating';
 
-export default function RatingStarsIndividualBoxes() {
-  const [value, setValue] = React.useState(3); 
+export default function RatingStars({ value, onChange }) {
+
   const [hover, setHover] = React.useState(-1);
 
   const displayValue = hover !== -1 ? hover : value;
   const overallColor = getRatingColor(displayValue);
 
   const handleStarClick = (starValue) => {
-    setValue(starValue === value ? 0 : starValue); 
+    onChange(starValue); 
   };
 
   return (

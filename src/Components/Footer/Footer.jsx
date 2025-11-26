@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 
 const Footer = () => {
+  const isLogged = !!localStorage.getItem("token");
   const { t } = useTranslation();
   const aboutLinks = [
     {
@@ -27,7 +28,7 @@ const Footer = () => {
 
   const businessLinks = [
     { name: "link_for_businesses", to: "/business/business" },
-    { name: "link_add_your_place", to: "/business/addPlace" },
+    { name: "link_add_your_place", to: "/business/addPlace", protected: true },
     { name: "link_advertising", to: "/business/advertising" },
     { name: "link_partner_with_us", to: "/business/partners" },
   ];
@@ -35,6 +36,12 @@ const Footer = () => {
   const linkStyle =
     "block py-2 px-3 rounded transition-all duration-200 hover:bg-gray-100 hover:border-l-4 hover:border-[#DD0303] hover:text-[#DD0303] linkStyle";
 
+  const handleProtected = (e)=> {
+    if(link?.protected && !isLogged){
+      e.preventDefault()
+      toast.error("Login first to add a place")
+    }    
+  }
   return (
     <footer className="bg-gray-50 border-t mt-10 text-gray-700 text-sm flex flex-col items-center justify-center text-center">
       <div className="w-full max-w-6xl px-10 py-20 grid grid-cols-2 md:grid-cols-3 gap-12 justify-items-center">
@@ -77,8 +84,9 @@ const Footer = () => {
           </h3>
           <ul className="space-y-1">
             {businessLinks.map((link) => (
+              
               <li key={link.name}>
-                <NavLink to={link.to} className={linkStyle}>
+                <NavLink to={link.to} className={linkStyle} onClick={(e)=>handleProtected(e,link)}>
                   <span>{t(link.name)}</span>
                 </NavLink>
               </li>
