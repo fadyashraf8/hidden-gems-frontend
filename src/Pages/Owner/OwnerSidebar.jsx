@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/userSlice";
 import { toggleDarkMode } from "../../redux/darkModeSlice";
@@ -12,11 +13,19 @@ export default function OwnerSidebar({ isOpen, toggleSidebar }) {
   const isDarkMode = useSelector((state) => state.darkMode.enabled);
 
   const handleLogout = () => {
-    if (window.confirm("Are you sure you want to sign out?")) {
-      dispatch(logoutUser()).then(() => {
-        navigate("/");
+    dispatch(logoutUser()).then(() => {
+      toast.success("Signed out successfully", {
+        style: {
+          background: "#DD0303",
+          color: "white",
+        },
+        iconTheme: {
+          primary: "white",
+          secondary: "#DD0303",
+        },
       });
-    }
+      navigate("/");
+    });
   };
 
   const handleDeleteRestaurant = () => {

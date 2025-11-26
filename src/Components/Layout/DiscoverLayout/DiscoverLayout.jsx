@@ -1,19 +1,24 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const DiscoverLayout = () => {
+  const { t } = useTranslation("DiscoverLayout");
+
   const menuItems = [
-    { to: "blog", label: "Blog" },
-    { to: "support", label: "Support" },
-    { to: "cities", label: "Cities" },
-    { to: "hidden", label: "Hidden" },
+    { to: "blog", label: t("Blog") },
+    { to: "support", label: t("Support") },
+    { to: "cities", label: t("Cities") },
+    { to: "spot", label: t("Spot") },
   ];
 
   return (
     <div className="mt-10 flex flex-col md:flex-row max-w-6xl mx-auto py-12 px-6 gap-10">
       {/* Sidebar */}
       <aside className="md:w-1/4 border-r border-gray-200">
-        <h2 className="text-lg font-semibold mb-4">Discover Hidden Gems</h2>
+        <h2 className="text-lg font-semibold mb-4">
+          {t("Discover Hidden Gems")}
+        </h2>
         <ul className="space-y-2">
           {menuItems.map((item) => (
             <li key={item.to}>
@@ -36,7 +41,7 @@ const DiscoverLayout = () => {
 
       {/* Content Area */}
       <main className="md:w-3/4">
-        <Outlet /> {/* هنا بيتعرض المحتوى الخاص باللينك */}
+        <Outlet />
       </main>
     </div>
   );

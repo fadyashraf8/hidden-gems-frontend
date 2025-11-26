@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import toast from "react-hot-toast";
 import { Menu, X, Search, User, Moon, Sun } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDarkMode } from "../../redux/darkModeSlice";
@@ -60,14 +61,23 @@ export default function Navbar() {
   }, []);
 
   const handleLogout = async () => {
-    if (window.confirm("Are you sure you want to sign out?")) {
-      try {
-        await dispatch(logoutUser()).unwrap();
-        setUserDropdown(false);
-        navigate("/");
-      } catch (error) {
-        console.error("Logout error:", error);
-      }
+    try {
+      await dispatch(logoutUser()).unwrap();
+      setUserDropdown(false);
+      toast.success("Signed out successfully", {
+        style: {
+          background: "#DD0303",
+          color: "white",
+        },
+        iconTheme: {
+          primary: "white",
+          secondary: "#DD0303",
+        },
+      });
+      navigate("/");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Failed to sign out");
     }
   };
 

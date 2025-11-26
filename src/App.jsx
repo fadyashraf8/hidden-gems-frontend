@@ -34,7 +34,7 @@ import Content from "./Pages/Footer/About/Content";
 import DiscoverLayout from "./Components/Layout/DiscoverLayout/DiscoverLayout";
 import Blog from "./Pages/Footer/Discover/Blog";
 import Support from "./Pages/Footer/Discover/Support";
-import Hidden from "./Pages/Footer/Discover/Hidden";
+import Spot from "./Pages/Footer/Discover/Spot";
 import Cities from "./Pages/Footer/Discover/Cities";
 import BusinessesLayout from "./Components/Layout/BusinessesLayout/BusinessesLayout";
 import Business from "./Pages/Footer/Business/Business";
@@ -76,8 +76,10 @@ function App() {
   useEffect(() => {
     if (dark) {
       document.documentElement.classList.add("dark-mode");
+      document.body.classList.add("dark-mode");
     } else {
       document.documentElement.classList.remove("dark-mode");
+      document.body.classList.remove("dark-mode");
     }
   }, [dark]);
 
@@ -124,7 +126,7 @@ function App() {
             { index: true, element: <Blog /> },
             { path: "blog", element: <Blog /> },
             { path: "support", element: <Support /> },
-            { path: "hidden", element: <Hidden /> },
+            { path: "Spot", element: <Spot /> },
             { path: "cities", element: <Cities /> },
           ],
         },
@@ -253,6 +255,7 @@ function App() {
       <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
         <Toaster
           position="top-center"
+          containerStyle={{ top: 80 }}
           toastOptions={{
             duration: 2000,
             error: {

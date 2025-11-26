@@ -6,6 +6,7 @@ import GemCard from "../../Components/Gems/GemCard";
 import LoadingScreen from "../LoadingScreen";
 import { useTranslation } from "react-i18next";
 import { Plus, Sparkles } from "lucide-react";
+import "./CreatedByYou.css";
 
 const CreatedByYou = () => {
   const { t } = useTranslation("common");
@@ -45,7 +46,7 @@ const CreatedByYou = () => {
   if (loading) return <LoadingScreen />;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 w-full">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 w-full hero">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-[#DD0303] to-[#b90202] text-white py-12 md:py-16 px-4 sm:px-6 lg:px-8 w-full">
         <div className="max-w-7xl mx-auto w-full">

@@ -1,19 +1,24 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const BusinessesLayout = () => {
+  const { t } = useTranslation("BusinessesLayout");
+
   const menuItems = [
-    { to: "business", label: "Business" },
-    { to: "addPlace", label: "Add Your Place" },
-    { to: "advertising", label: "Advertising" },
-    { to: "partners", label: "Partner With Us" },
+    { to: "business", label: t("Business") },
+    { to: "addPlace", label: t("Add Your Place") },
+    { to: "advertising", label: t("Advertising") },
+    { to: "partners", label: t("Partner With Us") },
   ];
 
   return (
     <div className="mt-10 flex flex-col md:flex-row max-w-6xl mx-auto py-12 px-6 gap-10">
       {/* Sidebar */}
       <aside className="md:w-1/4 border-r border-gray-200">
-        <h2 className="text-lg font-semibold mb-4">Business for Hidden Gems</h2>
+        <h2 className="text-lg font-semibold mb-4">
+          {t("Business Sidebar Title")}
+        </h2>
         <ul className="space-y-2">
           {menuItems.map((item) => (
             <li key={item.to}>
@@ -36,7 +41,7 @@ const BusinessesLayout = () => {
 
       {/* Content Area */}
       <main className="md:w-3/4">
-        <Outlet /> 
+        <Outlet />
       </main>
     </div>
   );
