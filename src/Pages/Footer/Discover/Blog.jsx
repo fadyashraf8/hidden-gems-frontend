@@ -1,32 +1,29 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const Blog = () => {
+  const { t } = useTranslation("Blog");
+
   return (
     <div className="footer-page-wrapper">
       <div className="footer-page-container">
-        <h1 className="footer-page-title">Gemsy Blog</h1>
+        <h1 className="footer-page-title">{t("title")}</h1>
         <div className="footer-page-content">
           <div className="space-y-8">
             <div className="border-b pb-8">
               <h2 className="text-2xl font-semibold mb-2 text-[#DD0303]">
-                Top 10 Hidden Cafes in NYC
+                {t("Top-title")}
               </h2>
-              <p className="mb-4">January 15, 2024</p>
-              <p>
-                Discover the coziest, most unique coffee spots that most
-                tourists never find...
-              </p>
+              <p className="mb-4">{t("Top-discreption")}</p>
+              <p>{t("Top-paragraph")}</p>
             </div>
 
             <div className="border-b pb-8">
               <h2 className="text-2xl font-semibold mb-2 text-[#DD0303]">
-                How to Write Helpful Reviews
+                {t("How-Write-title")}
               </h2>
-              <p className="mb-4">January 10, 2024</p>
-              <p>
-                Tips for writing reviews that actually help other people make
-                decisions...
-              </p>
+              <p className="mb-4">{t("How-Write-discreption")}</p>
+              <p>{t("How-Write-paragraph")}</p>
             </div>
           </div>
         </div>

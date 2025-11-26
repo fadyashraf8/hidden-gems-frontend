@@ -1,25 +1,23 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
-const Careers = () => (
-  <div className="footer-page-wrapper">
-    <div className="footer-page-container">
-      <h1 className="footer-page-title">Careers</h1>
-      <div className="footer-page-content">
-        <p>
-          Join our team and help us build the best local discovery platform.
-        </p>
-        <p>
-          We're always looking for passionate people who care about connecting
-          communities with great local businesses.
-        </p>
-        <p>
-          Currently, we don't have any open positions, but feel free to send
-          your resume to careers@gemsy.com and we'll keep it on file for future
-          opportunities.
-        </p>
+const Careers = () => {
+  const { t } = useTranslation("Careers");
+
+  return (
+    <div className="footer-page-wrapper">
+      <div className="footer-page-container">
+        {/* Title Centered */}
+        <h1 className="footer-page-title text-center">{t("title")}</h1>
+
+        <div className="footer-page-content leading-relaxed space-y-4">
+          <p>{t("Careers-p-1")}</p>
+          <p>{t("Careers-p-2")}</p>
+          <p>{t("Careers-p-3")}</p>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Careers;

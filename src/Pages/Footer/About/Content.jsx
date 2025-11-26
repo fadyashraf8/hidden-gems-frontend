@@ -1,87 +1,69 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const Content = () => {
+  const { t } = useTranslation("Guidelines");
+
   return (
     <div className="footer-page-wrapper">
       <div className="footer-page-container">
-        <h1 className="footer-page-title">Content Guidelines</h1>
+        {/* Title */}
+        <h1 className="footer-page-title text-center">{t("title")}</h1>
+
         <div className="footer-page-content">
           <div className="mb-16">
-            <h2 className="text-2xl font-bold text-[#DD0303]">
-              General Guidelines
+            {/* General Guidelines */}
+            <h2 className="text-2xl font-bold text-[#DD0303] mb-2">
+              {t("General-title")}
             </h2>
-            <p className="leading-relaxed">
-              People come to Gemsy to connect with great local businesses. We
-              know that people won’t always agree, but we expect everyone on the
-              site to treat one another and the platform with honesty and
-              respect. We’ve put together these general guidelines to help set
-              the tone for discourse on the site—just in case. Please also read
-              the additional guidelines below for specific types of content that
-              you might contribute to the site.{" "}
-            </p>
+            <p className="leading-relaxed mb-6">{t("General -p")}</p>
 
             {/* Relevance */}
-            <div>
-              <h3 className="text-xl font-semibold text-[#DD0303]">
-                Relevance
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-[#DD0303] mb-2">
+                {t("Relevance-title")}
               </h3>
-              <p className="leading-relaxed">
-                Only post content about your experience with the business.
-              </p>
+              <p className="leading-relaxed">{t("Relevance-p")}</p>
             </div>
 
             {/* Inappropriate Content */}
-            <div>
-              <h3 className="text-xl font-semibold text-[#DD0303] mb-3">
-                Inappropriate Content
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-[#DD0303] mb-2">
+                {t("Inappropriate-title")}
               </h3>
-              <p className="leading-relaxed">
-                No threats, harassment, hate speech, or offensive behavior.
-              </p>
+              <p className="leading-relaxed">{t("Inappropriate-p")}</p>
             </div>
 
             {/* Conflicts of Interest */}
-            <div>
-              <h3 className="text-xl font-semibold text-[#DD0303] mb-3">
-                Conflicts of Interest
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-[#DD0303] mb-2">
+                {t("Conflicts-title")}
               </h3>
-              <p className="leading-relaxed">
-                Don’t review your own, friends’, or competitors’ businesses.{" "}
-                <span className="font-medium">
-                  Businesses should never ask customers to write reviews.
-                </span>
-              </p>
+              <p className="leading-relaxed">{t("Conflicts-p")}</p>
             </div>
 
             {/* Privacy */}
-            <div>
-              <h3 className="text-xl font-semibold text-[#DD0303] mb-3">
-                Privacy
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-[#DD0303] mb-2">
+                {t("Privacy-title")}
               </h3>
-              <p className="leading-relaxed">
-                Don’t share others’ personal info or media without permission.
-              </p>
+              <p className="leading-relaxed">{t("Privacy-p")}</p>
             </div>
 
             {/* Promotional Content */}
-            <div>
-              <h3 className="text-xl font-semibold text-[#DD0303] mb-3">
-                Promotional Content
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-[#DD0303] mb-2">
+                {t("Promotional-title")}
               </h3>
-              <p className="leading-relaxed">
-                Only post ads through official gesmy Business Accounts.
-              </p>
+              <p className="leading-relaxed">{t("Promotional-p")}</p>
             </div>
 
             {/* Post Your Own Content */}
             <div className="mb-10">
-              <h3 className="text-xl font-semibold text-[#DD0303] mb-3">
-                Post Your Own Content
+              <h3 className="text-xl font-semibold text-[#DD0303] mb-2">
+                {t("Own-title")}
               </h3>
-              <p className="leading-relaxed">
-                Share your own words, photos, and videos; no AI or copied
-                content.
-              </p>
+              <p className="leading-relaxed">{t("Own-p")}</p>
             </div>
           </div>
         </div>

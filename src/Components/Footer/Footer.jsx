@@ -23,7 +23,7 @@ const Footer = () => {
       name: "link_explore_cities",
       to: "/discover/cities",
     },
-    { name: "link_hidden", to: "/discover/Hidden" },
+    { name: "Spot", to: "/discover/Spot" },
   ];
 
   const businessLinks = [

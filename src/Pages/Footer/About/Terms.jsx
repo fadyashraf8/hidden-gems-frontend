@@ -1,41 +1,40 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
-const Terms = () => (
-  <div className="footer-page-wrapper">
-    <div className="footer-page-container">
-      <h1 className="footer-page-title">Terms of Service</h1>
-      <div className="footer-page-content">
-        <p className="leading-relaxed">
-          Last updated: Novmber 20, 2025
-        </p>
+const Terms = () => {
+  const { t } = useTranslation("Terms of Service");
 
-        <h2 className="text-2xl font-semibold mt-2 text-[#DD0303]">
-          Acceptance of Terms
-        </h2>
-        <p>
-          By accessing and using Gemsy, you accept and agree to be bound by the
-          terms and provision of this agreement.
-        </p>
+  return (
+    <div className="footer-page-wrapper">
+      <div className="footer-page-container">
+        {/* Title Centered */}
+        <h1 className="footer-page-title text-center">{t("title")}</h1>
 
-        <h2 className="text-2xl font-semibold mt-2 text-[#DD0303]">
-          Use License
-        </h2>
-        <p>
-          Permission is granted to temporarily use Gemsy for personal,
-          non-commercial transitory viewing only.
-        </p>
+        <div className="footer-page-content leading-relaxed space-y-4">
+          {/* Last updated */}
+          <p className="text-gray-600">{t("title-discreption")}</p>
 
-        <h2 className="text-2xl font-semibold mt-2 text-[#DD0303]">
-          User Content
-        </h2>
-        <p className="">
-          Users are responsible for the content they post. By posting content,
-          you grant Gemsy a worldwide license to use, display, and distribute
-          that content.
-        </p>
+          {/* Acceptance */}
+          <h2 className="text-2xl font-semibold mt-2 text-[#DD0303]">
+            {t("Acceptance-title")}
+          </h2>
+          <p>{t("Acceptance-paragraph")}</p>
+
+          {/* License */}
+          <h2 className="text-2xl font-semibold mt-2 text-[#DD0303]">
+            {t("License-title")}
+          </h2>
+          <p>{t("License-paragraph")}</p>
+
+          {/* User Content */}
+          <h2 className="text-2xl font-semibold mt-2 text-[#DD0303]">
+            {t("Content-title")}
+          </h2>
+          <p>{t("Content-paragraph")}</p>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Terms;

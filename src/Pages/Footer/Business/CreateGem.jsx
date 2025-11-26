@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-
+import { useTranslation } from "react-i18next";
 const BASE_URL = "http://localhost:3000";
 
 const CreateGem = ({ onGemCreated }) => {
   const [categories, setCategories] = useState([]);
   const [errors, setErrors] = useState({});
-  
+    const { t } = useTranslation("AddPlace");
   // 1. Initialize images as an empty array
   const [formData, setFormData] = useState({
     name: "",
@@ -92,78 +92,99 @@ const CreateGem = ({ onGemCreated }) => {
     <form onSubmit={handleSubmit}>
       <div className="bg-gray-50 p-6 rounded-lg addPlace">
         <h2 className="text-2xl font-semibold mb-4 text-[#DD0303]">
-          Business Information
+          {t("Information-title")}
         </h2>
         <div className="space-y-4">
-          
           {/* Name */}
           <div>
-            <label className="block font-medium">Business Name <span className="text-red-500">*</span></label>
+            <label className="block font-medium">
+              {t("Information-l1")} <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className={`w-full p-2 border rounded ${errors.name ? "border-red-500 bg-red-50" : "border-gray-300"}`}
+              className={`w-full p-2 border rounded ${
+                errors.name ? "border-red-500 bg-red-50" : "border-gray-300"
+              }`}
             />
-            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+            {errors.name && (
+              <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+            )}
           </div>
 
           {/* Address */}
           <div>
-            <label className="block font-medium">Address <span className="text-red-500">*</span></label>
+            <label className="block font-medium">
+              {t("Information-l2")} <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               name="gemLocation"
               value={formData.gemLocation}
               onChange={handleInputChange}
-              className={`w-full p-2 border rounded ${errors.gemLocation ? "border-red-500 bg-red-50" : "border-gray-300"}`}
+              className={`w-full p-2 border rounded ${
+                errors.gemLocation
+                  ? "border-red-500 bg-red-50"
+                  : "border-gray-300"
+              }`}
             />
-            {errors.gemLocation && <p className="text-red-500 text-xs mt-1">{errors.gemLocation}</p>}
+            {errors.gemLocation && (
+              <p className="text-red-500 text-xs mt-1">{errors.gemLocation}</p>
+            )}
           </div>
 
           {/* Category */}
           <div>
-            <label className="block font-medium">Category <span className="text-red-500">*</span></label>
+            <label className="block font-medium">
+              {t("Information-l3")} <span className="text-red-500">*</span>
+            </label>
             <select
               name="category"
               value={formData.category}
               onChange={handleInputChange}
-              className={`w-full p-2 border rounded placeSelect ${errors.category ? "border-red-500 bg-red-50" : "border-gray-300"}`}
+              className={`w-full p-2 border rounded placeSelect ${
+                errors.category ? "border-red-500 bg-red-50" : "border-gray-300"
+              }`}
             >
-              <option value="">Select Category</option>
+              <option value="">{t("Information-l3.1")}</option>
               {categories.map((cat) => (
-                <option key={cat._id} value={cat._id}>{cat.categoryName || cat.name}</option>
+                <option key={cat._id} value={cat._id}>
+                  {cat.categoryName || cat.name}
+                </option>
               ))}
             </select>
-            {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
+            {errors.category && (
+              <p className="text-red-500 text-xs mt-1">{errors.category}</p>
+            )}
           </div>
 
           {/* 4. Image Upload Input */}
           <div>
-            <label className="block font-medium">Upload Images</label>
-            <input 
-              type="file" 
-              multiple  // <--- ALLOWS MULTIPLE SELECTION
-              accept="image/*" 
-              onChange={handleImageChange} 
-              className="w-full p-2 border rounded bg-white" 
+            <label className="block font-medium">{t("Information-l3")}</label>
+            <input
+              type="file"
+              multiple // <--- ALLOWS MULTIPLE SELECTION
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full p-2 border rounded bg-white"
             />
             {/* Show how many files are selected */}
             <p className="text-xs text-gray-500 mt-1">
-              {formData.images.length > 0 
-                ? `${formData.images.length} files selected` 
+              {formData.images.length > 0
+                ? `${formData.images.length} files selected`
                 : "No files selected"}
             </p>
           </div>
         </div>
       </div>
 
-      <button 
-        type="submit" 
+      <button
+        type="submit"
         className="bg-[#DD0303] text-white px-6 py-2 rounded mt-6 ml-auto block cursor-pointer hover:bg-red-700 transition"
       >
-        Next: Add Review
+        {t("btn")}
       </button>
     </form>
   );
