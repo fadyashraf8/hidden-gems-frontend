@@ -56,6 +56,7 @@ import CreatedByYou from "./Pages/CreatedByYou/CreatedByYou";
 
 import ContactUsPage from "./Pages/ContactUs";
 import CategoriesPage from "./Pages/CategoriesPage/CategoriesPage";
+import SurpriseMe from "./Pages/SurpriseMe/SurpriseMe";
 
 import { Toaster } from "react-hot-toast";
 
@@ -104,6 +105,7 @@ function App() {
         { path: "gems/:id", element: <GemDetails /> },
         { path: "contact-us", element: <ContactUsPage /> },
         { path: "places", element: <CategoriesPage /> },
+        { path: "surprise", element: <SurpriseMe /> },
         { path: "places/:categoryName", element: <CategoriesPage /> },
         {
           path: "about",
