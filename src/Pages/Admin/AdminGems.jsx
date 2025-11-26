@@ -3,6 +3,8 @@ import LoadingScreen from "../LoadingScreen";
 import "./Admin.css";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import GemForm from "./GemForm";
+import DeleteGemModal from "./DeleteGemModal";
 
 export default function AdminGems() {
   const { userInfo: user, isLoggedIn: isloggedin } = useSelector(
@@ -27,32 +29,9 @@ export default function AdminGems() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [gemToDelete, setGemToDelete] = useState(null);
-
-  // Forms
-  const [newGem, setNewGem] = useState({
-    name: "",
-    images: [],
-    gemLocation: "",
-    status: "pending",
-    isSubscribed: false,
-    category: "",
-    discount: 0,
-    discountPremium: 0,
-    description: "",
-  });
-
   const [editGem, setEditGem] = useState(null);
-  const [formErrors, setFormErrors] = useState({});
-  const [editFormErrors, setEditFormErrors] = useState({});
 
-  // Styles for Inputs to ensure visibility (Black text on White background)
-  const inputStyle = {
-    color: "black",
-    // backgroundColor: "white",
-    border: "1px solid #ccc",
-  };
-
-  // Styles for the Modal to be 90% height and responsive
+  // Modal wrapper style
   const modalStyle = {
     width: "90%",
     maxWidth: "600px",
@@ -66,7 +45,6 @@ export default function AdminGems() {
   };
 
   // ==================== FETCH DATA ====================
-
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
@@ -77,7 +55,7 @@ export default function AdminGems() {
         params.append("page", currentPage);
         if (sortOrder) params.append("sort", sortOrder);
 
-        // 1. Fetch Gems (For the Table)
+        // Fetch Gems
         const gemsRes = await fetch(`${baseURL}/gems?${params.toString()}`, {
           credentials: "include",
         });
@@ -86,6 +64,8 @@ export default function AdminGems() {
 
         setGems(gemsData.result || []);
         setTotalPages(gemsData.totalPages || 1);
+
+        // Fetch Categories
         const catRes = await fetch(`${baseURL}/categories`, {
           credentials: "include",
         });
@@ -102,90 +82,69 @@ export default function AdminGems() {
     fetchData();
   }, [currentPage, refreshTrigger, sortOrder, baseURL]);
 
+  // ==================== HANDLERS ====================
   const handleSortChange = (e) => setSortOrder(e.target.value);
   const nextPage = () => setCurrentPage((prev) => prev + 1);
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
-  // ==================== ACTIONS ====================
-  const validateGemForm = (gemData) => {
-    const errors = {};
-    if (!gemData.name) errors.name = "Name is required";
-    if (!gemData.gemLocation) errors.gemLocation = "Location is required";
-    if (!gemData.category) errors.category = "Category is required";
-    if (!gemData.description) errors.description = "Description is required";
-    return errors;
-  };
 
-  const handleCreateGem = async (e) => {
-    e.preventDefault();
-    const errors = validateGemForm(newGem);
-    setFormErrors(errors);
-
-    if (Object.keys(errors).length > 0) {
-      console.log("Validation errors:", errors);
-      toast.error("Please fill in all required fields");
-      return;
+// ==================== CREATE GEM ====================
+const handleCreateGem = async (formData) => {
+  const data = new FormData();
+  
+  // Append all form fields EXCEPT images first
+  Object.entries(formData).forEach(([key, value]) => {
+    if (key !== "images") {
+      data.append(key, value);
     }
+  });
 
-    const formData = new FormData();
-    formData.append("name", newGem.name);
-    formData.append("gemLocation", newGem.gemLocation);
-    formData.append("status", newGem.status);
-    formData.append("isSubscribed", newGem.isSubscribed);
-    formData.append("category", newGem.category);
-    formData.append("discount", newGem.discount);
-    formData.append("discountPremium", newGem.discountPremium);
-    formData.append("description", newGem.description);
+  // Handle images separately - FileList is not a regular array
+  if (formData.images && formData.images.length > 0) {
+    // Convert FileList to array and append each file
+    Array.from(formData.images).forEach((file) => {
+      data.append("images", file);
+    });
+  }
 
-    if (newGem.images) {
-      for (let i = 0; i < newGem.images.length; i++) {
-        formData.append("images", newGem.images[i]);
+  try {
+    const res = await fetch(`${baseURL}/gems`, {
+      method: "POST",
+      credentials: "include",
+      body: data,
+    });
+
+    const responseData = await res.json();
+    
+    // Debug: Log FormData entries
+    console.log("FormData entries:");
+    for (let pair of data.entries()) {
+      console.log(pair[0] + ': ', pair[1]);
+    }
+    
+    if (!res.ok) {
+      const errorMessage = responseData.error || responseData.message || "Failed to create Gem";
+      if (res.status === 400 && errorMessage.includes("already exists")) {
+        throw new Error("A gem with this name already exists. Please choose a different name.");
       }
+      throw new Error(errorMessage);
     }
 
-    try {
-      console.log("Submitting gem creation...");
-      const res = await fetch(`${baseURL}/gems`, {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      });
-
-      const data = await res.json();
-      console.log("Response:", { status: res.status, data });
-
-      if (!res.ok) {
-        const errorMessage =
-          data.error || data.message || "Failed to create Gem";
-        if (res.status === 400 && errorMessage.includes("already exists")) {
-          throw new Error(
-            "A gem with this name already exists. Please choose a different name."
-          );
-        }
-        throw new Error(errorMessage);
-      }
-
-      toast.success("Gem created successfully!");
-      setGems((prev) => [data.result, ...prev]);
-      setShowCreateModal(false);
-      setNewGem({
-        name: "",
-        images: [],
-        gemLocation: "",
-        status: "pending",
-        isSubscribed: false,
-        category: "",
-        discount: 0,
-        discountPremium: 0,
-        description: "",
-      });
-      setFormErrors({});
-    } catch (err) {
-      console.error("Error creating gem:", err);
-      toast.error(err.message);
+    toast.success("Gem created successfully!");
+    
+    if (gems.length === 0) {
+      setRefreshTrigger((prev) => prev + 1);
+    } else {
+      setGems((prev) => [responseData.result, ...prev]);
     }
-  };
-
+    
+    setShowCreateModal(false);
+  } catch (err) {
+    console.error("Error creating gem:", err);
+    toast.error(err.message);
+  }
+};
+  // ==================== DELETE GEM ====================
   const handleDeleteGem = (gem) => {
     setGemToDelete(gem);
     setShowDeleteModal(true);
@@ -200,10 +159,21 @@ export default function AdminGems() {
         credentials: "include",
       });
 
-      if (!res.ok) throw new Error("Failed to delete gem");
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || "Failed to delete gem");
+      }
 
-      setGems((prev) => prev.filter((g) => g._id !== gemToDelete._id));
       toast.success("Gem deleted successfully");
+      
+      // Check if we need to go back a page (if this was the last gem on the current page)
+      if (gems.length === 1 && currentPage > 1) {
+        setCurrentPage((prev) => prev - 1);
+      } else {
+        // Otherwise, just refresh the current page
+        setRefreshTrigger((prev) => prev + 1);
+      }
+      
       setShowDeleteModal(false);
       setGemToDelete(null);
     } catch (err) {
@@ -212,73 +182,62 @@ export default function AdminGems() {
     }
   };
 
+  // ==================== EDIT GEM ====================
   const openEditModal = (gem) => {
-    setEditGem({
-      ...gem,
-      category: gem.category,
-      images: [],
-    });
-    setEditFormErrors({});
+    setEditGem(gem);
     setShowEditModal(true);
   };
 
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-    const errors = validateGemForm(editGem);
-    setEditFormErrors(errors);
-
-    if (Object.keys(errors).length > 0) {
-      toast.error("Please fix validation errors");
-      return;
-    }
-
-    try {
-      const formData = new FormData();
-      formData.append("name", editGem.name);
-      formData.append("gemLocation", editGem.gemLocation);
-      formData.append("status", editGem.status);
-      formData.append("isSubscribed", editGem.isSubscribed);
-      formData.append("category", editGem.category);
-      formData.append("discount", editGem.discount);
-      formData.append("discountPremium", editGem.discountPremium);
-      formData.append("description", editGem.description);
-
-      if (editGem.images && editGem.images.length > 0) {
-        for (let i = 0; i < editGem.images.length; i++) {
-          formData.append("images", editGem.images[i]);
-        }
+ // ==================== EDIT GEM ====================
+const handleEditSubmit = async (formData) => {
+  try {
+    const data = new FormData();
+    
+    // Append all form fields EXCEPT images first
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key !== "images") {
+        data.append(key, value);
       }
+    });
 
-      const res = await fetch(`${baseURL}/gems/${editGem._id}`, {
-        method: "PUT",
-        credentials: "include",
-        body: formData,
+    // Handle images separately - FileList is not a regular array
+    if (formData.images && formData.images.length > 0) {
+      Array.from(formData.images).forEach((file) => {
+        data.append("images", file);
       });
-
-      const data = await res.json();
-      if (!res.ok)
-        throw new Error(data.error || data.message || "Failed to update Gem");
-
-      setGems((prev) =>
-        prev.map((g) => (g._id === editGem._id ? data.result : g))
-      );
-      toast.success("Gem updated successfully");
-      setShowEditModal(false);
-    } catch (err) {
-      console.error("Error updating gem:", err);
-      toast.error(err.message || "Failed to update gem");
     }
-  };
 
+    const res = await fetch(`${baseURL}/gems/${editGem._id}`, {
+      method: "PUT",
+      credentials: "include",
+      body: data,
+    });
+
+    const responseData = await res.json();
+    if (!res.ok)
+      throw new Error(responseData.error || responseData.message || "Failed to update Gem");
+
+    setGems((prev) =>
+      prev.map((g) => (g._id === editGem._id ? responseData.result : g))
+    );
+    toast.success("Gem updated successfully");
+    setShowEditModal(false);
+  } catch (err) {
+    console.error("Error updating gem:", err);
+    toast.error(err.message || "Failed to update gem");
+  }
+};
+  // ==================== ACCESS CONTROL ====================
   if (!isloggedin || !user || user.role !== "admin") {
     return (
       <div className="admin-access-denied">Access denied. Admins only.</div>
     );
   }
 
+  // ==================== RENDER ====================
   return (
     <>
-      {loading ? (
+      {loading && gems.length === 0 ? (
         <LoadingScreen />
       ) : (
         <div className="admin-page">
@@ -286,9 +245,7 @@ export default function AdminGems() {
             {/* HEADER */}
             <div className="admin-header-actions">
               <h1 className="admin-title">Gems Management</h1>
-              <div
-                style={{ display: "flex", gap: "15px", alignItems: "center" }}
-              >
+              <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
                 <button
                   className="admin-btn create-user-button"
                   onClick={() => setShowCreateModal(true)}
@@ -302,7 +259,6 @@ export default function AdminGems() {
                     value={sortOrder}
                     onChange={handleSortChange}
                     className="admin-sort-select"
-                    style={inputStyle}
                   >
                     <option value="">Default</option>
                     <option value="name">Name (A-Z)</option>
@@ -313,12 +269,17 @@ export default function AdminGems() {
             </div>
 
             {/* TABLE */}
-            {loading && gems.length === 0 ? (
-              <p className="admin-loading">Loading Gems...</p>
-            ) : error ? (
+            {error ? (
               <p className="admin-error">{error}</p>
             ) : (
-              <div className="admin-table-wrapper">
+              <div 
+                className="admin-table-wrapper"
+                style={{
+                  opacity: loading ? 0.5 : 1,
+                  pointerEvents: loading ? "none" : "auto",
+                  transition: "opacity 0.2s",
+                }}
+              >
                 <table className="admin-table">
                   <thead>
                     <tr>
@@ -327,7 +288,7 @@ export default function AdminGems() {
                       <th>Category</th>
                       <th>Status</th>
                       <th>Subscribed</th>
-                      <th>Disc. / Prem.</th>
+                      <th>Disc. / Gold / Plat.</th>
                       <th>Created By</th>
                       <th>Actions</th>
                     </tr>
@@ -342,8 +303,7 @@ export default function AdminGems() {
                           <td>
                             <span
                               style={{
-                                color:
-                                  g.status === "accepted" ? "green" : "red",
+                                color: g.status === "accepted" ? "green" : "red",
                                 fontWeight: "bold",
                                 textTransform: "capitalize",
                               }}
@@ -353,7 +313,7 @@ export default function AdminGems() {
                           </td>
                           <td>{g.isSubscribed ? "✅" : "❌"}</td>
                           <td>
-                            {g.discount}% / {g.discountPremium || 0}%
+                            {g.discount}% / {g.discountGold || 0}% / {g.discountPlatinum || 0}%
                           </td>
                           <td>{g.createdBy?.email || "N/A"}</td>
                           <td>
@@ -405,168 +365,13 @@ export default function AdminGems() {
             {showCreateModal && (
               <div className="modal-overlay">
                 <div className="modal" style={modalStyle}>
-                  <h2 style={{ color: "black", marginTop: 0 }}>
-                    Create New Gem
-                  </h2>
-                  <form onSubmit={handleCreateGem}>
-                    <div className="form-grid">
-                      <label style={{ color: "#333" }}>
-                        Name:
-                        <input
-                          type="text"
-                          value={newGem.name}
-                          style={inputStyle}
-                          onChange={(e) =>
-                            setNewGem({ ...newGem, name: e.target.value })
-                          }
-                        />
-                        {formErrors.name && (
-                          <span className="error">{formErrors.name}</span>
-                        )}
-                      </label>
-
-                      <label style={{ color: "#333" }}>
-                        Location:
-                        <input
-                          type="text"
-                          value={newGem.gemLocation}
-                          style={inputStyle}
-                          onChange={(e) =>
-                            setNewGem({
-                              ...newGem,
-                              gemLocation: e.target.value,
-                            })
-                          }
-                        />
-                      </label>
-
-                      <label style={{ color: "#333" }}>
-                        Category:
-                        <select
-                          value={newGem.category}
-                          style={inputStyle}
-                          onChange={(e) =>
-                            setNewGem({ ...newGem, category: e.target.value })
-                          }
-                        >
-                          <option value="">Select Category</option>
-                          {categories.map((cat) => (
-                            <option key={cat._id} value={cat._id}>
-                              {cat.categoryName}
-                            </option>
-                          ))}
-                        </select>
-                        {formErrors.category && (
-                          <span className="error">{formErrors.category}</span>
-                        )}
-                      </label>
-
-                      <label style={{ color: "#333" }}>
-                        Status:
-                        <select
-                          value={newGem.status}
-                          style={inputStyle}
-                          onChange={(e) =>
-                            setNewGem({ ...newGem, status: e.target.value })
-                          }
-                        >
-                          <option value="pending">Pending</option>
-                          <option value="rejected">Rejected</option>
-                          <option value="accepted">Accepted</option>
-                        </select>
-                      </label>
-                    </div>
-
-                    <div className="form-grid">
-                      <label style={{ color: "#333" }}>
-                        Standard Discount (%):
-                        <input
-                          type="number"
-                          value={newGem.discount}
-                          style={inputStyle}
-                          onChange={(e) =>
-                            setNewGem({ ...newGem, discount: e.target.value })
-                          }
-                        />
-                      </label>
-                      <label style={{ color: "#333" }}>
-                        Premium Discount (%):
-                        <input
-                          type="number"
-                          value={newGem.discountPremium}
-                          style={inputStyle}
-                          onChange={(e) =>
-                            setNewGem({
-                              ...newGem,
-                              discountPremium: e.target.value,
-                            })
-                          }
-                        />
-                      </label>
-                    </div>
-
-                    <label style={{ color: "#333" }}>
-                      Description:
-                      <textarea
-                        rows="3"
-                        value={newGem.description}
-                        style={inputStyle}
-                        onChange={(e) =>
-                          setNewGem({ ...newGem, description: e.target.value })
-                        }
-                      />
-                      {formErrors.description && (
-                        <span className="error">{formErrors.description}</span>
-                      )}
-                    </label>
-
-                    <label
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        gap: "10px",
-                        color: "#333",
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={newGem.isSubscribed}
-                        onChange={(e) =>
-                          setNewGem({
-                            ...newGem,
-                            isSubscribed: e.target.checked,
-                          })
-                        }
-                        style={{ width: "auto" }}
-                      />
-                      Is Subscribed?
-                    </label>
-
-                    <label style={{ color: "#333" }}>
-                      Images (Multiple):
-                      <input
-                        type="file"
-                        multiple
-                        style={inputStyle}
-                        onChange={(e) =>
-                          setNewGem({ ...newGem, images: e.target.files })
-                        }
-                      />
-                    </label>
-
-                    <div className="modal-actions">
-                      <button className="admin-btn" type="submit">
-                        Create
-                      </button>
-                      <button
-                        className="admin-btn admin-btn-delete"
-                        type="button"
-                        onClick={() => setShowCreateModal(false)}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
+                  <h2 style={{ color: "black", marginTop: 0 }}>Create New Gem</h2>
+                  <GemForm
+                    categories={categories}
+                    onSubmit={handleCreateGem}
+                    onCancel={() => setShowCreateModal(false)}
+                    isEdit={false}
+                  />
                 </div>
               </div>
             )}
@@ -576,193 +381,27 @@ export default function AdminGems() {
               <div className="modal-overlay">
                 <div className="modal" style={modalStyle}>
                   <h2 style={{ color: "black", marginTop: 0 }}>Edit Gem</h2>
-                  <form onSubmit={handleEditSubmit}>
-                    <div className="form-grid">
-                      <label style={{ color: "#333" }}>
-                        Name:
-                        <input
-                          type="text"
-                          value={editGem.name}
-                          style={inputStyle}
-                          onChange={(e) =>
-                            setEditGem({ ...editGem, name: e.target.value })
-                          }
-                        />
-                      </label>
-
-                      <label style={{ color: "#333" }}>
-                        Location:
-                        <input
-                          type="text"
-                          value={editGem.gemLocation}
-                          style={inputStyle}
-                          onChange={(e) =>
-                            setEditGem({
-                              ...editGem,
-                              gemLocation: e.target.value,
-                            })
-                          }
-                        />
-                      </label>
-
-                      <label style={{ color: "#333" }}>
-                        Category:
-                        <select
-                          value={editGem.category}
-                          style={inputStyle}
-                          onChange={(e) =>
-                            setEditGem({ ...editGem, category: e.target.value })
-                          }
-                        >
-                          <option value="">Select Category</option>
-                          {categories.map((cat) => (
-                            <option key={cat._id} value={cat._id}>
-                              {cat.categoryName}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-
-                      <label style={{ color: "#333" }}>
-                        Status:
-                        <select
-                          value={editGem.status}
-                          style={inputStyle}
-                          onChange={(e) =>
-                            setEditGem({ ...editGem, status: e.target.value })
-                          }
-                        >
-                          <option value="accepted">Accepted</option>
-                          <option value="rejected">Rejected</option>
-                          <option value="pending">Pending</option>
-                        </select>
-                      </label>
-                    </div>
-
-                    <div className="form-grid">
-                      <label style={{ color: "#333" }}>
-                        Standard Disc (%):
-                        <input
-                          type="number"
-                          value={editGem.discount}
-                          style={inputStyle}
-                          onChange={(e) =>
-                            setEditGem({ ...editGem, discount: e.target.value })
-                          }
-                        />
-                      </label>
-                      <label style={{ color: "#333" }}>
-                        Premium Disc (%):
-                        <input
-                          type="number"
-                          value={editGem.discountPremium}
-                          style={inputStyle}
-                          onChange={(e) =>
-                            setEditGem({
-                              ...editGem,
-                              discountPremium: e.target.value,
-                            })
-                          }
-                        />
-                      </label>
-                    </div>
-
-                    <label style={{ color: "#333" }}>
-                      Description:
-                      <textarea
-                        rows="3"
-                        value={editGem.description}
-                        style={inputStyle}
-                        onChange={(e) =>
-                          setEditGem({
-                            ...editGem,
-                            description: e.target.value,
-                          })
-                        }
-                      />
-                    </label>
-
-                    <label
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        gap: "10px",
-                        color: "#333",
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={editGem.isSubscribed}
-                        onChange={(e) =>
-                          setEditGem({
-                            ...editGem,
-                            isSubscribed: e.target.checked,
-                          })
-                        }
-                        style={{ width: "auto" }}
-                      />
-                      Is Subscribed?
-                    </label>
-
-                    <label style={{ color: "#333" }}>
-                      Update Images (Overrides existing):
-                      <input
-                        type="file"
-                        multiple
-                        style={inputStyle}
-                        onChange={(e) =>
-                          setEditGem({ ...editGem, images: e.target.files })
-                        }
-                      />
-                    </label>
-
-                    <div className="modal-actions">
-                      <button className="admin-btn" type="submit">
-                        Save Changes
-                      </button>
-                      <button
-                        className="admin-btn admin-btn-delete"
-                        type="button"
-                        onClick={() => setShowEditModal(false)}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
+                  <GemForm
+                    initialData={editGem}
+                    categories={categories}
+                    onSubmit={handleEditSubmit}
+                    onCancel={() => setShowEditModal(false)}
+                    isEdit={true}
+                  />
                 </div>
               </div>
             )}
 
             {/* ================= DELETE MODAL ================= */}
             {showDeleteModal && gemToDelete && (
-              <div className="modal-overlay">
-                <div
-                  className="modal"
-                  style={{ ...modalStyle, height: "auto", maxHeight: "auto" }}
-                >
-                  <h2 style={{ color: "black", marginTop: 0 }}>Delete Gem</h2>
-                  <p style={{ color: "#333", marginBottom: "20px" }}>
-                    Are you sure you want to delete{" "}
-                    <strong>{gemToDelete.name}</strong>? This action cannot be
-                    undone.
-                  </p>
-                  <div className="modal-actions">
-                    <button
-                      className="admin-btn admin-btn-delete"
-                      onClick={confirmDeleteGem}
-                    >
-                      Yes, Delete
-                    </button>
-                    <button
-                      className="admin-btn"
-                      onClick={() => setShowDeleteModal(false)}
-                      style={{ backgroundColor: "#6c757d" }}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <DeleteGemModal
+                gemName={gemToDelete.name}
+                onConfirm={confirmDeleteGem}
+                onCancel={() => {
+                  setShowDeleteModal(false);
+                  setGemToDelete(null);
+                }}
+              />
             )}
           </div>
         </div>
