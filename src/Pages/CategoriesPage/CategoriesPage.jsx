@@ -1,227 +1,105 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; 
-import { 
-  Box, 
-  Container, 
-  Typography, 
-  Rating, 
-  Grid, 
-  Stack, 
-  Divider,
-  Paper,
-  InputBase,
-  Chip,
-  CircularProgress,
-  Alert
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import TuneIcon from '@mui/icons-material/Tune';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useParams } from 'react-router-dom'; 
+import { Box, Container, Typography, Grid, Stack, Divider, CircularProgress, Alert } from '@mui/material';
+import { BASE_URL, THEME, FEATURED_PATHS} from '../../Components/Places/constants';
+import FilterBar from '../../Components/Places/FilterBar';
+import PlaceCard from '../../Components/Places/PlaceCard';
 
-// --- CONFIGURATION ---
-const BASE_URL = "http://localhost:3000"; 
-
-// --- THEME COLORS ---
-const BRAND_RED = '#DD0303'; 
-const TEXT_DARK = '#2D2E2F';
-const TEXT_GREY = '#6E7072';
-
-const FILTERS = ["Price", "Open Now", "Credit Cards", "Open to All", "Military Discount"];
-
-// --- COMPONENTS ---
-
-const FilterBar = () => (
-  <Stack direction="row" spacing={1} sx={{ mb: 3, overflowX: 'auto', pb: 1, '::-webkit-scrollbar': { display: 'none' } }}>
-    <Chip 
-        icon={<TuneIcon sx={{ fontSize: '1rem !important' }} />} 
-        label="All Filters" 
-        variant="outlined" 
-        sx={{ borderRadius: 2, fontWeight: 600, color: TEXT_DARK, borderColor: '#ccc', height: 36 }}
-    />
-    {FILTERS.map((label) => (
-        <Chip 
-            key={label}
-            label={label}
-            variant="outlined"
-            deleteIcon={<KeyboardArrowDownIcon />}
-            onDelete={() => {}} 
-            sx={{ borderRadius: 2, fontWeight: 500, color: TEXT_DARK, borderColor: '#ddd', bgcolor: 'white', height: 36, '& .MuiChip-deleteIcon': { color: TEXT_GREY } }}
-        />
-    ))}
-  </Stack>
-);
-
-const BusinessCard = ({ data, rank }) => {
-  const navigate = useNavigate(); 
-
-  const handleCardClick = () => {
-    navigate(`/gems/${data._id}`);
-  };
-
-  const mainImage = data.images && data.images.length > 0 
-    ? `${BASE_URL}/images/${data.images[0]}` 
-    : "https://via.placeholder.com/600x400?text=No+Image";
-
-  const categoryName = data.category && data.category.categoryName 
-    ? data.category.categoryName 
-    : "Uncategorized";
-
-  return (
-    <Paper 
-        elevation={0} 
-        onClick={handleCardClick} 
-        sx={{ 
-            p: 0, 
-            border: '1px solid #e0e0e0', 
-            borderRadius: 2, 
-            overflow: 'hidden',
-            cursor: 'pointer', 
-            transition: 'box-shadow 0.2s, transform 0.2s',
-            '&:hover': { 
-                boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                transform: 'translateY(-2px)' 
-            } 
-    }}>
-      <Grid container>
-        {/* IMAGE SECTION */}
-        <Grid item xs={12} sm={4}>
-          <Box 
-            component="img"
-            src={mainImage}
-            alt={data.name}
-            sx={{ width: '100%', height: '100%', minHeight: 200, objectFit: 'cover' }}
-          />
-        </Grid>
-
-        {/* CONTENT SECTION */}
-        <Grid item xs={12} sm={8} sx={{ p: 2.5 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', height: '100%' }}>
-            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
-                
-                <Typography variant="h5" sx={{ fontWeight: 800, color: TEXT_DARK, mb: 0.5 }}>
-                    {rank}. {data.name}
-                </Typography>
-                
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                    <Rating value={data.avgRating || 0} precision={0.5} readOnly sx={{ color: BRAND_RED, fontSize: '1.2rem' }} />
-                    <Typography variant="body2" sx={{ ml: 1, color: TEXT_DARK, fontWeight: 700 }}>
-                        0 reviews
-                    </Typography>
-                </Box>
-
-                <Typography variant="body2" sx={{ color: TEXT_DARK, mb: 0.5 }}>
-                    <span style={{ fontWeight: 600 }}>
-                       {categoryName}
-                    </span>
-                    <span style={{ margin: '0 6px', color: TEXT_GREY }}>•</span>
-                    {data.price || "$$"} 
-                    <span style={{ margin: '0 6px', color: TEXT_GREY }}>•</span>
-                    {data.gemLocation}
-                </Typography>
-
-                {/* --- SHOW STATUS HERE --- */}
-                {/* <Typography variant="body2" sx={{ mb: 1.5, fontSize: '0.9rem' }}>
-                    <span style={{ 
-                        color: 'green', // Always green since we filter for accepted
-                        fontWeight: 700,
-                        textTransform: 'capitalize',
-                        border: '1px solid green',
-                        padding: '2px 8px',
-                        borderRadius: '4px',
-                        fontSize: '0.75rem'
-                    }}>
-                        {data.status}
-                    </span>
-                </Typography> */}
-
-                <Box sx={{ mt: 1 }}>
-                      <Typography variant="body2" sx={{ color: TEXT_GREY, fontSize: '0.9rem', lineHeight: 1.5 }}>
-                        "{data.description ? data.description.substring(0, 100) : ''}..." 
-                        <span style={{ color: BRAND_RED, fontWeight: 600, cursor: 'pointer', marginLeft: '5px' }}>more</span>
-                      </Typography>
-                </Box>
-            </Box>
-          </Box>
-        </Grid>
-      </Grid>
-    </Paper>
-  );
-};
-
-// --- MAIN PAGE LAYOUT ---
 export default function CategoriesPage() {
   const { categoryName } = useParams(); 
   
+  const [filtersApplied, setFiltersApplied] = useState({
+    category: "",
+    avgRating: "",
+    gemLocation: ""
+  });
+  
   const [gems, setGems] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [pageTitle, setPageTitle] = useState("All Places");
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       setLoading(true);
       setError("");
 
       try {
-        const gemsRes = await fetch(`${BASE_URL}/gems`, { credentials: "include" });
-        if (!gemsRes.ok) throw new Error("Failed to fetch gems");
-        const gemsData = await gemsRes.json();
-        let fetchedGems = gemsData.result || [];
-
-        // 🟢 1. GLOBAL FILTER: Only show Accepted Gems
+        const response = await fetch(`${BASE_URL}/gems`, { credentials: "include" });
+        if (!response.ok) throw new Error("Failed to fetch gems");
+        
+        const data = await response.json();
+        let fetchedGems = data.result || [];
+        
+        // Filter: Only Accepted Gems
         fetchedGems = fetchedGems.filter(gem => gem.status === 'accepted');
-
-        // 2. CATEGORY FILTER
+        console.log("Accepted Gems:", fetchedGems);
+        // Filter: URL Category param (if exists)
         if (categoryName) {
-            
-            const targetNameLower = categoryName.toLowerCase();
-            setPageTitle(`Best ${categoryName} in Town`);
-
+            setPageTitle(`Best ${categoryName} in town`);
             fetchedGems = fetchedGems.filter(gem => {
-                if (!gem.category) return false; 
-                if (typeof gem.category === 'object' && gem.category.categoryName) {
-                    return gem.category.categoryName.toLowerCase() === targetNameLower;
-                }
-                return false;
-           });
+              if(!gem.category || !gem.category.categoryName) return false;
+              const targetFingerprint = categoryName.toLowerCase().replace(/[^a-z0-9]/g, '');
+              const dbFingerprint = gem.category.categoryName.toLowerCase().replace(/[^a-z0-9]/g, '');
+              console.log("Target:", targetFingerprint)
+              console.log("DB", dbFingerprint)
+              return dbFingerprint === targetFingerprint; // This will match "Spa & Wellness", "Spa & Wellness", and even "Spa And Wellness" perfectly.
+            });
+            console.log("CatName:", categoryName);
         } else {
             setPageTitle("Top Gems in San Francisco");
         }
 
         setGems(fetchedGems);
-
       } catch (err) {
         console.error(err);
         setError(err.message || "Error loading data");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    }
+    };
 
     fetchData();
   }, [categoryName]);
+
+  // Client-side filtering logic based on Chip selection
+  const visibleGems = useMemo(() => {
+    console.log("Applying filters:", filtersApplied);
+    return gems.filter(gem => {
+      // 1. Rating Filter
+      if (filtersApplied.avgRating && (gem.avgRating || 0) < filtersApplied.avgRating) return false;
+      // 2. Location Filter
+      if (filtersApplied.gemLocation && gem.gemLocation?.toLowerCase() !== filtersApplied.gemLocation.toLowerCase()) return false;
+      // 3. Category Filter (Dropdown)
+      if (filtersApplied.category && gem.category?._id !== filtersApplied.category) return false;
+      
+      return true;
+    });
+  }, [gems, filtersApplied]);
 
   return (
     <Box sx={{ bgcolor: 'white', minHeight: '100vh', pb: 12, pt: 8}}>
         <Container maxWidth="lg">
             
             <Stack direction="row" spacing={3} sx={{ mb: 3, display: { xs: 'none', md: 'flex' } }}>
-                <Typography variant="body2" sx={{ fontWeight: 600, color: TEXT_GREY }}>
-                    Home &gt; Places &gt; <span style={{color: BRAND_RED}}>{categoryName || "All"}</span>
+                <Typography variant="body2" sx={{ fontWeight: 600, color: THEME.GREY }}>
+                    Home &gt; Places &gt; <span style={{color: THEME.RED}}>{categoryName || "All"}</span>
                 </Typography>
             </Stack>
 
             <Divider sx={{ mb: 4, borderColor: '#eee' }} />
 
             <Box sx={{ textAlign: 'left', mb: 3 }}>
-                <Typography variant="h4" component="h1" sx={{ fontWeight: 800, color: TEXT_DARK, mb: 1 }}>
+                <Typography variant="h4" component="h1" sx={{ fontWeight: 800, color: THEME.DARK, mb: 1 }}>
                     {pageTitle}
                 </Typography>
-                <Typography variant="body1" sx={{ color: TEXT_GREY }}>
-                    Showing {gems.length} results
+                <Typography variant="body1" sx={{ color: THEME.GREY }}>
+                    Showing {visibleGems.length} results
                 </Typography>
             </Box>
 
-            <FilterBar />
+            <FilterBar filtersApplied={filtersApplied} setFiltersApplied={setFiltersApplied} />
 
             {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
 
@@ -229,20 +107,20 @@ export default function CategoriesPage() {
                 <Grid item xs={12} md={8}>
                     {loading ? (
                         <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}>
-                            <CircularProgress sx={{ color: BRAND_RED }} />
+                            <CircularProgress sx={{ color: THEME.RED }} />
                         </Box>
                     ) : (
                         <Stack spacing={3}>
-                            {gems.length > 0 ? (
-                                gems.map((gem, index) => (
-                                    <BusinessCard 
+                            {visibleGems.length > 0 ? (
+                                visibleGems.map((gem, index) => (
+                                    <PlaceCard 
                                         key={gem._id || index} 
                                         data={gem} 
                                         rank={index + 1} 
                                     />
                                 ))
                             ) : (
-                                !error && <Typography>No accepted gems found.</Typography>
+                                !error && <Typography>No gems match your filters.</Typography>
                             )}
                         </Stack>
                     )}

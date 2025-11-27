@@ -64,12 +64,12 @@ const CategoryItem = ({ label, path, lightBg, darkBg }) => (
 export default function Categories() {
     
         const categoriesData = [
-        { lightBg: "images/DFood1.jpg",darkBg: "images/DFood1.jpg",label: 'Restaurants', path: '/restaurants' },
-        { lightBg: "images/LShopping1.jpg",darkBg: "images/LShopping1.jpg",label: 'Shopping', path: '/shopping' },
-        { lightBg: "images/LActive1.jpg",darkBg: "images/LActive2.jpg",label: 'Active Life', path: '/active-life' },
-        { lightBg: "images/LSpa.jpg",darkBg: "images/DSpa1.jpg",label: 'Spa & Wellness', path: '/spa' },
-        { lightBg: "images/LCoffee1.jpg",darkBg: "images/DCoffee1.jpg",label: 'Coffee Shops', path: '/coffee' },
-        { lightBg: "images/LMore1.jpg",darkBg: "images/DMore1.jpg",label: 'More', path: '/more' },
+        { lightBg: "images/DFood1.jpg",darkBg: "images/DFood1.jpg",label: 'Restaurants', path: 'restaurant' },
+        { lightBg: "images/LShopping1.jpg",darkBg: "images/LShopping1.jpg",label: 'Shopping', path: 'shopping' },
+        { lightBg: "images/LActive1.jpg",darkBg: "images/LActive2.jpg",label: 'Active Life', path: 'active life' },
+        { lightBg: "images/LSpa.jpg",darkBg: "images/DSpa1.jpg",label: 'Spa & Wellness', path: 'spa & wellness' },
+        { lightBg: "images/LCoffee1.jpg",darkBg: "images/DCoffee1.jpg",label: 'Coffee Shops', path: 'coffee shops' },
+        { lightBg: "images/LMore1.jpg",darkBg: "images/DMore1.jpg",label: 'More', path: 'more' },
     ];
 
     return (
@@ -102,7 +102,7 @@ export default function Categories() {
                             key={index}
                             // Icon={category.Icon} 
                             label={category.label}
-                            path={'places/' + category.path}
+                            path={'places/' + encodeURIComponent(category.path)}
                             lightBg={category.lightBg}
                             darkBg={category.darkBg}
                         />

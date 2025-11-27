@@ -3,13 +3,14 @@ import { Link } from "react-router-dom";
 import { MapPin, Star } from "lucide-react";
 
 const GemCard = ({ gem }) => {
+  const imagesList = gem.images?.[0];
   return (
     <Link to={`/gems/${gem._id}`} className="block group">
       <div className="bg-white dark:bg-zinc-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 dark:border-zinc-700">
         <div className="relative aspect-[4/3] overflow-hidden">
           <img
             src={
-              gem.images?.[0] ||
+               `${BASE_URL}/uploads/gem/${imagesList}`||
               gem.image ||
               "https://via.placeholder.com/400x300"
             }
