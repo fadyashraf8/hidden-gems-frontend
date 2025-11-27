@@ -2,10 +2,8 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import "./Footer.css";
-import { toast } from "react-hot-toast";
 
 const Footer = () => {
-  const isLogged = !!localStorage.getItem("token");
   const { t } = useTranslation();
 
   const aboutLinks = [
@@ -36,14 +34,11 @@ const Footer = () => {
   // -------------------------------
   // Correct Protected Handler
   // -------------------------------
-  const handleProtected = (e, link) => {
-    if (link?.protected && !isLogged) {
-      e.preventDefault();
-      toast.error("Login first to add a place");
-      return false; // VERY IMPORTANT
-    }
-    return true;
-  };
+const handleProtected = () => {
+  return true; // Allow all links
+};
+
+
 
   // -------------------------------
   // Scroll Handler (no reload)

@@ -32,7 +32,6 @@ export default function UserProfile() {
     fetchUser();
   }, []);
 
-  // تحديد اتجاه النص حسب اللغة
   const direction = i18n.language === "ar" ? "rtl" : "ltr";
   const textAlign = i18n.language === "ar" ? "text-right" : "text-left";
 
@@ -116,14 +115,14 @@ export default function UserProfile() {
               <p
                 className={`text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
               >
-                {t("UserName-label")}
+                {t("subscription-label")}
               </p>
               <p
                 className={`bg-gray-100 p-3 rounded-xl border border-gray-200 
                    group-hover:text-[#DD0303] group-hover:bg-blue-50
                    transition shadow-sm ${textAlign}`}
               >
-                {user.email?.split("@")[0]}
+                {user.subscription}
               </p>
             </div>
           </CardBody>
