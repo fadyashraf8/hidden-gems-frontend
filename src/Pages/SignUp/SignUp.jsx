@@ -179,13 +179,13 @@ const RegisterPage = () => {
               {t("Signup-button")}
             </Button>
 
-            <div className="my-2 flex items-center">
+            {/* <div className="my-2 flex items-center">
               <span className="flex-1 h-[0.5px] bg-gray-300"></span>
               <span className="px-3 text-gray-500">{t("hr")}</span>
               <span className="flex-1 h-px bg-gray-300"></span>
-            </div>
+            </div> */}
 
-            <div className="flex flex-col mt-1">
+            {/* <div className="flex flex-col mt-1">
               <Button
                 color="primary"
                 variant="flat"
@@ -203,7 +203,7 @@ const RegisterPage = () => {
               >
                 {t("link-facebook")}
               </Button>
-            </div>
+            </div> */}
 
             <p className="mb-3">
               {t("text-login")}{" "}
