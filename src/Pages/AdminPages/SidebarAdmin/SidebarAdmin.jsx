@@ -15,11 +15,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../../redux/userSlice";
 import toast from "react-hot-toast";
 import { toggleDarkMode } from "../../../redux/darkModeSlice";
+import { useTranslation } from "react-i18next";
+import TranslateTwoToneIcon from "@mui/icons-material/TranslateTwoTone";
 
 export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
       const dispatch = useDispatch();
   const navigate = useNavigate();
   const isDarkMode = useSelector((state) => state.darkMode.enabled);
+  const { t, i18n } = useTranslation("Admin");
 
   const handleLogout = () => {
     dispatch(logoutUser()).then(() => {
@@ -164,32 +167,39 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
                 </div>
               )}
             </div>
-            
           ))}
 
-          
-      
-               <div className="nav-group bottom-actions">
-          <button
-            className="sidebar-btn dark-mode-toggle"
-            onClick={() => dispatch(toggleDarkMode())}
+          {/* Language Toggle */}
+          <div
+            className="sidebar-btn language-toggle"
+            onClick={() => {
+              const newLang = i18n.language === "en" ? "ar" : "en";
+              i18n.changeLanguage(newLang);
+            }}
           >
-            {isDarkMode ? "☀️ Light Mode" : "🌚 Dark Mode"}
-          </button>
-          <Link
-            to="/"
-            className="sidebar-btn dark-mode-toggle"
-          >
-            Return to Home
-          </Link>
-          <button             className="sidebar-btn dark-mode-toggle"
- onClick={handleLogout}>
-            Sign Out
-          </button>
-        </div>
-
+            <TranslateTwoToneIcon
+              style={{ cursor: "pointer", marginRight: "10px" }}
+            />
+            {i18n.language === "en" ? t("arabic") : t("english")}
+          </div>
+          <div className="nav-group bottom-actions">
+            <button
+              className="sidebar-btn dark-mode-toggle"
+              onClick={() => dispatch(toggleDarkMode())}
+            >
+              {isDarkMode ? "☀️ Light Mode" : "🌚 Dark Mode"}
+            </button>
+            <Link to="/" className="sidebar-btn dark-mode-toggle">
+              Return to Home
+            </Link>
+            <button
+              className="sidebar-btn dark-mode-toggle"
+              onClick={handleLogout}
+            >
+              Sign Out
+            </button>
+          </div>
         </nav>
-
       </aside>
     </>
   );

@@ -2,15 +2,14 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import "./Footer.css";
+import { toast } from "react-hot-toast";
 
 const Footer = () => {
   const isLogged = !!localStorage.getItem("token");
   const { t } = useTranslation();
+
   const aboutLinks = [
-    {
-      name: "link_about_us",
-      to: "/about/aboutUS",
-    },
+    { name: "link_about_us", to: "/about/aboutUS" },
     { name: "link_careers", to: "/about/careers" },
     { name: "link_content_guidelines", to: "/about/content" },
     { name: "link_terms_of_service", to: "/about/terms" },
@@ -20,11 +19,8 @@ const Footer = () => {
   const discoverLinks = [
     { name: "link_blog", to: "/discover/blog" },
     { name: "link_support", to: "/discover/support" },
-    {
-      name: "link_explore_cities",
-      to: "/discover/cities",
-    },
-    { name: "Spot", to: "/discover/Spot" },
+    { name: "link_explore_cities", to: "/discover/cities" },
+    { name: "link_spot", to: "/discover/spot" },
   ];
 
   const businessLinks = [
@@ -37,12 +33,34 @@ const Footer = () => {
   const linkStyle =
     "block py-2 px-3 rounded transition-all duration-200 hover:bg-gray-100 hover:border-l-4 hover:border-[#DD0303] hover:text-[#DD0303] linkStyle";
 
-  const handleProtected = (e) => {
+  // -------------------------------
+  // Correct Protected Handler
+  // -------------------------------
+  const handleProtected = (e, link) => {
     if (link?.protected && !isLogged) {
       e.preventDefault();
       toast.error("Login first to add a place");
+      return false; // VERY IMPORTANT
     }
+    return true;
   };
+
+  // -------------------------------
+  // Scroll Handler (no reload)
+  // -------------------------------
+  const handleClick = (e, link) => {
+    const pass = handleProtected(e, link);
+    if (!pass) return; // stop if protected
+
+    // Run scroll without causing reload
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }, 0);
+  };
+
   return (
     <footer className="bg-gray-50 border-t text-gray-700 text-sm flex flex-col items-center justify-center text-center">
       <div className="w-full max-w-6xl px-10 py-20 grid grid-cols-2 md:grid-cols-3 gap-12 justify-items-center">
@@ -54,7 +72,11 @@ const Footer = () => {
           <ul className="space-y-1">
             {aboutLinks.map((link) => (
               <li key={link.name}>
-                <NavLink to={link.to} className={linkStyle}>
+                <NavLink
+                  to={link.to}
+                  className={linkStyle}
+                  onClick={(e) => handleClick(e, link)}
+                >
                   <span>{t(link.name)}</span>
                 </NavLink>
               </li>
@@ -70,7 +92,11 @@ const Footer = () => {
           <ul className="space-y-1">
             {discoverLinks.map((link) => (
               <li key={link.name}>
-                <NavLink to={link.to} className={linkStyle}>
+                <NavLink
+                  to={link.to}
+                  className={linkStyle}
+                  onClick={(e) => handleClick(e, link)}
+                >
                   <span>{t(link.name)}</span>
                 </NavLink>
               </li>
@@ -78,7 +104,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* For Businesses */}
+        {/* Businesses */}
         <div>
           <h3 className="text-[#DD0303] font-semibold mb-5 text-base uppercase tracking-wide">
             {t("footer_business_title")}
@@ -89,7 +115,7 @@ const Footer = () => {
                 <NavLink
                   to={link.to}
                   className={linkStyle}
-                  onClick={(e) => handleProtected(e, link)}
+                  onClick={(e) => handleClick(e, link)}
                 >
                   <span>{t(link.name)}</span>
                 </NavLink>
