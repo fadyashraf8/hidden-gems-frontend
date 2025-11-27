@@ -6,14 +6,19 @@ import { logoutUser } from "../../redux/userSlice";
 import { toggleDarkMode } from "../../redux/darkModeSlice";
 import "./Admin.css";
 
+import { useTranslation } from "react-i18next";
+import TranslateTwoToneIcon from "@mui/icons-material/TranslateTwoTone";
+
 export default function AdminSidebar({ isOpen, toggleSidebar }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isDarkMode = useSelector((state) => state.darkMode.enabled);
 
+  const { t, i18n } = useTranslation("Admin");
+
   const handleLogout = () => {
     dispatch(logoutUser()).then(() => {
-      toast.success("Signed out successfully", {
+      toast.success(t("signed-out-successfully"), {
         style: {
           background: "#DD0303",
           color: "white",
@@ -28,13 +33,18 @@ export default function AdminSidebar({ isOpen, toggleSidebar }) {
   };
 
   return (
-    <div className={`admin-sidebar ${isOpen ? "open" : ""}`}>
+    <div
+      className={`admin-sidebar ${isOpen ? "open" : ""} ${
+        i18n.language === "ar" ? "rtl" : ""
+      }`}
+    >
       <div className="sidebar-header">
-        <h2>Admin Panel</h2>
+        <h2>{t("admin-panel")}</h2>
         <button className="close-sidebar-btn" onClick={toggleSidebar}>
           &times;
         </button>
       </div>
+
       <nav className="sidebar-nav">
         <div className="nav-group">
           <NavLink
@@ -42,29 +52,46 @@ export default function AdminSidebar({ isOpen, toggleSidebar }) {
             className={({ isActive }) => (isActive ? "active-link" : "")}
             onClick={() => window.innerWidth < 768 && toggleSidebar()}
           >
-            Users
+            {t("users")}
           </NavLink>
+
           <NavLink
             to="/admin/categories"
             className={({ isActive }) => (isActive ? "active-link" : "")}
             onClick={() => window.innerWidth < 768 && toggleSidebar()}
           >
-            Categories
+            {t("categories")}
           </NavLink>
+
           <NavLink
             to="/admin/gems"
             className={({ isActive }) => (isActive ? "active-link" : "")}
             onClick={() => window.innerWidth < 768 && toggleSidebar()}
           >
-            All Gems
+            {t("all-gems")}
           </NavLink>
+
           <NavLink
             to="/admin/my-gems"
             className={({ isActive }) => (isActive ? "active-link" : "")}
             onClick={() => window.innerWidth < 768 && toggleSidebar()}
           >
-            My Gems
+            {t("my-gems")}
           </NavLink>
+        </div>
+
+        {/* Language Toggle */}
+        <div
+          className="sidebar-btn language-toggle"
+          onClick={() => {
+            const newLang = i18n.language === "en" ? "ar" : "en";
+            i18n.changeLanguage(newLang);
+          }}
+        >
+          <TranslateTwoToneIcon
+            style={{ cursor: "pointer", marginRight: "10px" }}
+          />
+          {i18n.language === "en" ? t("arabic") : t("english")}
         </div>
 
         <div className="nav-group bottom-actions">
@@ -72,17 +99,19 @@ export default function AdminSidebar({ isOpen, toggleSidebar }) {
             className="sidebar-btn dark-mode-toggle"
             onClick={() => dispatch(toggleDarkMode())}
           >
-            {isDarkMode ? "☀️ Light Mode" : "⏾ Dark Mode"}
+            {isDarkMode ? t("light-mode") : t("dark-mode")}
           </button>
+
           <NavLink
             to="/"
             className="return-home-link"
             onClick={() => window.innerWidth < 768 && toggleSidebar()}
           >
-            Return to Home
+            {t("return-home")}
           </NavLink>
+
           <button className="signout-btn" onClick={handleLogout}>
-            Sign Out
+            {t("sign-out")}
           </button>
         </div>
       </nav>

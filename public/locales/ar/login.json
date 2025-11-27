@@ -16,6 +16,7 @@
   "link-forgot-password": "نسيت كلمة المرور؟",
 
   "Toaster-error": "البريد الالكتروني او كلمة المرور غير صحيحة",
-  "Toaster-success": "تم تسجيل الدخول بنجاح!"
-  
+  "Toaster-success": "تم تسجيل الدخول بنجاح!",
+   "SignOut-button": "تسجيل الخروج",
+  "signed-out-successfully": "تم تسجيل الخروج بنجاح!"
 }

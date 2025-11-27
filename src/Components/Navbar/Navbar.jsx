@@ -60,26 +60,28 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await dispatch(logoutUser()).unwrap();
-      setUserDropdown(false);
-      toast.success("Signed out successfully", {
-        style: {
-          background: "#DD0303",
-          color: "white",
-        },
-        iconTheme: {
-          primary: "white",
-          secondary: "#DD0303",
-        },
-      });
-      navigate("/");
-    } catch (error) {
-      console.error("Logout error:", error);
-      toast.error("Failed to sign out");
-    }
-  };
+ const handleLogout = async () => {
+   try {
+     await dispatch(logoutUser()).unwrap();
+     setUserDropdown(false);
+
+     toast.success(t("signed-out-successfully"), {
+       position: "top-center",
+       duration: 2000,
+       className: "custom-toast",
+       id: "logout-toast",
+       ariaProps: { role: "status", "aria-live": "polite" },
+       icon: "👋",
+     });
+
+     
+     navigate("/");
+   } catch (error) {
+     console.error("Logout error:", error);
+     toast.error("Failed to sign out");
+   }
+ };
+
 
   const toggleMenu = () => setIsOpen(!isOpen);
 

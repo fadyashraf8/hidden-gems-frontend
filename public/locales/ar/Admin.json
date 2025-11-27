@@ -1,0 +1,17 @@
+{
+  "admin-panel": "لوحة التحكم",
+  "users": "المستخدمين",
+  "categories": "الفئات",
+  "all-gems": "كل الجواهر",
+  "my-gems": "جواهري",
+
+  "arabic": "العربية",
+  "english": "الإنجليزية",
+
+  "light-mode": "☀️ وضع النهار",
+  "dark-mode": "⏾ الوضع الليلي",
+
+  "return-home": "العودة للصفحة الرئيسية",
+  "sign-out": "تسجيل الخروج",
+  "signed-out-successfully": "تم تسجيل الخروج بنجاح"
+}

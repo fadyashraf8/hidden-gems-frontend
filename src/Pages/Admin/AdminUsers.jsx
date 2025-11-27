@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import "./Admin.css";
 import LoadingScreen from "../LoadingScreen";
+import { useTranslation } from "react-i18next";
 
 export default function AdminUsers() {
+  const { t } = useTranslation("AdminUsers");
+
   const { userInfo: user, isLoggedIn: isloggedin } = useSelector(
     (state) => state.user
   );
@@ -12,44 +15,39 @@ export default function AdminUsers() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [sortOrder, setSortOrder] = useState("");
+
   const baseURL = import.meta.env.VITE_Base_URL;
-  // Fetch users
+
   useEffect(() => {
     async function fetchUsers() {
       setLoading(true);
       setError("");
       try {
         const res = await fetch(
-          `http://localhost:3000/users?page=${currentPage}&sort=${sortOrder}`,
-          {
-            credentials: "include",
-          }
+          `${baseURL}/users?page=${currentPage}&sort=${sortOrder}`,
+          { credentials: "include" }
         );
-        if (!res.ok) throw new Error("Failed to fetch users");
+        if (!res.ok) throw new Error(t("fetch-failed"));
         const data = await res.json();
         setUsers(data.result || []);
         setTotalPages(data.totalPages || 1);
       } catch (err) {
-        setError(err.message || "Error fetching users");
+        setError(err.message || t("fetch-error"));
       }
       setLoading(false);
     }
     fetchUsers();
-  }, [currentPage, refreshTrigger, sortOrder]);
+  }, [currentPage, refreshTrigger, sortOrder, t]);
 
-  // Sort handler for dropdown
-  const handleSortChange = (e) => {
-    setSortOrder(e.target.value);
-  };
+  const handleSortChange = (e) => setSortOrder(e.target.value);
 
-  const nextPage = () => setCurrentPage((prev) => prev + 1);
-  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const nextPage = () => setCurrentPage((p) => p + 1);
+  const prevPage = () => setCurrentPage((p) => Math.max(p - 1, 1));
 
   const [showModal, setShowModal] = useState(false);
   const [newUser, setNewUser] = useState({
@@ -66,14 +64,14 @@ export default function AdminUsers() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editFormErrors, setEditFormErrors] = useState({});
 
-  // ==================== CREATE USER ====================
+  // ========== CREATE ==========
   const validateNewUser = () => {
     const errors = {};
-    if (!newUser.firstName) errors.firstName = "First name is required";
-    if (!newUser.lastName) errors.lastName = "Last name is required";
-    if (!newUser.phoneNumber) errors.phoneNumber = "Phone number is required";
-    if (!newUser.email) errors.email = "Email is required";
-    if (!newUser.password) errors.password = "Password is required";
+    if (!newUser.firstName) errors.firstName = t("error-firstName");
+    if (!newUser.lastName) errors.lastName = t("error-lastName");
+    if (!newUser.phoneNumber) errors.phoneNumber = t("error-phone");
+    if (!newUser.email) errors.email = t("error-email");
+    if (!newUser.password) errors.password = t("error-password");
     return errors;
   };
 
@@ -89,7 +87,7 @@ export default function AdminUsers() {
         if (value) formData.append(key, value);
       });
 
-      const res = await fetch("http://localhost:3000/users", {
+      const res = await fetch(`${baseURL}/users`, {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -98,16 +96,12 @@ export default function AdminUsers() {
       const data = await res.json();
 
       if (!res.ok) {
-        if (data.errors) {
-          setFormErrors(data.errors);
-        } else {
-          throw new Error(data.error || "Failed to create user");
-        }
+        if (data.errors) setFormErrors(data.errors);
+        else throw new Error(data.error || t("create-failed"));
         return;
       }
 
-      setRefreshTrigger((prev) => prev + 1);
-
+      setRefreshTrigger((p) => p + 1);
       setShowModal(false);
       setNewUser({
         firstName: "",
@@ -123,39 +117,32 @@ export default function AdminUsers() {
     }
   };
 
-  // ==================== DELETE USER ====================
+  // ========== DELETE ==========
   const handleDeleteUser = async (userId) => {
-    if (
-      !window.confirm(
-        "Are you sure you want to delete this user? This action cannot be undone."
-      )
-    ) {
-      return;
-    }
+    if (!window.confirm(t("delete-confirm"))) return;
 
     try {
-      const res = await fetch(baseURL + `/users/${userId}`, {
+      const res = await fetch(`${baseURL}/users/${userId}`, {
         method: "DELETE",
         credentials: "include",
       });
+
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.message || "Failed to delete user");
+        throw new Error(data.message || t("delete-failed"));
       }
 
-      // Check if we need to go back a page (if this was the last user on the current page)
       if (users.length === 1 && currentPage > 1) {
-        setCurrentPage((prev) => prev - 1);
+        setCurrentPage((p) => p - 1);
       } else {
-        // Otherwise, just refresh the current page to fill the gap
-        setRefreshTrigger((prev) => prev + 1);
+        setRefreshTrigger((p) => p + 1);
       }
     } catch (err) {
       alert(err.message);
     }
   };
 
-  // ==================== EDIT USER ====================
+  // ========== EDIT ==========
   const openEditModal = (user) => {
     setEditUser(user);
     setEditFormErrors({});
@@ -165,12 +152,14 @@ export default function AdminUsers() {
   const handleEditUserSubmit = async (e) => {
     e.preventDefault();
     const errors = {};
-    if (!editUser.phoneNumber) errors.phoneNumber = "Phone number is required";
-    if (!editUser.email) errors.email = "Email is required";
+    if (!editUser.phoneNumber) errors.phoneNumber = t("error-phone");
+    if (!editUser.email) errors.email = t("error-email");
     setEditFormErrors(errors);
+
     if (Object.keys(errors).length > 0) return;
 
     const allowedUpdates = ["phoneNumber", "email", "image"];
+
     let body, headers;
     const isFile = editUser.image instanceof File;
 
@@ -193,7 +182,7 @@ export default function AdminUsers() {
     }
 
     try {
-      const res = await fetch(baseURL + `/users/${editUser._id}`, {
+      const res = await fetch(`${baseURL}/users/${editUser._id}`, {
         method: "PUT",
         credentials: "include",
         headers,
@@ -203,8 +192,7 @@ export default function AdminUsers() {
       const data = await res.json();
       if (!res.ok) {
         if (data.errors) setEditFormErrors(data.errors);
-        else
-          throw new Error(data.error || data.message || "Failed to edit user");
+        else throw new Error(data.error || data.message || t("edit-failed"));
         return;
       }
 
@@ -219,9 +207,7 @@ export default function AdminUsers() {
   };
 
   if (!isloggedin || !user || user.role !== "admin") {
-    return (
-      <div className="admin-access-denied">Access denied. Admins only.</div>
-    );
+    return <div className="admin-access-denied">{t("admin-only")}</div>;
   }
 
   return loading ? (
@@ -230,95 +216,96 @@ export default function AdminUsers() {
     <div className="admin-page">
       <div className="admin-dashboard">
         <div className="admin-header-actions">
-          <h1 className="admin-title">User Management</h1>
+          <h1 className="admin-title">{t("title")}</h1>
+
           <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
             <button
               className="admin-btn create-user-button"
               onClick={() => setShowModal(true)}
               style={{ marginTop: 0 }}
             >
-              Create User
+              {t("create-user")}
             </button>
+
             <div className="admin-sort-wrapper">
-              <label htmlFor="sortUsers">Sort by:</label>
+              <label htmlFor="sortUsers">{t("sort-by")}</label>
               <select
                 id="sortUsers"
                 value={sortOrder}
                 onChange={handleSortChange}
                 className="admin-sort-select"
               >
-                <option value="">Default</option>
-                <option value="firstName">Name (A-Z)</option>
-                <option value="-firstName">Name (Z-A)</option>
+                <option value="">{t("default")}</option>
+                <option value="firstName">{t("name-asc")}</option>
+                <option value="-firstName">{t("name-desc")}</option>
               </select>
             </div>
           </div>
         </div>
 
         {loading && users.length === 0 ? (
-          <p className="admin-loading">Loading users...</p>
+          <p className="admin-loading">{t("loading")}</p>
         ) : error ? (
           <p className="admin-error">{error}</p>
         ) : (
-          <div
-            className="admin-table-wrapper"
-            style={{
-              opacity: loading ? 0.5 : 1,
-              pointerEvents: loading ? "none" : "auto",
-              transition: "opacity 0.2s",
-            }}
-          >
+          <div className="admin-table-wrapper">
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Phone Number</th>
-                  <th>Actions</th>
+                  <th>{t("name")}</th>
+                  <th>{t("email")}</th>
+                  <th>{t("phone")}</th>
+                  <th>{t("actions")}</th>
                 </tr>
               </thead>
+
               <tbody>
-                {users.map((u) =>
-                  u && u._id ? (
-                    <tr key={u._id}>
-                      <td>
-                        {u.firstName} {u.lastName}
-                      </td>
-                      <td>{u.email}</td>
-                      <td>{u.phoneNumber}</td>
-                      <td>
-                        <button
-                          className="admin-btn"
-                          onClick={() => openEditModal(u)}
-                        >
-                          ✎
-                        </button>
-                        <button
-                          className="admin-btn admin-btn-delete"
-                          onClick={() => handleDeleteUser(u._id)}
-                        >
-                          🗑️
-                        </button>
-                      </td>
-                    </tr>
-                  ) : null
+                {users.map(
+                  (u) =>
+                    u &&
+                    u._id && (
+                      <tr key={u._id}>
+                        <td>
+                          {u.firstName} {u.lastName}
+                        </td>
+                        <td>{u.email}</td>
+                        <td>{u.phoneNumber}</td>
+
+                        <td>
+                          <button
+                            className="admin-btn"
+                            onClick={() => openEditModal(u)}
+                          >
+                            ✎
+                          </button>
+
+                          <button
+                            className="admin-btn admin-btn-delete"
+                            onClick={() => handleDeleteUser(u._id)}
+                          >
+                            🗑️
+                          </button>
+                        </td>
+                      </tr>
+                    )
                 )}
               </tbody>
             </table>
           </div>
         )}
-        {/* Pagination Controls */}
+
         <div className="pagination-container">
           <p className="pagination-info">
-            Page {currentPage} of {totalPages}
+            {t("page")} {currentPage} {t("of")} {totalPages}
           </p>
+
           <div className="pagination-buttons">
             <button
               className="pagination-btn"
               onClick={prevPage}
               disabled={currentPage === 1 || loading}
             >
-              Previous
+              {t("previous")}
             </button>
 
             <button
@@ -326,7 +313,7 @@ export default function AdminUsers() {
               onClick={nextPage}
               disabled={currentPage === totalPages || loading}
             >
-              Next
+              {t("next")}
             </button>
           </div>
         </div>
@@ -334,7 +321,7 @@ export default function AdminUsers() {
         {showModal && (
           <div className="modal-overlay">
             <div className="modal">
-              <h2>Create User</h2>
+              <h2>{t("create-user")}</h2>
               <form onSubmit={handleCreateUser}>
                 {[
                   "firstName",
@@ -344,10 +331,7 @@ export default function AdminUsers() {
                   "password",
                 ].map((field) => (
                   <label key={field}>
-                    {field
-                      .replace(/([A-Z])/g, " $1")
-                      .replace(/^./, (str) => str.toUpperCase())}
-                    :
+                    {t(field)}
                     <input
                       type={
                         field === "email"
@@ -366,8 +350,9 @@ export default function AdminUsers() {
                     )}
                   </label>
                 ))}
+
                 <label>
-                  Image:
+                  {t("image")}
                   <input
                     type="file"
                     onChange={(e) =>
@@ -378,16 +363,17 @@ export default function AdminUsers() {
                     <span className="error">{formErrors.image}</span>
                   )}
                 </label>
+
                 <div className="modal-actions">
                   <button className="admin-btn" type="submit">
-                    Create
+                    {t("create")}
                   </button>
                   <button
                     className="admin-btn admin-btn-delete"
                     type="button"
                     onClick={() => setShowModal(false)}
                   >
-                    Cancel
+                    {t("cancel")}
                   </button>
                 </div>
               </form>
@@ -395,26 +381,16 @@ export default function AdminUsers() {
           </div>
         )}
 
-        {/* EDIT USER */}
         {showEditModal && (
           <div className="modal-overlay">
             <div className="modal">
-              <h2>Edit User</h2>
+              <h2>{t("edit-user")}</h2>
               <form onSubmit={handleEditUserSubmit}>
                 {["phoneNumber", "email"].map((field) => (
                   <label key={field}>
-                    {field
-                      .replace(/([A-Z])/g, " $1")
-                      .replace(/^./, (str) => str.toUpperCase())}
-                    :
+                    {t(field)}
                     <input
-                      type={
-                        field === "email"
-                          ? "email"
-                          : field === "password"
-                          ? "password"
-                          : "text"
-                      }
+                      type={field === "email" ? "email" : "text"}
                       value={editUser[field] || ""}
                       onChange={(e) =>
                         setEditUser({ ...editUser, [field]: e.target.value })
@@ -425,28 +401,28 @@ export default function AdminUsers() {
                     )}
                   </label>
                 ))}
+
                 <label>
-                  Image:
+                  {t("image")}
                   <input
                     type="file"
                     onChange={(e) =>
                       setEditUser({ ...editUser, image: e.target.files[0] })
                     }
                   />
-                  {editFormErrors.image && (
-                    <span className="error">{editFormErrors.image}</span>
-                  )}
                 </label>
+
                 <div className="modal-actions">
                   <button className="admin-btn" type="submit">
-                    Save Changes
+                    {t("save")}
                   </button>
+
                   <button
                     className="admin-btn admin-btn-delete"
                     type="button"
                     onClick={() => setShowEditModal(false)}
                   >
-                    Cancel
+                    {t("cancel")}
                   </button>
                 </div>
               </form>
@@ -457,3 +433,4 @@ export default function AdminUsers() {
     </div>
   );
 }
+  

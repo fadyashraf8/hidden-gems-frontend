@@ -1,0 +1,17 @@
+{
+  "admin-panel": "Admin Panel",
+  "users": "Users",
+  "categories": "Categories",
+  "all-gems": "All Gems",
+  "my-gems": "My Gems",
+
+  "arabic": "Arabic",
+  "english": "English",
+
+  "light-mode": "☀️ Light Mode",
+  "dark-mode": "⏾ Dark Mode",
+
+  "return-home": "Return to Home",
+  "sign-out": "Sign Out",
+  "signed-out-successfully": "Signed out successfully"
+}
