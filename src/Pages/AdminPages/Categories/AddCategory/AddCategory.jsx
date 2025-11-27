@@ -90,6 +90,8 @@ export default function AddCategory() {
     })
     .then(res => {
       showToast('Category created successfully', 'success');
+      console.log(res);
+      
       // navigate('/admin/categories');
     })
     .catch(err => {

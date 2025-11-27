@@ -1,7 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { Edit, Trash2, ChevronLeft, ChevronRight, X, AlertTriangle, Search, Star, MapPin } from 'lucide-react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import {
+  Edit,
+  Trash2,
+  ChevronLeft,
+  ChevronRight,
+  X,
+  AlertTriangle,
+  Search,
+  Star,
+  MapPin,
+} from "lucide-react";
+import axios from "axios";
 
 export default function AllGems() {
   const [gems, setGems] = useState([]);
@@ -11,19 +21,19 @@ export default function AllGems() {
   const [totalItems, setTotalItems] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [gemToDelete, setGemToDelete] = useState(null);
-  const [toast, setToast] = useState({ show: false, message: '', type: '' });
+  const [toast, setToast] = useState({ show: false, message: "", type: "" });
 
   // Search & Filter States
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [sortBy, setSortBy] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [sortBy, setSortBy] = useState("");
 
   const baseURL = import.meta.env.VITE_Base_URL;
 
   // URL query param for page
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageFromURL = parseInt(searchParams.get('page')) || 1;
+  const pageFromURL = parseInt(searchParams.get("page")) || 1;
   const [currentPage, setCurrentPage] = useState(pageFromURL);
 
   // Update URL when page changes
@@ -49,15 +59,15 @@ export default function AllGems() {
       .get(`${baseURL}/gems`, { params, withCredentials: true })
       .then((response) => {
         const data = response.data;
-        if (data.message === 'success') {
+        if (data.message === "success") {
           setGems(data.result);
           setTotalPages(data.totalPages);
           setTotalItems(data.totalItems);
         }
       })
       .catch((error) => {
-        console.error('Error fetching gems:', error);
-        showToast('Failed to load gems', 'error');
+        console.error("Error fetching gems:", error);
+        showToast("Failed to load gems", "error");
       })
       .finally(() => setLoading(false));
   };
@@ -66,18 +76,18 @@ export default function AllGems() {
     axios
       .get(`${baseURL}/categories`, { withCredentials: true })
       .then((response) => {
-        if (response.data.message === 'success') {
+        if (response.data.message === "success") {
           setCategories(response.data.result);
         }
       })
       .catch((error) => {
-        console.error('Error fetching categories:', error);
+        console.error("Error fetching categories:", error);
       });
   };
 
   const showToast = (message, type) => {
     setToast({ show: true, message, type });
-    setTimeout(() => setToast({ show: false, message: '', type: '' }), 3000);
+    setTimeout(() => setToast({ show: false, message: "", type: "" }), 3000);
   };
 
   const openDeleteModal = (gem) => {
@@ -95,13 +105,13 @@ export default function AllGems() {
     axios
       .delete(`${baseURL}/gems/${gemToDelete._id}`, { withCredentials: true })
       .then(() => {
-        showToast('Gem deleted successfully', 'success');
+        showToast("Gem deleted successfully", "success");
         closeDeleteModal();
         fetchGems();
       })
       .catch((error) => {
-        console.error('Error deleting gem:', error);
-        showToast('Failed to delete gem', 'error');
+        console.error("Error deleting gem:", error);
+        showToast("Failed to delete gem", "error");
       });
   };
 
@@ -126,10 +136,10 @@ export default function AllGems() {
   };
 
   const clearFilters = () => {
-    setSearchKeyword('');
-    setCategoryFilter('');
-    setStatusFilter('');
-    setSortBy('');
+    setSearchKeyword("");
+    setCategoryFilter("");
+    setStatusFilter("");
+    setSortBy("");
     setCurrentPage(1);
   };
 
@@ -150,8 +160,12 @@ export default function AllGems() {
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Hidden Gems Management</h1>
-              <p className="text-sm text-gray-600 mt-1">Total {totalItems} gems found</p>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Hidden Gems Management
+              </h1>
+              <p className="text-sm text-gray-600 mt-1">
+                Total {totalItems} gems found
+              </p>
             </div>
             <Link
               to="/admin/gems/add"
@@ -164,7 +178,10 @@ export default function AllGems() {
           {/* Search & Filters */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <Search
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
               <input
                 type="text"
                 placeholder="Search gems..."
@@ -245,13 +262,19 @@ export default function AllGems() {
             <tbody className="bg-white divide-y divide-gray-200">
               {gems.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
+                  <td
+                    colSpan="5"
+                    className="px-6 py-8 text-center text-gray-500"
+                  >
                     No gems found
                   </td>
                 </tr>
               ) : (
                 gems.map((gem) => (
-                  <tr key={gem._id} className="hover:bg-gray-50 transition-colors">
+                  <tr
+                    key={gem._id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="h-16 w-16 flex-shrink-0 rounded-lg overflow-hidden">
@@ -263,12 +286,16 @@ export default function AllGems() {
                             />
                           ) : (
                             <div className="h-16 w-16 bg-gray-200 flex items-center justify-center">
-                              <span className="text-gray-400 text-xs">No Image</span>
+                              <span className="text-gray-400 text-xs">
+                                No Image
+                              </span>
                             </div>
                           )}
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">{gem.name}</div>
+                          <div className="text-sm font-medium text-gray-900">
+                            {gem.name}
+                          </div>
                           <div className="text-sm text-gray-500 flex items-center gap-1">
                             <MapPin size={14} />
                             {gem.gemLocation}
@@ -278,32 +305,34 @@ export default function AllGems() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
-                        {gem.category?.categoryName || 'N/A'}
+                        {gem.category?.categoryName || "N/A"}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-1">
-                        <Star size={16} className="text-yellow-400 fill-yellow-400" />
+                        <Star
+                          size={16}
+                          className="text-yellow-400 fill-yellow-400"
+                        />
                         <span className="text-sm font-medium text-gray-900">
-                          {gem.avgRating?.toFixed(1) || '0.0'}
+                          {gem.avgRating?.toFixed(1) || "0.0"}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                  <span
-  className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full min-w-[80px] justify-center ${
-    gem.status === 'accepted'
-      ? 'bg-green-100 text-green-800'
-      : gem.status === 'pending'
-      ? 'bg-yellow-100 text-yellow-800'
-      : gem.status === 'rejected'
-      ? 'bg-red-100 text-red-800'
-      : 'bg-gray-100 text-gray-800'    
-  }`}
->
-  {gem.status}
-</span>
-
+                      <span
+                        className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full min-w-[80px] justify-center ${
+                          gem.status === "accepted"
+                            ? "bg-green-100 text-green-800"
+                            : gem.status === "pending"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : gem.status === "rejected"
+                            ? "bg-red-100 text-red-800"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {gem.status}
+                      </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex items-center gap-2">
@@ -331,7 +360,7 @@ export default function AllGems() {
         {/* Pagination */}
         <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
           <div className="text-sm text-gray-700">
-            Showing page <span className="font-medium">{currentPage}</span> of{' '}
+            Showing page <span className="font-medium">{currentPage}</span> of{" "}
             <span className="font-medium">{totalPages}</span>
           </div>
           <div className="flex gap-2">
@@ -363,7 +392,9 @@ export default function AllGems() {
                   <div className="bg-red-100 p-2 rounded-full">
                     <AlertTriangle className="text-red-600" size={24} />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900">Delete Gem</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Delete Gem
+                  </h3>
                 </div>
                 <button
                   onClick={closeDeleteModal}
@@ -378,8 +409,12 @@ export default function AllGems() {
                 </p>
                 {gemToDelete && (
                   <div className="bg-gray-50 p-3 rounded-lg mt-3">
-                    <p className="text-sm font-medium text-gray-900">{gemToDelete.name}</p>
-                    <p className="text-sm text-gray-600">{gemToDelete.gemLocation}</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {gemToDelete.name}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {gemToDelete.gemLocation}
+                    </p>
                   </div>
                 )}
                 <p className="text-sm text-red-600 mt-3 font-medium">
@@ -410,12 +445,14 @@ export default function AllGems() {
         <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top duration-300">
           <div
             className={`px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${
-              toast.type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+              toast.type === "success"
+                ? "bg-green-600 text-white"
+                : "bg-red-600 text-white"
             }`}
           >
             <span>{toast.message}</span>
             <button
-              onClick={() => setToast({ show: false, message: '', type: '' })}
+              onClick={() => setToast({ show: false, message: "", type: "" })}
               className="hover:opacity-80 transition-opacity"
             >
               <X size={18} />

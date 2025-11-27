@@ -25,10 +25,8 @@ export default function EditGem() {
     isSubscribed: false
   });
 
-  // للصور القديمة (اللي جاية من السيرفر)
   const [oldImages, setOldImages] = useState([]);
   
-  // للصور الجديدة (اللي المستخدم هيرفعها)
   const [newImages, setNewImages] = useState([]);
   const [newImagePreviews, setNewImagePreviews] = useState([]);
   
@@ -209,12 +207,10 @@ export default function EditGem() {
       submitData.append('discountPlatinum', formData.discountPlatinum);
       submitData.append('isSubscribed', formData.isSubscribed);
       
-      // إضافة الصور القديمة (كـ strings)
       oldImages.forEach(imageName => {
         submitData.append('oldImages[]', imageName);
       });
       
-      // إضافة الصور الجديدة (كـ files)
       newImages.forEach(imageFile => {
         submitData.append('images', imageFile);
       });
