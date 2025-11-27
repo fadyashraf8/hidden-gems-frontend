@@ -1,0 +1,29 @@
+{
+  "contact": {
+    "title": "Get in Touch",
+    "subtitle": "Have questions about a business? Need support? We're here to help.",
+
+    "office-title": "Our Office",
+    "office-desc": "123 Market Street, Suite 400\nSan Francisco, CA 94103",
+
+    "phone-title": "Phone",
+    "phone-desc": "+1 (555) 123-4567\nMon-Fri 9am-6pm PST",
+
+    "email-title": "Email",
+    "email-desc": "support@gemsy.com\nhelp@gemsy.com",
+
+    "form-title": "Send us a message",
+    "form-subtitle": "We'll get back to you within 24 hours.",
+
+    "first-name": "First Name",
+    "last-name": "Last Name",
+    "email": "Email Address",
+    "message": "Your Message",
+
+    "send-btn": "Send Message",
+    "sending": "Sending...",
+
+    "sent-success": "Message sent successfully!",
+    "sent-failed": "Failed to send message. Try again."
+  }
+}
