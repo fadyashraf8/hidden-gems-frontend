@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import BounceCards from "../../Components/BounceCards/BounceCards";
 import { Sparkles } from "lucide-react";
 import "./SurpriseMe.css";
 
 export default function SurpriseMe() {
+  const navigate = useNavigate();
   const [mood, setMood] = useState("");
   const [loading, setLoading] = useState(false);
   const [suggestion, setSuggestion] = useState(null);
@@ -16,23 +18,44 @@ export default function SurpriseMe() {
     "/images/1.jpg",
   ];
 
-  const handleSurprise = () => {
+  const handleSurprise = async () => {
     if (!mood.trim()) return;
 
     setLoading(true);
     setSuggestion(null);
 
-    // Mock AI delay
-    setTimeout(() => {
-      setLoading(false);
-      setSuggestion({
-        name: "Hidden Oasis Cafe",
-        description:
-          "A perfect match for your mood! This cozy spot offers a serene atmosphere and delicious comfort food.",
-        image: "/images/2.jpg",
-        rating: 4.8,
+    try {
+      const response = await fetch("http://localhost:3000/ai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: mood }),
       });
-    }, 2000);
+
+      if (!response.ok) {
+        throw new Error("Failed to get suggestion");
+      }
+
+      const data = await response.json();
+      const gem = data.suggestions;
+
+      // Transform backend data to match the UI format
+      setSuggestion({
+        name: gem.name,
+        description: gem.description || "A perfect match for your mood!",
+        image: gem.images?.[0]
+          ? `http://localhost:3000${gem.images[0]}`
+          : "/images/2.jpg",
+        rating: gem.averageRating || 0,
+        id: gem._id,
+      });
+    } catch (error) {
+      console.error("Error fetching suggestion:", error);
+      alert("Failed to get a suggestion. Please try again!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -66,7 +89,11 @@ export default function SurpriseMe() {
           </div>
 
           {suggestion && (
-            <div className="suggestion-card fade-in">
+            <div
+              className="suggestion-card fade-in"
+              onClick={() => navigate(`/gems/${suggestion.id}`)}
+              style={{ cursor: "pointer" }}
+            >
               <img
                 src={suggestion.image}
                 alt={suggestion.name}
@@ -75,7 +102,9 @@ export default function SurpriseMe() {
               <div className="suggestion-info">
                 <h3>{suggestion.name}</h3>
                 <p>{suggestion.description}</p>
-                <div className="suggestion-rating">★ {suggestion.rating}</div>
+                <div className="suggestion-rating">
+                  ★ {suggestion.rating.toFixed(1)}
+                </div>
               </div>
             </div>
           )}

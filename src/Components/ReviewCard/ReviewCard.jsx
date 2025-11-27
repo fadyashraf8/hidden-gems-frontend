@@ -101,7 +101,7 @@ export default function ReviewCard() {
                     Read more
                 </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'row', mb: 1, width: '100%', mt: 1 }}>
-                    <RatingStars rating={reviewData.rating} readOnly={true} color={REVIEW_RED_COLOR} />
+                    <RatingStars rating={reviewData.rating} readOnly={true} showLabel={false} />
                 </Box>
             </CardContent>
 
