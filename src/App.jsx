@@ -58,6 +58,17 @@ import ContactUsPage from "./Pages/ContactUs";
 import CategoriesPage from "./Pages/CategoriesPage/CategoriesPage";
 
 import { Toaster } from "react-hot-toast";
+import LayoutAdmin from "./Pages/AdminPages/LayoutAdmin/LayoutAdmin";
+import Users from "./Pages/AdminPages/Users/AllUsers/Users";
+import HomeAdmin from "./Pages/AdminPages/HomeAdmin/HomeAdmin";
+import EditUser from "./Pages/AdminPages/Users/EditUser/EditUser";
+import AddUser from "./Pages/AdminPages/Users/AddUser/AddUser";
+import AllCategories from "./Pages/AdminPages/Categories/AllCategories/AllCategories";
+import EditCategory from "./Pages/AdminPages/Categories/EditCategory/EditCategory";
+import AddCategory from "./Pages/AdminPages/Categories/AddCategory/AddCategory";
+import AllGems from "./Pages/AdminPages/Gems/AllGems/AllGems";
+import EditGem from "./Pages/AdminPages/Gems/EditGem/EditGem";
+import AddGem from "./Pages/AdminPages/Gems/AddGem/AddGem";
 
 function App() {
   console.log(import.meta.env.VITE_CLIENT_ID);
@@ -216,19 +227,45 @@ function App() {
         { path: "*", element: <NotFoundPage /> },
       ],
     },
+    // {
+    //   path: "admin",
+    //   element: (
+    //     <ProtectedRoute allowedRoles={["admin"]}>
+    //       <AdminLayout />
+    //     </ProtectedRoute>
+    //   ),
+    //   children: [
+    //     { index: true, element: <Navigate to="users" replace /> },
+    //     { path: "users", element: <AdminUsers /> },
+    //     { path: "gems", element: <AdminGems /> },
+    //     { path: "my-gems", element: <AdminMyGems /> },
+    //     { path: "categories", element: <AdminCategories /> },
+    //   ],
+    // },
     {
       path: "admin",
       element: (
         <ProtectedRoute allowedRoles={["admin"]}>
-          <AdminLayout />
+          <LayoutAdmin />
         </ProtectedRoute>
       ),
       children: [
-        { index: true, element: <Navigate to="users" replace /> },
-        { path: "users", element: <AdminUsers /> },
-        { path: "gems", element: <AdminGems /> },
-        { path: "my-gems", element: <AdminMyGems /> },
-        { path: "categories", element: <AdminCategories /> },
+        { index: true, element: <HomeAdmin /> },
+        //user
+        { path: "users", element: <Users /> },
+        { path: "users/add", element: <AddUser /> },
+        { path: "users/:id", element: <EditUser /> },
+
+        //category
+        { path: "categories", element: <AllCategories /> },
+        { path: "categories/:id", element: <EditCategory /> },
+        { path: "categories/add", element: <AddCategory /> },
+
+        //Gems
+
+        { path: "gems", element: <AllGems /> },
+        { path: "gems/:id", element: <EditGem /> },
+        { path: "gems/add", element: <AddGem /> },
       ],
     },
     {
