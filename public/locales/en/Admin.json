@@ -1,17 +1,24 @@
 {
-  "admin-panel": "Admin Panel",
-  "users": "Users",
-  "categories": "Categories",
-  "all-gems": "All Gems",
-  "my-gems": "My Gems",
+  "Users": "Users",
+  "All Users": "All Users",
+  "Add User": "Add User",
 
-  "arabic": "Arabic",
+  "Categories": "Categories",
+  "All Categories": "All Categories",
+  "Add Category": "Add Category",
+
+  "Gems": "Gems",
+  "All Hidden Gems": "All Hidden Gems",
+  "Add Hidden Gem": "Add Hidden Gem",
+  "My Hidden Gems": "My Hidden Gems",
+
+  "Admin Panel": "Admin Panel",
+  "Return to Home": "Return to Home",
+  "Sign Out": "Sign Out",
+
+  "Light Mode": "Light Mode",
+  "Dark Mode": "Dark Mode",
+
   "english": "English",
-
-  "light-mode": "☀️ Light Mode",
-  "dark-mode": "⏾ Dark Mode",
-
-  "return-home": "Return to Home",
-  "sign-out": "Sign Out",
-  "signed-out-successfully": "Signed out successfully"
+  "arabic": "Arabic"
 }

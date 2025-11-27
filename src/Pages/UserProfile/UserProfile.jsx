@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 export default function UserProfile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { t } = useTranslation("UserProfile");    
+  const { t, i18n } = useTranslation("UserProfile");
   const baseURL = import.meta.env.VITE_Base_URL;
 
   useEffect(() => {
@@ -32,19 +32,25 @@ export default function UserProfile() {
     fetchUser();
   }, []);
 
+  // تحديد اتجاه النص حسب اللغة
+  const direction = i18n.language === "ar" ? "rtl" : "ltr";
+  const textAlign = i18n.language === "ar" ? "text-right" : "text-left";
+
   return loading ? (
     <LoadingScreen />
   ) : !user ? (
-    <div className="flex justify-center items-center h-screen text-red-500 ">
+    <div
+      className={`flex justify-center items-center h-screen text-red-500 ${textAlign}`}
+    >
       {t("no-user")}
     </div>
   ) : (
-    <div className="max-w-5xl mx-auto mt-16 p-6 profile">
-      <h2 className="text-lg font-semibold text-[#DD0303] mb-6">
+    <div className={`max-w-5xl mx-auto mt-16 p-6 profile`} dir={direction}>
+      <h2 className={`text-lg font-semibold text-[#DD0303] mb-6 ${textAlign}`}>
         {t("title")}
       </h2>
 
-      <div className="flex flex-col md:flex-row gap-10 items-start user">
+      <div className={`flex flex-col md:flex-row gap-10 items-start user`}>
         {/* Left: Photo */}
         <div>
           <img
@@ -59,13 +65,15 @@ export default function UserProfile() {
           <CardBody className="space-y-5">
             {/* First Name */}
             <div className="group">
-              <p className="text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition">
+              <p
+                className={`text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
+              >
                 {t("firstName-label")}
               </p>
               <p
-                className="bg-gray-100 p-3 rounded-xl border border-gray-200 
+                className={`bg-gray-100 p-3 rounded-xl border border-gray-200 
                    group-hover:text-[#DD0303] group-hover:bg-blue-50 
-                   transition shadow-sm"
+                   transition shadow-sm ${textAlign}`}
               >
                 {user.firstName}
               </p>
@@ -73,13 +81,15 @@ export default function UserProfile() {
 
             {/* Last Name */}
             <div className="group">
-              <p className="text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition">
+              <p
+                className={`text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
+              >
                 {t("lastName-label")}
               </p>
               <p
-                className="bg-gray-100 p-3 rounded-xl border border-gray-200
+                className={`bg-gray-100 p-3 rounded-xl border border-gray-200
                    group-hover:text-[#DD0303] group-hover:bg-blue-50
-                   transition shadow-sm"
+                   transition shadow-sm ${textAlign}`}
               >
                 {user.lastName}
               </p>
@@ -87,13 +97,15 @@ export default function UserProfile() {
 
             {/* Email */}
             <div className="group">
-              <p className="text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition">
+              <p
+                className={`text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
+              >
                 {t("email-label")}
               </p>
               <p
-                className="bg-gray-100 p-3 rounded-xl border border-gray-200
+                className={`bg-gray-100 p-3 rounded-xl border border-gray-200
                    group-hover:text-[#DD0303] group-hover:bg-blue-50
-                   transition shadow-sm break-all"
+                   transition shadow-sm break-all ${textAlign}`}
               >
                 {user.email}
               </p>
@@ -101,13 +113,15 @@ export default function UserProfile() {
 
             {/* Username */}
             <div className="group">
-              <p className="text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition">
+              <p
+                className={`text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
+              >
                 {t("UserName-label")}
               </p>
               <p
-                className="bg-gray-100 p-3 rounded-xl border border-gray-200 
+                className={`bg-gray-100 p-3 rounded-xl border border-gray-200 
                    group-hover:text-[#DD0303] group-hover:bg-blue-50
-                   transition shadow-sm"
+                   transition shadow-sm ${textAlign}`}
               >
                 {user.email?.split("@")[0]}
               </p>

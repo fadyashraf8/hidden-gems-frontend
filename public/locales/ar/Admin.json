@@ -1,17 +1,24 @@
 {
-  "admin-panel": "لوحة التحكم",
-  "users": "المستخدمين",
-  "categories": "الفئات",
-  "all-gems": "كل الجواهر",
-  "my-gems": "جواهري",
+  "Users": "المستخدمون",
+  "All Users": "جميع المستخدمين",
+  "Add User": "إضافة مستخدم",
 
-  "arabic": "العربية",
+  "Categories": "الفئات",
+  "All Categories": "جميع الفئات",
+  "Add Category": "إضافة فئة",
+
+  "Gems": "الوجهات",
+  "All Hidden Gems": "جميع الوجهات",
+  "Add Hidden Gem": "إضافة وجهة",
+  "My Hidden Gems": "وجهاتي",
+
+  "Admin Panel": "لوحة التحكم",
+  "Return to Home": "العودة إلى الرئيسية",
+  "Sign Out": "تسجيل الخروج",
+
+  "Light Mode": "وضع النهار",
+  "Dark Mode": "الوضع الليلي",
+
   "english": "الإنجليزية",
-
-  "light-mode": "☀️ وضع النهار",
-  "dark-mode": "⏾ الوضع الليلي",
-
-  "return-home": "العودة للصفحة الرئيسية",
-  "sign-out": "تسجيل الخروج",
-  "signed-out-successfully": "تم تسجيل الخروج بنجاح"
+  "arabic": "العربية"
 }

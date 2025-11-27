@@ -9,7 +9,7 @@ import {
   X,
   ChevronLeft,
 } from "lucide-react";
-import { Link, useNavigate,NavLink } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../../redux/userSlice";
@@ -19,14 +19,14 @@ import { useTranslation } from "react-i18next";
 import TranslateTwoToneIcon from "@mui/icons-material/TranslateTwoTone";
 
 export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
-      const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const isDarkMode = useSelector((state) => state.darkMode.enabled);
   const { t, i18n } = useTranslation("Admin");
 
   const handleLogout = () => {
     dispatch(logoutUser()).then(() => {
-      toast.success("Signed out successfully", {
+      toast.success(t("signed-out-successfully"), {
         style: {
           background: "#DD0303",
           color: "white",
@@ -35,10 +35,12 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
           primary: "white",
           secondary: "#DD0303",
         },
+        icon: "👋",
       });
       navigate("/");
     });
   };
+
   const [openSections, setOpenSections] = useState({
     users: false,
     categories: false,
@@ -56,30 +58,30 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
   const menuItems = [
     {
       id: "users",
-      title: "Users",
+      title: ` ${t("Users")}`,
       icon: Users,
       items: [
-        { label: "All Users", path: "/admin/users" },
-        { label: "Add User", path: "/admin/users/add" },
+        { label: `👤 ${t("All Users")}`, path: "/admin/users" },
+        { label: `➕ ${t("Add User")}`, path: "/admin/users/add" },
       ],
     },
     {
       id: "categories",
-      title: "Categories",
+      title: ` ${t("Categories")}`,
       icon: FolderOpen,
       items: [
-        { label: "All Categories", path: "/admin/categories" },
-        { label: "Add Category", path: "/admin/categories/add" },
+        { label: `📋 ${t("All Categories")}`, path: "/admin/categories" },
+        { label: `➕ ${t("Add Category")}`, path: "/admin/categories/add" },
       ],
     },
     {
       id: "gems",
-      title: "Gems",
+      title: ` ${t("Gems")}`,
       icon: Gem,
       items: [
-        { label: "All Hidden Gems", path: "/admin/gems" },
-        { label: "Add Hidden Gem", path: "/admin/gems/add" },
-        { label: "My Hidden Gems", path: "/admin/gems/" },
+        { label: `💠 ${t("All Hidden Gems")}`, path: "/admin/gems" },
+        { label: `✨ ${t("Add Hidden Gem")}`, path: "/admin/gems/add" },
+        { label: `⭐ ${t("My Hidden Gems")}`, path: "/admin/gems/" },
       ],
     },
   ];
@@ -130,7 +132,7 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
             to="/admin"
             className="inline-block px-6 py-3 bg-gray-700 text-white font-medium rounded-md hover:bg-gray-600 transition-colors"
           >
-            Admin Panel
+            🛠️ {t("Admin Panel")}
           </Link>
         </div>
 
@@ -177,26 +179,30 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
               i18n.changeLanguage(newLang);
             }}
           >
+            
             <TranslateTwoToneIcon
               style={{ cursor: "pointer", marginRight: "10px" }}
             />
             {i18n.language === "en" ? t("arabic") : t("english")}
           </div>
+
           <div className="nav-group bottom-actions">
             <button
               className="sidebar-btn dark-mode-toggle"
               onClick={() => dispatch(toggleDarkMode())}
             >
-              {isDarkMode ? "☀️ Light Mode" : "🌚 Dark Mode"}
+              {isDarkMode ? `☀️ ${t("Light Mode")}` : `🌙 ${t("Dark Mode")}`}
             </button>
+
             <Link to="/" className="sidebar-btn dark-mode-toggle">
-              Return to Home
+              🏠 {t("Return to Home")}
             </Link>
+
             <button
               className="sidebar-btn dark-mode-toggle"
               onClick={handleLogout}
             >
-              Sign Out
+              🚪 {t("Sign Out")}
             </button>
           </div>
         </nav>

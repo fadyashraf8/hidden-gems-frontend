@@ -190,10 +190,10 @@ export default function Navbar() {
             <NavLink to="/places">Places</NavLink>
           </li>
           <li>
-            <NavLink to="/surprise">Surprise Me</NavLink>
+            <NavLink to="/surprise">Surprise </NavLink>
           </li>
           <li>
-            <NavLink to="/contact">Contact</NavLink>
+            <NavLink to="/contact">Contact Us</NavLink>
           </li>
           {!isloggedin && (
             <>
