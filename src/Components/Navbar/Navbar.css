@@ -619,3 +619,7 @@
 .dark-mode .facebook-btn:hover {
   background-color: #155db5;
 }
+
+.dark-mode .card-body {
+  background-color: var(--dm-card-bg);
+}

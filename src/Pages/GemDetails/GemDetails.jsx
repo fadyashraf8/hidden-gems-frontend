@@ -350,7 +350,7 @@ const GemDetails = () => {
 
   const visibleGallery = galleryExpanded
     ? galleryImages
-    : galleryImages.slice(0, 5);
+    : galleryImages.slice(0, 6);
 
   const visibleReviews = reviewsExpanded ? reviews : reviews.slice(0, 3);
 
@@ -774,7 +774,7 @@ const GemDetails = () => {
                       <div
                         key={`${image}-${index}`}
                         className={`aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-zinc-800 gallery-card ${
-                          galleryExpanded && index >= 5
+                          galleryExpanded && index >= 6
                             ? "gallery-card-new"
                             : ""
                         }`}
@@ -788,7 +788,7 @@ const GemDetails = () => {
                       </div>
                     ))}
                   </div>
-                  {galleryImages.length > 5 && (
+                  {galleryImages.length > 6 && (
                     <div className="flex justify-center pt-2">
                       <ToggleButton
                         expanded={galleryExpanded}

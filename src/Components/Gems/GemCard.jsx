@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Star } from "lucide-react";
 
+const BASE_URL = import.meta.env.VITE_Base_URL;
+
 const GemCard = ({ gem }) => {
   const imagesList = gem.images?.[0];
   return (
@@ -10,7 +12,7 @@ const GemCard = ({ gem }) => {
         <div className="relative aspect-[4/3] overflow-hidden">
           <img
             src={
-               `${BASE_URL}/uploads/gem/${imagesList}`||
+              `${BASE_URL}/uploads/gem/${imagesList}` ||
               gem.image ||
               "https://via.placeholder.com/400x300"
             }
@@ -30,7 +32,7 @@ const GemCard = ({ gem }) => {
           )}
         </div>
 
-        <div className="p-4">
+        <div className="p-4 card-body">
           <div className="flex justify-between items-start mb-2">
             <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1 group-hover:text-[#DD0303] transition-colors">
               {gem.name}
