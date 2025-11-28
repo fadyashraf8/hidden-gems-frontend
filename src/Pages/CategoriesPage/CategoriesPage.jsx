@@ -1,9 +1,22 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router-dom'; 
-import { Box, Container, Typography, Grid, Stack, Divider, CircularProgress, Alert } from '@mui/material';
+import { Link, useParams } from 'react-router-dom'; 
+import { Box, Container, Typography, Grid, Stack, Divider, CircularProgress, Alert, Pagination, Breadcrumbs } from '@mui/material';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { BASE_URL, THEME, FEATURED_PATHS} from '../../Components/Places/constants';
+//capitalizeWords
 import FilterBar from '../../Components/Places/FilterBar';
 import PlaceCard from '../../Components/Places/PlaceCard';
+import { hover } from 'framer-motion';
+
+const linkStyle = {
+    // textDecoration: 'none',     // Remove underline
+    '&:hover': { color: THEME.RED },
+    color: THEME.GREY,          
+    fontWeight: 600,            
+    cursor: 'pointer',
+    display: 'flex',            // Helps align icons if you add them later
+    alignItems: 'center'
+};
 
 export default function CategoriesPage() {
   const { categoryName } = useParams(); 
@@ -15,6 +28,9 @@ export default function CategoriesPage() {
   });
   
   const [gems, setGems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -26,11 +42,15 @@ export default function CategoriesPage() {
       setError("");
 
       try {
-        const response = await fetch(`${BASE_URL}/gems`, { credentials: "include" });
+        const response = await fetch(`${BASE_URL}/gems?page=${currentPage}`, { credentials: "include" });
         if (!response.ok) throw new Error("Failed to fetch gems");
         
         const data = await response.json();
         let fetchedGems = data.result || [];
+        
+        // Update pagination state
+        setTotalPages(data.totalPages || 1);
+        setTotalItems(data.totalItems || 0);
         
         // Filter: Only Accepted Gems
         fetchedGems = fetchedGems.filter(gem => gem.status === 'accepted');
@@ -46,9 +66,11 @@ export default function CategoriesPage() {
               console.log("DB", dbFingerprint)
               return dbFingerprint === targetFingerprint; // This will match "Spa & Wellness", "Spa & Wellness", and even "Spa And Wellness" perfectly.
             });
+            // setTotalItems(fetchedGems.length);
+            // setTotalPages(Math.ceil(fetchedGems.length / 10)); // 10 per page
             console.log("CatName:", categoryName);
         } else {
-            setPageTitle("Top Gems in San Francisco");
+            setPageTitle("Top Gems in your area" );
         }
 
         setGems(fetchedGems);
@@ -61,7 +83,7 @@ export default function CategoriesPage() {
     };
 
     fetchData();
-  }, [categoryName]);
+  }, [categoryName, currentPage]);
 
   // Client-side filtering logic based on Chip selection
   const visibleGems = useMemo(() => {
@@ -77,16 +99,38 @@ export default function CategoriesPage() {
       return true;
     });
   }, [gems, filtersApplied]);
+  
+  // useEffect(() => {
+  //   if(visibleGems.length >= 0){
+  //     setTotalItems(visibleGems.length);
+  //     setTotalPages(Math.ceil(visibleGems.length / 10)); // 10 per page
+  //   }
+    
+  // }, [visibleGems]);
 
   return (
     <Box sx={{ bgcolor: 'white', minHeight: '100vh', pb: 12, pt: 8}}>
         <Container maxWidth="lg">
             
-            <Stack direction="row" spacing={3} sx={{ mb: 3, display: { xs: 'none', md: 'flex' } }}>
-                <Typography variant="body2" sx={{ fontWeight: 600, color: THEME.GREY }}>
-                    Home &gt; Places &gt; <span style={{color: THEME.RED}}>{categoryName || "All"}</span>
-                </Typography>
-            </Stack>
+            <Breadcrumbs 
+                separator={<ArrowRightIcon fontSize="small" />} 
+                aria-label="breadcrumb"
+                sx={{ mb: 3, display: { xs: 'none', md: 'flex' } }}
+              >
+                  <Link to="/" style={linkStyle}>
+                      Home
+                  </Link>
+                  <Link to="/places" style={linkStyle}>
+                      Places
+                  </Link>
+                  <Typography 
+                      variant="body2" 
+                      sx={{ fontWeight: 600, color: THEME.RED }}
+                  >
+                      {categoryName || "All"}
+                  </Typography>
+
+              </Breadcrumbs>
 
             <Divider sx={{ mb: 4, borderColor: '#eee' }} />
 
@@ -112,13 +156,41 @@ export default function CategoriesPage() {
                     ) : (
                         <Stack spacing={3}>
                             {visibleGems.length > 0 ? (
-                                visibleGems.map((gem, index) => (
-                                    <PlaceCard 
-                                        key={gem._id || index} 
-                                        data={gem} 
-                                        rank={index + 1} 
-                                    />
-                                ))
+                                <>
+                                    {visibleGems.map((gem, index) => (
+                                        <PlaceCard 
+                                            key={gem._id || index} 
+                                            data={gem} 
+                                            rank={index + 1} 
+                                        />
+                                    ))}
+                                    {/* Pagination Controls */}
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                                        <Pagination 
+                                            count={totalPages} 
+                                            page={currentPage} 
+                                            onChange={(e, page) => {
+                                                setCurrentPage(page);
+                                                window.scrollTo(0, 0); // Scroll to top on page change
+                                            }}
+                                            sx={{
+                                                '& .MuiPaginationItem-root': {
+                                                    color: THEME.DARK,
+                                                    '&.Mui-selected': {
+                                                        backgroundColor: THEME.RED,
+                                                        color: 'white',
+                                                        '&:hover': {
+                                                            backgroundColor: THEME.RED,
+                                                        }
+                                                    },
+                                                    '&:hover': {
+                                                        backgroundColor: '#f0f0f0',
+                                                    }
+                                                }
+                                            }}
+                                        />
+                                    </Box>
+                                </>
                             ) : (
                                 !error && <Typography>No gems match your filters.</Typography>
                             )}

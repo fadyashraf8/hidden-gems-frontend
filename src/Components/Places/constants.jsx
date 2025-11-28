@@ -24,6 +24,18 @@ export const FEATURED_PATHS = [
 ];
 
 
+// export function capitalizeWords(str) {
+
+//     if (!str) return "";
+//     else{
+//         str[0] = str[0].toUpperCase();
+//         return str;
+//     }
+  
+// }
+
+
+
 export const FILTERS_CONFIG = [
   { 
     label: "Rating", 
@@ -59,7 +71,8 @@ export const FILTERS_CONFIG = [
       { label: "Embaba", value: "embaba", icon: <LocateIcon size={18} /> },
       { label: "Abbasia", value: "abbasia", icon: <LocateIcon size={18} /> },
       { label: "Sherouk", value: "sherouk", icon: <LocateIcon size={18} /> },
-      { label: "Obbour", value: "obbour", icon: <LocateIcon size={18} /> }
+      { label: "Obbour", value: "obbour", icon: <LocateIcon size={18} /> },
+      { label: "Any Location", value: "", icon: <LocateIcon /> }
     ]
   }
 ];

@@ -24,7 +24,7 @@ const PlaceCard = ({ data, rank }) => {
         sx={{ 
             p: 0, 
             border: '1px solid #e0e0e0', 
-            borderRadius: 2, 
+            borderRadius: 3, 
             overflow: 'hidden',
             cursor: 'pointer', 
             transition: 'all 0.2s',
