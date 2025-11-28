@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Card, Input, Textarea, Button } from "@heroui/react";
 import SendIcon from "@mui/icons-material/Send";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useTranslation } from "react-i18next";
-import emailjs from "emailjs-com";
+import toast, { Toaster } from "react-hot-toast";
 
 const InfoItem = ({ icon: Icon, title, subtitle }) => (
   <div className="flex gap-4 mb-6">
-    <div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-100 text-red-600 ">
-      {React.createElement(Icon)}
+    <div className="w-12 h-12 flex items-center justify-center rounded-full bg-red-100 text-red-600">
+      {Icon && <Icon />}
     </div>
     <div>
       <h4 className="font-bold text-gray-900 mb-1">{title}</h4>
@@ -20,63 +21,79 @@ const InfoItem = ({ icon: Icon, title, subtitle }) => (
 );
 
 export default function ContactUsPage() {
-  const { t } = useTranslation("ContactUs");
+  const { t, i18n } = useTranslation("ContactUs");
+  const isRTL = i18n.language === "ar";
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    message: "",
-  });
-  const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm();
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  // إعادة تحديث رسائل الأخطاء عند تغيير اللغة
+  useEffect(() => {
+    Object.keys(errors).forEach((field) => {
+      const error = errors[field];
+      if (error?.type === "required") {
+        setError(field, {
+          type: "required",
+          message: t(`contact.errors.${field}`),
+        });
+      }
+      if (error?.type === "minLength") {
+        setError(field, {
+          type: "minLength",
+          message: t(`contact.errors.${field}-short`),
+        });
+      }
+      if (error?.type === "pattern") {
+        setError(field, {
+          type: "pattern",
+          message: t("contact.errors.email-invalid"),
+        });
+      }
+    });
+  }, [i18n.language]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const onSubmit = async (data) => {
+    try {
+      const res = await fetch("http://localhost:3000/contactus", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    const templateParams = {
-      ...formData,
-      name: `${formData.firstName} ${formData.lastName}`,
-    };
+      const result = await res.json();
 
-    emailjs
-      .send(
-        "service_8idncm9",
-        "template_nbmj3ig",
-        templateParams,
-        "OZzaqu7xm09m4RX1J"
-      )
-      .then(
-        () => {
-          alert(t("contact.sent-success"));
-          setFormData({ firstName: "", lastName: "", email: "", message: "" });
-          setLoading(false);
-        },
-        () => {
-          alert(t("contact.sent-failed"));
-          setLoading(false);
-        }
-      );
+      if (!res.ok) {
+        toast.error(result.message || t("contact.sent-failed"));
+        return;
+      }
+
+      toast.success(t("contact.sent-success"));
+      reset();
+    } catch {
+      toast.error(t("contact.sent-failed"));
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-17 px-4">
-      {/* Header */}
+    <div
+      className="min-h-screen bg-gray-50 py-16 px-4"
+      dir={isRTL ? "rtl" : "ltr"}
+    >
+      <Toaster position="top-right" />
+
       <div className="text-center mb-12">
         <h1 className="text-4xl font-extrabold text-gray-900 mb-2">
           {t("contact.title")}
         </h1>
-        <p className="text-gray-600 text-lg">
-          {t("contact.subtitle")}
-        </p>
+        <p className="text-gray-600 text-lg">{t("contact.subtitle")}</p>
       </div>
 
-      {/* Main Grid */}
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-10">
-        {/* Left Column */}
         <div className="flex-1">
           <InfoItem
             icon={LocationOnIcon}
@@ -95,8 +112,7 @@ export default function ContactUsPage() {
           />
         </div>
 
-        {/* Right Column */}
-        <div className="flex-2">
+        <div className="flex-[2]">
           <Card className="p-8 rounded-2xl shadow-xl">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
               {t("contact.form-title")}
@@ -105,50 +121,72 @@ export default function ContactUsPage() {
               {t("contact.form-subtitle")}
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
                   label={t("contact.first-name")}
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
+                  {...register("firstName", {
+                    required: t("contact.errors.firstName"),
+                    minLength: {
+                      value: 2,
+                      message: t("contact.errors.firstName-short"),
+                    },
+                  })}
+                  isInvalid={!!errors.firstName}
+                  errorMessage={errors.firstName?.message}
                 />
+
                 <Input
                   label={t("contact.last-name")}
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
+                  {...register("lastName", {
+                    required: t("contact.errors.lastName"),
+                    minLength: {
+                      value: 2,
+                      message: t("contact.errors.lastName-short"),
+                    },
+                  })}
+                  isInvalid={!!errors.lastName}
+                  errorMessage={errors.lastName?.message}
                 />
               </div>
 
               <Input
                 label={t("contact.email")}
-                name="email"
                 type="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
+                {...register("email", {
+                  required: t("contact.errors.email"),
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: t("contact.errors.email-invalid"),
+                  },
+                })}
+                isInvalid={!!errors.email}
+                errorMessage={errors.email?.message}
               />
 
               <Textarea
                 label={t("contact.message")}
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                rows={5}
-                required
+                minRows={5}
+                {...register("message", {
+                  required: t("contact.errors.message"),
+                  minLength: {
+                    value: 10,
+                    message: t("contact.errors.message-short"),
+                  },
+                })}
+                isInvalid={!!errors.message}
+                errorMessage={errors.message?.message}
               />
 
               <Button
                 type="submit"
                 fullWidth
-                disabled={loading}
-                className="bg-red-600 hover:bg-red-700 rounded-xl flex items-center justify-center space-x-2 py-3 text-white font-bold"
+                isLoading={isSubmitting}
+                disabled={isSubmitting}
+                className="bg-red-600 hover:bg-red-700 rounded-xl text-white font-bold py-3"
+                endContent={<SendIcon />}
               >
-                <span>{loading ? t("contact.sending") : t("contact.send-btn")}</span>
-                <SendIcon />
+                {isSubmitting ? t("contact.sending") : t("contact.send-btn")}
               </Button>
             </form>
           </Card>
