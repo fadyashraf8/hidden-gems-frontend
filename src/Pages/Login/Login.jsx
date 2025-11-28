@@ -182,8 +182,9 @@ const LoginPage = () => {
                   onError={handleGoogleError}
                   size="large"
                   width="100%"
-                  text="continue_with"
-                  shape="rectangular"
+                  text="signin_with"
+                  shape="pill"
+                  
                 />
               </div>
 

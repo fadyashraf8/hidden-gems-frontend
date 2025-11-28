@@ -191,8 +191,8 @@ export default function OwnerDashboard() {
               <div className="flex items-center gap-1">
                 <RatingStars
                   rating={restaurant?.avgRating || 0}
-                  readOnly={true}
-                  color="#FFD700"
+                  readOnly
+                  showLabel={false}
                 />
                 <span className="font-medium">
                   ({restaurant?.reviews?.length || 0} reviews)

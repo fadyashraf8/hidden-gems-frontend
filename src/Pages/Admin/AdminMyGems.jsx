@@ -5,10 +5,12 @@ import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../LoadingScreen";
 import "../Admin/Admin.css";
 import "./AdminMyGems.css";
+import { useTranslation } from "react-i18next";
 
 const baseURL = import.meta.env.VITE_Base_URL;
 
 export default function AdminMyGems() {
+  const { t } = useTranslation("AdminMyGems");
   const { userInfo } = useSelector((state) => state.user);
   const [gems, setGems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,33 +24,27 @@ export default function AdminMyGems() {
       setLoading(true);
       try {
         const data = await getGemsAPI({ createdBy: userInfo.id });
-
-        if (data.result) {
-          setGems(data.result);
-        } else {
-          setGems([]);
-        }
+        if (data.result) setGems(data.result);
+        else setGems([]);
       } catch (err) {
         console.error("Error fetching admin gems:", err);
-        setError("Failed to load your gems.");
+        setError(t("failedLoadGems"));
       } finally {
         setLoading(false);
       }
     }
 
-    if (userInfo) {
-      fetchAdminGems();
-    }
-  }, [userInfo]);
+    if (userInfo) fetchAdminGems();
+  }, [userInfo, t]);
 
   if (loading) return <LoadingScreen />;
 
   return (
     <div className="admin-page">
       <div className="admin-header">
-        <h1>My Gems</h1>
+        <h1>{t("myGems")}</h1>
         <p className="admin-subtitle">
-          Gems you've personally created ({gems.length})
+          {t("gemsCreatedCount", { count: gems.length })}
         </p>
       </div>
 
@@ -66,10 +62,8 @@ export default function AdminMyGems() {
           className="empty-state"
           style={{ textAlign: "center", padding: "3rem" }}
         >
-          <h3>No gems created yet</h3>
-          <p style={{ marginTop: "0.5rem" }}>
-            You haven't created any gems personally.
-          </p>
+          <h3>{t("noGemsCreated")}</h3>
+          <p style={{ marginTop: "0.5rem" }}>{t("noGemsCreatedDesc")}</p>
         </div>
       ) : (
         <div
@@ -135,7 +129,7 @@ export default function AdminMyGems() {
                     fontWeight: "600",
                   }}
                 >
-                  {gem.status}
+                  {t(gem.status)}
                 </div>
               </div>
               <div style={{ padding: "1rem" }}>
@@ -151,21 +145,13 @@ export default function AdminMyGems() {
                 </h3>
                 <p
                   className="gem-card-text"
-                  style={{
-                    fontSize: "0.875rem",
-                    marginBottom: "0.5rem",
-                  }}
+                  style={{ fontSize: "0.875rem", marginBottom: "0.5rem" }}
                 >
                   📍 {gem.gemLocation}
                 </p>
-                <p
-                  className="gem-card-text"
-                  style={{
-                    fontSize: "0.875rem",
-                  }}
-                >
-                  ⭐ {gem.avgRating?.toFixed(1) || "N/A"} •{" "}
-                  {gem.reviews?.length || 0} reviews
+                <p className="gem-card-text" style={{ fontSize: "0.875rem" }}>
+                  ⭐ {gem.avgRating?.toFixed(1) || t("na")} •{" "}
+                  {gem.reviews?.length || 0} {t("reviews")}
                 </p>
                 {(gem.discount > 0 || gem.discountPremium > 0) && (
                   <div
@@ -186,7 +172,7 @@ export default function AdminMyGems() {
                           fontWeight: "600",
                         }}
                       >
-                        {gem.discount}% OFF
+                        {gem.discount}% {t("off")}
                       </span>
                     )}
                     {gem.discountPremium > 0 && (
@@ -200,7 +186,7 @@ export default function AdminMyGems() {
                           fontWeight: "600",
                         }}
                       >
-                        {gem.discountPremium}% PREMIUM
+                        {gem.discountPremium}% {t("premium")}
                       </span>
                     )}
                   </div>

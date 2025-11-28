@@ -1,0 +1,13 @@
+{
+  "myGems": "My Gems",
+  "gemsCreatedCount": "Gems you've personally created ({{count}})",
+  "failedLoadGems": "Failed to load your gems.",
+  "noGemsCreated": "No gems created yet",
+  "noGemsCreatedDesc": "You haven't created any gems personally.",
+  "reviews": "reviews",
+  "off": "OFF",
+  "premium": "PREMIUM",
+  "na": "N/A",
+  "accepted": "Accepted",
+  "pending": "Pending"
+}

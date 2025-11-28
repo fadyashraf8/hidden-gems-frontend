@@ -1,0 +1,66 @@
+.gem-details .about-text {
+  line-height: 1.8;
+  overflow: hidden;
+  transition: max-height 0.45s ease, opacity 0.35s ease;
+}
+
+.gem-details .about-text.collapsed {
+  opacity: 0.92;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 60%, transparent);
+}
+
+.gem-details .about-text.expanded {
+  opacity: 1;
+}
+
+.gem-details .gallery-card img {
+  transition: transform 0.4s ease;
+}
+
+.gem-details .gallery-card:hover img {
+  transform: scale(1.05);
+}
+
+.gem-details .review-card {
+  background-color: #fff;
+}
+
+.dark .gem-details .review-card {
+  background-color: #101010;
+}
+
+.gem-details .review-text {
+  line-height: 1.6;
+}
+
+.gem-details .toggle-button {
+  background-color: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.gem-details .toggle-button:hover {
+  box-shadow: 0 8px 24px rgba(221, 3, 3, 0.25);
+}
+
+.dark .gem-details .toggle-button {
+  background-color: rgba(16, 16, 16, 0.65);
+  box-shadow: none;
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.gem-details .gallery-card-new,
+.gem-details .review-card-new {
+  animation: fadeSlideUp 0.4s ease forwards;
+}
+

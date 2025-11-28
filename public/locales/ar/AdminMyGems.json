@@ -1,0 +1,13 @@
+{
+  "myGems": "جواهرى",
+  "gemsCreatedCount": "الجواهر التي قمت بإنشائها شخصياً ({{count}})",
+  "failedLoadGems": "فشل تحميل الجواهر الخاصة بك.",
+  "noGemsCreated": "لم يتم إنشاء أي جواهر بعد",
+  "noGemsCreatedDesc": "لم تقم بإنشاء أي جواهر شخصياً.",
+  "reviews": "تقييمات",
+  "off": "خصم",
+  "premium": "مميز",
+  "na": "غير متوفر",
+  "accepted": "مقبول",
+  "pending": "قيد الانتظار"
+}

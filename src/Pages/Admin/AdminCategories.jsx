@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import "./Admin.css";
 import LoadingScreen from "../LoadingScreen";
 
 export default function AdminCategories() {
+  const { t } = useTranslation("AdminCategories");
   const { userInfo: user, isLoggedIn: isloggedin } = useSelector(
     (state) => state.user
   );
@@ -47,22 +49,20 @@ export default function AdminCategories() {
           { credentials: "include" }
         );
 
-        if (!res.ok) throw new Error("Failed to fetch categories");
+        if (!res.ok) throw new Error(t("fetchError"));
 
         const data = await res.json();
-        console.log(data.result);
-
         setCategories(data.result || []);
         setTotalPages(data.totalPages || 1);
       } catch (err) {
-        setError(err.message || "Error loading categories");
+        setError(err.message || t("loadingError"));
       }
 
       setLoading(false);
     }
 
     fetchCategories();
-  }, [currentPage, refreshTrigger, sortOrder]);
+  }, [currentPage, refreshTrigger, sortOrder, t]);
 
   // sort handler
   const handleSortChange = (e) => setSortOrder(e.target.value);
@@ -74,15 +74,14 @@ export default function AdminCategories() {
   const validateNewCategory = () => {
     const errors = {};
     if (!newCategory.categoryName)
-      errors.categoryName = "Category name is required";
+      errors.categoryName = t("categoryNameRequired");
     if (!newCategory.categoryImage)
-      errors.categoryImage = "Category image is required";
+      errors.categoryImage = t("categoryImageRequired");
     return errors;
   };
 
   const handleCreate = async (e) => {
     e.preventDefault();
-
     const errors = validateNewCategory();
     setFormErrors(errors);
     if (Object.keys(errors).length > 0) return;
@@ -100,9 +99,7 @@ export default function AdminCategories() {
 
       const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.message || "Failed to create category");
-      }
+      if (!res.ok) throw new Error(data.message || t("createFailed"));
 
       setShowCreateModal(false);
       setNewCategory({ categoryName: "", categoryImage: null });
@@ -123,7 +120,7 @@ export default function AdminCategories() {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.message || "Failed to delete category");
+        throw new Error(data.message || t("deleteFailed"));
       }
 
       setCategories((prev) => prev.filter((c) => c._id !== id));
@@ -139,52 +136,39 @@ export default function AdminCategories() {
     setShowEditModal(true);
   };
 
- const handleEditSubmit = async (e) => {
-   e.preventDefault();
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
 
-   const errors = {};
-   if (!editCategory.categoryName)
-     errors.categoryName = "Category name is required";
-   setEditFormErrors(errors);
-   if (Object.keys(errors).length > 0) return;
+    const errors = {};
+    if (!editCategory.categoryName)
+      errors.categoryName = t("categoryNameRequired");
+    setEditFormErrors(errors);
+    if (Object.keys(errors).length > 0) return;
 
-   try {
-     const formData = new FormData();
-     formData.append("categoryName", editCategory.categoryName);
+    try {
+      const formData = new FormData();
+      formData.append("categoryName", editCategory.categoryName);
+      if (editCategory.categoryImage) {
+        formData.append("categoryImage", editCategory.categoryImage);
+      }
 
-           
-     if (editCategory.categoryImage) {
-       formData.append("categoryImage", editCategory.categoryImage);
-     }
+      const res = await fetch(
+        `http://localhost:3000/categories/${editCategory._id}`,
+        { method: "PUT", credentials: "include", body: formData }
+      );
 
-     const res = await fetch(
-       `http://localhost:3000/categories/${editCategory._id}`,
-       {
-         method: "PUT",
-         credentials: "include",
-         body: formData,
-       }
-     );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || t("updateFailed"));
 
-     const data = await res.json();
-
-     if (!res.ok) {
-       throw new Error(data.message || "Failed to update category");
-     }
-
-     // نحدث الجدول
-     setShowEditModal(false);
-     setRefreshTrigger((prev) => prev + 1);
-   } catch (err) {
-     alert(err.message);
-   }
- };
-
+      setShowEditModal(false);
+      setRefreshTrigger((prev) => prev + 1);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
   if (!isloggedin || !user || user.role !== "admin") {
-    return (
-      <div className="admin-access-denied">Access denied. Admins only.</div>
-    );
+    return <div className="admin-access-denied">{t("accessDenied")}</div>;
   }
 
   return loading ? (
@@ -193,33 +177,32 @@ export default function AdminCategories() {
     <div className="admin-page">
       <div className="admin-dashboard">
         <div className="admin-header-actions">
-          <h1 className="admin-title">Category Management</h1>
+          <h1 className="admin-title">{t("categoryManagement")}</h1>
           <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
             <button
               style={{ marginTop: 0 }}
               className="admin-btn create-user-button "
               onClick={() => setShowCreateModal(true)}
             >
-              Create Category
+              {t("createCategory")}
             </button>
             <div className="admin-sort-wrapper ">
-              <label>Sort by:</label>
+              <label>{t("sortBy")}:</label>
               <select
                 value={sortOrder}
                 onChange={handleSortChange}
                 className="admin-sort-select"
               >
-                <option value="">Default</option>
-                <option value="categoryName">Name (A-Z)</option>
-                <option value="-categoryName">Name (Z-A)</option>
+                <option value="">{t("default")}</option>
+                <option value="categoryName">{t("nameAZ")}</option>
+                <option value="-categoryName">{t("nameZA")}</option>
               </select>
             </div>
           </div>
         </div>
 
-        {/* Table */}
         {loading && categories.length === 0 ? (
-          <p className="admin-loading">Loading categories...</p>
+          <p className="admin-loading">{t("loadingCategories")}</p>
         ) : error ? (
           <p className="admin-error">{error}</p>
         ) : (
@@ -234,18 +217,16 @@ export default function AdminCategories() {
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Image</th>
-                  <th>Created By</th>
-                  <th>Actions</th>
+                  <th>{t("name")}</th>
+                  <th>{t("image")}</th>
+                  <th>{t("createdBy")}</th>
+                  <th>{t("actions")}</th>
                 </tr>
               </thead>
-
               <tbody>
                 {categories.map((cat) => (
                   <tr key={cat._id}>
                     <td>{cat.categoryName}</td>
-
                     <td>
                       <img
                         src={`http://localhost:3000/uploads/category/${cat.categoryImage}`}
@@ -259,13 +240,7 @@ export default function AdminCategories() {
                         }}
                       />
                     </td>
-
-                    <td>
-                      {cat.createdBy?.email} <br />
-                      {/* {cat.createdBy?.firstName} */}
-                      {/* {cat.createdBy?.lastName} */}
-                    </td>
-
+                    <td>{cat.createdBy?.email}</td>
                     <td>
                       <button
                         className="admin-btn"
@@ -273,7 +248,6 @@ export default function AdminCategories() {
                       >
                         ✎
                       </button>
-
                       <button
                         className="admin-btn admin-btn-delete"
                         onClick={() => handleDelete(cat._id)}
@@ -286,44 +260,37 @@ export default function AdminCategories() {
               </tbody>
             </table>
 
-            {/* Pagination */}
             <div className="pagination-container">
               <p className="pagination-info">
-                Page {currentPage} of {totalPages}
+                {t("pageInfo", { current: currentPage, total: totalPages })}
               </p>
-
               <div className="pagination-buttons">
                 <button
                   className="pagination-btn"
                   disabled={currentPage === 1}
                   onClick={prevPage}
                 >
-                  Previous
+                  {t("previous")}
                 </button>
-
                 <button
                   className="pagination-btn"
                   disabled={currentPage === totalPages}
                   onClick={nextPage}
                 >
-                  Next
+                  {t("next")}
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* CREATE Category */}
-
-        {/* CREATE MODAL */}
         {showCreateModal && (
           <div className="modal-overlay">
             <div className="modal">
-              <h2>Create Category</h2>
-
+              <h2>{t("createCategory")}</h2>
               <form onSubmit={handleCreate}>
                 <label>
-                  Category Name:
+                  {t("categoryNameLabel")}:
                   <input
                     type="text"
                     value={newCategory.categoryName}
@@ -340,7 +307,7 @@ export default function AdminCategories() {
                 </label>
 
                 <label>
-                  Image:
+                  {t("categoryImageLabel")}:
                   <input
                     type="file"
                     onChange={(e) =>
@@ -357,14 +324,14 @@ export default function AdminCategories() {
 
                 <div className="modal-actions">
                   <button className="admin-btn" type="submit">
-                    Create
+                    {t("create")}
                   </button>
                   <button
                     className="admin-btn admin-btn-delete"
                     type="button"
                     onClick={() => setShowCreateModal(false)}
                   >
-                    Cancel
+                    {t("cancel")}
                   </button>
                 </div>
               </form>
@@ -372,15 +339,13 @@ export default function AdminCategories() {
           </div>
         )}
 
-        {/* EDIT MODAL */}
         {showEditModal && (
           <div className="modal-overlay">
             <div className="modal">
-              <h2>Edit Category</h2>
-
+              <h2>{t("editCategory")}</h2>
               <form onSubmit={handleEditSubmit}>
                 <label>
-                  Category Name:
+                  {t("categoryNameLabel")}:
                   <input
                     type="text"
                     value={editCategory.categoryName}
@@ -397,7 +362,7 @@ export default function AdminCategories() {
                 </label>
 
                 <label>
-                  Change Image:
+                  {t("changeImageLabel")}:
                   <input
                     type="file"
                     onChange={(e) =>
@@ -411,14 +376,14 @@ export default function AdminCategories() {
 
                 <div className="modal-actions">
                   <button className="admin-btn" type="submit">
-                    Save Changes
+                    {t("saveChanges")}
                   </button>
                   <button
                     type="button"
                     className="admin-btn admin-btn-delete"
                     onClick={() => setShowEditModal(false)}
                   >
-                    Cancel
+                    {t("cancel")}
                   </button>
                 </div>
               </form>

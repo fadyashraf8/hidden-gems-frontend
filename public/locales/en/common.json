@@ -14,7 +14,7 @@
   "link_blog": "Blog",
   "link_support": "Support",
   "link_explore_cities": "Explore Cities",
-  "link_hidden": "Hidden",
+  "link_spot": "Spot",
   
   "link_for_businesses": "For Businesses",
   "link_add_your_place": "Add Your Place",
@@ -24,7 +24,7 @@
   "nav_search_placeholder": "Search places…",
   "nav_link_places": "Places",
   "nav_link_surprise": "Surprise Me",
-  "nav_link_contact": "Contact",
+  "nav_link_contact": "Contact Us",
   "nav_auth_login": "Login",
   "nav_auth_signup": "Sign Up"
 }

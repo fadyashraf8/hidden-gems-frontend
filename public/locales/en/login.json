@@ -16,6 +16,8 @@
   "link-forgot-password": "Forgot Password?",
 
   "Toaster-error": "Email or password is incorrect",
-  "Toaster-success": "Logged in successfully!"
-  
+  "Toaster-success": "Logged in successfully!",
+  "SignOut-button": "Sign Out",
+  "signed-out-successfully": "Signed out successfully!"
+
 }

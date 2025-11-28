@@ -1,8 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-
 const AboutUs = () => {
-  const { t } = useTranslation("About"); // ملف الترجمة اسمه about.json
+  const { t} = useTranslation("About"); 
 
   return (
     <div className="footer-page-wrapper">
