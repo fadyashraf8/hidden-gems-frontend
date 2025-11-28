@@ -1,7 +1,6 @@
-import React from "react";
 
 const DeleteGemModal = ({ gemName, onConfirm, onCancel }) => {
-  // Styles specific to this modal
+
   const modalStyle = {
     width: "90%",
     maxWidth: "500px",

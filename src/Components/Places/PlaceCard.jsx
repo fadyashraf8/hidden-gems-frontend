@@ -1,5 +1,3 @@
-// components/BusinessCard.jsx
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Paper, Grid, Box, Typography, Rating } from '@mui/material';
 import { BASE_URL, THEME } from './constants';

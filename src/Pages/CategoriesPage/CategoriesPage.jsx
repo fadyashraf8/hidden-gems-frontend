@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom'; 
 import { Box, Container, Typography, Grid, Stack, Divider, CircularProgress, Alert, Pagination, Breadcrumbs } from '@mui/material';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { Navigation2Icon } from 'lucide-react'; // Make sure this is installed or use MUI icon
-
-// Adjust these paths to match your project structure exactly
 import { BASE_URL, THEME } from '../../Components/Places/constants';
 import FilterBar from '../../Components/Places/FilterBar';
 import PlaceCard from '../../Components/Places/PlaceCard';

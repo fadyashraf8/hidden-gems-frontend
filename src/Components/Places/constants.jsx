@@ -1,4 +1,3 @@
-import React from 'react';
 import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone';
 import TapasTwoToneIcon from '@mui/icons-material/TapasTwoTone';
 import StadiumTwoToneIcon from '@mui/icons-material/StadiumTwoTone';
