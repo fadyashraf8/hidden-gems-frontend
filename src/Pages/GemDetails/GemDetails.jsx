@@ -73,7 +73,7 @@ const GemDetails = () => {
 
   const fetchGemRatings = useCallback(async () => {
     try {
-      const res = await fetch(`${BASE_URL}/rating/gem/${id}`, {
+      const res = await fetch(`${BASE_URL}/ratings/gem/${id}`, {
         credentials: "include",
       });
       const data = await res.json();
@@ -497,7 +497,7 @@ const GemDetails = () => {
         withCredentials: true,
       });
       if (userRatingId) {
-        await axios.delete(`${BASE_URL}/rating/${userRatingId}`, {
+        await axios.delete(`${BASE_URL}/ratings/${userRatingId}`, {
           withCredentials: true,
         });
       }
@@ -620,14 +620,14 @@ const GemDetails = () => {
 
       if (effectiveRatingId) {
         await axios.put(
-          `${BASE_URL}/rating/${effectiveRatingId}`,
+          `${BASE_URL}/ratings/${effectiveRatingId}`,
           { rating: reviewRating },
           { withCredentials: true }
         );
         setUserRatingId(effectiveRatingId);
       } else {
         const { data } = await axios.post(
-          `${BASE_URL}/rating`,
+          `${BASE_URL}/ratings`,
           { gem: id, rating: reviewRating },
           { withCredentials: true }
         );
