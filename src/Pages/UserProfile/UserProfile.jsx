@@ -3,6 +3,7 @@ import { Card, CardBody } from "@heroui/react";
 import userImage from "../../assets/userImage.png";
 import LoadingScreen from "../LoadingScreen";
 import { useTranslation } from "react-i18next";
+import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
 
 export default function UserProfile() {
   const [user, setUser] = useState(null);
@@ -60,73 +61,85 @@ export default function UserProfile() {
         </div>
 
         {/* Right: Info */}
-        <Card className="w-full shadow-sm p-4 bg-white user-info">
-          <CardBody className="space-y-5">
-            {/* First Name */}
-            <div className="group">
-              <p
-                className={`text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
-              >
-                {t("firstName-label")}
-              </p>
-              <p
-                className={`bg-gray-100 p-3 rounded-xl border border-gray-200 
-                   group-hover:text-[#DD0303] group-hover:bg-blue-50 
-                   transition shadow-sm ${textAlign}`}
-              >
-                {user.firstName}
-              </p>
-            </div>
+        <div className="w-full space-y-8">
+          <Card className="w-full shadow-sm p-4 bg-white user-info">
+            <CardBody className="space-y-5">
+              {/* First Name */}
+              <div className="group">
+                <p
+                  className={`text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
+                >
+                  {t("firstName-label")}
+                </p>
+                <p
+                  className={`bg-gray-100 p-3 rounded-xl border border-gray-200 
+                     group-hover:text-[#DD0303] group-hover:bg-blue-50 
+                     transition shadow-sm ${textAlign}`}
+                >
+                  {user.firstName}
+                </p>
+              </div>
 
-            {/* Last Name */}
-            <div className="group">
-              <p
-                className={`text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
-              >
-                {t("lastName-label")}
-              </p>
-              <p
-                className={`bg-gray-100 p-3 rounded-xl border border-gray-200
-                   group-hover:text-[#DD0303] group-hover:bg-blue-50
-                   transition shadow-sm ${textAlign}`}
-              >
-                {user.lastName}
-              </p>
-            </div>
+              {/* Last Name */}
+              <div className="group">
+                <p
+                  className={`text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
+                >
+                  {t("lastName-label")}
+                </p>
+                <p
+                  className={`bg-gray-100 p-3 rounded-xl border border-gray-200
+                     group-hover:text-[#DD0303] group-hover:bg-blue-50
+                     transition shadow-sm ${textAlign}`}
+                >
+                  {user.lastName}
+                </p>
+              </div>
 
-            {/* Email */}
-            <div className="group">
-              <p
-                className={`text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
-              >
-                {t("email-label")}
-              </p>
-              <p
-                className={`bg-gray-100 p-3 rounded-xl border border-gray-200
-                   group-hover:text-[#DD0303] group-hover:bg-blue-50
-                   transition shadow-sm break-all ${textAlign}`}
-              >
-                {user.email}
-              </p>
-            </div>
+              {/* Email */}
+              <div className="group">
+                <p
+                  className={`text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
+                >
+                  {t("email-label")}
+                </p>
+                <p
+                  className={`bg-gray-100 p-3 rounded-xl border border-gray-200
+                     group-hover:text-[#DD0303] group-hover:bg-blue-50
+                     transition shadow-sm break-all ${textAlign}`}
+                >
+                  {user.email}
+                </p>
+              </div>
 
-            {/* Username */}
-            <div className="group">
-              <p
-                className={`text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
-              >
-                {t("subscription-label")}
-              </p>
-              <p
-                className={`bg-gray-100 p-3 rounded-xl border border-gray-200 
-                   group-hover:text-[#DD0303] group-hover:bg-blue-50
-                   transition shadow-sm ${textAlign}`}
-              >
-                {user.subscription}
-              </p>
-            </div>
-          </CardBody>
-        </Card>
+              {/* Username */}
+              <div className="group">
+                <p
+                  className={`text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
+                >
+                  {t("subscription-label")}
+                </p>
+                <p
+                  className={`bg-gray-100 p-3 rounded-xl border border-gray-200 
+                     group-hover:text-[#DD0303] group-hover:bg-blue-50
+                     transition shadow-sm ${textAlign}`}
+                >
+                  {user.subscription}
+                </p>
+              </div>
+            </CardBody>
+          </Card>
+
+          {/* Subscription Plans */}
+          <div className="mt-8">
+            <h3
+              className={`text-lg font-semibold text-[#DD0303] mb-4 ${textAlign}`}
+            >
+              Manage Subscription
+            </h3>
+            <SubscriptionPlans />
+          </div>
+        </div>
       </div>
     </div>
   );

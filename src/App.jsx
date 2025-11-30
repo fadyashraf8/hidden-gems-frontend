@@ -48,7 +48,6 @@ import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import NotFoundPage from "./Pages/NotFound/NotFoundPage";
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import PublicRoute from "./Components/Auth/PublicRoute";
-import { Cat } from "lucide-react";
 
 import GemDetails from "./Pages/GemDetails/GemDetails";
 import UserProfile from "./Pages/UserProfile/UserProfile";
@@ -57,6 +56,8 @@ import CreatedByYou from "./Pages/CreatedByYou/CreatedByYou";
 import ContactUsPage from "./Pages/ContactUs";
 import CategoriesPage from "./Pages/CategoriesPage/CategoriesPage";
 import SurpriseMe from "./Pages/SurpriseMe/SurpriseMe";
+import Success from "./Pages/Subscription/Success";
+import Cancel from "./Pages/Subscription/Cancel";
 
 import { Toaster } from "react-hot-toast";
 import LayoutAdmin from "./Pages/AdminPages/LayoutAdmin/LayoutAdmin";
@@ -286,6 +287,14 @@ function App() {
     {
       path: "shopping",
       element: <CategoriesPage />,
+    },
+    {
+      path: "success",
+      element: <Success />,
+    },
+    {
+      path: "cancel",
+      element: <Cancel />,
     },
   ]);
 
