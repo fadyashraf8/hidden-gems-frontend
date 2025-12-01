@@ -72,6 +72,10 @@ import AllGems from "./Pages/AdminPages/Gems/AllGems/AllGems";
 import EditGem from "./Pages/AdminPages/Gems/EditGem/EditGem";
 import AddGem from "./Pages/AdminPages/Gems/AddGem/AddGem";
 import UserGems from "./Pages/AdminPages/Gems/UserGems/UserGems";
+import LayoutOwner from "./Pages/OwnerPages/LayoutOwner/LayoutOwner";
+import HomeOwner from "./Pages/OwnerPages/HomeOwner/HomeOwner";
+import GemOwner from "./Pages/OwnerPages/GemOwner/GemOwner";
+import AddGemOwner from "./Pages/OwnerPages/AddGemOwner/AddGemOwner";
 
 function App() {
   console.log(import.meta.env.VITE_CLIENT_ID);
@@ -273,17 +277,30 @@ function App() {
         { path: "gems/user", element: <UserGems /> },
       ],
     },
-    {
+    // {
+    //   path: "owner",
+    //   element: (
+    //     <ProtectedRoute allowedRoles={["owner"]}>
+    //       <OwnerLayout />
+    //     </ProtectedRoute>
+    //   ),
+    //   children: [
+    //     { path: "dashboard", element: <OwnerDashboard /> },
+    //     { path: "add-restaurant", element: <AddRestaurant /> },
+    //     { path: "edit-restaurant", element: <EditRestaurant /> },
+    //   ],
+    // },
+       {
       path: "owner",
       element: (
         <ProtectedRoute allowedRoles={["owner"]}>
-          <OwnerLayout />
+          <LayoutOwner />
         </ProtectedRoute>
       ),
       children: [
-        { path: "dashboard", element: <OwnerDashboard /> },
-        { path: "add-restaurant", element: <AddRestaurant /> },
-        { path: "edit-restaurant", element: <EditRestaurant /> },
+        { path: "dashboard", element: <HomeOwner /> },
+        { path: "gem", element: <GemOwner /> },
+        { path: "gem/add", element: <AddGemOwner /> },
       ],
     },
     {
