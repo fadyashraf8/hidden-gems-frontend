@@ -71,6 +71,7 @@ import AddCategory from "./Pages/AdminPages/Categories/AddCategory/AddCategory";
 import AllGems from "./Pages/AdminPages/Gems/AllGems/AllGems";
 import EditGem from "./Pages/AdminPages/Gems/EditGem/EditGem";
 import AddGem from "./Pages/AdminPages/Gems/AddGem/AddGem";
+import UserGems from "./Pages/AdminPages/Gems/UserGems/UserGems";
 
 function App() {
   console.log(import.meta.env.VITE_CLIENT_ID);
@@ -269,6 +270,7 @@ function App() {
         { path: "gems", element: <AllGems /> },
         { path: "gems/:id", element: <EditGem /> },
         { path: "gems/add", element: <AddGem /> },
+        { path: "gems/user", element: <UserGems /> },
       ],
     },
     {

@@ -221,7 +221,6 @@ export default function EditGem() {
           'Content-Type': 'multipart/form-data'
         }
       });
-console.log(res);
 
       toast.success('Gem updated successfully');
     //   setTimeout(() => {
@@ -285,7 +284,7 @@ console.log(res);
                   {oldImages.map((image, index) => (
                     <div key={`old-${index}`} className="relative group">
                       <img
-                        src={`${baseURL}/uploads/gem/${image}`}
+                        src={`${image}`}
                         alt={`Gem ${index + 1}`}
                         className="w-full h-24 object-cover rounded-lg border-2 border-gray-200"
                       />

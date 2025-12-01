@@ -81,7 +81,7 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
       items: [
         { label: `💠 ${t("All Hidden Gems")}`, path: "/admin/gems" },
         { label: `✨ ${t("Add Hidden Gem")}`, path: "/admin/gems/add" },
-        { label: `⭐ ${t("My Hidden Gems")}`, path: "/admin/gems/" },
+        { label: `⭐ ${t("My Hidden Gems")}`, path: "/admin/gems/user" },
       ],
     },
   ];
