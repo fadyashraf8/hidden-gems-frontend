@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import {
   Box,
   Container,
@@ -22,6 +22,8 @@ const ITEMS_PER_PAGE = 10;
 
 export default function CategoriesPage() {
   const { categoryName } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const title = searchParams.get("title");
 
   const [filtersApplied, setFiltersApplied] = useState({
     category: "",
@@ -37,6 +39,14 @@ export default function CategoriesPage() {
   const [error, setError] = useState("");
   const [pageTitle, setPageTitle] = useState("All Places");
 
+  //clear query parameter on the first render
+  useEffect(() => {
+    
+    if(title) {
+      setSearchParams({});
+    }
+  }, [])
+
   // 1. FETCH DATA
   useEffect(() => {
     const fetchData = async () => {
@@ -44,10 +54,18 @@ export default function CategoriesPage() {
       setError("");
 
       try {
-        // Fetch ALL data (no page param) so we can filter client-side
-        const response = await fetch(`${BASE_URL}/gems`, {
+        let response = null;
+        if(title) {
+          response = await fetch(`${BASE_URL}/gems?keyword=${encodeURIComponent(title)}`, {
           credentials: "include",
         });
+        }
+        else {
+          // Fetch ALL data (no page param) so we can filter client-side
+          response = await fetch(`${BASE_URL}/gems`, {
+          credentials: "include",
+        });
+        }
         if (!response.ok) throw new Error("Failed to fetch gems");
 
         const data = await response.json();
@@ -84,7 +102,7 @@ export default function CategoriesPage() {
     };
 
     fetchData();
-  }, [categoryName]);
+  }, [categoryName, title]);
 
   // 2. RESET PAGE ON FILTER CHANGE
   useEffect(() => {

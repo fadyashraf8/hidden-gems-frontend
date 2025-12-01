@@ -13,6 +13,7 @@ export default function Navbar() {
   const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
+  const [searchElement, setSearchElement] = useState("");
 
   const { isLoggedIn: isloggedin, userInfo: user } = useSelector(
     (state) => state.user
@@ -26,6 +27,27 @@ export default function Navbar() {
 
   const navigate = useNavigate();
 
+  const handleSearchChage = (e) => {
+    setSearchElement(e.target.value);
+  }
+
+  const handlePressingEnter = (e) => {
+    if(e.key === "Enter") {
+      console.log("enter pressed");
+    }
+  }
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if(searchElement.trim() == "") {
+      navigate("/places");
+    }
+    else {
+      navigate(`/places?title=${searchElement}`);
+      setSearchElement("");
+    }
+    
+  }
   // Sticky navbar on scroll
   useEffect(() => {
     const scrollFunction = () => {
@@ -95,8 +117,8 @@ export default function Navbar() {
         </Link>
 
         <div className="search-box">
-          <Search size={18} />
-          <input type="text" placeholder={t("nav_search_placeholder")} />
+          <Search size={18} onClick={handleSearchSubmit}/>
+          <input type="text" onKeyDown={handlePressingEnter} onChange={handleSearchChage} value={searchElement} placeholder={t("nav_search_placeholder")} />
         </div>
 
         <ul className="navbar-links">
