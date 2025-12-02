@@ -40,7 +40,6 @@ export default function CategoriesPage() {
 
   // Filter states
   const [searchInput, setSearchInput] = useState("");
-  const [locationInput, setLocationInput] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSort, setSelectedSort] = useState("");
 
@@ -82,7 +81,6 @@ export default function CategoriesPage() {
     categoryName,
     currentPage,
     searchInput,
-    locationInput,
     selectedCategory,
     selectedSort,
   ]);
@@ -92,7 +90,7 @@ export default function CategoriesPage() {
     if (currentPage !== 1) {
       setCurrentPage(1);
     }
-  }, [searchInput, locationInput, selectedCategory, selectedSort]);
+  }, [searchInput, selectedCategory, selectedSort]);
 
   // Fetch categories
   const fetchCategories = () => {
@@ -129,10 +127,7 @@ export default function CategoriesPage() {
       params.category = selectedCategory;
     }
 
-    // Location filter
-    if (locationInput) {
-      params.gemLocation = locationInput;
-    }
+
 
     // Sort
     if (selectedSort) {
@@ -143,7 +138,9 @@ export default function CategoriesPage() {
     axios
       .get(`${baseURL}/gems`, { params, withCredentials: true })
       .then((response) => {
+        
         const data = response.data;
+        console.log( "Fetched gems data:", data);
         if (data.message === "success") {
           setGems(data.result || []);
           setTotalPages(data.totalPages || 1);
@@ -170,14 +167,13 @@ export default function CategoriesPage() {
   // Clear all filters
   const clearAllFilters = () => {
     setSearchInput("");
-    setLocationInput("");
     setSelectedCategory("");
     setSelectedSort("");
     setCurrentPage(1);
   };
 
   const hasActiveFilters =
-    searchInput || locationInput || selectedCategory || selectedSort;
+    searchInput  || selectedCategory || selectedSort;
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "white" }}>
@@ -299,29 +295,7 @@ export default function CategoriesPage() {
                 />
               </Grid>
 
-              {/* Location Input */}
-              <Grid item xs={12} sm={6} md={4}>
-                <TextField
-                  fullWidth
-                  placeholder="Location..."
-                  value={locationInput}
-                  onChange={(e) => setLocationInput(e.target.value)}
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      borderRadius: 2,
-                      height: 56,
-                      "&:hover fieldset": {
-                        borderColor: THEME.RED,
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: THEME.RED,
-                        borderWidth: 2,
-                      },
-                    },
-                  }}
-                />
-              </Grid>
-
+         
               {/* Category Filter */}
               <Grid item xs={12} sm={6} md={2}>
                 <FormControl fullWidth>
@@ -339,6 +313,7 @@ export default function CategoriesPage() {
                     sx={{
                       borderRadius: 2,
                       height: 56,
+                      width: 150,
                       "&:hover .MuiOutlinedInput-notchedOutline": {
                         borderColor: THEME.RED,
                       },
@@ -389,6 +364,7 @@ export default function CategoriesPage() {
                     sx={{
                       borderRadius: 2,
                       height: 56,
+                      width: 150,
                       "&:hover .MuiOutlinedInput-notchedOutline": {
                         borderColor: THEME.RED,
                       },

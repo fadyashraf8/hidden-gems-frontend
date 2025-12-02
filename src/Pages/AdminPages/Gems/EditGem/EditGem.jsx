@@ -56,7 +56,7 @@ export default function EditGem() {
           name: gem.name,
           gemLocation: gem.gemLocation,
           description: gem.description,
-          category: gem.category._id,
+          category: gem.category?._id,
           status: gem.status,
           discount: gem.discount,
           discountGold: gem.discountGold,
