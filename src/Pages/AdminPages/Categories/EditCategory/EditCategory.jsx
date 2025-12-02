@@ -33,7 +33,7 @@ export default function EditCategory() {
         const category = res.data.result;
         setFormData({ categoryName: category.categoryName,createdBy: category.createdBy });
         if (category.categoryImage) {
-          setImagePreview(`${baseURL}/uploads/category/${category.categoryImage}`);
+          setImagePreview(`${category.categoryImage}`);
         }
       }
     } catch (err) {

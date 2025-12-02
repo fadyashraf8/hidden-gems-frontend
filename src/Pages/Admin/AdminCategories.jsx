@@ -229,7 +229,7 @@ export default function AdminCategories() {
                     <td>{cat.categoryName}</td>
                     <td>
                       <img
-                        src={`http://localhost:3000/uploads/category/${cat.categoryImage}`}
+                        src={`${cat.categoryImage}`}
                         alt=""
                         width="120"
                         height="120"

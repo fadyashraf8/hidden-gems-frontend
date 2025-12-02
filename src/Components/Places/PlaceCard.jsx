@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Paper, Grid, Box, Typography, Rating } from '@mui/material';
-import { BASE_URL, THEME } from './constants';
+import { THEME } from './constants';
 
 const PlaceCard = ({ data, rank }) => {
   const navigate = useNavigate(); 
@@ -10,71 +9,150 @@ const PlaceCard = ({ data, rank }) => {
   };
 
   const mainImage = data.images && data.images.length > 0 
-    ? `${BASE_URL}/uploads/gem/${data.images[0]}` 
+    ? `${data.images[0]}` 
     : "https://via.placeholder.com/600x400?text=No+Image";
 
   const categoryName = data.category?.categoryName || "Uncategorized";
 
+  // Star rating component
+  const StarRating = ({ value }) => {
+    const stars = [];
+    const fullStars = Math.floor(value);
+    const hasHalfStar = value % 1 !== 0;
+
+    for (let i = 0; i < 5; i++) {
+      if (i < fullStars) {
+        stars.push(<span key={i} style={{ color: THEME.RED }}>★</span>);
+      } else if (i === fullStars && hasHalfStar) {
+        stars.push(<span key={i} style={{ color: THEME.RED }}>⯨</span>);
+      } else {
+        stars.push(<span key={i} style={{ color: '#e0e0e0' }}>★</span>);
+      }
+    }
+    return <div style={{ fontSize: '1.2rem', letterSpacing: '2px' }}>{stars}</div>;
+  };
+
   return (
-    <Paper 
-        elevation={0} 
-        onClick={handleCardClick} 
-        sx={{ 
-            p: 0, 
-            border: '1px solid #e0e0e0', 
-            borderRadius: 3, 
-            overflow: 'hidden',
-            cursor: 'pointer', 
-            transition: 'all 0.2s',
-            '&:hover': { 
-                boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                transform: 'translateY(-2px)' 
-            } 
-    }}>
-      <Grid container>
-        <Grid item xs={12} sm={4}>
-          <Box 
-            component="img"
-            src={mainImage}
-            alt={data.name}
-            sx={{ width: '100%', height: '100%', minHeight: 200, objectFit: 'cover' }}
-          />
-        </Grid>
+    <div 
+      onClick={handleCardClick}
+      style={{
+        border: '1px solid #e0e0e0',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        cursor: 'pointer',
+        transition: 'all 0.2s',
+        backgroundColor: 'white',
+        display: 'flex',
+        flexDirection: window.innerWidth < 640 ? 'column' : 'row',
+      }}
+      className="place-card"
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)';
+        e.currentTarget.style.transform = 'translateY(-2px)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = 'none';
+        e.currentTarget.style.transform = 'translateY(0)';
+      }}
+    >
+      <style>{`
+        @media (max-width: 639px) {
+          .place-card {
+            flex-direction: column !important;
+          }
+          .place-card-image {
+            width: 100% !important;
+            min-width: 100% !important;
+            height: 200px !important;
+          }
+        }
+        @media (min-width: 640px) {
+          .place-card {
+            flex-direction: row !important;
+          }
+          .place-card-image {
+            width: 300px !important;
+            min-width: 300px !important;
+            height: 220px !important;
+          }
+        }
+      `}</style>
 
-        <Grid item xs={12} sm={8} sx={{ p: 2.5 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', height: '100%' }}>
-            <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
-                
-                <Typography variant="h5" sx={{ fontWeight: 800, color: THEME.DARK, mb: 0.5 }}>
-                    {rank}. {data.name}
-                </Typography>
-                
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                    <Rating value={data.avgRating || 0} precision={0.5} readOnly sx={{ color: THEME.RED, fontSize: '1.2rem' }} />
-                    <Typography variant="body2" sx={{ ml: 1, color: THEME.DARK, fontWeight: 700 }}>
-                        0 reviews
-                    </Typography>
-                </Box>
+      {/* Image Section */}
+      <div 
+        className="place-card-image"
+        style={{ 
+          flexShrink: 0
+        }}
+      >
+        <img
+          src={mainImage}
+          alt={data.name}
+          style={{ 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover',
+            display: 'block'
+          }}
+        />
+      </div>
 
-                <Typography variant="body2" sx={{ color: THEME.DARK, mb: 0.5 }}>
-                    <span style={{ fontWeight: 600 }}>{categoryName}</span>
-                    <span style={{ margin: '0 6px', color: THEME.GREY }}>•</span>
-                    {data.price || "$$"} 
-                    <span style={{ margin: '0 6px', color: THEME.GREY }}>•</span>
-                    {data.gemLocation}
-                </Typography>
+      {/* Content Section */}
+      <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <h2 style={{ 
+          fontWeight: 800, 
+          color: THEME.DARK, 
+          marginBottom: '8px',
+          fontSize: '1.5rem',
+          margin: '0 0 8px 0'
+        }}>
+          {data.name}
+        </h2>
+        
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+          <StarRating value={data.avgRating || 0} />
+          <span style={{ 
+            marginLeft: '10px', 
+            color: THEME.DARK, 
+            fontWeight: 700,
+            fontSize: '0.875rem'
+          }}>
+            0 reviews
+          </span>
+        </div>
 
-                <Box sx={{ mt: 1 }}>
-                      <Typography variant="body2" sx={{ color: THEME.GREY, fontSize: '0.9rem', lineHeight: 1.5 }}>
-                        "{data.description ? data.description.substring(0, 100) : ''}..." 
-                        <span style={{ color: THEME.RED, fontWeight: 600, cursor: 'pointer', marginLeft: '5px' }}>more</span>
-                      </Typography>
-                </Box>
-            </Box>
-          </Box>
-        </Grid>
-      </Grid>
-    </Paper>
+        <div style={{ 
+          color: THEME.DARK, 
+          marginBottom: '8px',
+          fontSize: '0.875rem'
+        }}>
+          <span style={{ fontWeight: 600 }}>{categoryName}</span>
+          <span style={{ margin: '0 6px', color: THEME.GREY }}>•</span>
+          {data.price || "$$"} 
+          <span style={{ margin: '0 6px', color: THEME.GREY }}>•</span>
+          {data.gemLocation}
+        </div>
+
+        <div style={{ marginTop: '12px' }}>
+          <p style={{ 
+            color: THEME.GREY, 
+            fontSize: '0.9rem', 
+            lineHeight: 1.5,
+            margin: 0
+          }}>
+            "{data.description ? data.description.substring(0, 100) : ''}..." 
+            <span style={{ 
+              color: THEME.RED, 
+              fontWeight: 600, 
+              cursor: 'pointer', 
+              marginLeft: '5px' 
+            }}>
+              more
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
 

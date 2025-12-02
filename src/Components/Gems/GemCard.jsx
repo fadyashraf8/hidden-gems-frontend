@@ -36,7 +36,7 @@ const GemCard = ({ gem }) => {
         <div className="relative aspect-[4/3] overflow-hidden">
           <img
             src={
-              `${BASE_URL}/uploads/gem/${imagesList}` ||
+              `${imagesList}` ||
               gem.image ||
               "https://via.placeholder.com/400x300"
             }

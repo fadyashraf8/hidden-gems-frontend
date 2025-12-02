@@ -56,7 +56,7 @@ export default function UserProfile() {
           <img
             onError={(e) => (e.target.src = userImage)}
             className="rounded-xl object-cover user-img"
-            src={`${baseURL}/uploads/user/${user.image}`}
+            src={`${user.image}`}
           />
         </div>
 

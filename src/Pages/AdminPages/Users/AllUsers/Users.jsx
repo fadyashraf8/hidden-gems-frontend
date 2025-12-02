@@ -206,7 +206,7 @@ export default function Users() {
                       <div className="flex items-center">
                         <div className="h-10 w-10 flex-shrink-0">
                           {user.image ? (
-                            <img className="h-10 w-10 rounded-full object-cover" src={`${baseURL}/uploads/user/${user.image}`} alt={user.firstName} />
+                            <img className="h-10 w-10 rounded-full object-cover" src={`${user.image}`} alt={user.firstName} />
                           ) : (
                             <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
                               <User size={20} className="text-gray-500" />

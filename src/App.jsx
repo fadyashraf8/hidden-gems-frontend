@@ -76,9 +76,9 @@ import LayoutOwner from "./Pages/OwnerPages/LayoutOwner/LayoutOwner";
 import HomeOwner from "./Pages/OwnerPages/HomeOwner/HomeOwner";
 import GemOwner from "./Pages/OwnerPages/GemOwner/GemOwner";
 import AddGemOwner from "./Pages/OwnerPages/AddGemOwner/AddGemOwner";
+import VerifyEmail from "./Pages/VerifyEmail/VerifyEmail";
 
 function App() {
-  console.log(import.meta.env.VITE_CLIENT_ID);
 
   const dark = useSelector((state) => state.darkMode.enabled);
   const dispatch = useDispatch();
@@ -137,7 +137,7 @@ function App() {
             { path: "content", element: <Content /> },
           ],
         },
-
+        
         {
           path: "discover",
           element: <DiscoverLayout />,
@@ -149,7 +149,7 @@ function App() {
             { path: "cities", element: <Cities /> },
           ],
         },
-
+        
         {
           path: "business",
           element: <BusinessesLayout />,
@@ -168,7 +168,7 @@ function App() {
             { path: "partners", element: <Partners /> },
           ],
         },
-
+        
         {
           path: "/",
           element: <MainLayout />,
@@ -191,7 +191,7 @@ function App() {
             },
           ],
         },
-
+        
         {
           path: "/",
           element: <AuthLayout />,
@@ -204,6 +204,9 @@ function App() {
                 </PublicRoute>
               ),
             },
+            { path: "verify", element:         <PublicRoute>
+                  <SignUp />
+                </PublicRoute> },
             {
               path: "login",
               element: (

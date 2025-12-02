@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = import.meta.env.VITE_Base_URL;
 
 const CreateGem = ({ onGemCreated }) => {
   const [categories, setCategories] = useState([]);
@@ -84,6 +84,7 @@ const CreateGem = ({ onGemCreated }) => {
       onGemCreated(data.result._id || data._id, formData.name);
 
     } catch (err) {
+      console.error("Error creating gem:", err);
       toast.error(err.message || "Something went wrong");
     }
   };

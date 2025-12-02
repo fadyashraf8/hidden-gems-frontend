@@ -14,7 +14,6 @@ export const checkAuth = createAsyncThunk("user/checkAuth", async (_, { rejectWi
     const res = await axios.get(baseURL + "/auth/me", {
       withCredentials: true,
     });
-    console.log("res.data.user",res.data.user);
     
     return res.data.user;
   } catch (err) {
