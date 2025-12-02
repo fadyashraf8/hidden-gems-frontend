@@ -6,11 +6,12 @@ import { getGemsAPI } from "../../Services/GemsAuth";
 import { Stack, Typography, Grid, Container } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
+
 export default function Home() {
   const { t } = useTranslation("home");
   const [gems, setGems] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     const fetchGems = async () => {
       try {
@@ -75,7 +76,9 @@ export default function Home() {
         )}
       </Container>
 
-      <Categories />
+      <div id="categories">
+        <Categories />
+      </div>
     </>
   );
 }
