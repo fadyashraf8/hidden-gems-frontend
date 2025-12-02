@@ -102,7 +102,7 @@ export default function AdminMyGems() {
                 <img
                   src={
                     gem.images?.[0]
-                      ? `${baseURL}/uploads/gem/${gem.images[0]}`
+                      ? `${gem.images[0]}`
                       : "https://via.placeholder.com/300x200?text=No+Image"
                   }
                   alt={gem.name}

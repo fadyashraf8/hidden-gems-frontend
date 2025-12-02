@@ -8,11 +8,12 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { useTranslation } from "react-i18next";
 import TranslateTwoToneIcon from "@mui/icons-material/TranslateTwoTone";
-
+import {Link as LinkScroll} from "react-scroll"
 export default function Navbar() {
   const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
+  const [searchElement, setSearchElement] = useState("");
 
   const { isLoggedIn: isloggedin, userInfo: user } = useSelector(
     (state) => state.user
@@ -26,6 +27,25 @@ export default function Navbar() {
 
   const navigate = useNavigate();
 
+  const handleSearchChage = (e) => {
+    setSearchElement(e.target.value);
+  };
+
+  const handlePressingEnter = (e) => {
+    if (e.key === "Enter") {
+      console.log("enter pressed");
+    }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchElement.trim() == "") {
+      navigate("/places");
+    } else {
+      navigate(`/places?title=${searchElement}`);
+      setSearchElement("");
+    }
+  };
   // Sticky navbar on scroll
   useEffect(() => {
     const scrollFunction = () => {
@@ -60,28 +80,37 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
- const handleLogout = async () => {
-   try {
-     await dispatch(logoutUser()).unwrap();
-     setUserDropdown(false);
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setIsOpen(false);
+      }
+    };
 
-     toast.success(t("signed-out-successfully"), {
-       position: "top-center",
-       duration: 2000,
-       className: "custom-toast",
-       id: "logout-toast",
-       ariaProps: { role: "status", "aria-live": "polite" },
-       icon: "👋",
-     });
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-     
-     navigate("/");
-   } catch (error) {
-     console.error("Logout error:", error);
-     toast.error("Failed to sign out");
-   }
- };
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      setUserDropdown(false);
 
+      toast.success(t("signed-out-successfully"), {
+        position: "top-center",
+        duration: 2000,
+        className: "custom-toast",
+        id: "logout-toast",
+        ariaProps: { role: "status", "aria-live": "polite" },
+        icon: "👋",
+      });
+
+      navigate("/");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Failed to sign out");
+    }
+  };
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -95,8 +124,14 @@ export default function Navbar() {
         </Link>
 
         <div className="search-box">
-          <Search size={18} />
-          <input type="text" placeholder={t("nav_search_placeholder")} />
+          <Search size={18} onClick={handleSearchSubmit} />
+          <input
+            type="text"
+            onKeyDown={handlePressingEnter}
+            onChange={handleSearchChage}
+            value={searchElement}
+            placeholder={t("nav_search_placeholder")}
+          />
         </div>
 
         <ul className="navbar-links">
@@ -107,7 +142,15 @@ export default function Navbar() {
             <NavLink to="/surprise">{t("nav_link_surprise")}</NavLink>
           </li>
           <li>
+            <LinkScroll to="categories" smooth={true}>
+              {t("nav_link_categories")}
+            </LinkScroll>
+          </li>
+          <li>
             <NavLink to="/contact-us">{t("nav_link_contact")}</NavLink>
+          </li>
+          <li>
+            <NavLink to="/about/aboutUS">{t("nav_link_about")}</NavLink>
           </li>
         </ul>
 
@@ -187,28 +230,37 @@ export default function Navbar() {
       {isOpen && (
         <ul className="mobile-menu">
           <li>
-            <NavLink to="/places">Places</NavLink>
+            <NavLink to="/places">{t("nav_link_places")}</NavLink>
           </li>
           <li>
-            <NavLink to="/surprise">Surprise </NavLink>
+            <NavLink to="/surprise">{t("nav_link_surprise")} </NavLink>
           </li>
           <li>
-            <NavLink to="/contact">Contact Us</NavLink>
+            <LinkScroll to="categories" smooth={true}>
+              {t("nav_link_categories")}
+            </LinkScroll>
           </li>
+          <li>
+            <NavLink to="/contact">{t("nav_link_contact")}</NavLink>
+          </li>
+          <li>
+            <NavLink to="/about/aboutUS">{t("nav_link_about")}</NavLink>
+          </li>
+
           {!isloggedin && (
             <>
               <li>
-                <Link to="/login">Login</Link>
+                <Link to="/login">{t("nav_auth_login")}</Link>
               </li>
               <li>
-                <Link to="/signUp">Sign Up</Link>
+                <Link to="/signUp">{t("nav_auth_signup")}</Link>
               </li>
             </>
           )}
           <li>
             <div className="mobile-search">
               <Search size={18} />
-              <input type="text" placeholder="Search places…" />
+              <input type="text" placeholder={t("nav_search_placeholder")} />
             </div>
           </li>
         </ul>

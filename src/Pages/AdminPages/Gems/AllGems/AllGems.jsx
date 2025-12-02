@@ -281,7 +281,7 @@ export default function AllGems() {
                           {gem.images && gem.images.length > 0 ? (
                             <img
                               className="h-16 w-16 object-cover"
-                              src={`${baseURL}/uploads/gem/${gem.images[0]}`}
+                              src={`${gem.images[0]}`}
                               alt={gem.name}
                             />
                           ) : (

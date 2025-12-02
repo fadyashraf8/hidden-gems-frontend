@@ -48,7 +48,6 @@ import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import NotFoundPage from "./Pages/NotFound/NotFoundPage";
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import PublicRoute from "./Components/Auth/PublicRoute";
-import { Cat } from "lucide-react";
 
 import GemDetails from "./Pages/GemDetails/GemDetails";
 import UserProfile from "./Pages/UserProfile/UserProfile";
@@ -57,6 +56,8 @@ import CreatedByYou from "./Pages/CreatedByYou/CreatedByYou";
 import ContactUsPage from "./Pages/ContactUs";
 import CategoriesPage from "./Pages/CategoriesPage/CategoriesPage";
 import SurpriseMe from "./Pages/SurpriseMe/SurpriseMe";
+import Success from "./Pages/Subscription/Success";
+import Cancel from "./Pages/Subscription/Cancel";
 
 import { Toaster } from "react-hot-toast";
 import LayoutAdmin from "./Pages/AdminPages/LayoutAdmin/LayoutAdmin";
@@ -70,10 +71,14 @@ import AddCategory from "./Pages/AdminPages/Categories/AddCategory/AddCategory";
 import AllGems from "./Pages/AdminPages/Gems/AllGems/AllGems";
 import EditGem from "./Pages/AdminPages/Gems/EditGem/EditGem";
 import AddGem from "./Pages/AdminPages/Gems/AddGem/AddGem";
+import UserGems from "./Pages/AdminPages/Gems/UserGems/UserGems";
+import LayoutOwner from "./Pages/OwnerPages/LayoutOwner/LayoutOwner";
+import HomeOwner from "./Pages/OwnerPages/HomeOwner/HomeOwner";
+import GemOwner from "./Pages/OwnerPages/GemOwner/GemOwner";
+import AddGemOwner from "./Pages/OwnerPages/AddGemOwner/AddGemOwner";
+import VerifyEmail from "./Pages/VerifyEmail/VerifyEmail";
 
 function App() {
-  console.log(import.meta.env.VITE_CLIENT_ID);
-
   const dark = useSelector((state) => state.darkMode.enabled);
   const dispatch = useDispatch();
   const { i18n } = useTranslation();
@@ -199,6 +204,14 @@ function App() {
               ),
             },
             {
+              path: "verify",
+              element: (
+                <PublicRoute>
+                  <VerifyEmail />
+                </PublicRoute>
+              ),
+            },
+            {
               path: "login",
               element: (
                 <PublicRoute>
@@ -268,24 +281,46 @@ function App() {
         { path: "gems", element: <AllGems /> },
         { path: "gems/:id", element: <EditGem /> },
         { path: "gems/add", element: <AddGem /> },
+        { path: "gems/user", element: <UserGems /> },
       ],
     },
+    // {
+    //   path: "owner",
+    //   element: (
+    //     <ProtectedRoute allowedRoles={["owner"]}>
+    //       <OwnerLayout />
+    //     </ProtectedRoute>
+    //   ),
+    //   children: [
+    //     { path: "dashboard", element: <OwnerDashboard /> },
+    //     { path: "add-restaurant", element: <AddRestaurant /> },
+    //     { path: "edit-restaurant", element: <EditRestaurant /> },
+    //   ],
+    // },
     {
       path: "owner",
       element: (
         <ProtectedRoute allowedRoles={["owner"]}>
-          <OwnerLayout />
+          <LayoutOwner />
         </ProtectedRoute>
       ),
       children: [
-        { path: "dashboard", element: <OwnerDashboard /> },
-        { path: "add-restaurant", element: <AddRestaurant /> },
-        { path: "edit-restaurant", element: <EditRestaurant /> },
+        { path: "dashboard", element: <HomeOwner /> },
+        { path: "gem", element: <GemOwner /> },
+        { path: "gem/add", element: <AddGemOwner /> },
       ],
     },
     {
       path: "shopping",
       element: <CategoriesPage />,
+    },
+    {
+      path: "success",
+      element: <Success />,
+    },
+    {
+      path: "cancel",
+      element: <Cancel />,
     },
   ]);
 

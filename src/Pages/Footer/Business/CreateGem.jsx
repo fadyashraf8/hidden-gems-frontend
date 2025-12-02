@@ -84,6 +84,7 @@ const CreateGem = ({ onGemCreated }) => {
       onGemCreated(data.result._id || data._id, formData.name);
 
     } catch (err) {
+      console.error("Error creating gem:", err);
       toast.error(err.message || "Something went wrong");
     }
   };

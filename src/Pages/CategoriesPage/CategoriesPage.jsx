@@ -1,22 +1,53 @@
-import { useState, useEffect, useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom'; 
-import { Box, Container, Typography, Grid, Stack, Divider, CircularProgress, Alert, Pagination, Breadcrumbs } from '@mui/material';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { BASE_URL, THEME } from '../../Components/Places/constants';
-import FilterBar from '../../Components/Places/FilterBar';
-import PlaceCard from '../../Components/Places/PlaceCard';
-
-const ITEMS_PER_PAGE = 10;
+import { useState, useEffect } from "react";
+import { Link, useParams, useSearchParams } from "react-router-dom";
+import {
+  Box,
+  Container,
+  Typography,
+  Grid,
+  Stack,
+  Divider,
+  CircularProgress,
+  Alert,
+  Pagination,
+  Breadcrumbs,
+  TextField,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  Button,
+  InputAdornment,
+} from "@mui/material";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
+import axios from "axios";
+import { THEME } from "../../Components/Places/constants";
+import PlaceCard from "../../Components/Places/PlaceCard";
+import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
 
 export default function CategoriesPage() {
-  const { categoryName } = useParams(); 
-  
-  const [filtersApplied, setFiltersApplied] = useState({
-    category: "",
-    avgRating: "",
-    gemLocation: ""
-  });
-  
+  const { categoryName } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const title = searchParams.get("title");
+
+  // Base URL from env
+  const baseURL = import.meta.env.VITE_Base_URL;
+
+  // Categories for dropdown
+  const [categories, setCategories] = useState([]);
+
+  // Filter states
+  const [searchInput, setSearchInput] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSort, setSelectedSort] = useState("");
+
+  // Get page from URL or default to 1
+  const pageFromURL = parseInt(searchParams.get("page")) || 1;
+  const [currentPage, setCurrentPage] = useState(pageFromURL);
+
+  // Data states
   const [gems, setGems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -25,55 +56,124 @@ export default function CategoriesPage() {
   const [error, setError] = useState("");
   const [pageTitle, setPageTitle] = useState("All Places");
 
-  // 1. FETCH DATA
+  // Update URL when page changes
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError("");
+    setSearchParams({ page: currentPage });
+  }, [currentPage, setSearchParams]);
 
-      try {
-        // Fetch data with pagination support
-        const response = await fetch(`${BASE_URL}/gems?page=${currentPage}`, { credentials: "include" });
-        if (!response.ok) throw new Error("Failed to fetch gems");
-        
-        const data = await response.json();
-        let fetchedGems = data.result || [];
-        
-        // Extract pagination data from API response
-        setTotalPages(data.totalPages || 1);
-        setTotalItems(data.totalItems || 0);
-        // Filter: Only Accepted Gems
-        fetchedGems = fetchedGems.filter(gem => gem.status === 'accepted');
-        
-        // Filter: URL Category param (Fingerprint logic)
-        if (categoryName) {
-            setPageTitle(`Best ${categoryName} in town`);
-            const targetFingerprint = categoryName.toLowerCase().replace(/[^a-z0-9]/g, '');
+  // Fetch categories on mount
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
-            fetchedGems = fetchedGems.filter(gem => {
-              if(!gem.category || !gem.category.categoryName) return false;
-              const dbFingerprint = gem.category.categoryName.toLowerCase().replace(/[^a-z0-9]/g, '');
-              return dbFingerprint === targetFingerprint; 
-            });
-        } else {
-            setPageTitle("Top Gems in your area");
+  // Clear query parameter and set search on first render
+  useEffect(() => {
+    if (title) {
+      setSearchParams({ page: currentPage });
+      setSearchInput(title);
+    }
+  }, []);
+
+  // Fetch gems when dependencies change
+  useEffect(() => {
+    fetchGems();
+  }, [
+    categoryName,
+    currentPage,
+    searchInput,
+    selectedCategory,
+    selectedSort,
+  ]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    }
+  }, [searchInput, selectedCategory, selectedSort]);
+
+  // Fetch categories
+  const fetchCategories = () => {
+    axios
+      .get(`${baseURL}/categories`, { withCredentials: true })
+      .then((response) => {
+        if (response.data.message === "success") {
+          setCategories(response.data.result);
         }
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  };
 
-        setGems(fetchedGems);
-      } catch (err) {
-        console.error(err);
-        setError(err.message || "Error loading data");
-      } finally {
-        setLoading(false);
-      }
+  // Fetch gems
+  const fetchGems = () => {
+    setLoading(true);
+    setError("");
+
+    // Build query params object
+    const params = {
+      page: currentPage,
+      status: "accepted", // Only show accepted gems
     };
 
-    fetchData();
-  }, [categoryName, currentPage]);
+    // Search keyword
+    if (searchInput) {
+      params.keyword = searchInput;
+    }
 
-  // 2. RESET PAGE ON FILTER CHANGE
-  useEffect(() => {
+    // Category filter
+    if (selectedCategory) {
+      params.category = selectedCategory;
+    }
+
+
+
+    // Sort
+    if (selectedSort) {
+      params.sort = selectedSort;
+    }
+
+    // Fetch from API using axios
+    axios
+      .get(`${baseURL}/gems`, { params, withCredentials: true })
+      .then((response) => {
+        
+        const data = response.data;
+        console.log( "Fetched gems data:", data);
+        if (data.message === "success") {
+          setGems(data.result || []);
+          setTotalPages(data.totalPages || 1);
+          setTotalItems(data.totalItems || 0);
+
+          // Update page title
+          if (categoryName) {
+            setPageTitle(`Best ${categoryName} in town`);
+          } else {
+            setPageTitle("Top Gems in your area");
+          }
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching gems:", err);
+        setError(err.message || "Error loading data");
+        setGems([]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  // Clear all filters
+  const clearAllFilters = () => {
+    setSearchInput("");
+    setSelectedCategory("");
+    setSelectedSort("");
     setCurrentPage(1);
+  };
+
+  const hasActiveFilters =
+    searchInput  || selectedCategory || selectedSort;
   }, [filtersApplied, categoryName]);
 
   // 3. CLIENT-SIDE FILTERING
@@ -95,107 +195,345 @@ export default function CategoriesPage() {
 
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'white' }}>
-        
-        <Box sx={{ bgcolor: THEME.RED, pt: { xs: 4, md: 5 }, pb: 6, mt: { xs: 7, md: 8 } }}>
-            <Container maxWidth="lg">
-                <Breadcrumbs 
-                    separator={<ArrowRightIcon fontSize="small" sx={{ color: 'rgba(255,255,255,0.7)' }} />} 
-                    aria-label="breadcrumb"
-                    sx={{ mb: 3, display: { xs: 'none', md: 'flex' } }}
+    <Box sx={{ minHeight: "100vh", bgcolor: "white" }}>
+      {/* UPPER PART: RED BACKGROUND */}
+      <Box
+        sx={{
+          bgcolor: THEME.RED,
+          pt: { xs: 4, md: 5 },
+          pb: 6,
+          mt: { xs: 7, md: 8 },
+        }}
+      >
+        <Container maxWidth="lg">
+          <Breadcrumbs
+            separator={
+              <ArrowRightIcon
+                fontSize="small"
+                sx={{ color: "rgba(255,255,255,0.7)" }}
+              />
+            }
+            aria-label="breadcrumb"
+            sx={{ mb: 3, display: { xs: "none", md: "flex" } }}
+          >
+            <Link
+              to="/"
+              style={{
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: 600,
+                  color: "rgba(255,255,255,0.85)",
+                  "&:hover": { color: "white" },
+                }}
+              >
+                Home
+              </Typography>
+            </Link>
+
+            <Link
+              to="/places"
+              style={{
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: 600,
+                  color: "rgba(255,255,255,0.85)",
+                  "&:hover": { color: "white" },
+                }}
+              >
+                Places
+              </Typography>
+            </Link>
+
+            <Typography variant="body2" sx={{ fontWeight: 600, color: "white" }}>
+              {categoryName || "All"}
+            </Typography>
+          </Breadcrumbs>
+
+          <Divider sx={{ mb: 4, borderColor: "rgba(255,255,255,0.2)" }} />
+
+          <Box sx={{ textAlign: "left" }}>
+            <Typography
+              variant="h4"
+              component="h1"
+              sx={{ fontWeight: 800, color: "white", mb: 1 }}
+            >
+              {pageTitle}
+            </Typography>
+            <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.85)" }}>
+              Showing {totalItems} results
+            </Typography>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* LOWER PART: WHITE BACKGROUND */}
+      <Box sx={{ bgcolor: "white", pb: 12, pt: 4 }}>
+        <Container maxWidth="lg">
+          {/* FILTER BAR - INLINE */}
+          <Box sx={{ mb: 4 }}>
+            <Grid container spacing={2}>
+              {/* Search Input */}
+              <Grid item xs={12} sm={6} md={4}>
+                <TextField
+                  fullWidth
+                  placeholder="Search gems..."
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon sx={{ color: THEME.GREY }} />
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: 2,
+                      height: 56,
+                      "&:hover fieldset": {
+                        borderColor: THEME.RED,
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: THEME.RED,
+                        borderWidth: 2,
+                      },
+                    },
+                  }}
+                />
+              </Grid>
+
+         
+              {/* Category Filter */}
+              <Grid item xs={12} sm={6} md={2}>
+                <FormControl fullWidth>
+                  <InputLabel sx={{ 
+                    "&.Mui-focused": { 
+                      color: THEME.RED 
+                    } 
+                  }}>
+                    Category
+                  </InputLabel>
+                  <Select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    label="Category"
+                    sx={{
+                      borderRadius: 2,
+                      height: 56,
+                      width: 150,
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: THEME.RED,
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: THEME.RED,
+                        borderWidth: 2,
+                      },
+                    }}
+                  >
+                    <MenuItem value="">All Categories</MenuItem>
+                    {categories.map((cat) => (
+                      <MenuItem 
+                        key={cat._id} 
+                        value={cat._id}
+                        sx={{
+                          "&:hover": {
+                            backgroundColor: "rgba(220, 38, 38, 0.08)",
+                          },
+                          "&.Mui-selected": {
+                            backgroundColor: "rgba(220, 38, 38, 0.12)",
+                            "&:hover": {
+                              backgroundColor: "rgba(220, 38, 38, 0.16)",
+                            },
+                          },
+                        }}
+                      >
+                        {cat.categoryName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              {/* Sort By */}
+              <Grid item xs={12} sm={6} md={2}>
+                <FormControl fullWidth>
+                  <InputLabel sx={{ 
+                    "&.Mui-focused": { 
+                      color: THEME.RED 
+                    } 
+                  }}>
+                    Sort By
+                  </InputLabel>
+                  <Select
+                    value={selectedSort}
+                    onChange={(e) => setSelectedSort(e.target.value)}
+                    label="Sort By"
+                    sx={{
+                      borderRadius: 2,
+                      height: 56,
+                      width: 150,
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: THEME.RED,
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: THEME.RED,
+                        borderWidth: 2,
+                      },
+                    }}
+                  >
+                    <MenuItem value="">Default</MenuItem>
+                    <MenuItem value="name" sx={{
+                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
+                      "&.Mui-selected": { 
+                        backgroundColor: "rgba(220, 38, 38, 0.12)",
+                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
+                      },
+                    }}>Name (A-Z)</MenuItem>
+                    <MenuItem value="-name" sx={{
+                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
+                      "&.Mui-selected": { 
+                        backgroundColor: "rgba(220, 38, 38, 0.12)",
+                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
+                      },
+                    }}>Name (Z-A)</MenuItem>
+                    <MenuItem value="-avgRating" sx={{
+                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
+                      "&.Mui-selected": { 
+                        backgroundColor: "rgba(220, 38, 38, 0.12)",
+                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
+                      },
+                    }}>Highest Rating</MenuItem>
+                    <MenuItem value="avgRating" sx={{
+                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
+                      "&.Mui-selected": { 
+                        backgroundColor: "rgba(220, 38, 38, 0.12)",
+                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
+                      },
+                    }}>Lowest Rating</MenuItem>
+                    <MenuItem value="createdAt" sx={{
+                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
+                      "&.Mui-selected": { 
+                        backgroundColor: "rgba(220, 38, 38, 0.12)",
+                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
+                      },
+                    }}>Oldest First</MenuItem>
+                    <MenuItem value="-createdAt" sx={{
+                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
+                      "&.Mui-selected": { 
+                        backgroundColor: "rgba(220, 38, 38, 0.12)",
+                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
+                      },
+                    }}>Newest First</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+
+            {/* Clear Filters Button */}
+            {hasActiveFilters && (
+              <Box sx={{ mt: 2 }}>
+                <Button
+                  startIcon={<ClearIcon />}
+                  onClick={clearAllFilters}
+                  sx={{
+                    color: THEME.RED,
+                    textTransform: 'none',
+                    fontSize: '0.95rem',
+                    fontWeight: 600,
+                    "&:hover": {
+                      backgroundColor: "rgba(220, 38, 38, 0.1)",
+                    },
+                  }}
                 >
-                    <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-                        <Typography variant="body2" sx={{ fontWeight: 600, color: 'rgba(255,255,255,0.85)', '&:hover': { color: 'white' } }}>
-                            Home
-                        </Typography>
-                    </Link>
+                  Clear all filters
+                </Button>
+              </Box>
+            )}
+          </Box>
 
-                    <Link to="/places" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-                        <Typography variant="body2" sx={{ fontWeight: 600, color: 'rgba(255,255,255,0.85)', '&:hover': { color: 'white' } }}>
-                            Places
-                        </Typography>
-                    </Link>
+          {error && (
+            <Alert severity="error" sx={{ mb: 3 }}>
+              {error}
+            </Alert>
+          )}
 
-                    <Typography 
-                        variant="body2" 
-                        sx={{ fontWeight: 600, color: 'white' }}
-                    >
-                        {categoryName || "All"}
-                    </Typography>
-                </Breadcrumbs>
-
-                <Divider sx={{ mb: 4, borderColor: 'rgba(255,255,255,0.2)' }} />
-
-                <Box sx={{ textAlign: 'left' }}>
-                    <Typography variant="h4" component="h1" sx={{ fontWeight: 800, color: 'white', mb: 1 }}>
-                        {pageTitle}
-                    </Typography>
-                    <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.85)' }}>
-                        Showing {currentVisibleGems.length} results (Page {currentPage} of {totalPages})
-                    </Typography>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={8}>
+              {loading ? (
+                <Box sx={{ display: "flex", justifyContent: "center", py: 5 }}>
+                  <CircularProgress sx={{ color: THEME.RED }} />
                 </Box>
-            </Container>
-        </Box>
+              ) : (
+                <Stack spacing={3}>
+                  {gems.length > 0 ? (
+                    <>
+                      {gems.map((gem, index) => (
+                        <PlaceCard
+                          key={gem._id || index}
+                          data={gem}
+                          rank={(currentPage - 1) * 10 + index + 1}
+                        />
+                      ))}
 
-        {/* LOWER PART: WHITE BACKGROUND (Rest of content) */}
-        <Box sx={{ bgcolor: 'white', pb: 12, pt: 4 }}>
-            <Container maxWidth="lg">
-                <FilterBar filtersApplied={filtersApplied} setFiltersApplied={setFiltersApplied} />
+                      {/* Pagination Controls */}
+                      {totalPages > 1 && (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            mt: 4,
+                          }}
+                        >
+                          <Pagination
+                            count={totalPages}
+                            page={currentPage}
+                            onChange={(e, page) => {
+                              setCurrentPage(page);
+                              window.scrollTo(0, 0);
+                            }}
+                            sx={{
+                              "& .MuiPaginationItem-root": {
+                                color: THEME.DARK,
+                                "&.Mui-selected": {
+                                  backgroundColor: THEME.RED,
+                                  color: "white",
+                                  "&:hover": { backgroundColor: THEME.RED },
+                                },
+                                "&:hover": { backgroundColor: "#f0f0f0" },
+                              },
+                            }}
+                          />
+                        </Box>
+                      )}
+                    </>
+                  ) : (
+                    !error && <Typography>No gems match your filters.</Typography>
+                  )}
+                </Stack>
+              )}
+            </Grid>
 
-                {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
-
-                <Grid container spacing={4}>
-                    <Grid item xs={12} md={8}>
-                        {loading ? (
-                            <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}>
-                                <CircularProgress sx={{ color: THEME.RED }} />
-                            </Box>
-                        ) : (
-                            <Stack spacing={3}>
-                                {currentVisibleGems.length > 0 ? (
-                                    <>
-                                        {currentVisibleGems.map((gem, index) => (
-                                            <PlaceCard 
-                                                key={gem._id || index} 
-                                                data={gem} 
-                                                rank={index + 1} 
-                                            />
-                                        ))}
-
-                                        {/* Pagination Controls */}
-                                        {totalPages > 1 && (
-                                            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-                                                <Pagination 
-                                                    count={totalPages} 
-                                                    page={currentPage} 
-                                                    onChange={(e, page) => {
-                                                        setCurrentPage(page);
-                                                        window.scrollTo(0, 0); 
-                                                    }}
-                                                    sx={{
-                                                        '& .MuiPaginationItem-root': {
-                                                            color: THEME.DARK,
-                                                            '&.Mui-selected': {
-                                                                backgroundColor: THEME.RED,
-                                                                color: 'white',
-                                                                '&:hover': { backgroundColor: THEME.RED }
-                                                            },
-                                                            '&:hover': { backgroundColor: '#f0f0f0' }
-                                                        }
-                                                    }}
-                                                />
-                                            </Box>
-                                        )}
-                                    </>
-                                ) : (
-                                    !error && <Typography>No gems match your filters.</Typography>
-                                )}
-                            </Stack>
-                        )}
-                    </Grid>
-                </Grid>
-            </Container>
-        </Box>
+            {/* Sidebar */}
+            <Grid item xs={12} md={4}>
+              <Box sx={{ position: "sticky", top: 100 }}>
+                <SubscriptionPlans compact />
+              </Box>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
     </Box>
   );
 }

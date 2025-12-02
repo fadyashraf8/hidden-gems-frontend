@@ -6,22 +6,21 @@ import { getGemsAPI } from "../../Services/GemsAuth";
 import { Stack, Typography, Grid, Container } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
+
 export default function Home() {
   const { t } = useTranslation("home");
   const [gems, setGems] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     const fetchGems = async () => {
       try {
         const data = await getGemsAPI();
+        console.log("data",data.result.filter(gem => gem.status === 'accepted'));
+        
         if (data && data.result) {
-          setGems(data.result);
-        } else if (data && data.gems) {
-          setGems(data.gems);
-        } else if (Array.isArray(data)) {
-          setGems(data);
-        }
+          setGems(data.result.filter(gem => gem.status === 'accepted'));
+        } 
       } catch (error) {
         console.error("Failed to fetch gems", error);
       } finally {
@@ -70,14 +69,16 @@ export default function Home() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {gems.slice(0, 8).map((gem) => (
+            {gems.slice(0, 4).map((gem) => (
               <GemCard key={gem._id} gem={gem} />
             ))}
           </div>
         )}
       </Container>
 
-      <Categories />
+      <div id="categories">
+        <Categories />
+      </div>
     </>
   );
 }

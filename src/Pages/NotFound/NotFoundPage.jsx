@@ -1,13 +1,35 @@
 import { Button, Divider } from "@heroui/react";
+import Shuffle from "../../Components/Shuffle/Shuffle";
 
 export default function NotFoundPage() {
   return (
     <div className="page-wrapper text-center">
-      <h1 className="text-7xl font-extrabold text-red-600">404</h1>
+      <Shuffle
+        text="Error 404"
+        shuffleDirection="right"
+        duration={0.9}
+        animationMode="all"
+        shuffleTimes={1}
+        ease="power3.out"
+        stagger={0.05}
+        tag="h1"
+        className="text-7xl font-extrabold text-red-600"
+        triggerOnHover={true}
+      />
 
-      <h2 className="text-3xl font-semibold mt-4">Page Not Found</h2>
+      <Shuffle
+        text="Page Not Found"
+        shuffleDirection="right"
+        duration={0.9}
+        animationMode="all"
+        shuffleTimes={2}
+        ease="power3.out"
+        stagger={0.03}
+        tag="h2"
+        className="text-3xl font-semibold mt-4"
+      />
 
-      <p className="text-gray-600 mt-2 max-w-md">
+      <p className="text-gray-600 mt-2 max-w-md mx-auto">
         The page you are looking for does not exist or has been moved.
       </p>
 

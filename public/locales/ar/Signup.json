@@ -1,5 +1,6 @@
 {
   "title": "التسجيل",
+  "subtitle": "مرحبا بك في Gemsy! انشئ حسابك",
   "firstName-placeholder": "الاسم الاول",
   "firstName-error": "الاسم الاول مطلوب",
   "firstName-error-min": "الاسم الاول يجب ان يكون على الاقل 3 حروف",

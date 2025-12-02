@@ -15,6 +15,7 @@ import { MapPin, Phone, Globe, ChevronDown, Edit2, Trash2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import "./GemDetails.css";
+import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
 
 const BASE_URL = import.meta.env.VITE_Base_URL;
 const COLLAPSED_ABOUT_HEIGHT = 150;
@@ -1005,7 +1006,7 @@ const GemDetails = () => {
 
           {/* Sidebar Info */}
           <div className="lg:col-span-1">
-            <div className="bg-white dark:bg-zinc-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-zinc-700 sticky top-24 space-y-6">
+            <div className="bg-white dark:bg-zinc-800 rounded-2xl p-6 shadow-lg border border-gray-500 dark:border-zinc-700  top-24 space-y-6">
               <div>
                 <h3 className="text-lg font-semibold mb-4 dark:text-white">
                   Details
@@ -1054,6 +1055,10 @@ const GemDetails = () => {
                 <button className="w-full bg-[#DD0303] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#b90202] transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                   Book Now
                 </button>
+              </div>
+
+              <div className="pt-6 border-t border-gray-100 dark:border-zinc-700">
+                <SubscriptionPlans compact />
               </div>
             </div>
           </div>

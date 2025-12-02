@@ -9,6 +9,7 @@ export default function SurpriseMe() {
   const [mood, setMood] = useState("");
   const [loading, setLoading] = useState(false);
   const [suggestion, setSuggestion] = useState(null);
+  const baseURL = import.meta.env.VITE_Base_URL;
 
   const images = [
     "/images/1.jpg",
@@ -25,7 +26,7 @@ export default function SurpriseMe() {
     setSuggestion(null);
 
     try {
-      const response = await fetch("http://localhost:3000/ai", {
+      const response = await fetch(`${baseURL}/ai`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,13 +40,14 @@ export default function SurpriseMe() {
 
       const data = await response.json();
       const gem = data.suggestions;
+      
 
       // Transform backend data to match the UI format
       setSuggestion({
         name: gem.name,
         description: gem.description || "A perfect match for your mood!",
         image: gem.images?.[0]
-          ? `http://localhost:3000${gem.images[0]}`
+          ? `${gem.images[0]}`
           : "/images/2.jpg",
         rating: gem.averageRating || 0,
         id: gem._id,

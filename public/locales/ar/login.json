@@ -1,15 +1,18 @@
 {
-  "title": "تسجيل الدخول",
-
-  "email-placeholder": "بريد الكتروني",
+  "title": "مرحبا بعودتك",
+  "subtitle": "تسجيل الدخول لحسابك",
+  "Home": "العودة الى الصفحة الرئيسية",
+   "email-label": "بريد الكتروني",
+  "email-placeholder": "ادخل بريدك الالكتروني",
   "email-error": "البريد الالكتروني مطلوب",
-  "password-placeholder": "كلمة المرور",
+"password-label": "كلمة المرور",
+  "password-placeholder": "ادخل كلمة المرور",
   "password-error": "كلمة المرور مطلوبة",
   "Login-button": "تسجيل الدخول",
   "hr": "أو",
 
   "link-google": "الاكمال عن طريق جوجل",
-  "link-facebook": "الاكمال عن طريق فيسبوك",
+ 
   "text-signup": "ليس لديك حساب؟",
 "link-signup": "انشاء حساب جديد",
 "text-forgot-password": "لا تتذكر كلمة المرور؟",

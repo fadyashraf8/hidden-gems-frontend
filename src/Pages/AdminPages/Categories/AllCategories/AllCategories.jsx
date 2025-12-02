@@ -199,7 +199,7 @@ export default function AllCategories() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <img
                         className="h-10 w-10 rounded-full object-cover"
-                        src={`${baseURL}/uploads/category/${cat.categoryImage}`}
+                        src={`${cat.categoryImage}`}
                         alt={cat.categoryName}
                       />
                     </td>
