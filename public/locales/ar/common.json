@@ -27,7 +27,9 @@
   "nav_search_placeholder": "ابحث عن الأماكن…",
   "nav_link_places": "الأماكن",
   "nav_link_surprise": "فاجئني",
+  "nav_link_categories": "الفئات",
   "nav_link_contact": "اتصل بنا",
+  "nav_link_about": "معلومات عنا",
   "nav_auth_login": "تسجيل الدخول",
   "nav_auth_signup": "التسجيل"
 
