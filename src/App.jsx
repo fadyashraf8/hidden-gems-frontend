@@ -79,7 +79,6 @@ import AddGemOwner from "./Pages/OwnerPages/AddGemOwner/AddGemOwner";
 import VerifyEmail from "./Pages/VerifyEmail/VerifyEmail";
 
 function App() {
-
   const dark = useSelector((state) => state.darkMode.enabled);
   const dispatch = useDispatch();
   const { i18n } = useTranslation();
@@ -137,7 +136,7 @@ function App() {
             { path: "content", element: <Content /> },
           ],
         },
-        
+
         {
           path: "discover",
           element: <DiscoverLayout />,
@@ -149,7 +148,7 @@ function App() {
             { path: "cities", element: <Cities /> },
           ],
         },
-        
+
         {
           path: "business",
           element: <BusinessesLayout />,
@@ -168,7 +167,7 @@ function App() {
             { path: "partners", element: <Partners /> },
           ],
         },
-        
+
         {
           path: "/",
           element: <MainLayout />,
@@ -191,7 +190,7 @@ function App() {
             },
           ],
         },
-        
+
         {
           path: "/",
           element: <AuthLayout />,
@@ -204,9 +203,14 @@ function App() {
                 </PublicRoute>
               ),
             },
-            { path: "verify", element:         <PublicRoute>
-                  <SignUp />
-                </PublicRoute> },
+            {
+              path: "verify",
+              element: (
+                <PublicRoute>
+                  <VerifyEmail />
+                </PublicRoute>
+              ),
+            },
             {
               path: "login",
               element: (
@@ -293,7 +297,7 @@ function App() {
     //     { path: "edit-restaurant", element: <EditRestaurant /> },
     //   ],
     // },
-       {
+    {
       path: "owner",
       element: (
         <ProtectedRoute allowedRoles={["owner"]}>
