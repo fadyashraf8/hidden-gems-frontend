@@ -8,7 +8,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { useTranslation } from "react-i18next";
 import TranslateTwoToneIcon from "@mui/icons-material/TranslateTwoTone";
-
+import {Link as LinkScroll} from "react-scroll"
 export default function Navbar() {
   const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
@@ -142,7 +142,15 @@ export default function Navbar() {
             <NavLink to="/surprise">{t("nav_link_surprise")}</NavLink>
           </li>
           <li>
+            <LinkScroll to="categories" smooth={true}>
+              {t("nav_link_categories")}
+            </LinkScroll>
+          </li>
+          <li>
             <NavLink to="/contact-us">{t("nav_link_contact")}</NavLink>
+          </li>
+          <li>
+            <NavLink to="/about/aboutUS">{t("nav_link_about")}</NavLink>
           </li>
         </ul>
 
@@ -222,28 +230,37 @@ export default function Navbar() {
       {isOpen && (
         <ul className="mobile-menu">
           <li>
-            <NavLink to="/places">Places</NavLink>
+            <NavLink to="/places">{t("nav_link_places")}</NavLink>
           </li>
           <li>
-            <NavLink to="/surprise">Surprise </NavLink>
+            <NavLink to="/surprise">{t("nav_link_surprise")} </NavLink>
           </li>
           <li>
-            <NavLink to="/contact-us">Contact Us</NavLink>
+            <LinkScroll to="categories" smooth={true}>
+              {t("nav_link_categories")}
+            </LinkScroll>
           </li>
+          <li>
+            <NavLink to="/contact">{t("nav_link_contact")}</NavLink>
+          </li>
+          <li>
+            <NavLink to="/about/aboutUS">{t("nav_link_about")}</NavLink>
+          </li>
+
           {!isloggedin && (
             <>
               <li>
-                <Link to="/login">Login</Link>
+                <Link to="/login">{t("nav_auth_login")}</Link>
               </li>
               <li>
-                <Link to="/signUp">Sign Up</Link>
+                <Link to="/signUp">{t("nav_auth_signup")}</Link>
               </li>
             </>
           )}
           <li>
             <div className="mobile-search">
               <Search size={18} />
-              <input type="text" placeholder="Search places…" />
+              <input type="text" placeholder={t("nav_search_placeholder")} />
             </div>
           </li>
         </ul>

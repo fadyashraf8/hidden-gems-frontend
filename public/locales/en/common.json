@@ -24,7 +24,9 @@
   "nav_search_placeholder": "Search places…",
   "nav_link_places": "Places",
   "nav_link_surprise": "Surprise Me",
+  "nav_link_categories": "Categories",
   "nav_link_contact": "Contact Us",
+  "nav_link_about": "About Us",
   "nav_auth_login": "Login",
   "nav_auth_signup": "Sign Up"
 }
