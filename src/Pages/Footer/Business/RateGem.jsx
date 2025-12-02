@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Rating, Box, Typography } from "@mui/material"; // Added Box and Typography
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = import.meta.env.VITE_Base_URL;
 
 const RateGem = ({ gemId }) => {
   const navigate = useNavigate();

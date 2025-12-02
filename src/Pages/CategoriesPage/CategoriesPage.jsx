@@ -19,8 +19,8 @@ export default function CategoriesPage() {
   
   const [gems, setGems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  // No need for separate totalPages state, we calculate it dynamically
-
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [pageTitle, setPageTitle] = useState("All Places");
@@ -32,13 +32,16 @@ export default function CategoriesPage() {
       setError("");
 
       try {
-        // Fetch ALL data (no page param) so we can filter client-side
-        const response = await fetch(`${BASE_URL}/gems`, { credentials: "include" });
+        // Fetch data with pagination support
+        const response = await fetch(`${BASE_URL}/gems?page=${currentPage}`, { credentials: "include" });
         if (!response.ok) throw new Error("Failed to fetch gems");
         
         const data = await response.json();
         let fetchedGems = data.result || [];
         
+        // Extract pagination data from API response
+        setTotalPages(data.totalPages || 1);
+        setTotalItems(data.totalItems || 0);
         // Filter: Only Accepted Gems
         fetchedGems = fetchedGems.filter(gem => gem.status === 'accepted');
         
@@ -66,7 +69,7 @@ export default function CategoriesPage() {
     };
 
     fetchData();
-  }, [categoryName]);
+  }, [categoryName, currentPage]);
 
   // 2. RESET PAGE ON FILTER CHANGE
   useEffect(() => {
@@ -87,16 +90,13 @@ export default function CategoriesPage() {
     });
   }, [gems, filtersApplied]);
 
-  // 4. CLIENT-SIDE PAGINATION
-  const totalPages = Math.ceil(filteredGems.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentVisibleGems = filteredGems.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  // Display all gems from current page (already paginated by API)
+  const currentVisibleGems = gems;
+
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'white' }}>
         
-        {/* UPPER PART: RED BACKGROUND */}
-        {/* Added mt: 8 (approx 64px) to push this section below the sticky navbar */}
         <Box sx={{ bgcolor: THEME.RED, pt: { xs: 4, md: 5 }, pb: 6, mt: { xs: 7, md: 8 } }}>
             <Container maxWidth="lg">
                 <Breadcrumbs 
@@ -131,7 +131,7 @@ export default function CategoriesPage() {
                         {pageTitle}
                     </Typography>
                     <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.85)' }}>
-                        Showing {filteredGems.length} results
+                        Showing {currentVisibleGems.length} results (Page {currentPage} of {totalPages})
                     </Typography>
                 </Box>
             </Container>
@@ -158,7 +158,7 @@ export default function CategoriesPage() {
                                             <PlaceCard 
                                                 key={gem._id || index} 
                                                 data={gem} 
-                                                rank={startIndex + index + 1} 
+                                                rank={index + 1} 
                                             />
                                         ))}
 

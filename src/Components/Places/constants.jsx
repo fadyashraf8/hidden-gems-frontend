@@ -6,7 +6,7 @@ import CoffeeMakerTwoToneIcon from '@mui/icons-material/CoffeeMakerTwoTone';
 import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
 import { LocateIcon, StarIcon } from 'lucide-react';
 
-export const BASE_URL = "http://localhost:3000"; 
+export const BASE_URL = import.meta.env.VITE_Base_URL; 
 
 export const THEME = {
   RED: '#DD0303',
