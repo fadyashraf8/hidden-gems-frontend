@@ -30,9 +30,7 @@ const LoginPage = () => {
     "/images/4.jpg",
   ];
   const [bgIndex, setBgIndex] = useState(0);
-
-  // تغيير الصورة كل 3 ثواني
-  useEffect(() => {
+ useEffect(() => {
     const interval = setInterval(
       () => setBgIndex((prev) => (prev + 1) % images.length),
       3000
@@ -41,7 +39,7 @@ const LoginPage = () => {
   }, []);
 
   const particlesInit = async (main) => {
-    await loadFull(main); // تحميل جميع المميزات
+    await loadFull(main); 
   };
 
   const particlesOptions = {

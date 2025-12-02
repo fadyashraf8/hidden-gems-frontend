@@ -51,7 +51,6 @@ const RegisterPage = () => {
     mode: "onBlur",
   });
 
-  // تحديث المعاينة عند اختيار صورة
   const selectedFile = watch("image");
   useEffect(() => {
     if (selectedFile && selectedFile.length > 0) {
