@@ -83,15 +83,13 @@ export default function Categories() {
   const fetchCategories = useCallback(async () => {
     try {
       console.log(BASE_URL)
-      const res = await axios.get(`${BASE_URL}/categories`,
+      const res = await axios.get(`${BASE_URL}/categories/allCategories`,
       { withCredentials: true }
       );
       console.log(res.data);
       if (res.data.result) {
         setCategories(res.data.result);
-      } else if (Array.isArray(res.data)) {
-        setCategories(res.data);
-      }
+      } 
     } catch (error) {
       setError(error?.response?.data?.message || "Failed to fetch categories");
     } finally {
