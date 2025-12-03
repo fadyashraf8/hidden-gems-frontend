@@ -9,6 +9,7 @@ export default function SurpriseMe() {
   const [mood, setMood] = useState("");
   const [loading, setLoading] = useState(false);
   const [suggestion, setSuggestion] = useState(null);
+  const baseURL = import.meta.env.VITE_Base_URL;
 
   const images = [
     "/images/1.jpg",
@@ -25,7 +26,7 @@ export default function SurpriseMe() {
     setSuggestion(null);
 
     try {
-      const response = await fetch("http://localhost:3000/ai", {
+      const response = await fetch(`${baseURL}/ai`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
