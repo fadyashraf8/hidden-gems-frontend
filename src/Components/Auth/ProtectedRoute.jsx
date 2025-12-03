@@ -1,11 +1,12 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
+import LoadingScreen from "@/Pages/LoadingScreen";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { isLoggedIn, userInfo, loading } = useSelector((state) => state.user);
 
   if (loading) {
-    return <div>Loading...</div>; // You can replace this with a proper loading spinner
+    return <LoadingScreen />;
   }
 
   if (!isLoggedIn) {

@@ -16,6 +16,8 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import "./GemDetails.css";
 import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
+import QRCodeModal from "../../Components/QRCodeModal/QRCodeModal.jsx";
+import toast from "react-hot-toast";
 
 const BASE_URL = import.meta.env.VITE_Base_URL;
 const COLLAPSED_ABOUT_HEIGHT = 150;
@@ -71,7 +73,34 @@ const GemDetails = () => {
 
   const [reviews, setReviews] = useState([]);
   const [gemRatings, setGemRatings] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [voucherQR, setVoucherQR] = useState(null);
+  const [voucherData, setVoucherData] = useState(null);
+  const [isCreatingVoucher, setIsCreatingVoucher] = useState(false);
 
+  const createVoucher = async () => {
+    setIsCreatingVoucher(true);
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/vouchers/create/${id}`,
+        {},
+        { withCredentials: true }
+      );
+
+      console.log("Voucher created:", response.data);
+console.log("response.data",response.data);
+
+      setVoucherQR(response?.data?.createdVoucher?.qrCode);
+      setVoucherData(response?.data?.createdVoucher);
+
+      setIsModalOpen(true);
+    } catch (err) {
+      console.error("Error creating voucher:", err.response?.data?.error);
+      toast.error(err.response?.data?.error || "Failed to create voucher.");
+    } finally {
+      setIsCreatingVoucher(false);
+    }
+  };
   const fetchGemRatings = useCallback(async () => {
     try {
       const res = await fetch(`${BASE_URL}/ratings/gem/${id}`, {
@@ -685,6 +714,7 @@ const GemDetails = () => {
   if (!gem) return <div className="text-center mt-10">Gem not found</div>;
 
   return (
+    <>
     <div className="min-h-screen bg-white dark:bg-zinc-900 pb-12 gem-details">
       {/* Hero Image Section - Full Width */}
       <div className="relative h-[50vh] md:h-[60vh] w-full">
@@ -1027,22 +1057,46 @@ const GemDetails = () => {
                     </a>
                   </div>
                   {/* Discount Section */}
-                  {(gem.discount > 0 || gem.discountPremium > 0) && (
-                    <div className="pt-4 border-t border-gray-100 dark:border-zinc-700">
-                      <h4 className="font-semibold mb-2 dark:text-white">
+                  {(gem.discount > 0 ||
+                    gem.discountGold > 0 ||
+                    gem.discountPlatinum > 0) && (
+                    <div className="pt-4 border-t border-gray-200 dark:border-zinc-700">
+                      <h4 className="font-semibold mb-3 text-gray-800 dark:text-white">
                         Discounts
                       </h4>
+
+                      {/* Standard */}
                       {gem.discount > 0 && (
-                        <div className="flex justify-between items-center text-green-600 dark:text-green-400">
-                          <span>Standard Discount</span>
-                          <span className="font-bold">{gem.discount}%</span>
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-green-700 dark:text-green-400">
+                            Standard Discount
+                          </span>
+                          <span className="font-bold text-green-700 dark:text-green-400">
+                            {gem.discount}%
+                          </span>
                         </div>
                       )}
-                      {gem.discountPremium > 0 && (
-                        <div className="flex justify-between items-center text-[#DD0303] font-medium">
-                          <span>Premium Discount</span>
-                          <span className="font-bold">
-                            {gem.discountPremium}%
+
+                      {/* Gold */}
+                      {gem.discountGold > 0 && (
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-yellow-700 dark:text-yellow-400">
+                            Gold Discount
+                          </span>
+                          <span className="font-bold text-yellow-700 dark:text-yellow-400">
+                            {gem.discountGold}%
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Platinum */}
+                      {gem.discountPlatinum > 0 && (
+                        <div className="flex justify-between items-center">
+                          <span className="text-purple-700 dark:text-purple-400">
+                            Platinum Discount
+                          </span>
+                          <span className="font-bold text-purple-700 dark:text-purple-400">
+                            {gem.discountPlatinum}%
                           </span>
                         </div>
                       )}
@@ -1052,8 +1106,14 @@ const GemDetails = () => {
               </div>
 
               <div className="pt-6 border-t border-gray-100 dark:border-zinc-700">
-                <button className="w-full bg-[#DD0303] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#b90202] transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                  Book Now
+                <button
+                  onClick={createVoucher}
+                  disabled={isCreatingVoucher}
+                  className="w-full bg-[#DD0303] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#b90202] transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isCreatingVoucher
+                    ? "Creating Voucher..."
+                    : "Ask For A Voucher"}
                 </button>
               </div>
 
@@ -1065,6 +1125,15 @@ const GemDetails = () => {
         </div>
       </div>
     </div>
+
+    <QRCodeModal
+  isOpen={isModalOpen}
+  onClose={() => setIsModalOpen(false)}
+  qrCode={voucherQR}
+  voucherData={voucherData}
+/>
+
+    </>
   );
 };
 
