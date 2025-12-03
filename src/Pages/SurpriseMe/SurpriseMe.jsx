@@ -40,13 +40,14 @@ export default function SurpriseMe() {
 
       const data = await response.json();
       const gem = data.suggestions;
+      
 
       // Transform backend data to match the UI format
       setSuggestion({
         name: gem.name,
         description: gem.description || "A perfect match for your mood!",
         image: gem.images?.[0]
-          ? `http://localhost:3000${gem.images[0]}`
+          ? `${gem.images[0]}`
           : "/images/2.jpg",
         rating: gem.averageRating || 0,
         id: gem._id,

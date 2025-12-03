@@ -1006,7 +1006,7 @@ const GemDetails = () => {
 
           {/* Sidebar Info */}
           <div className="lg:col-span-1">
-            <div className="bg-white dark:bg-zinc-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-zinc-700 sticky top-24 space-y-6">
+            <div className="bg-white dark:bg-zinc-800 rounded-2xl p-6 shadow-lg border border-gray-500 dark:border-zinc-700  top-24 space-y-6">
               <div>
                 <h3 className="text-lg font-semibold mb-4 dark:text-white">
                   Details
