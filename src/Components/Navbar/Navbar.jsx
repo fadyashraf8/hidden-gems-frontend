@@ -200,6 +200,7 @@ export default function Navbar() {
                     </p>
                   )}
                   <button onClick={() => navigate("/profile")}>Profile</button>
+                  <button onClick={() => navigate("/vouchers")}>Vouchers</button>
                   {user && user.role !== "admin" && user.role !== "owner" && (
                     <button onClick={() => navigate("/created-by-you")}>
                       My Gems

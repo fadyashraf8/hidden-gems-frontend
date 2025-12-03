@@ -77,6 +77,8 @@ import HomeOwner from "./Pages/OwnerPages/HomeOwner/HomeOwner";
 import GemOwner from "./Pages/OwnerPages/GemOwner/GemOwner";
 import AddGemOwner from "./Pages/OwnerPages/AddGemOwner/AddGemOwner";
 import VerifyEmail from "./Pages/VerifyEmail/VerifyEmail";
+import VoucherRedeem from "./Pages/AdminPages/VoucherRedeem/VoucherRedeem";
+import Vouchers from "./Pages/Vouchers/Vouchers";
 
 function App() {
   const dark = useSelector((state) => state.darkMode.enabled);
@@ -120,6 +122,8 @@ function App() {
         { path: "home", element: <Home /> },
         { path: "gems/:id", element: <GemDetails /> },
         { path: "contact-us", element: <ContactUsPage /> },
+        { path: "vouchers", element: <Vouchers /> },
+
         { path: "places", element: <CategoriesPage /> },
         { path: "surprise", element: <SurpriseMe /> },
         { path: "places/:categoryName", element: <CategoriesPage /> },
@@ -282,6 +286,10 @@ function App() {
         { path: "gems/:id", element: <EditGem /> },
         { path: "gems/add", element: <AddGem /> },
         { path: "gems/user", element: <UserGems /> },
+
+        //Voucher Redeem
+
+
       ],
     },
     // {
@@ -308,6 +316,8 @@ function App() {
         { path: "dashboard", element: <HomeOwner /> },
         { path: "gem", element: <GemOwner /> },
         { path: "gem/add", element: <AddGemOwner /> },
+        { path: ":id", element: <VoucherRedeem /> },
+
       ],
     },
     {
