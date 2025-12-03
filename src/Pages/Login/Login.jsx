@@ -14,14 +14,16 @@ import { GoogleLogin } from "@react-oauth/google";
 import { motion, AnimatePresence } from "framer-motion";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
+import "./Login.css";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { t } = useTranslation("login");
+  const { t, i18n } = useTranslation("login");
   const baseUrl = import.meta.env.VITE_Base_URL;
   const dispatch = useDispatch();
   const [isloading, setisloading] = useState(false);
   const navigate = useNavigate();
+  const isArabic = i18n.language === "ar";
 
   const images = [
     "/images/1.jpg",
@@ -142,7 +144,7 @@ const LoginPage = () => {
   const handleGoogleError = () => toast.error("Google login failed!");
 
   return (
-   <div className="page-wrapper relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div className="page-wrapper relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Slideshow */}
       <AnimatePresence>
         <motion.div
@@ -178,9 +180,12 @@ const LoginPage = () => {
       >
         {/* Back to home */}
         <div className="mb-4 flex items-center gap-2 cursor-pointer">
-          <span className="text-[#DD0303] text-lg">←</span>
           <span className="text-[#DD0303] font-medium">
-            <Link to="/">{t("Home")}</Link>
+            <Link to="/">
+              <span className="text-[#DD0303] text-lg">{t("arrow")}</span>
+
+              {t("Home")}
+            </Link>
           </span>
         </div>
 
@@ -240,21 +245,24 @@ const LoginPage = () => {
           <div className="relative">
             <Lock size={16} className="absolute left-3 top-3 text-[#DD0303]" />
             <Input
-              isInvalid={Boolean(errors.password?.message)}
-              errorMessage={t("password-error")}
+              isInvalid={!!errors.password?.message}
+              errorMessage={errors.password?.message ? t("password-error") : ""}
               variant="bordered"
               type={showPassword ? "text" : "password"}
+              className={isArabic ? "rtl-input" : ""}
               {...register("password")}
               placeholder={t("password-placeholder")}
               classNames={{
                 inputWrapper:
-                  "pl-10 pr-10 transition-shadow duration-300 focus:shadow-[0_0_10px_rgba(221,3,3,0.5)]",
+                  "pl-10 pr-2 transition-shadow duration-300 focus:shadow-[0_0_10px_rgba(221,3,3,0.5)] relative",
               }}
               endContent={
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 focus:outline-none text-[#DD0303]"
+                  className={`absolute top-3 focus:outline-none text-[#DD0303] ${
+                    isArabic ? "left-8" : "right-3"
+                  }`}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -264,7 +272,7 @@ const LoginPage = () => {
 
           {/* Forgot Password */}
           <div className="text-right">
-            <Link to="/forget" className="text-[#DD0303] text-sm">
+            <Link to="/forget" className="text-[#DD0303] text-sm color">
               {t("link-forgot-password")}
             </Link>
           </div>
@@ -300,7 +308,7 @@ const LoginPage = () => {
           {/* Signup Link */}
           <p className="text-center text-gray-400">
             {t("text-signup")}{" "}
-            <Link to="/signUp" className="text-[#DD0303]">
+            <Link to="/signUp" className="text-[#DD0303] color">
               {t("link-signup")}
             </Link>
           </p>

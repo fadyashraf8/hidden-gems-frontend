@@ -1,0 +1,48 @@
+{
+  "errors": {
+    "checkoutFailed": "Failed to initiate checkout."
+  },
+
+  "common": {
+    "processing": "Processing...",
+    "active": "Active",
+    "currentPlan": "CURRENT PLAN",
+    "currentRole": "CURRENT ROLE",
+    "manageBilling": "Manage Billing & Subscription"
+  },
+
+  "compact": {
+    "title": "Upgrade your experience",
+    "subtitle": "Unlock exclusive perks & discounts",
+    "getGold": "Get Gold",
+    "getPlatinum": "Get Platinum",
+    "currentGold": "Current Plan (Gold)",
+    "currentPlatinum": "Current Plan (Platinum)",
+    "becomeOwner": "Become an Owner"
+  },
+
+  "gold": {
+    "title": "Gold",
+    "subtitle": "Perfect for casual explorers",
+    "feature1": "Exclusive discounts",
+    "feature2": "Priority support",
+    "choose": "Choose Gold"
+  },
+
+  "platinum": {
+    "title": "Platinum",
+    "subtitle": "For the ultimate experience",
+    "feature1": "All Gold features",
+    "feature2": "Higher discounts",
+    "feature3": "VIP access to events",
+    "choose": "Choose Platinum"
+  },
+
+  "owner": {
+    "title": "Business Owner",
+    "subtitle": "Manage your own gems",
+    "feature1": "List your business",
+    "feature2": "Analytics dashboard",
+    "choose": "Become Owner"
+  }
+}

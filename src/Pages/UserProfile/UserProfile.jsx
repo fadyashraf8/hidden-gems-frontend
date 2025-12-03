@@ -135,7 +135,7 @@ export default function UserProfile() {
             <h3
               className={`text-lg font-semibold text-[#DD0303] mb-4 ${textAlign}`}
             >
-              Manage Subscription
+              {t("Manage-Subscription")} 
             </h3>
             <SubscriptionPlans />
           </div>

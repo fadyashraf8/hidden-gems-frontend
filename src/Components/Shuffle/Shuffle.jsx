@@ -16,6 +16,7 @@ const Shuffle = ({
   colorTo,
   tag = "p",
   textAlign = "center",
+  isRTL = false,
 }) => {
   const ref = useRef(null);
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -33,66 +34,85 @@ const Shuffle = ({
 
   useEffect(() => {
     if (!ref.current || !text || !fontsLoaded) return;
-
     const el = ref.current;
 
-    // Build chars
-    splitRef.current = new GSAPSplitText(el, { type: "chars" });
-    const chars = splitRef.current.chars || [];
+    const splitType = isRTL ? "words" : "chars";
+    splitRef.current = new GSAPSplitText(el, { type: splitType });
+    const items = splitRef.current[splitType] || [];
 
     wrappersRef.current = [];
     const rolls = Math.max(1, Math.floor(shuffleTimes));
     const rand = (set) =>
       set.charAt(Math.floor(Math.random() * set.length)) || "";
 
-    chars.forEach((ch) => {
-      const parent = ch.parentElement;
+    items.forEach((item) => {
+      const parent = item.parentElement;
       if (!parent) return;
-      const w = ch.getBoundingClientRect().width;
+      const w = item.getBoundingClientRect().width;
       if (!w) return;
 
       const wrap = document.createElement("span");
-      wrap.className = "inline-block overflow-hidden align-baseline text-left";
-      Object.assign(wrap.style, { width: w + "px" });
+      wrap.className = "inline-block overflow-hidden align-baseline";
+      Object.assign(wrap.style, { width: w + "px", display: "inline-block" });
 
       const inner = document.createElement("span");
-      inner.className =
-        "inline-block whitespace-nowrap will-change-transform origin-left transform-gpu";
+      const originClass = isRTL ? "origin-right" : "origin-left";
+      inner.className = `inline-block whitespace-nowrap will-change-transform ${originClass} transform-gpu`;
+      inner.style.minHeight = item.getBoundingClientRect().height + 10 + "px";
+      inner.style.minWidth = item.getBoundingClientRect().width + "px";
 
-      parent.insertBefore(wrap, ch);
+      inner.style.direction = isRTL ? "rtl" : "ltr";
+
+      parent.insertBefore(wrap, item);
       wrap.appendChild(inner);
 
-      const firstOrig = ch.cloneNode(true);
+      const firstOrig = item.cloneNode(true);
       Object.assign(firstOrig.style, { width: w + "px" });
-
-      ch.setAttribute("data-orig", "1");
-      Object.assign(ch.style, { width: w + "px" });
+      item.setAttribute("data-orig", "1");
+      Object.assign(item.style, { width: w + "px" });
 
       inner.appendChild(firstOrig);
 
       for (let k = 0; k < rolls; k++) {
-        const c = ch.cloneNode(true);
-        if (scrambleCharset) c.textContent = rand(scrambleCharset);
+        const c = item.cloneNode(true);
+        if (!isRTL && scrambleCharset) c.textContent = rand(scrambleCharset);
         inner.appendChild(c);
       }
 
-      inner.appendChild(ch);
+      inner.appendChild(item);
 
-      let startY = shuffleDirection === "top" ? -50 : 50;
-      gsap.set(inner, { y: startY, opacity: 0 });
+      let startX = 0;
+      let startY = 0;
+      switch (shuffleDirection) {
+        case "top":
+          startY = -50;
+          break;
+        case "bottom":
+          startY = 50;
+          break;
+        case "left":
+          startX = isRTL ? 50 : -50;
+          break;
+        case "right":
+          startX = isRTL ? -50 : 50;
+          break;
+      }
+      gsap.set(inner, { x: startX, y: startY, opacity: 0 });
+      inner.setAttribute("data-final-x", "0");
       inner.setAttribute("data-final-y", "0");
+      inner.setAttribute("data-start-x", startX);
       inner.setAttribute("data-start-y", startY);
 
       wrappersRef.current.push(wrap);
     });
 
-    // Play animation loop
     const play = () => {
       const inners = wrappersRef.current.map((w) => w.firstElementChild);
       if (!inners.length) return;
 
       const tl = gsap.timeline({ repeat: -1, yoyo: true });
       tl.to(inners, {
+        x: 0,
         y: 0,
         opacity: 1,
         color: colorTo,
@@ -106,11 +126,11 @@ const Shuffle = ({
     };
 
     play();
-
     return () => {
       tlRef.current?.kill();
     };
-  }, [text,
+  }, [
+    text,
     duration,
     ease,
     shuffleTimes,
@@ -119,6 +139,8 @@ const Shuffle = ({
     scrambleCharset,
     colorTo,
     fontsLoaded,
+    shuffleDirection,
+    isRTL,
   ]);
 
   const baseTw =
@@ -127,7 +149,7 @@ const Shuffle = ({
     ready ? "visible" : "invisible"
   } ${className}`.trim();
   const Tag = tag || "p";
-  const commonStyle = { textAlign, ...style };
+  const commonStyle = { textAlign: textAlign, ...style };
 
   return React.createElement(
     Tag,

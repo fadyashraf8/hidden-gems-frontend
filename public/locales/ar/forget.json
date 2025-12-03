@@ -1,0 +1,19 @@
+{
+  "Home": "العودة الى الصفحة الرئيسية",
+  "arrow": "<<",
+  "auth": {
+    "forgetPasswordTitle": "نسيت كلمة المرور",
+    "email": "البريد الإلكتروني",
+    "emailRequired": "البريد الإلكتروني مطلوب",
+    "sendRequest": "إرسال الطلب",
+    "backToLogin": "العودة لتسجيل الدخول",
+    "placeholder": "ادخل البريد الإلكتروني"
+  },
+  "success": {
+    "requestSent": "تم إرسال الطلب بنجاح"
+  },
+  "errors": {
+    "general": "حدث خطأ ما",
+    "unexpected": "خطأ غير متوقع"
+  }
+}

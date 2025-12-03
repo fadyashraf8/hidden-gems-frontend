@@ -1,0 +1,19 @@
+{
+  "Home": "Back to Home",
+  "arrow": "<<",
+  "auth": {
+    "forgetPasswordTitle": "Forget Password",
+    "email": "Email",
+    "emailRequired": "Email is required",
+    "sendRequest": "Send Request",
+    "backToLogin": "Back to Login",
+    "placeholder": "Enter your email"
+  },
+  "success": {
+    "requestSent": "Request sent successfully"
+  },
+  "errors": {
+    "general": "Something went wrong",
+    "unexpected": "Unexpected error"
+  }
+}
