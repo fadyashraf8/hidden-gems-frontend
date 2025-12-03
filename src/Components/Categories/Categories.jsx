@@ -6,7 +6,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import "../NavBar/Navbar.css";
+import "../Navbar/Navbar.css";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import {
