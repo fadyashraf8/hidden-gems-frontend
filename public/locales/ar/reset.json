@@ -1,0 +1,31 @@
+{
+  "Home": "العودة الى الصفحة الرئيسية",
+  "arrow": "<<",
+  "auth": {
+    "resetPasswordTitle": "إعادة تعيين كلمة المرور",
+    "email": "البريد الإلكتروني",
+    "verificationCode": "رمز التحقق",
+    "newPassword": "كلمة المرور الجديدة",
+    "resetPasswordButton": "إعادة التعيين",
+    "backToLogin": "العودة لتسجيل الدخول",
+    "placeholder-email": "ادخل البريد الإلكتروني",
+    "placeholder-verificationCode": "ادخل رمز التحقق",
+    "placeholder-newPassword": "ادخل كلمة المرور الجديدة"
+
+  },
+  "errors": {
+    "emailRequired": "البريد الإلكتروني مطلوب",
+    "invalidEmail": "البريد الإلكتروني غير صالح",
+    "invalidEmailFormat": "صيغة البريد الإلكتروني غير صحيحة",
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "weakPassword": "كلمة المرور ضعيفة",
+    "weakPasswordFormat": "كلمة المرور يجب أن تحتوي على حروف وأرقام ورمز خاص",
+    "codeRequired": "رمز التحقق مطلوب",
+    "invalidCode": "رمز التحقق غير صحيح",
+    "invalidCodeOrEmail": "الكود أو البريد غير صحيح",
+    "general": "حدث خطأ ما"
+  },
+  "success": {
+    "passwordChanged": "تم تغيير كلمة المرور بنجاح"
+  }
+}

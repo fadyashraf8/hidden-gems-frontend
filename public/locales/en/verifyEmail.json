@@ -1,0 +1,12 @@
+{
+  "verify-title": "Verify Email",
+  "verify-subtitle": "Enter the verification code sent to your email",
+  "Home": "Back to Home",
+  "arrow": "<<",
+  "email-label": "Email",
+  "code-label": "Verification Code",
+  "code-placeholder": "Enter code",
+  "code-required": "Code is required",
+  "verify-button": "Verify",
+  "success-message": "Email verified!"
+}

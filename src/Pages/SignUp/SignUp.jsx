@@ -7,8 +7,10 @@ import { registerAPI } from "../../Services/RegisterAuth.js";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, User, Mail, Lock, Phone } from "lucide-react"; 
 import { motion, AnimatePresence } from "framer-motion";
+
+import "../Login/Login.css";
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,7 +37,7 @@ const RegisterPage = () => {
 
   const {
     handleSubmit,
-    register,
+    register: formRegister,
     formState: { errors },
     watch,
   } = useForm({
@@ -58,9 +60,7 @@ const RegisterPage = () => {
       const reader = new FileReader();
       reader.onloadend = () => setPreviewImage(reader.result);
       reader.readAsDataURL(file);
-    } else {
-      setPreviewImage(null);
-    }
+    } else setPreviewImage(null);
   }, [selectedFile]);
 
   const handle = async (data) => {
@@ -76,10 +76,9 @@ const RegisterPage = () => {
 
     try {
       const res = await registerAPI(formData);
-      if (res.error) {
-        toast.error(res.error || t("Toaster-error"));
-      } else {
-        toast.success(res.message || t("Toaster-success"));
+      if (res.error) toast.error(t("Toaster-error"));
+      else {
+        toast.success(t("Toaster-success"));
         navigate("/verify", { state: { email: data.email } });
       }
     } catch (err) {
@@ -118,16 +117,16 @@ const RegisterPage = () => {
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
         {/* Back to home */}
-        <div className=" flex items-center  cursor-pointer">
-          <span className="text-[#DD0303] text-lg">←</span>
+        <div className="flex items-center cursor-pointer mb-4">
+          <span className="text-[#DD0303] text-lg">{t("arrow")}</span>
           <span className="text-[#DD0303] font-medium">
             <Link to="/">{t("Home")}</Link>
           </span>
         </div>
 
-        {/* Icon */}
+        {/* Logo */}
         <motion.div
-          className="w-full flex justify-center "
+          className="w-full flex justify-center mb-4"
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
@@ -155,99 +154,128 @@ const RegisterPage = () => {
 
         <form className="space-y-3" onSubmit={handleSubmit(handle)}>
           {/* First Name */}
-          <Input
-            isInvalid={!!errors.firstName?.message}
-            errorMessage={
-              errors.firstName?.message && t(errors.firstName?.message)
-            }
-            variant="bordered"
-            label={t("firstName-placeholder")}
-            {...register("firstName")}
-            classNames={{
-              errorMessage: "text-[#DD0303]",
-              inputWrapper:
-                "transition-shadow duration-300 focus:shadow-[0_0_10px_rgba(221,3,3,0.5)]",
-            }}
-          />
+          <label className="text-[#DD0303] font-medium">
+            {t("firstName-label")}
+          </label>
+          <div className="relative">
+            <User size={16} className="absolute left-3 top-3 text-[#DD0303]" />
+            <Input
+              isInvalid={!!errors.firstName?.message}
+              errorMessage={
+                errors.firstName?.message && t(errors.firstName?.message)
+              }
+              variant="bordered"
+              placeholder={t("firstName-placeholder")}
+              {...formRegister("firstName")}
+              classNames={{
+                inputWrapper:
+                  "pl-10 transition-shadow duration-300 focus:shadow-[0_0_10px_rgba(221,3,3,0.5)]",
+                errorMessage: "text-[#DD0303]",
+              }}
+            />
+          </div>
 
           {/* Last Name */}
-          <Input
-            isInvalid={!!errors.lastName?.message}
-            errorMessage={
-              errors.lastName?.message && t(errors.lastName?.message)
-            }
-            variant="bordered"
-            label={t("lastName-placeholder")}
-            {...register("lastName")}
-            classNames={{
-              errorMessage: "text-[#DD0303]",
-              inputWrapper:
-                "transition-shadow duration-300 focus:shadow-[0_0_10px_rgba(221,3,3,0.5)]",
-            }}
-          />
+          <label className="text-[#DD0303] font-medium">
+            {t("lastName-label")}
+          </label>
+          <div className="relative">
+            <User size={16} className="absolute left-3 top-3 text-[#DD0303]" />
+            <Input
+              isInvalid={!!errors.lastName?.message}
+              errorMessage={
+                errors.lastName?.message && t(errors.lastName?.message)
+              }
+              variant="bordered"
+              placeholder={t("lastName-placeholder")}
+              {...formRegister("lastName")}
+              classNames={{
+                inputWrapper:
+                  "pl-10 transition-shadow duration-300 focus:shadow-[0_0_10px_rgba(221,3,3,0.5)]",
+                errorMessage: "text-[#DD0303]",
+              }}
+            />
+          </div>
 
           {/* Email */}
-          <Input
-            isInvalid={!!errors.email?.message}
-            errorMessage={errors.email?.message && t(errors.email?.message)}
-            variant="bordered"
-            label={t("email-placeholder")}
-            {...register("email")}
-            classNames={{
-              errorMessage: "text-[#DD0303]",
-              inputWrapper:
-                "transition-shadow duration-300 focus:shadow-[0_0_10px_rgba(221,3,3,0.5)]",
-            }}
-          />
+          <label className="text-[#DD0303] font-medium">
+            {t("email-label")}
+          </label>
+          <div className="relative">
+            <Mail size={16} className="absolute left-3 top-3 text-[#DD0303]" />
+            <Input
+              isInvalid={!!errors.email?.message}
+              errorMessage={errors.email?.message && t(errors.email?.message)}
+              variant="bordered"
+              placeholder={t("email-placeholder")}
+              {...formRegister("email")}
+              classNames={{
+                inputWrapper:
+                  "pl-10 transition-shadow duration-300 focus:shadow-[0_0_10px_rgba(221,3,3,0.5)]",
+                errorMessage: "text-[#DD0303]",
+              }}
+            />
+          </div>
 
           {/* Password */}
-          <Input
-            isInvalid={!!errors.password?.message}
-            errorMessage={
-              errors.password?.message && t(errors.password?.message)
-            }
-            type={showPassword ? "text" : "password"}
-            variant="bordered"
-            label={t("password-placeholder")}
-            {...register("password")}
-            endContent={
-              <button
-                type="button"
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="focus:outline-none"
-              >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-            }
-            classNames={{
-              errorMessage: "text-[#DD0303]",
-              inputWrapper:
-                "transition-shadow duration-300 focus:shadow-[0_0_10px_rgba(221,3,3,0.5)]",
-            }}
-          />
+          <label className="text-[#DD0303] font-medium">
+            {t("password-label")}
+          </label>
+          <div className="relative">
+            <Lock size={16} className="absolute left-3 top-3 text-[#DD0303]" />
+            <Input
+              isInvalid={!!errors.password?.message}
+              errorMessage={
+                errors.password?.message && t(errors.password?.message)
+              }
+              type={showPassword ? "text" : "password"}
+              variant="bordered"
+              placeholder={t("password-placeholder")}
+              {...formRegister("password")}
+              classNames={{
+                inputWrapper:
+                  "pl-10 pr-10 transition-shadow duration-300 focus:shadow-[0_0_10px_rgba(221,3,3,0.5)]",
+                errorMessage: "text-[#DD0303]",
+              }}
+              endContent={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute top-3 right-3 focus:outline-none text-[#DD0303]"
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              }
+            />
+          </div>
 
           {/* Phone */}
-          <Input
-            isInvalid={!!errors.phoneNumber?.message}
-            errorMessage={
-              errors.phoneNumber?.message && t(errors.phoneNumber?.message)
-            }
-            variant="bordered"
-            label={t("phoneNumber-placeholder")}
-            {...register("phoneNumber")}
-            classNames={{
-              errorMessage: "text-[#DD0303]",
-              inputWrapper:
-                "transition-shadow duration-300 focus:shadow-[0_0_10px_rgba(221,3,3,0.5)]",
-            }}
-          />
+          <label className="text-[#DD0303] font-medium">
+            {t("phoneNumber-label")}
+          </label>
+          <div className="relative">
+            <Phone size={16} className="absolute left-3 top-3 text-[#DD0303]" />
+            <Input
+              isInvalid={!!errors.phoneNumber?.message}
+              errorMessage={
+                errors.phoneNumber?.message && t(errors.phoneNumber?.message)
+              }
+              variant="bordered"
+              placeholder={t("phoneNumber-placeholder")}
+              {...formRegister("phoneNumber")}
+              classNames={{
+                inputWrapper:
+                  "pl-10 transition-shadow duration-300 focus:shadow-[0_0_10px_rgba(221,3,3,0.5)]",
+                errorMessage: "text-[#DD0303]",
+              }}
+            />
+          </div>
 
-          {/* Image Upload with Circular Preview */}
+          {/* Image Upload */}
           <div className="flex flex-col items-center">
             <label className="mb-2 text-[#DD0303] font-medium">
               {t("image-placeholder")}
             </label>
-
             {previewImage ? (
               <img
                 src={previewImage}
@@ -259,14 +287,12 @@ const RegisterPage = () => {
                 <span className="text-sm">No Image</span>
               </div>
             )}
-
             <input
               type="file"
               accept="image/*"
-              {...register("image")}
+              {...formRegister("image")}
               className="w-full px-4 py-2 border-2 border-[#DD0303] rounded-lg text-black cursor-pointer hover:bg-[#DD0303]/10 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#DD0303]"
             />
-
             {errors.image?.message && (
               <span className="text-[#DD0303] mt-1 text-sm">
                 {t(errors.image?.message)}
@@ -283,9 +309,10 @@ const RegisterPage = () => {
             {t("Signup-button")}
           </Button>
 
+          {/* Login Link */}
           <p className="text-center text-gray-400 mt-2">
-            {t("text-login")}{" "}
-            <Link to="/login" className="text-[#DD0303]">
+            {t("text-login")}
+            <Link to="/login" className="px-3 text-[#DD0303] color">
               {t("link-login")}
             </Link>
           </p>

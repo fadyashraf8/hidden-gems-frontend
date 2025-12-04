@@ -3,18 +3,20 @@ import * as zod from "zod";
 export const schema = zod.object({
   email: zod
     .string()
-    .nonempty("Email is required")
-    .regex(
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      "Invalid email address"
-    ),
+    .nonempty({ message: "errors.emailRequired" })
+    .email({ message: "errors.invalidEmail" })
+    .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
+      message: "errors.invalidEmailFormat",
+    }),
   newPassword: zod
     .string()
-    .regex(
-      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-      "Password must contain at least one letter and one number"
-    )
-    .min(6)
-    .nonempty("Password is required"),
-  code: zod.string().nonempty("Verification code is required"),
+    .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, {
+      message: "errors.weakPasswordFormat",
+    })
+    .min(6, { message: "errors.weakPassword" })
+    .nonempty({ message: "errors.passwordRequired" }),
+  code: zod
+    .string()
+    .nonempty({ message: "errors.codeRequired" })
+    .min(6, { message: "errors.invalidCode" }),
 });

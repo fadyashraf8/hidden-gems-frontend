@@ -1,18 +1,39 @@
 import { useNavigate } from 'react-router-dom';
 import { THEME } from './constants';
+import { useEffect, useState } from 'react';
 
-const PlaceCard = ({ data, rank }) => {
+const PlaceCard = ({ gem, rank }) => {
   const navigate = useNavigate(); 
-
+  const [ ratingsCount, setRatingsCount ] = useState(0);
+    useEffect(() => {
+      const fetchRatingGems = async () => {
+        try {
+          const response = await fetch(`${BASE_URL}/ratings/gem/${gem._id}`,{
+            credentials: "include"
+          });
+          const data = await response.json();
+          if(data.message === "success" && Array.isArray(data.ratings)){
+            setRatingsCount(data.ratings.length)
+          }
+        } catch (error) {
+          console.error("Failed to fetch rating count", error);
+        }
+      }
+      if(gem._id){
+        fetchRatingGems();
+      }else{
+        console.error("Gem is not passed correctly to GemCard")
+      }
+    },[gem._id])
   const handleCardClick = () => {
     navigate(`/gems/${data._id}`);
   };
 
-  const mainImage = data.images && data.images.length > 0 
-    ? `${data.images[0]}` 
+  const mainImage = gem.images && gem.images.length > 0 
+    ? `${gem.images[0]}` 
     : "https://via.placeholder.com/600x400?text=No+Image";
 
-  const categoryName = data.category?.categoryName || "Uncategorized";
+  const categoryName = gem.category?.categoryName || "Uncategorized";
 
   // Star rating component
   const StarRating = ({ value }) => {

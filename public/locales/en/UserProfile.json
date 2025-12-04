@@ -3,6 +3,7 @@
     "firstName-label": "First Name",
     "lastName-label": "Last Name",
     "email-label": "Email",
-    "subscription-label": "Subscription"
+    "subscription-label": "Subscription",
+    "Manage-Subscription": "Manage Subscription"
     
 }

@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BounceCards from "../../Components/BounceCards/BounceCards";
 import { Sparkles } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import "./SurpriseMe.css";
 
 export default function SurpriseMe() {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation("surprise");
+
   const [mood, setMood] = useState("");
   const [loading, setLoading] = useState(false);
   const [suggestion, setSuggestion] = useState(null);
@@ -40,53 +43,48 @@ export default function SurpriseMe() {
 
       const data = await response.json();
       const gem = data.suggestions;
-      
 
-      // Transform backend data to match the UI format
       setSuggestion({
         name: gem.name,
-        description: gem.description || "A perfect match for your mood!",
-        image: gem.images?.[0]
-          ? `${gem.images[0]}`
-          : "/images/2.jpg",
+        description: gem.description || t("defaultDescription"),
+        image: gem.images?.[0] ? `${gem.images[0]}` : "/images/2.jpg",
         rating: gem.averageRating || 0,
         id: gem._id,
       });
     } catch (error) {
       console.error("Error fetching suggestion:", error);
-      alert("Failed to get a suggestion. Please try again!");
+      alert(t("errorMessage"));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="surprise-container">
+    <div className={`surprise-container ${i18n.dir()}`}>
       <div className="surprise-content">
         <div className="surprise-left">
           <h1 className="surprise-title">
             <Sparkles className="sparkle-icon" />
-            Surprise Me
+            {t("title")}
           </h1>
-          <p className="surprise-subtitle">
-            Describe your mood, and let our AI find the perfect hidden gem for
-            you.
-          </p>
+
+          <p className="surprise-subtitle">{t("subtitle")}</p>
 
           <div className="input-group">
             <textarea
               className="mood-input"
-              placeholder="I'm feeling adventurous and hungry for something spicy..."
+              placeholder={t("placeholder")}
               value={mood}
               onChange={(e) => setMood(e.target.value)}
               rows={4}
             />
+
             <button
               className={`surprise-btn ${loading ? "loading" : ""}`}
               onClick={handleSurprise}
               disabled={loading || !mood.trim()}
             >
-              {loading ? "Finding the perfect gem..." : "Surprise Me!"}
+              {loading ? t("loading") : t("button")}
             </button>
           </div>
 

@@ -49,7 +49,6 @@ export default function CategoriesPage() {
 
   // Data states
   const [gems, setGems] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -72,11 +71,13 @@ export default function CategoriesPage() {
       setSearchParams({ page: currentPage });
       setSearchInput(title);
     }
+
   }, []);
 
   // Fetch gems when dependencies change
   useEffect(() => {
     fetchGems();
+    
   }, [
     categoryName,
     currentPage,
@@ -90,6 +91,7 @@ export default function CategoriesPage() {
     if (currentPage !== 1) {
       setCurrentPage(1);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchInput, selectedCategory, selectedSort]);
 
   // Fetch categories
@@ -127,8 +129,6 @@ export default function CategoriesPage() {
       params.category = selectedCategory;
     }
 
-
-
     // Sort
     if (selectedSort) {
       params.sort = selectedSort;
@@ -138,7 +138,6 @@ export default function CategoriesPage() {
     axios
       .get(`${baseURL}/gems`, { params, withCredentials: true })
       .then((response) => {
-        
         const data = response.data;
         console.log( "Fetched gems data:", data);
         if (data.message === "success") {
@@ -172,27 +171,8 @@ export default function CategoriesPage() {
     setCurrentPage(1);
   };
 
-  const hasActiveFilters =
-    searchInput  || selectedCategory || selectedSort;
-  }, [filtersApplied, categoryName]);
-
-  // 3. CLIENT-SIDE FILTERING
-  const filteredGems = useMemo(() => {
-    return gems.filter(gem => {
-      // Rating Filter
-      if (filtersApplied.avgRating && (gem.avgRating || 0) < filtersApplied.avgRating) return false;
-      // Location Filter
-      if (filtersApplied.gemLocation && gem.gemLocation?.toLowerCase() !== filtersApplied.gemLocation.toLowerCase()) return false;
-      // Category Filter
-      if (filtersApplied.category && gem.category?._id !== filtersApplied.category) return false;
-      
-      return true;
-    });
-  }, [gems, filtersApplied]);
-
-  // Display all gems from current page (already paginated by API)
-  const currentVisibleGems = gems;
-
+  // Calculate if any filters are active (returns boolean)
+  const hasActiveFilters = Boolean(searchInput || selectedCategory || selectedSort);
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "white" }}>
@@ -256,7 +236,10 @@ export default function CategoriesPage() {
               </Typography>
             </Link>
 
-            <Typography variant="body2" sx={{ fontWeight: 600, color: "white" }}>
+            <Typography
+              variant="body2"
+              sx={{ fontWeight: 600, color: "white" }}
+            >
               {categoryName || "All"}
             </Typography>
           </Breadcrumbs>
@@ -271,7 +254,10 @@ export default function CategoriesPage() {
             >
               {pageTitle}
             </Typography>
-            <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.85)" }}>
+            <Typography
+              variant="body1"
+              sx={{ color: "rgba(255,255,255,0.85)" }}
+            >
               Showing {totalItems} results
             </Typography>
           </Box>
@@ -314,15 +300,16 @@ export default function CategoriesPage() {
                 />
               </Grid>
 
-         
               {/* Category Filter */}
               <Grid item xs={12} sm={6} md={2}>
                 <FormControl fullWidth>
-                  <InputLabel sx={{ 
-                    "&.Mui-focused": { 
-                      color: THEME.RED 
-                    } 
-                  }}>
+                  <InputLabel
+                    sx={{
+                      "&.Mui-focused": {
+                        color: THEME.RED,
+                      },
+                    }}
+                  >
                     Category
                   </InputLabel>
                   <Select
@@ -344,8 +331,8 @@ export default function CategoriesPage() {
                   >
                     <MenuItem value="">All Categories</MenuItem>
                     {categories.map((cat) => (
-                      <MenuItem 
-                        key={cat._id} 
+                      <MenuItem
+                        key={cat._id}
                         value={cat._id}
                         sx={{
                           "&:hover": {
@@ -369,11 +356,13 @@ export default function CategoriesPage() {
               {/* Sort By */}
               <Grid item xs={12} sm={6} md={2}>
                 <FormControl fullWidth>
-                  <InputLabel sx={{ 
-                    "&.Mui-focused": { 
-                      color: THEME.RED 
-                    } 
-                  }}>
+                  <InputLabel
+                    sx={{
+                      "&.Mui-focused": {
+                        color: THEME.RED,
+                      },
+                    }}
+                  >
                     Sort By
                   </InputLabel>
                   <Select
@@ -394,48 +383,102 @@ export default function CategoriesPage() {
                     }}
                   >
                     <MenuItem value="">Default</MenuItem>
-                    <MenuItem value="name" sx={{
-                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
-                      "&.Mui-selected": { 
-                        backgroundColor: "rgba(220, 38, 38, 0.12)",
-                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
-                      },
-                    }}>Name (A-Z)</MenuItem>
-                    <MenuItem value="-name" sx={{
-                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
-                      "&.Mui-selected": { 
-                        backgroundColor: "rgba(220, 38, 38, 0.12)",
-                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
-                      },
-                    }}>Name (Z-A)</MenuItem>
-                    <MenuItem value="-avgRating" sx={{
-                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
-                      "&.Mui-selected": { 
-                        backgroundColor: "rgba(220, 38, 38, 0.12)",
-                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
-                      },
-                    }}>Highest Rating</MenuItem>
-                    <MenuItem value="avgRating" sx={{
-                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
-                      "&.Mui-selected": { 
-                        backgroundColor: "rgba(220, 38, 38, 0.12)",
-                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
-                      },
-                    }}>Lowest Rating</MenuItem>
-                    <MenuItem value="createdAt" sx={{
-                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
-                      "&.Mui-selected": { 
-                        backgroundColor: "rgba(220, 38, 38, 0.12)",
-                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
-                      },
-                    }}>Oldest First</MenuItem>
-                    <MenuItem value="-createdAt" sx={{
-                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
-                      "&.Mui-selected": { 
-                        backgroundColor: "rgba(220, 38, 38, 0.12)",
-                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
-                      },
-                    }}>Newest First</MenuItem>
+                    <MenuItem
+                      value="name"
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "rgba(220, 38, 38, 0.08)",
+                        },
+                        "&.Mui-selected": {
+                          backgroundColor: "rgba(220, 38, 38, 0.12)",
+                          "&:hover": {
+                            backgroundColor: "rgba(220, 38, 38, 0.16)",
+                          },
+                        },
+                      }}
+                    >
+                      Name (A-Z)
+                    </MenuItem>
+                    <MenuItem
+                      value="-name"
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "rgba(220, 38, 38, 0.08)",
+                        },
+                        "&.Mui-selected": {
+                          backgroundColor: "rgba(220, 38, 38, 0.12)",
+                          "&:hover": {
+                            backgroundColor: "rgba(220, 38, 38, 0.16)",
+                          },
+                        },
+                      }}
+                    >
+                      Name (Z-A)
+                    </MenuItem>
+                    <MenuItem
+                      value="-avgRating"
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "rgba(220, 38, 38, 0.08)",
+                        },
+                        "&.Mui-selected": {
+                          backgroundColor: "rgba(220, 38, 38, 0.12)",
+                          "&:hover": {
+                            backgroundColor: "rgba(220, 38, 38, 0.16)",
+                          },
+                        },
+                      }}
+                    >
+                      Highest Rating
+                    </MenuItem>
+                    <MenuItem
+                      value="avgRating"
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "rgba(220, 38, 38, 0.08)",
+                        },
+                        "&.Mui-selected": {
+                          backgroundColor: "rgba(220, 38, 38, 0.12)",
+                          "&:hover": {
+                            backgroundColor: "rgba(220, 38, 38, 0.16)",
+                          },
+                        },
+                      }}
+                    >
+                      Lowest Rating
+                    </MenuItem>
+                    <MenuItem
+                      value="createdAt"
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "rgba(220, 38, 38, 0.08)",
+                        },
+                        "&.Mui-selected": {
+                          backgroundColor: "rgba(220, 38, 38, 0.12)",
+                          "&:hover": {
+                            backgroundColor: "rgba(220, 38, 38, 0.16)",
+                          },
+                        },
+                      }}
+                    >
+                      Oldest First
+                    </MenuItem>
+                    <MenuItem
+                      value="-createdAt"
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "rgba(220, 38, 38, 0.08)",
+                        },
+                        "&.Mui-selected": {
+                          backgroundColor: "rgba(220, 38, 38, 0.12)",
+                          "&:hover": {
+                            backgroundColor: "rgba(220, 38, 38, 0.16)",
+                          },
+                        },
+                      }}
+                    >
+                      Newest First
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
