@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 
 export default function Users() {
   const { t, i18n } = useTranslation("AdminUsers");
- useEffect(() => {
+  useEffect(() => {
     document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
   }, [i18n.language]);
 
@@ -39,7 +39,10 @@ export default function Users() {
   const [currentPage, setCurrentPage] = useState(pageFromURL);
 
   useEffect(() => setSearchParams({ page: currentPage }), [currentPage]);
-  useEffect(() => fetchUsers(), [currentPage, searchKeyword, roleFilter, statusFilter, sortBy]);
+  useEffect(
+    () => fetchUsers(),
+    [currentPage, searchKeyword, roleFilter, statusFilter, sortBy]
+  );
 
   const fetchUsers = () => {
     setLoading(true);
@@ -49,7 +52,8 @@ export default function Users() {
     if (statusFilter) params.verified = statusFilter;
     if (sortBy) params.sort = sortBy;
 
-    axios.get(`${baseURL}/users`, { params, withCredentials: true })
+    axios
+      .get(`${baseURL}/users`, { params, withCredentials: true })
       .then((response) => {
         const data = response.data;
         if (data.message === "success") {
@@ -70,20 +74,52 @@ export default function Users() {
     setTimeout(() => setToast({ show: false, message: "", type: "" }), 3000);
   };
 
-  const openDeleteModal = (user) => { setUserToDelete(user); setShowDeleteModal(true); };
-  const closeDeleteModal = () => { setShowDeleteModal(false); setUserToDelete(null); };
+  const openDeleteModal = (user) => {
+    setUserToDelete(user);
+    setShowDeleteModal(true);
+  };
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+    setUserToDelete(null);
+  };
   const handleDelete = () => {
     if (!userToDelete) return;
-    axios.delete(`${baseURL}/users/${userToDelete._id}`, { withCredentials: true })
-      .then(() => { showToast(t("user_deleted_successfully"), "success"); closeDeleteModal(); fetchUsers(); })
-      .catch((error) => { console.error("Error deleting user:", error); showToast(t("failed_delete_user"), "error"); });
+    axios
+      .delete(`${baseURL}/users/${userToDelete._id}`, { withCredentials: true })
+      .then(() => {
+        showToast(t("user_deleted_successfully"), "success");
+        closeDeleteModal();
+        fetchUsers();
+      })
+      .catch((error) => {
+        console.error("Error deleting user:", error);
+        showToast(t("failed_delete_user"), "error");
+      });
   };
 
-  const handleSearch = (e) => { setSearchKeyword(e.target.value); setCurrentPage(1); };
-  const handleRoleFilter = (e) => { setRoleFilter(e.target.value); setCurrentPage(1); };
-  const handleStatusFilter = (e) => { setStatusFilter(e.target.value); setCurrentPage(1); };
-  const handleSort = (e) => { setSortBy(e.target.value); setCurrentPage(1); };
-  const clearFilters = () => { setSearchKeyword(""); setRoleFilter(""); setStatusFilter(""); setSortBy(""); setCurrentPage(1); };
+  const handleSearch = (e) => {
+    setSearchKeyword(e.target.value);
+    setCurrentPage(1);
+  };
+  const handleRoleFilter = (e) => {
+    setRoleFilter(e.target.value);
+    setCurrentPage(1);
+  };
+  const handleStatusFilter = (e) => {
+    setStatusFilter(e.target.value);
+    setCurrentPage(1);
+  };
+  const handleSort = (e) => {
+    setSortBy(e.target.value);
+    setCurrentPage(1);
+  };
+  const clearFilters = () => {
+    setSearchKeyword("");
+    setRoleFilter("");
+    setStatusFilter("");
+    setSortBy("");
+    setCurrentPage(1);
+  };
 
   if (loading) {
     return (
@@ -209,7 +245,7 @@ export default function Users() {
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="h-10 w-10 flex-shrink-0">
+                        <div className="h-10 w-10 shrink-0">
                           {user.image ? (
                             <img
                               className="h-10 w-10 rounded-full object-cover"
