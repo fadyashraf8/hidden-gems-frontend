@@ -525,7 +525,7 @@ export default function CategoriesPage() {
                       {gems.map((gem, index) => (
                         <PlaceCard
                           key={gem._id || index}
-                          data={gem}
+                          gem={gem}
                           rank={(currentPage - 1) * 10 + index + 1}
                         />
                       ))}

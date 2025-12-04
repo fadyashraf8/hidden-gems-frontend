@@ -2,31 +2,37 @@ import { useNavigate } from 'react-router-dom';
 import { THEME } from './constants';
 import { useEffect, useState } from 'react';
 
+
 const PlaceCard = ({ gem, rank }) => {
+  const BASE_URL = import.meta.env.VITE_Base_URL
   const navigate = useNavigate(); 
   const [ ratingsCount, setRatingsCount ] = useState(0);
     useEffect(() => {
       const fetchRatingGems = async () => {
         try {
           const response = await fetch(`${BASE_URL}/ratings/gem/${gem._id}`,{
-            credentials: "include"
+            credentials: 'include',
           });
           const data = await response.json();
           if(data.message === "success" && Array.isArray(data.ratings)){
             setRatingsCount(data.ratings.length)
+             console.log("Gem ID:", data.ratings.length)
           }
         } catch (error) {
+          console.log("gemid", gem._id);
           console.error("Failed to fetch rating count", error);
         }
       }
       if(gem._id){
-        fetchRatingGems();
+         fetchRatingGems();
+       
       }else{
         console.error("Gem is not passed correctly to GemCard")
       }
+      
     },[gem._id])
   const handleCardClick = () => {
-    navigate(`/gems/${data._id}`);
+    navigate(`/gems/${gem._id}`);
   };
 
   const mainImage = gem.images && gem.images.length > 0 
@@ -108,7 +114,7 @@ const PlaceCard = ({ gem, rank }) => {
       >
         <img
           src={mainImage}
-          alt={data.name}
+          alt={gem.name}
           style={{ 
             width: '100%', 
             height: '100%', 
@@ -127,18 +133,18 @@ const PlaceCard = ({ gem, rank }) => {
           fontSize: '1.5rem',
           margin: '0 0 8px 0'
         }}>
-          {data.name}
+          {gem.name}
         </h2>
         
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
-          <StarRating value={data.avgRating || 0} />
+          <StarRating value={gem.avgRating || 0} />
           <span style={{ 
             marginLeft: '10px', 
             color: THEME.DARK, 
             fontWeight: 700,
             fontSize: '0.875rem'
           }}>
-            0 reviews
+            {ratingsCount} Reviews
           </span>
         </div>
 
@@ -148,10 +154,10 @@ const PlaceCard = ({ gem, rank }) => {
           fontSize: '0.875rem'
         }}>
           <span style={{ fontWeight: 600 }}>{categoryName}</span>
-          <span style={{ margin: '0 6px', color: THEME.GREY }}>•</span>
-          {data.price || "$$"} 
-          <span style={{ margin: '0 6px', color: THEME.GREY }}>•</span>
-          {data.gemLocation}
+          {/* <span style={{ margin: '0 6px', color: THEME.GREY }}>•</span>
+          {gem.price || "$$"} */
+          <span style={{ margin: '0 6px', color: THEME.GREY }}>•</span> }
+          {gem.gemLocation}
         </div>
 
         <div style={{ marginTop: '12px' }}>
@@ -161,7 +167,7 @@ const PlaceCard = ({ gem, rank }) => {
             lineHeight: 1.5,
             margin: 0
           }}>
-            "{data.description ? data.description.substring(0, 100) : ''}..." 
+            "{gem.description ? gem.description.substring(0, 100) : ''}..." 
             <span style={{ 
               color: THEME.RED, 
               fontWeight: 600, 
