@@ -73,7 +73,7 @@ export default function UserProfile() {
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
-              {t("profile-info") || "Profile Info"}
+              {t("profile-info")}
             </button>
             <button
               onClick={() => setActiveTab("activity")}
@@ -83,7 +83,7 @@ export default function UserProfile() {
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
-              {t("activity-log") || "Activity Log"}
+              {t("activity-log")}
             </button>
           </div>
         </div>
