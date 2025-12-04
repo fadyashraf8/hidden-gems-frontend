@@ -11,15 +11,25 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import axios from "axios";
+<<<<<<< HEAD
 import { useTranslation } from "react-i18next";
+=======
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
 
 export default function AddGem() {
   const { t, i18n } = useTranslation("AdminAddGem");
   const navigate = useNavigate();
   const baseURL = import.meta.env.VITE_Base_URL;
+  const { userInfo } = useSelector((state) => state.user || {});
 
   const [saving, setSaving] = useState(false);
   const [categories, setCategories] = useState([]);
+<<<<<<< HEAD
+=======
+
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
   const [formData, setFormData] = useState({
     name: "",
     gemLocation: "",
@@ -56,7 +66,11 @@ export default function AddGem() {
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
+<<<<<<< HEAD
       showToast("failedToLoadCategories", "error");
+=======
+      toast.error("Failed to load categories");
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
     }
   };
 
@@ -77,7 +91,11 @@ export default function AddGem() {
     const totalImages = images.length + files.length;
 
     if (totalImages > 10) {
+<<<<<<< HEAD
       showToast("maxImagesError", "error");
+=======
+      toast.error("Maximum 10 images allowed");
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
       return;
     }
 
@@ -92,6 +110,7 @@ export default function AddGem() {
 
     setImages((prev) => [...prev, ...validFiles]);
 
+<<<<<<< HEAD
     const previews = validFiles.map(
       (file) =>
         new Promise((resolve) => {
@@ -104,6 +123,19 @@ export default function AddGem() {
     Promise.all(previews).then((results) =>
       setImagePreviews((prev) => [...prev, ...results])
     );
+=======
+    const previews = validFiles.map((file) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(previews).then((results) => {
+      setImagePreviews((prev) => [...prev, ...results]);
+    });
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
   };
 
   const removeImage = (index) => {
@@ -117,6 +149,7 @@ export default function AddGem() {
 
   const validateForm = () => {
     const newErrors = {};
+<<<<<<< HEAD
 
     if (!formData.name.trim()) newErrors.name = t("nameRequired");
     else if (formData.name.length < 3)
@@ -140,11 +173,51 @@ export default function AddGem() {
       newErrors.discountPlatinum = t("discountRange");
 
     if (images.length === 0) newErrors.images = t("atLeastOneImage");
+=======
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    } else if (formData.name.length < 3) {
+      newErrors.name = "Name must be at least 3 characters";
+    }
+
+    if (!formData.gemLocation.trim()) {
+      newErrors.gemLocation = "Location is required";
+    }
+
+    if (!formData.description.trim()) {
+      newErrors.description = "Description is required";
+    } else if (formData.description.length < 10) {
+      newErrors.description = "Description must be at least 10 characters";
+    }
+
+    if (!formData.category) {
+      newErrors.category = "Category is required";
+    }
+
+    if (formData.discount < 0 || formData.discount > 100) {
+      newErrors.discount = "Discount must be between 0 and 100";
+    }
+
+    if (formData.discountGold < 0 || formData.discountGold > 100) {
+      newErrors.discountGold = "Gold discount must be between 0 and 100";
+    }
+
+    if (formData.discountPlatinum < 0 || formData.discountPlatinum > 100) {
+      newErrors.discountPlatinum =
+        "Platinum discount must be between 0 and 100";
+    }
+
+    if (images.length === 0) {
+      newErrors.images = "At least one image is required";
+    }
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+<<<<<<< HEAD
 const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -182,6 +255,52 @@ const handleSubmit = async (e) => {
   }
 };
 
+=======
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("Please fix all errors");
+      return;
+    }
+
+    try {
+      setSaving(true);
+
+      const submitData = new FormData();
+      submitData.append("name", formData.name);
+      submitData.append("gemLocation", formData.gemLocation);
+      submitData.append("description", formData.description);
+      submitData.append("category", formData.category);
+      submitData.append("discount", formData.discount);
+      submitData.append("discountGold", formData.discountGold);
+      submitData.append("discountPlatinum", formData.discountPlatinum);
+      submitData.append("isSubscribed", formData.isSubscribed);
+
+      images.forEach((image) => {
+        submitData.append("images", image);
+      });
+
+      const response = await axios.post(`${baseURL}/gems`, submitData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      toast.success(response.data.message || "Gem created successfully");
+
+      setTimeout(() => {
+        navigate("/admin/gems");
+      }, 1500);
+    } catch (error) {
+      console.error("Error creating gem:", error);
+      toast.error(error.response?.data?.message || "Failed to create gem");
+    } finally {
+      setSaving(false);
+    }
+  };
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -206,7 +325,11 @@ const handleSubmit = async (e) => {
           <div className="bg-white rounded-lg shadow-sm p-6 sticky top-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <ImageIcon size={20} className="text-blue-600" />
+<<<<<<< HEAD
               {t("imagesCount", { count: images.length })}
+=======
+              Images ({images.length}/10){" "}
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
               <span className="text-red-500">*</span>
             </h3>
 
@@ -252,9 +375,13 @@ const handleSubmit = async (e) => {
                 <div className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors cursor-pointer border-2 border-blue-200">
                   <Upload size={20} />
                   <span className="font-medium">
+<<<<<<< HEAD
                     {images.length === 0
                       ? t("uploadImages")
                       : t("addMoreImages")}
+=======
+                    {images.length === 0 ? "Upload Images" : "Add More Images"}
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
                   </span>
                 </div>
               </label>
@@ -355,7 +482,11 @@ const handleSubmit = async (e) => {
                     errors.category ? "border-red-500" : "border-gray-300"
                   }`}
                 >
+<<<<<<< HEAD
                   <option value="">{t("selectCategory")}</option>
+=======
+                  <option value="">Select Category</option>
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
                   {categories.map((cat) => (
                     <option key={cat._id} value={cat._id}>
                       {cat.categoryName}
@@ -372,7 +503,11 @@ const handleSubmit = async (e) => {
           {/* Discounts & Settings */}
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
+<<<<<<< HEAD
               {t("discountSettings")}
+=======
+              Discount Settings
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">

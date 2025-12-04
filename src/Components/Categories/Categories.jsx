@@ -6,7 +6,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import "../NavBar/NavBar.css";
+import "../Navbar/Navbar.css";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import {
@@ -82,7 +82,7 @@ export default function Categories() {
 
   const fetchCategories = useCallback(async () => {
     try {
-      console.log(BASE_URL)
+     
       const res = await axios.get(`${BASE_URL}/categories/allCategories`,
       { withCredentials: true }
       );

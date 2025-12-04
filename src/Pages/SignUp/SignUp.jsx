@@ -7,10 +7,10 @@ import { registerAPI } from "../../Services/RegisterAuth.js";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-import { Eye, EyeOff, User, Mail, Lock, Phone } from "lucide-react"; // أيقونات لكل حقل
+import { Eye, EyeOff, User, Mail, Lock, Phone } from "lucide-react"; 
 import { motion, AnimatePresence } from "framer-motion";
 
-import "../Login/login.css";
+import "../Login/Login.css";
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);

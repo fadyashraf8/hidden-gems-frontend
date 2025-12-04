@@ -43,6 +43,11 @@ const CreatedByYou = () => {
     }
   }, [userInfo]);
 
+  // Handle gem deletion
+  const handleGemDeleted = (deletedGemId) => {
+    setGems((prevGems) => prevGems.filter((gem) => gem._id !== deletedGemId));
+  };
+
   if (loading) return <LoadingScreen />;
 
   return (
@@ -111,7 +116,12 @@ const CreatedByYou = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
               {gems.map((gem) => (
-                <GemCard key={gem._id} gem={gem} />
+                <GemCard 
+                  key={gem._id} 
+                  gem={gem} 
+                  isUserGem={true}
+                  onGemDeleted={handleGemDeleted}
+                />
               ))}
             </div>
           )}

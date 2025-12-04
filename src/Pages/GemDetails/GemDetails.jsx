@@ -88,7 +88,7 @@ const GemDetails = () => {
       );
 
       console.log("Voucher created:", response.data);
-console.log("response.data",response.data);
+      console.log("response.data", response.data);
 
       setVoucherQR(response?.data?.createdVoucher?.qrCode);
       setVoucherData(response?.data?.createdVoucher);
@@ -537,6 +537,7 @@ console.log("response.data",response.data);
       setReviewText("");
       setIsEditingReview(false);
       setReviewMessage("Your review was deleted.");
+
       fetchReviews();
       fetchGemDetails();
     } catch (error) {
@@ -715,424 +716,433 @@ console.log("response.data",response.data);
 
   return (
     <>
-    <div className="min-h-screen bg-white dark:bg-zinc-900 pb-12 gem-details">
-      {/* Hero Image Section - Full Width */}
-      <div className="relative h-[50vh] md:h-[60vh] w-full">
-        <img
-          src={heroImage}
-          alt={gem.name}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end">
-          <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-12 text-white">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">{gem.name}</h1>
-            <div className="flex items-center gap-4 text-lg">
-              <div className="flex items-center gap-1">
-                <RatingStars
-                  rating={averageRatingValue}
-                  readOnly
-                  showLabel={false}
-                />
-                <span className="font-medium">
-                  ({totalReviewsCount} reviews)
-                </span>
-              </div>
-              {gem.category && (
-                <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-sm font-medium">
-                  {gem.category.categoryName}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Content Section - Centered Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Info */}
-          <div className="lg:col-span-2 space-y-8">
-            <div className="bg-white dark:bg-zinc-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-zinc-700 space-y-4">
-              <div className="flex items-center justify-between gap-4">
-                <h2 className="text-2xl font-bold dark:text-white">
-                  {copy.aboutTitle}
-                </h2>
-                <span className="text-sm text-gray-400 dark:text-gray-500">
-                  {copy.aboutCaption}
-                </span>
-              </div>
-              <p
-                ref={aboutRef}
-                className={`about-text text-gray-600 dark:text-gray-300 leading-relaxed text-lg ${
-                  aboutExpanded ? "expanded" : "collapsed"
-                }`}
-                style={{
-                  maxHeight: aboutExpanded
-                    ? Math.max(aboutMaxHeight, COLLAPSED_ABOUT_HEIGHT)
-                    : COLLAPSED_ABOUT_HEIGHT,
-                }}
-              >
-                {aboutText}
-              </p>
-              {aboutToggleVisible && (
-                <div className="flex justify-end">
-                  <ToggleButton
-                    expanded={aboutExpanded}
-                    onClick={() => setAboutExpanded((prev) => !prev)}
-                    collapsedLabel={copy.seeMore}
-                    expandedLabel={copy.seeLess}
-                  />
-                </div>
-              )}
-            </div>
-
-            {/* Gallery */}
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold mb-6 dark:text-white">
-                {copy.galleryTitle}
-              </h2>
-              <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
-                <span>{copy.galleryCount(galleryImages.length)}</span>
-              </div>
-              {galleryImages.length === 0 ? (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {copy.galleryEmpty}
-                </p>
-              ) : (
-                <>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {visibleGallery.map((image, index) => (
-                      <div
-                        key={`${image}-${index}`}
-                        className={`aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-zinc-800 gallery-card ${
-                          galleryExpanded && index >= 6
-                            ? "gallery-card-new"
-                            : ""
-                        }`}
-                      >
-                        <img
-                          src={resolveImageSrc(image)}
-                          alt={copy.galleryAlt(index + 1)}
-                          className="w-full h-full object-cover"
-                          onError={(e) => (e.target.src = "/images/Gem.png")}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  {galleryImages.length > 6 && (
-                    <div className="flex justify-center pt-2">
-                      <ToggleButton
-                        expanded={galleryExpanded}
-                        onClick={() => setGalleryExpanded((prev) => !prev)}
-                        collapsedLabel={copy.seeMore}
-                        expandedLabel={copy.seeLess}
-                      />
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-
-            {/* Reviews */}
-            <div className="bg-white dark:bg-zinc-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-zinc-700 space-y-6">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold dark:text-white">
-                    {copy.reviewsTitle}
-                  </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {copy.reviewsCaption}
-                  </p>
-                </div>
-                <div className="flex items-center gap-3 bg-gray-50 dark:bg-zinc-900 px-4 py-2 rounded-full">
-                  <span className="text-2xl font-bold text-[#DD0303]">
-                    {averageRatingLabel}
-                  </span>
+      <div className="min-h-screen bg-white dark:bg-zinc-900 pb-12 gem-details">
+        {/* Hero Image Section - Full Width */}
+        <div className="relative h-[50vh] md:h-[60vh] w-full">
+          <img
+            src={heroImage}
+            alt={gem.name}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end">
+            <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-12 text-white">
+              <h1 className="text-4xl md:text-6xl font-bold mb-4">
+                {gem.name}
+              </h1>
+              <div className="flex items-center gap-4 text-lg">
+                <div className="flex items-center gap-1">
                   <RatingStars
                     rating={averageRatingValue}
                     readOnly
                     showLabel={false}
                   />
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {copy.reviewsTotal(totalReviewsCount)}
+                  <span className="font-medium">
+                    ({totalReviewsCount} reviews)
                   </span>
                 </div>
+                {gem.category && (
+                  <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-sm font-medium">
+                    {gem.category.categoryName}
+                  </span>
+                )}
               </div>
+            </div>
+          </div>
+        </div>
 
-              <div
-                ref={composerRef}
-                className="rounded-2xl border border-dashed border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900/40 p-5"
-              >
-                {isLoggedIn ? (
-                  <form className="space-y-4" onSubmit={handleReviewSubmit}>
-                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                      <div>
-                        <p className="text-sm font-semibold text-gray-700 dark:text-gray-100">
-                          {isEditingReview
-                            ? "Edit your review"
-                            : "Add your review"}
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          {isEditingReview
-                            ? "Update your previous feedback below."
-                            : "Choose a rating then share a quick highlight."}
-                        </p>
-                      </div>
-                      <RatingStars
-                        value={reviewRating}
-                        onChange={handleRatingChange}
-                        showLabel={false}
-                      />
-                    </div>
-                    {isEditingReview && (
-                      <div className="flex items-center gap-4 text-xs font-semibold">
-                        <button
-                          type="button"
-                          onClick={handleCancelEdit}
-                          className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white"
-                        >
-                          Cancel edit
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleDeleteReview}
-                          disabled={reviewDeleting}
-                          className="text-red-500 hover:text-red-600 disabled:opacity-60"
-                        >
-                          {reviewDeleting ? "Deleting..." : "Delete review"}
-                        </button>
-                      </div>
-                    )}
-
-                    <textarea
-                      className="w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-3 text-sm text-gray-700 dark:text-gray-100 focus:border-[#DD0303] focus:ring-1 focus:ring-[#DD0303] transition"
-                      rows={4}
-                      maxLength={600}
-                      placeholder="Tell others what stood out for you..."
-                      value={reviewText}
-                      onChange={(event) => {
-                        setReviewText(event.target.value);
-                        setReviewError("");
-                        setReviewMessage("");
-                      }}
+        {/* Content Section - Centered Container */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Info */}
+            <div className="lg:col-span-2 space-y-8">
+              <div className="bg-white dark:bg-zinc-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-zinc-700 space-y-4">
+                <div className="flex items-center justify-between gap-4">
+                  <h2 className="text-2xl font-bold dark:text-white">
+                    {copy.aboutTitle}
+                  </h2>
+                  <span className="text-sm text-gray-400 dark:text-gray-500">
+                    {copy.aboutCaption}
+                  </span>
+                </div>
+                <p
+                  ref={aboutRef}
+                  className={`about-text text-gray-600 dark:text-gray-300 leading-relaxed text-lg ${
+                    aboutExpanded ? "expanded" : "collapsed"
+                  }`}
+                  style={{
+                    maxHeight: aboutExpanded
+                      ? Math.max(aboutMaxHeight, COLLAPSED_ABOUT_HEIGHT)
+                      : COLLAPSED_ABOUT_HEIGHT,
+                  }}
+                >
+                  {aboutText}
+                </p>
+                {aboutToggleVisible && (
+                  <div className="flex justify-end">
+                    <ToggleButton
+                      expanded={aboutExpanded}
+                      onClick={() => setAboutExpanded((prev) => !prev)}
+                      collapsedLabel={copy.seeMore}
+                      expandedLabel={copy.seeLess}
                     />
-
-                    {reviewError && (
-                      <p className="text-sm text-red-500">{reviewError}</p>
-                    )}
-                    {reviewMessage && (
-                      <p className="text-sm text-green-600">{reviewMessage}</p>
-                    )}
-
-                    <button
-                      type="submit"
-                      disabled={!canSubmitReview}
-                      className={`w-full md:w-auto px-6 py-2 rounded-full font-semibold text-sm transition ${
-                        canSubmitReview
-                          ? "bg-[#DD0303] text-white hover:bg-[#b90202] shadow-lg shadow-[#dd0303]/30"
-                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      }`}
-                    >
-                      {submittingReview ? "Sharing..." : "Share review"}
-                    </button>
-                  </form>
-                ) : (
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Sign in to add your rating and review for this place.
-                  </p>
+                  </div>
                 )}
               </div>
 
-              {visibleReviews.length === 0 ? (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {reviewsLoading ? "Loading reviews…" : copy.reviewsEmpty}
-                </p>
-              ) : (
-                <>
-                  <div className="space-y-4">
-                    {visibleReviews.map((review, index) => {
-                      const reviewUserId = getReviewUserId(review);
-                      const specificRating = gemRatings.find((r) => {
-                        const ratingUserId =
-                          typeof r.createdBy === "object"
-                            ? r.createdBy._id
-                            : r.createdBy;
-                        return String(ratingUserId) === String(reviewUserId);
-                      });
-                      const ratingValue = specificRating
-                        ? specificRating.rating
-                        : 0;
-
-                      return (
-                        <article
-                          key={review.id || review._id}
-                          className={`review-card border border-gray-100 dark:border-zinc-700 rounded-2xl p-5 space-y-2 ${
-                            reviewsExpanded && index >= 3
-                              ? "review-card-new"
+              {/* Gallery */}
+              <div className="space-y-4">
+                <h2 className="text-2xl font-bold mb-6 dark:text-white">
+                  {copy.galleryTitle}
+                </h2>
+                <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+                  <span>{copy.galleryCount(galleryImages.length)}</span>
+                </div>
+                {galleryImages.length === 0 ? (
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {copy.galleryEmpty}
+                  </p>
+                ) : (
+                  <>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {visibleGallery.map((image, index) => (
+                        <div
+                          key={`${image}-${index}`}
+                          className={`aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-zinc-800 gallery-card ${
+                            galleryExpanded && index >= 6
+                              ? "gallery-card-new"
                               : ""
                           }`}
                         >
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <div>
-                              <p className="font-semibold text-gray-900 dark:text-white">
-                                {formatReviewTitle(review)}
-                              </p>
-                              <p className="text-sm text-gray-500 dark:text-gray-400">
-                                {formatReviewAuthor(review)} ·{" "}
-                                {formatReviewDate(review)}
-                              </p>
-                            </div>
-                            {/* Rating Display - Uses specific user rating */}
-                            {ratingValue > 0 && (
-                              <RatingStars rating={ratingValue} readOnly />
-                            )}
-                          </div>
-                          <p className="text-gray-700 dark:text-gray-300 review-text">
-                            {formatReviewContent(review)}
+                          <img
+                            src={resolveImageSrc(image)}
+                            alt={copy.galleryAlt(index + 1)}
+                            className="w-full h-full object-cover"
+                            onError={(e) => (e.target.src = "/images/Gem.png")}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    {galleryImages.length > 6 && (
+                      <div className="flex justify-center pt-2">
+                        <ToggleButton
+                          expanded={galleryExpanded}
+                          onClick={() => setGalleryExpanded((prev) => !prev)}
+                          collapsedLabel={copy.seeMore}
+                          expandedLabel={copy.seeLess}
+                        />
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {/* Reviews */}
+              <div className="bg-white dark:bg-zinc-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-zinc-700 space-y-6">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h2 className="text-2xl font-bold dark:text-white">
+                      {copy.reviewsTitle}
+                    </h2>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {copy.reviewsCaption}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3 bg-gray-50 dark:bg-zinc-900 px-4 py-2 rounded-full">
+                    <span className="text-2xl font-bold text-[#DD0303]">
+                      {averageRatingLabel}
+                    </span>
+                    <RatingStars
+                      rating={averageRatingValue}
+                      readOnly
+                      showLabel={false}
+                    />
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {copy.reviewsTotal(totalReviewsCount)}
+                    </span>
+                  </div>
+                </div>
+
+                <div
+                  ref={composerRef}
+                  className="rounded-2xl border border-dashed border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900/40 p-5"
+                >
+                  {isLoggedIn ? (
+                    <form className="space-y-4" onSubmit={handleReviewSubmit}>
+                      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-700 dark:text-gray-100">
+                            {isEditingReview
+                              ? "Edit your review"
+                              : "Add your review"}
                           </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {isEditingReview
+                              ? "Update your previous feedback below."
+                              : "Choose a rating then share a quick highlight."}
+                          </p>
+                        </div>
+                        <RatingStars
+                          value={reviewRating}
+                          onChange={handleRatingChange}
+                          showLabel={false}
+                        />
+                      </div>
+                      {isEditingReview && (
+                        <div className="flex items-center gap-4 text-xs font-semibold">
+                          <button
+                            type="button"
+                            onClick={handleCancelEdit}
+                            className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white"
+                          >
+                            Cancel edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleDeleteReview}
+                            disabled={reviewDeleting}
+                            className="text-red-500 hover:text-red-600 disabled:opacity-60"
+                          >
+                            {reviewDeleting ? "Deleting..." : "Delete review"}
+                          </button>
+                        </div>
+                      )}
 
-                          {normalizedUserId &&
-                            getReviewUserId(review) === normalizedUserId && (
-                              <div className="flex items-center justify-end gap-3 pt-3 border-t border-gray-100 dark:border-zinc-700/50 mt-3">
-                                <button
-                                  type="button"
-                                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-[#DD0303] text-gray-700 hover:text-white rounded-xl transition-all text-sm font-semibold shadow-sm"
-                                  onClick={() => handleEditReviewClick(review)}
-                                  title="Edit review"
-                                >
-                                  <Edit2 className="w-4 h-4" />
-                                  <span>Edit</span>
-                                </button>
-                                <button
-                                  type="button"
-                                  className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-600 text-red-600 hover:text-white rounded-xl transition-all text-sm font-semibold shadow-sm"
-                                  onClick={handleDeleteReview}
-                                  disabled={reviewDeleting}
-                                  title="Delete review"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                  <span>Delete</span>
-                                </button>
-                              </div>
-                            )}
-                        </article>
-                      );
-                    })}
-                  </div>
-                  {totalReviewsCount > 3 && (
-                    <div className="flex justify-center pt-2">
-                      <ToggleButton
-                        expanded={reviewsExpanded}
-                        onClick={() => setReviewsExpanded((prev) => !prev)}
-                        collapsedLabel={copy.seeMore}
-                        expandedLabel={copy.seeLess}
+                      <textarea
+                        className="w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-3 text-sm text-gray-700 dark:text-gray-100 focus:border-[#DD0303] focus:ring-1 focus:ring-[#DD0303] transition"
+                        rows={4}
+                        maxLength={600}
+                        placeholder="Tell others what stood out for you..."
+                        value={reviewText}
+                        onChange={(event) => {
+                          setReviewText(event.target.value);
+                          setReviewError("");
+                          setReviewMessage("");
+                        }}
                       />
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          </div>
 
-          {/* Sidebar Info */}
-          <div className="lg:col-span-1">
-            <div className="bg-white dark:bg-zinc-800 rounded-2xl p-6 shadow-lg border border-gray-500 dark:border-zinc-700  top-24 space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-4 dark:text-white">
-                  Details
-                </h3>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3 text-gray-600 dark:text-gray-300">
-                    <MapPin className="w-5 h-5 mt-1 text-[#DD0303]" />
-                    <span>{gem.gemLocation || "Location not available"}</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-                    <Phone className="w-5 h-5 text-[#DD0303]" />
-                    <span>+1 234 567 890</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-                    <Globe className="w-5 h-5 text-[#DD0303]" />
-                    <a href="#" className="hover:underline">
-                      Visit Website
-                    </a>
-                  </div>
-                  {/* Discount Section */}
-                  {(gem.discount > 0 ||
-                    gem.discountGold > 0 ||
-                    gem.discountPlatinum > 0) && (
-                    <div className="pt-4 border-t border-gray-200 dark:border-zinc-700">
-                      <h4 className="font-semibold mb-3 text-gray-800 dark:text-white">
-                        Discounts
-                      </h4>
-
-                      {/* Standard */}
-                      {gem.discount > 0 && (
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-green-700 dark:text-green-400">
-                            Standard Discount
-                          </span>
-                          <span className="font-bold text-green-700 dark:text-green-400">
-                            {gem.discount}%
-                          </span>
-                        </div>
+                      {reviewError && (
+                        <p className="text-sm text-red-500">{reviewError}</p>
+                      )}
+                      {reviewMessage && (
+                        <p className="text-sm text-green-600">
+                          {reviewMessage}
+                        </p>
                       )}
 
-                      {/* Gold */}
-                      {gem.discountGold > 0 && (
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-yellow-700 dark:text-yellow-400">
-                            Gold Discount
-                          </span>
-                          <span className="font-bold text-yellow-700 dark:text-yellow-400">
-                            {gem.discountGold}%
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Platinum */}
-                      {gem.discountPlatinum > 0 && (
-                        <div className="flex justify-between items-center">
-                          <span className="text-purple-700 dark:text-purple-400">
-                            Platinum Discount
-                          </span>
-                          <span className="font-bold text-purple-700 dark:text-purple-400">
-                            {gem.discountPlatinum}%
-                          </span>
-                        </div>
-                      )}
-                    </div>
+                      <button
+                        type="submit"
+                        disabled={!canSubmitReview}
+                        className={`w-full md:w-auto px-6 py-2 rounded-full font-semibold text-sm transition ${
+                          canSubmitReview
+                            ? "bg-[#DD0303] text-white hover:bg-[#b90202] shadow-lg shadow-[#dd0303]/30"
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
+                      >
+                        {submittingReview ? "Sharing..." : "Share review"}
+                      </button>
+                    </form>
+                  ) : (
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Sign in to add your rating and review for this place.
+                    </p>
                   )}
                 </div>
-              </div>
 
-              <div className="pt-6 border-t border-gray-100 dark:border-zinc-700">
-                <button
-                  onClick={createVoucher}
-                  disabled={isCreatingVoucher}
-                  className="w-full bg-[#DD0303] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#b90202] transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isCreatingVoucher
-                    ? "Creating Voucher..."
-                    : "Ask For A Voucher"}
-                </button>
-              </div>
+                {visibleReviews.length === 0 ? (
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {reviewsLoading ? "Loading reviews…" : copy.reviewsEmpty}
+                  </p>
+                ) : (
+                  <>
+                    <div className="space-y-4">
+                      {visibleReviews.map((review, index) => {
+                        const reviewUserId = getReviewUserId(review);
+                        const specificRating = gemRatings.find((r) => {
+                          const ratingUserId =
+                            typeof r.createdBy === "object"
+                              ? r.createdBy._id
+                              : r.createdBy;
+                          return String(ratingUserId) === String(reviewUserId);
+                        });
+                        const ratingValue = specificRating
+                          ? specificRating.rating
+                          : 0;
 
-              <div className="pt-6 border-t border-gray-100 dark:border-zinc-700">
-                <SubscriptionPlans compact />
+                        return (
+                          <article
+                            key={review.id || review._id}
+                            className={`review-card border border-gray-100 dark:border-zinc-700 rounded-2xl p-5 space-y-2 ${
+                              reviewsExpanded && index >= 3
+                                ? "review-card-new"
+                                : ""
+                            }`}
+                          >
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <div>
+                                <p className="font-semibold text-gray-900 dark:text-white">
+                                  {formatReviewTitle(review)}
+                                </p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                  {formatReviewAuthor(review)} ·{" "}
+                                  {formatReviewDate(review)}
+                                </p>
+                              </div>
+                              {/* Rating Display - Uses specific user rating */}
+                              {ratingValue > 0 && (
+                                <RatingStars rating={ratingValue} readOnly />
+                              )}
+                            </div>
+                            <p className="text-gray-700 dark:text-gray-300 review-text">
+                              {formatReviewContent(review)}
+                            </p>
+
+                            {normalizedUserId &&
+                              getReviewUserId(review) === normalizedUserId && (
+                                <div className="flex items-center justify-end gap-3 pt-3 border-t border-gray-100 dark:border-zinc-700/50 mt-3">
+                                  <button
+                                    type="button"
+                                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-[#DD0303] text-gray-700 hover:text-white rounded-xl transition-all text-sm font-semibold shadow-sm"
+                                    onClick={() =>
+                                      handleEditReviewClick(review)
+                                    }
+                                    title="Edit review"
+                                  >
+                                    <Edit2 className="w-4 h-4" />
+                                    <span>Edit</span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-600 text-red-600 hover:text-white rounded-xl transition-all text-sm font-semibold shadow-sm"
+                                    onClick={handleDeleteReview}
+                                    disabled={reviewDeleting}
+                                    title="Delete review"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                    <span>Delete</span>
+                                  </button>
+                                </div>
+                              )}
+                          </article>
+                        );
+                      })}
+                    </div>
+                    {totalReviewsCount > 3 && (
+                      <div className="flex justify-center pt-2">
+                        <ToggleButton
+                          expanded={reviewsExpanded}
+                          onClick={() => setReviewsExpanded((prev) => !prev)}
+                          collapsedLabel={copy.seeMore}
+                          expandedLabel={copy.seeLess}
+                        />
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Sidebar Info */}
+            <div className="lg:col-span-1">
+              <div className="bg-white dark:bg-zinc-800 rounded-2xl p-6 shadow-lg border border-gray-500 dark:border-zinc-700  top-24 space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 dark:text-white">
+                    Details
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3 text-gray-600 dark:text-gray-300">
+                      <MapPin className="w-5 h-5 mt-1 text-[#DD0303]" />
+                      <span>{gem.gemLocation || "Location not available"}</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                      <Phone className="w-5 h-5 text-[#DD0303]" />
+                      <span>+1 234 567 890</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                      <Globe className="w-5 h-5 text-[#DD0303]" />
+                      <a href="#" className="hover:underline">
+                        Visit Website
+                      </a>
+                    </div>
+                    {/* Discount Section */}
+                    {(gem.discount > 0 ||
+                      gem.discountGold > 0 ||
+                      gem.discountPlatinum > 0) && (
+                      <div className="pt-4 border-t border-gray-200 dark:border-zinc-700">
+                        <h4 className="font-semibold mb-3 text-gray-800 dark:text-white">
+                          Discounts
+                        </h4>
+
+                        {/* Standard */}
+                        {gem.discount > 0 && (
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-green-700 dark:text-green-400">
+                              Standard Discount
+                            </span>
+                            <span className="font-bold text-green-700 dark:text-green-400">
+                              {gem.discount}%
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Gold */}
+                        {gem.discountGold > 0 && (
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-yellow-700 dark:text-yellow-400">
+                              Gold Discount
+                            </span>
+                            <span className="font-bold text-yellow-700 dark:text-yellow-400">
+                              {gem.discountGold}%
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Platinum */}
+                        {gem.discountPlatinum > 0 && (
+                          <div className="flex justify-between items-center">
+                            <span className="text-purple-700 dark:text-purple-400">
+                              Platinum Discount
+                            </span>
+                            <span className="font-bold text-purple-700 dark:text-purple-400">
+                              {gem.discountPlatinum}%
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="pt-6 border-t border-gray-100 dark:border-zinc-700">
+                  <button
+                    onClick={createVoucher}
+                    disabled={isCreatingVoucher}
+                    className="w-full bg-[#DD0303] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#b90202] transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isCreatingVoucher
+                      ? "Creating Voucher..."
+                      : "Ask For A Voucher"}
+                  </button>
+                </div>
+
+                {(!userInfo?.subscription ||
+                  userInfo?.subscription === "free") &&
+                  userInfo?.role !== "admin" && (
+                    <div className="pt-6 border-t border-gray-100 dark:border-zinc-700">
+                      <SubscriptionPlans compact />
+                    </div>
+                  )}
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <QRCodeModal
-  isOpen={isModalOpen}
-  onClose={() => setIsModalOpen(false)}
-  qrCode={voucherQR}
-  voucherData={voucherData}
-/>
-
+      <QRCodeModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        qrCode={voucherQR}
+        voucherData={voucherData}
+      />
     </>
   );
 };

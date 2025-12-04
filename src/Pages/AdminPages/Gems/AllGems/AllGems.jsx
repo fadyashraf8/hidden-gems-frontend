@@ -12,7 +12,11 @@ import {
   MapPin,
 } from "lucide-react";
 import axios from "axios";
+<<<<<<< HEAD
 import { useTranslation } from "react-i18next";
+=======
+import { useSelector } from "react-redux";
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
 
 export default function AllGems() {
   const { t , i18n} = useTranslation("AdminGems");
@@ -33,6 +37,7 @@ export default function AllGems() {
   const [sortBy, setSortBy] = useState("");
 
   const baseURL = import.meta.env.VITE_Base_URL;
+  const { userInfo } = useSelector((state) => state.user || {});
 
   // URL query param for page
   const [searchParams, setSearchParams] = useSearchParams();
@@ -107,8 +112,13 @@ export default function AllGems() {
     if (!gemToDelete) return;
     axios
       .delete(`${baseURL}/gems/${gemToDelete._id}`, { withCredentials: true })
+<<<<<<< HEAD
       .then(() => {
         showToast(t("toast.gemDeleted"), "success");
+=======
+      .then(async () => {
+        showToast("Gem deleted successfully", "success");
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
         closeDeleteModal();
         fetchGems();
       })
@@ -333,42 +343,40 @@ export default function AllGems() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center">
                         <Star
                           size={16}
-                          className="text-yellow-400 fill-yellow-400"
+                          className="text-yellow-400 fill-current"
                         />
-                        <span className="text-sm font-medium text-gray-900">
+                        <span className="ml-1 text-sm text-gray-900">
                           {gem.avgRating?.toFixed(1) || "0.0"}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full min-w-[80px] justify-center ${
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                           gem.status === "accepted"
                             ? "bg-green-100 text-green-800"
-                            : gem.status === "pending"
-                            ? "bg-yellow-100 text-yellow-800"
                             : gem.status === "rejected"
                             ? "bg-red-100 text-red-800"
-                            : "bg-gray-100 text-gray-800"
+                            : "bg-yellow-100 text-yellow-800"
                         }`}
                       >
                         {t(`status.${gem.status}`)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-3">
                         <Link
-                          to={`/admin/gems/${gem._id}`}
-                          className="text-blue-600 hover:text-blue-900 p-2 hover:bg-blue-50 rounded transition-colors"
+                          to={`/admin/gems/edit/${gem._id}`}
+                          className="text-blue-600 hover:text-blue-900"
                         >
                           <Edit size={18} />
                         </Link>
                         <button
                           onClick={() => openDeleteModal(gem)}
-                          className="text-red-600 hover:text-red-900 p-2 hover:bg-red-50 rounded transition-colors"
+                          className="text-red-600 hover:text-red-900"
                         >
                           <Trash2 size={18} />
                         </button>
@@ -382,6 +390,7 @@ export default function AllGems() {
         </div>
 
         {/* Pagination */}
+<<<<<<< HEAD
         <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
           <div className="text-sm text-gray-700">
             {t("pagination.showingPage", {
@@ -435,10 +444,36 @@ export default function AllGems() {
             )}
           </div>
         </div>
+=======
+        {totalPages > 1 && (
+          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+            <div className="text-sm text-gray-500">
+              Showing page {currentPage} of {totalPages}
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
+          </div>
+        )}
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
       </div>
 
       {/* Delete Modal */}
       {showDeleteModal && (
+<<<<<<< HEAD
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 animate-in fade-in zoom-in duration-200">
             <div className="p-6">
@@ -490,6 +525,49 @@ export default function AllGems() {
                   {t("buttons.delete")}
                 </button>
               </div>
+=======
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                <AlertTriangle size={24} className="text-red-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-gray-900">Delete Gem?</h3>
+                <p className="text-sm text-gray-600">
+                  This action cannot be undone
+                </p>
+              </div>
+              <button
+                onClick={closeDeleteModal}
+                className="ml-auto text-gray-400 hover:text-gray-500"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete{" "}
+              <span className="font-semibold text-gray-900">
+                {gemToDelete?.name}
+              </span>
+              ? All data associated with this gem will be permanently removed.
+            </p>
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={closeDeleteModal}
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium"
+              >
+                Delete Gem
+              </button>
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
             </div>
           </div>
         </div>
@@ -497,6 +575,7 @@ export default function AllGems() {
 
       {/* Toast Notification */}
       {toast.show && (
+<<<<<<< HEAD
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-top duration-300">
           <div
             className={`px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${
@@ -513,6 +592,14 @@ export default function AllGems() {
               <X size={18} />
             </button>
           </div>
+=======
+        <div
+          className={`fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg text-white transform transition-all duration-300 z-50 ${
+            toast.type === "success" ? "bg-green-600" : "bg-red-600"
+          }`}
+        >
+          {toast.message}
+>>>>>>> b238bdf32695d8580698679c1a3d912d558c392e
         </div>
       )}
     </>
