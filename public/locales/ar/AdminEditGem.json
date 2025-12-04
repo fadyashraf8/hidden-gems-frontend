@@ -1,18 +1,18 @@
 {
   "backToGems": "العودة للأحجار",
-  "editGem": "تعديل الحجر المخفي",
-  "updateGemInfo": "تحديث معلومات وإعدادات الحجر",
+  "editGem": "تعديل الجوهرة المخفي",
+  "updateGemInfo": "تحديث معلومات وإعدادات الجوهرة",
   "images": "الصور",
   "currentImages": "الصور الحالية",
   "newImages": "الصور الجديدة",
   "addMoreImages": "إضافة صور أكثر",
   "maxImages": "الحد الأقصى 10 صور، كل صورة 5MB",
-  "gemStats": "إحصائيات الحجر",
+  "gemStats": "إحصائيات الجوهرة ",
   "averageRating": "التقييم المتوسط",
   "createdBy": "تم الإنشاء بواسطة",
   "basicInfo": "المعلومات الأساسية",
-  "gemName": "اسم الحجر",
-  "enterGemName": "أدخل اسم الحجر",
+  "gemName": "اسم الجوهرة ",
+  "enterGemName": "أدخل اسم الجوهرة ",
   "location": "الموقع",
   "enterLocation": "أدخل الموقع",
   "description": "الوصف",
@@ -41,11 +41,11 @@
     "images": "مطلوب صورة واحدة على الأقل"
   },
   "toast": {
-    "failedLoad": "فشل تحميل بيانات الحجر",
+    "failedLoad": "فشل تحميل بيانات الجوهرة ",
     "maxImages": "الحد الأقصى 10 صور فقط",
     "imageTooLarge": "{{name}} أكبر من 5MB",
     "fixErrors": "يرجى تصحيح جميع الأخطاء",
-    "updated": "تم تحديث الحجر بنجاح",
-    "failedUpdate": "فشل تحديث الحجر"
+    "updated": "تم تحديث الجوهرة  بنجاح",
+    "failedUpdate": "فشل تحديث الجوهرة "
   }
 }
