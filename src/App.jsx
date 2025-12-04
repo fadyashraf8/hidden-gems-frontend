@@ -39,6 +39,7 @@ import Cities from "./Pages/Footer/Discover/Cities";
 import BusinessesLayout from "./Components/Layout/BusinessesLayout/BusinessesLayout";
 import Business from "./Pages/Footer/Business/Business";
 import AddPlace from "./Pages/Footer/Business/AddPlace";
+import EditPlace from "./Pages/Footer/Business/EditPlace";
 import Advertising from "./Pages/Footer/Business/Advertising";
 import Partners from "./Pages/Footer/Business/Partners";
 import SignUp from "./Pages/SignUp/SignUp";
@@ -164,6 +165,14 @@ function App() {
               element: (
                 <ProtectedRoute>
                   <AddPlace />
+                </ProtectedRoute>
+              ),
+            },
+            {
+              path: "editPlace/:gemId",
+              element: (
+                <ProtectedRoute>
+                  <EditPlace />
                 </ProtectedRoute>
               ),
             },

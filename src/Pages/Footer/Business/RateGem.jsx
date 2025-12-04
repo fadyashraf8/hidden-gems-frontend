@@ -38,7 +38,9 @@ const RateGem = ({ gemId }) => {
           body: JSON.stringify({
             gem: gemId,
             rating: reviewData.rating.toString() // e.g. "4.5"
-          }),
+          }
+        ),
+        credentials: "include"
         }).then(async (res) => {
            if (!res.ok) throw new Error("Failed to save rating");
         });
@@ -56,6 +58,7 @@ const RateGem = ({ gemId }) => {
             description: reviewData.description,
             images: []
           }),
+          credentials: "include"
         }).then(async (res) => {
            if (!res.ok) throw new Error("Failed to save review");
         });
