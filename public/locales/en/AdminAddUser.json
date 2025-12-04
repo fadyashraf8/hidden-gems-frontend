@@ -1,0 +1,71 @@
+{
+  "navigation": {
+    "backToUsers": "Back to Users"
+  },
+  "header": {
+    "title": "Add New User",
+    "subtitle": "Create a new user account"
+  },
+  "profile": {
+    "title": "Profile Picture",
+    "uploadPhoto": "Upload Photo",
+    "maxSize": "Max size: 5MB",
+    "format": "Format: JPG, PNG, GIF"
+  },
+  "personalInfo": {
+    "title": "Personal Information",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "firstNamePlaceholder": "Enter first name",
+    "lastNamePlaceholder": "Enter last name",
+    "required": "*"
+  },
+  "contactInfo": {
+    "title": "Contact Information",
+    "email": "Email",
+    "phoneNumber": "Phone Number",
+    "emailPlaceholder": "user@example.com",
+    "phonePlaceholder": "01234567890"
+  },
+  "security": {
+    "title": "Security",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "passwordPlaceholder": "Enter password (min 8 characters)",
+    "confirmPasswordPlaceholder": "Confirm your password"
+  },
+  "accountSettings": {
+    "title": "Account Settings",
+    "role": "Role",
+    "user": "User",
+    "admin": "Admin",
+    "owner": "Owner",
+    "subscription": "Subscription Plan",
+    "free": "Free",
+    "platinum": "Platinum",
+    "gold": "Gold",
+    "verified": "Verified Account"
+  },
+  "actions": {
+    "createUser": "Create User",
+    "creating": "Creating...",
+    "cancel": "Cancel"
+  },
+  "errors": {
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Email is invalid",
+    "phoneRequired": "Phone number is required",
+    "passwordRequired": "Password is required",
+    "passwordMin": "Password must be at least 8 characters",
+    "confirmPasswordRequired": "Please confirm your password",
+    "passwordMismatch": "Passwords do not match",
+    "fixErrors": "Please fix all errors",
+    "imageSize": "Image size should be less than 5MB"
+  },
+  "toast": {
+    "successCreate": "User created successfully",
+    "failedCreate": "Failed to create user"
+  }
+}

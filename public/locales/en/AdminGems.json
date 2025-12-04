@@ -1,31 +1,55 @@
 {
-  "accessDenied": "Access denied. Admins only.",
-  "gemsManagement": "Gems Management",
-  "createGem": "Create Gem",
-  "editGem": "Edit Gem",
-  "fetchGemsError": "Failed to fetch gems",
-  "loadingError": "Error loading data",
-  "createGemError": "Failed to create Gem",
-  "gemExistsError": "A gem with this name already exists. Please choose a different name.",
-  "gemCreated": "Gem created successfully!",
-  "updateGemError": "Failed to update Gem",
-  "gemUpdated": "Gem updated successfully",
-  "deleteGemError": "Failed to delete Gem",
-  "gemDeleted": "Gem deleted successfully",
-  "sortBy": "Sort by",
-  "default": "Default",
-  "nameAZ": "Name (A-Z)",
-  "nameZA": "Name (Z-A)",
-  "name": "Name",
-  "location": "Location",
-  "category": "Category",
-  "status": "Status",
-  "subscribed": "Subscribed",
-  "discounts": "Disc. / Gold / Plat.",
-  "createdBy": "Created By",
-  "actions": "Actions",
-  "pageInfo": "Page {{current}} of {{total}}",
-  "previous": "Previous",
-  "next": "Next",
-  "na": "N/A"
+  "header": {
+    "hiddenGemsManagement": "Hidden Gems Management",
+    "totalGemsFound": "Total {{totalItems}} gems found"
+  },
+  "buttons": {
+    "addHiddenGem": "Add Hidden Gem",
+    "clearAllFilters": "Clear all filters",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "inputs": {
+    "searchGems": "Search gems..."
+  },
+  "filters": {
+    "allCategories": "All Categories",
+    "allStatus": "All Status",
+    "sortBy": "Sort By"
+  },
+  "status": {
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Rejected"
+  },
+  "sort": {
+    "nameAZ": "Name (A-Z)",
+    "nameZA": "Name (Z-A)",
+    "highestRating": "Highest Rating",
+    "lowestRating": "Lowest Rating",
+    "oldestFirst": "Oldest First",
+    "newestFirst": "Newest First"
+  },
+  "table": {
+    "gem": "Gem",
+    "category": "Category",
+    "rating": "Rating",
+    "status": "Status",
+    "actions": "Actions",
+    "noGemsFound": "No gems found",
+    "noImage": "No Image"
+  },
+  "modals": {
+    "deleteGem": "Delete Gem",
+    "confirmDelete": "Are you sure you want to delete this hidden gem?",
+    "cannotUndo": "This action cannot be undone."
+  },
+  "toast": {
+    "failedToLoadGems": "Failed to load gems",
+    "gemDeleted": "Gem deleted successfully",
+    "failedToDeleteGem": "Failed to delete gem"
+  },
+  "pagination": {
+    "showingPage": "Showing page {{currentPage}} of {{totalPages}}"
+  }
 }

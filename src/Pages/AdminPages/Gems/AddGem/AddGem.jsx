@@ -1,202 +1,203 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Save, MapPin, Upload, X, Image as ImageIcon, CheckCircle, AlertTriangle } from 'lucide-react';
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import {
+  ArrowLeft,
+  Save,
+  MapPin,
+  Upload,
+  X,
+  Image as ImageIcon,
+  CheckCircle,
+  AlertTriangle,
+} from "lucide-react";
+import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 export default function AddGem() {
+  const { t, i18n } = useTranslation("AdminAddGem");
   const navigate = useNavigate();
   const baseURL = import.meta.env.VITE_Base_URL;
 
   const [saving, setSaving] = useState(false);
   const [categories, setCategories] = useState([]);
-  
   const [formData, setFormData] = useState({
-    name: '',
-    gemLocation: '',
-    description: '',
-    category: '',
+    name: "",
+    gemLocation: "",
+    description: "",
+    category: "",
     discount: 0,
     discountGold: 0,
     discountPlatinum: 0,
-    isSubscribed: false
+    isSubscribed: false,
   });
-
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [errors, setErrors] = useState({});
+  const [toast, setToast] = useState({ show: false, message: "", type: "" });
 
   useEffect(() => {
     fetchCategories();
   }, []);
 
+  const showToast = (key, type, params = {}) => {
+    setToast({ show: true, message: t(key, params), type });
+    setTimeout(() => {
+      setToast({ show: false, message: "", type: "" });
+    }, 3000);
+  };
+
   const fetchCategories = async () => {
     try {
       const response = await axios.get(`${baseURL}/categories`, {
-        withCredentials: true
+        withCredentials: true,
       });
-      if (response.data.message === 'success') {
+      if (response.data.message === "success") {
         setCategories(response.data.result);
       }
     } catch (error) {
-      console.error('Error fetching categories:', error);
-      toast.error('Failed to load categories');
+      console.error("Error fetching categories:", error);
+      showToast("failedToLoadCategories", "error");
     }
   };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
-    
+
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     const totalImages = images.length + files.length;
-    
+
     if (totalImages > 10) {
-      toast.error('Maximum 10 images allowed');
+      showToast("maxImagesError", "error");
       return;
     }
-    
+
     const validFiles = [];
-    files.forEach(file => {
+    files.forEach((file) => {
       if (file.size > 5 * 1024 * 1024) {
-        toast.error(`${file.name} is larger than 5MB`);
+        showToast("fileTooLarge", "error", { fileName: file.name });
         return;
       }
       validFiles.push(file);
     });
-    
-    setImages(prev => [...prev, ...validFiles]);
-    
-    const previews = validFiles.map(file => {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(file);
-      });
-    });
-    
-    Promise.all(previews).then(results => {
-      setImagePreviews(prev => [...prev, ...results]);
-    });
+
+    setImages((prev) => [...prev, ...validFiles]);
+
+    const previews = validFiles.map(
+      (file) =>
+        new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        })
+    );
+
+    Promise.all(previews).then((results) =>
+      setImagePreviews((prev) => [...prev, ...results])
+    );
   };
 
   const removeImage = (index) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
-    setImagePreviews(prev => prev.filter((_, i) => i !== index));
-    
+    setImages((prev) => prev.filter((_, i) => i !== index));
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+
     if (errors.images) {
-      setErrors(prev => ({ ...prev, images: '' }));
+      setErrors((prev) => ({ ...prev, images: "" }));
     }
   };
 
   const validateForm = () => {
     const newErrors = {};
-    
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    } else if (formData.name.length < 3) {
-      newErrors.name = 'Name must be at least 3 characters';
-    }
-    
-    if (!formData.gemLocation.trim()) {
-      newErrors.gemLocation = 'Location is required';
-    }
-    
-    if (!formData.description.trim()) {
-      newErrors.description = 'Description is required';
-    } else if (formData.description.length < 10) {
-      newErrors.description = 'Description must be at least 10 characters';
-    }
-    
-    if (!formData.category) {
-      newErrors.category = 'Category is required';
-    }
-    
-    if (formData.discount < 0 || formData.discount > 100) {
-      newErrors.discount = 'Discount must be between 0 and 100';
-    }
-    
-    if (formData.discountGold < 0 || formData.discountGold > 100) {
-      newErrors.discountGold = 'Gold discount must be between 0 and 100';
-    }
-    
-    if (formData.discountPlatinum < 0 || formData.discountPlatinum > 100) {
-      newErrors.discountPlatinum = 'Platinum discount must be between 0 and 100';
-    }
 
-    if (images.length === 0) {
-      newErrors.images = 'At least one image is required';
-    }
-    
+    if (!formData.name.trim()) newErrors.name = t("nameRequired");
+    else if (formData.name.length < 3)
+      newErrors.name = t("nameMinChars", { count: 3 });
+
+    if (!formData.gemLocation.trim())
+      newErrors.gemLocation = t("locationRequired");
+
+    if (!formData.description.trim())
+      newErrors.description = t("descriptionRequired");
+    else if (formData.description.length < 10)
+      newErrors.description = t("descriptionMinChars", { count: 10 });
+
+    if (!formData.category) newErrors.category = t("categoryRequired");
+
+    if (formData.discount < 0 || formData.discount > 100)
+      newErrors.discount = t("discountRange");
+    if (formData.discountGold < 0 || formData.discountGold > 100)
+      newErrors.discountGold = t("discountRange");
+    if (formData.discountPlatinum < 0 || formData.discountPlatinum > 100)
+      newErrors.discountPlatinum = t("discountRange");
+
+    if (images.length === 0) newErrors.images = t("atLeastOneImage");
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      toast.error('Please fix all errors');
-      return;
-    }
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      setSaving(true);
-      
-      const submitData = new FormData();
-      submitData.append('name', formData.name);
-      submitData.append('gemLocation', formData.gemLocation);
-      submitData.append('description', formData.description);
-      submitData.append('category', formData.category);
-      submitData.append('discount', formData.discount);
-      submitData.append('discountGold', formData.discountGold);
-      submitData.append('discountPlatinum', formData.discountPlatinum);
-      submitData.append('isSubscribed', formData.isSubscribed);
-      
-      images.forEach(image => {
-        submitData.append('images', image);
-      });
+  if (!validateForm()) {
+    showToast("fixErrors", "error"); 
+    return;
+  }
 
-      const response = await axios.post(`${baseURL}/gems`, submitData, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+  try {
+    setSaving(true);
+    const submitData = new FormData();
+    Object.entries(formData).forEach(([key, value]) =>
+      submitData.append(key, value)
+    );
+    images.forEach((image) => submitData.append("images", image));
 
-      toast.success(response.data.message || 'Gem created successfully');
-      setTimeout(() => {
-        navigate('/admin/gems');
-      }, 1500);
-    } catch (error) {
-      console.error('Error creating gem:', error);
-      toast.error(error.response?.data?.message || 'Failed to create gem');
-    } finally {
-      setSaving(false);
-    }
-  };
+    const response = await axios.post(`${baseURL}/gems`, submitData, {
+      withCredentials: true,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+ showToast("gemCreated", "success");
+    setTimeout(() => navigate("/admin/gems"), 1500);
+  } catch (error) {
+    console.error("Error creating gem:", error);
+ const errorMsg = error.response?.data?.message;
+    const msg = errorMsg
+      ? i18n.exists(errorMsg)
+        ? t(errorMsg)
+        : errorMsg
+      : t("failedToCreateGem");
+
+    showToast(msg, "error");
+  } finally {
+    setSaving(false);
+  }
+};
+
 
   return (
     <div className="max-w-7xl mx-auto">
+      {/* Header */}
       <div className="mb-6">
         <Link
           to="/admin/gems"
           className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4 transition-colors"
         >
           <ArrowLeft size={20} className="mr-2" />
-          Back to Gems
+          {t("backToGems")}
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Add Hidden Gem</h1>
-        <p className="text-gray-600 mt-2">Create a new hidden gem</p>
+        <h1 className="text-3xl font-bold text-gray-900">
+          {t("addHiddenGem")}
+        </h1>
+        <p className="text-gray-600 mt-2">{t("createNewGem")}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -205,7 +206,8 @@ export default function AddGem() {
           <div className="bg-white rounded-lg shadow-sm p-6 sticky top-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <ImageIcon size={20} className="text-blue-600" />
-              Images ({images.length}/10) <span className="text-red-500">*</span>
+              {t("imagesCount", { count: images.length })}
+              <span className="text-red-500">*</span>
             </h3>
 
             {errors.images && (
@@ -216,7 +218,7 @@ export default function AddGem() {
                 </p>
               </div>
             )}
-            
+
             {imagePreviews.length > 0 && (
               <div className="grid grid-cols-2 gap-3 mb-4">
                 {imagePreviews.map((preview, index) => (
@@ -250,18 +252,16 @@ export default function AddGem() {
                 <div className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors cursor-pointer border-2 border-blue-200">
                   <Upload size={20} />
                   <span className="font-medium">
-                    {images.length === 0 ? 'Upload Images' : 'Add More Images'}
+                    {images.length === 0
+                      ? t("uploadImages")
+                      : t("addMoreImages")}
                   </span>
                 </div>
               </label>
             )}
-            
+
             <p className="text-xs text-gray-500 mt-3 text-center">
-              Required: At least 1 image
-              <br />
-              Max: 10 images, 5MB each
-              <br />
-              Format: JPG, PNG, GIF
+              {t("imageRequirements")}
             </p>
           </div>
         </div>
@@ -272,13 +272,13 @@ export default function AddGem() {
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <ImageIcon size={20} className="text-blue-600" />
-              Basic Information
+              {t("basicInformation")}
             </h3>
-            
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Gem Name <span className="text-red-500">*</span>
+                  {t("gemName")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -286,9 +286,9 @@ export default function AddGem() {
                   value={formData.name}
                   onChange={handleInputChange}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.name ? 'border-red-500' : 'border-gray-300'
+                    errors.name ? "border-red-500" : "border-gray-300"
                   }`}
-                  placeholder="Enter gem name (min 3 characters)"
+                  placeholder={t("enterGemName")}
                 />
                 {errors.name && (
                   <p className="text-red-500 text-xs mt-1">{errors.name}</p>
@@ -297,29 +297,34 @@ export default function AddGem() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Location <span className="text-red-500">*</span>
+                  {t("location")} <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <MapPin
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
                   <input
                     type="text"
                     name="gemLocation"
                     value={formData.gemLocation}
                     onChange={handleInputChange}
                     className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                      errors.gemLocation ? 'border-red-500' : 'border-gray-300'
+                      errors.gemLocation ? "border-red-500" : "border-gray-300"
                     }`}
-                    placeholder="Enter location"
+                    placeholder={t("enterLocation")}
                   />
                 </div>
                 {errors.gemLocation && (
-                  <p className="text-red-500 text-xs mt-1">{errors.gemLocation}</p>
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.gemLocation}
+                  </p>
                 )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description <span className="text-red-500">*</span>
+                  {t("description")} <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   name="description"
@@ -327,29 +332,31 @@ export default function AddGem() {
                   onChange={handleInputChange}
                   rows="6"
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none ${
-                    errors.description ? 'border-red-500' : 'border-gray-300'
+                    errors.description ? "border-red-500" : "border-gray-300"
                   }`}
-                  placeholder="Enter detailed description (min 10 characters)"
+                  placeholder={t("enterDescription")}
                 />
                 {errors.description && (
-                  <p className="text-red-500 text-xs mt-1">{errors.description}</p>
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.description}
+                  </p>
                 )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Category <span className="text-red-500">*</span>
+                  {t("category")} <span className="text-red-500">*</span>
                 </label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.category ? 'border-red-500' : 'border-gray-300'
+                    errors.category ? "border-red-500" : "border-gray-300"
                   }`}
                 >
-                  <option value="">Select Category</option>
-                  {categories.map(cat => (
+                  <option value="">{t("selectCategory")}</option>
+                  {categories.map((cat) => (
                     <option key={cat._id} value={cat._id}>
                       {cat.categoryName}
                     </option>
@@ -364,12 +371,14 @@ export default function AddGem() {
 
           {/* Discounts & Settings */}
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Discount Settings</h3>
-            
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              {t("discountSettings")}
+            </h3>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Free Tier Discount (%)
+                  {t("freeTierDiscount")}
                 </label>
                 <input
                   type="number"
@@ -379,7 +388,7 @@ export default function AddGem() {
                   min="0"
                   max="100"
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.discount ? 'border-red-500' : 'border-gray-300'
+                    errors.discount ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="0"
                 />
@@ -390,7 +399,7 @@ export default function AddGem() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Gold Tier Discount (%)
+                  {t("goldTierDiscount")}
                 </label>
                 <input
                   type="number"
@@ -400,18 +409,20 @@ export default function AddGem() {
                   min="0"
                   max="100"
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.discountGold ? 'border-red-500' : 'border-gray-300'
+                    errors.discountGold ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="0"
                 />
                 {errors.discountGold && (
-                  <p className="text-red-500 text-xs mt-1">{errors.discountGold}</p>
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.discountGold}
+                  </p>
                 )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Platinum Tier Discount (%)
+                  {t("platinumTierDiscount")}
                 </label>
                 <input
                   type="number"
@@ -421,12 +432,16 @@ export default function AddGem() {
                   min="0"
                   max="100"
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.discountPlatinum ? 'border-red-500' : 'border-gray-300'
+                    errors.discountPlatinum
+                      ? "border-red-500"
+                      : "border-gray-300"
                   }`}
                   placeholder="0"
                 />
                 {errors.discountPlatinum && (
-                  <p className="text-red-500 text-xs mt-1">{errors.discountPlatinum}</p>
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.discountPlatinum}
+                  </p>
                 )}
               </div>
             </div>
@@ -442,7 +457,7 @@ export default function AddGem() {
                 />
                 <span className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <CheckCircle size={16} className="text-green-600" />
-                  Subscription Active
+                  {t("subscriptionActive")}
                 </span>
               </label>
             </div>
@@ -454,30 +469,56 @@ export default function AddGem() {
               type="button"
               onClick={handleSubmit}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
+              className="flex-1 flex items-center cursor-pointer justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
             >
               {saving ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  Creating...
+                  {t("creating")}
                 </>
               ) : (
                 <>
                   <Save size={20} />
-                  Create Gem
+                  {t("createGem")}
                 </>
               )}
             </button>
-            
+
             <Link
               to="/admin/gems"
-              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              className="px-6 py-3 border cursor-pointer border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
             >
-              Cancel
+              {t("cancel")}
             </Link>
           </div>
         </div>
       </div>
+
+      {/* Toast Notification */}
+      {toast.show && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-top duration-300">
+          <div
+            className={`px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${
+              toast.type === "success"
+                ? "bg-green-600 text-white"
+                : "bg-red-600 text-white"
+            }`}
+          >
+            {toast.type === "success" ? (
+              <CheckCircle size={20} />
+            ) : (
+              <AlertTriangle size={20} />
+            )}
+            <span>{toast.message}</span>
+            <button
+              onClick={() => setToast({ show: false, message: "", type: "" })}
+              className="hover:opacity-80 transition-opacity"
+            >
+              <X size={18} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

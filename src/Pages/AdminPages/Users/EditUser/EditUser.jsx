@@ -1,27 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Save, User, Mail, Phone, Shield, Upload, X, CheckCircle, AlertTriangle } from 'lucide-react';
-import axios from 'axios';
-import toast from "react-hot-toast";
-
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import {
+  ArrowLeft,
+  Save,
+  User,
+  Mail,
+  Phone,
+  Shield,
+  Upload,
+  X,
+  CheckCircle,
+  AlertTriangle,
+} from "lucide-react";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 export default function EditUser() {
+  const { t } = useTranslation("AdminEditUser");
   const { id } = useParams();
   const navigate = useNavigate();
   const baseURL = import.meta.env.VITE_Base_URL;
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-//   const [toast, setToast] = useState({ show: false, message: '', type: '' });
-  
+
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    role: 'user',
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    role: "user",
     verified: false,
-    subscription: 'free'
+    subscription: "free",
   });
 
   const [imagePreview, setImagePreview] = useState(null);
@@ -36,12 +47,10 @@ export default function EditUser() {
     try {
       setLoading(true);
       const response = await axios.get(`${baseURL}/users/${id}`, {
-        withCredentials: true
+        withCredentials: true,
       });
-      
-      if (response.data.message === 'Success') {
+      if (response.data.message === "Success") {
         const user = response.data.result;
-        console.log(user);
         setFormData({
           firstName: user.firstName,
           lastName: user.lastName,
@@ -49,55 +58,39 @@ export default function EditUser() {
           phoneNumber: user.phoneNumber,
           role: user.role,
           verified: user.verified,
-          subscription: user.subscription
+          subscription: user.subscription,
         });
-        
-        if (user.image) {
+        if (user.image)
           setImagePreview(`${baseURL}/uploads/user/${user.image}`);
-        }
       }
     } catch (error) {
-      console.error('Error fetching user:', error);
-      toast.error('Failed to load user data', 'error');
+      console.error("Error fetching user:", error);
+      toast.error(t("failedToLoadUser"));
     } finally {
       setLoading(false);
     }
   };
 
-//   const showToast = (message, type) => {
-//     setToast({ show: true, message, type });
-//     setTimeout(() => {
-//       setToast({ show: false, message: '', type: '' });
-//     }, 3000);
-//   };
-
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
-    
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error('Image size should be less than 5MB', 'error');
-        return;
-      }
-      
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error(t("imageSizeError"));
+      return;
     }
+    setImageFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => setImagePreview(reader.result);
+    reader.readAsDataURL(file);
   };
 
   const removeImage = () => {
@@ -107,68 +100,43 @@ export default function EditUser() {
 
   const validateForm = () => {
     const newErrors = {};
-    
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
-    }
-    
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
-    }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-    
-    if (!formData.phoneNumber.trim()) {
-      newErrors.phoneNumber = 'Phone number is required';
-    }
-    
+    if (!formData.firstName.trim())
+      newErrors.firstName = t("firstNameRequired");
+    if (!formData.lastName.trim()) newErrors.lastName = t("lastNameRequired");
+    if (!formData.email.trim()) newErrors.email = t("emailRequired");
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = t("emailInvalid");
+    if (!formData.phoneNumber.trim())
+      newErrors.phoneNumber = t("phoneRequired");
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (!validateForm()) {
-      toast.error('Please fix all errors', 'error');
+      toast.error(t("fixErrors"));
       return;
     }
-
     try {
       setSaving(true);
-      
       const submitData = new FormData();
-      submitData.append('firstName', formData.firstName);
-      submitData.append('lastName', formData.lastName);
-      submitData.append('email', formData.email);
-      submitData.append('phoneNumber', formData.phoneNumber);
-      submitData.append('role', formData.role);
-      submitData.append('verified', formData.verified);
-      submitData.append('subscription', formData.subscription);
-      
-      if (imageFile) {
-        submitData.append('image', imageFile);
-      }
+      Object.entries(formData).forEach(([key, value]) =>
+        submitData.append(key, value)
+      );
+      if (imageFile) submitData.append("image", imageFile);
 
-   let res=   await axios.put(`${baseURL}/users/${id}`, submitData, {
+      await axios.put(`${baseURL}/users/${id}`, submitData, {
         withCredentials: true,
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+        headers: { "Content-Type": "multipart/form-data" },
       });
-console.log(res);
 
-      toast.success('User updated successfully', 'success');
-    //   setTimeout(() => {
-    //     navigate('/admin/users');
-    //   }, 1500);
+      toast.success(t("userUpdated"));
     } catch (error) {
-      console.error('Error updating user:', error);
-      toast.error(error.response?.data?.errors.join("\n") || 'Failed to update user', 'error');
+      console.error("Error updating user:", error);
+      toast.error(
+        error.response?.data?.errors?.join("\n") || t("failedToUpdateUser")
+      );
     } finally {
       setSaving(false);
     }
@@ -190,18 +158,19 @@ console.log(res);
           className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4 transition-colors"
         >
           <ArrowLeft size={20} className="mr-2" />
-          Back to Users
+          {t("backToUsers")}
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Edit User</h1>
-        <p className="text-gray-600 mt-2">Update user information and settings</p>
+        <h1 className="text-3xl font-bold text-gray-900">{t("editUser")}</h1>
+        <p className="text-gray-600 mt-2">{t("updateUserInfo")}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - Profile Image */}
+        {/* Profile Image */}
         <div className="lg:col-span-1">
-          <div className="bg-red-50  rounded-lg shadow-sm p-6  top-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Picture</h3>
-            
+          <div className="bg-red-50 rounded-lg shadow-sm p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              {t("profilePicture")}
+            </h3>
             <div className="flex flex-col items-center">
               <div className="relative mb-4">
                 {imagePreview ? (
@@ -225,7 +194,6 @@ console.log(res);
                   </div>
                 )}
               </div>
-
               <label className="w-full">
                 <input
                   type="file"
@@ -235,32 +203,30 @@ console.log(res);
                 />
                 <div className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors cursor-pointer border-2 border-blue-200">
                   <Upload size={18} />
-                  <span className="font-medium">Upload Photo</span>
+                  <span className="font-medium">{t("uploadPhoto")}</span>
                 </div>
               </label>
-              
               <p className="text-xs text-gray-500 mt-3 text-center">
-                Max size: 5MB
+                {t("maxSize")}: 5MB
                 <br />
-                Format: JPG, PNG, GIF
+                {t("format")}: JPG, PNG, GIF
               </p>
             </div>
           </div>
         </div>
 
-        {/* Right Column - Form Fields */}
+        {/* Form Fields */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Personal Information */}
+          {/* Personal Info */}
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <User size={20} className="text-blue-600" />
-              Personal Information
+              {t("personalInfo")}
             </h3>
-            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  First Name <span className="text-red-500">*</span>
+                  {t("firstName")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -268,18 +234,19 @@ console.log(res);
                   value={formData.firstName}
                   onChange={handleInputChange}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.firstName ? 'border-red-500' : 'border-gray-300'
+                    errors.firstName ? "border-red-500" : "border-gray-300"
                   }`}
-                  placeholder="Enter first name"
+                  placeholder={t("enterFirstName")}
                 />
                 {errors.firstName && (
-                  <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.firstName}
+                  </p>
                 )}
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Last Name <span className="text-red-500">*</span>
+                  {t("lastName")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -287,9 +254,9 @@ console.log(res);
                   value={formData.lastName}
                   onChange={handleInputChange}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.lastName ? 'border-red-500' : 'border-gray-300'
+                    errors.lastName ? "border-red-500" : "border-gray-300"
                   }`}
-                  placeholder="Enter last name"
+                  placeholder={t("enterLastName")}
                 />
                 {errors.lastName && (
                   <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
@@ -298,27 +265,29 @@ console.log(res);
             </div>
           </div>
 
-          {/* Contact Information */}
+          {/* Contact Info */}
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Mail size={20} className="text-blue-600" />
-              Contact Information
+              {t("contactInfo")}
             </h3>
-            
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email <span className="text-red-500">*</span>
+                  {t("email")} <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <Mail
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
                   <input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
                     className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                      errors.email ? 'border-red-500' : 'border-gray-300'
+                      errors.email ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="user@example.com"
                   />
@@ -327,26 +296,30 @@ console.log(res);
                   <p className="text-red-500 text-xs mt-1">{errors.email}</p>
                 )}
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number <span className="text-red-500">*</span>
+                  {t("phoneNumber")} <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <Phone
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
                   <input
                     type="tel"
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleInputChange}
                     className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                      errors.phoneNumber ? 'border-red-500' : 'border-gray-300'
+                      errors.phoneNumber ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="01234567890"
                   />
                 </div>
                 {errors.phoneNumber && (
-                  <p className="text-red-500 text-xs mt-1">{errors.phoneNumber}</p>
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.phoneNumber}
+                  </p>
                 )}
               </div>
             </div>
@@ -356,13 +329,12 @@ console.log(res);
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Shield size={20} className="text-blue-600" />
-              Account Settings
+              {t("accountSettings")}
             </h3>
-            
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Role
+                  {t("role")}
                 </label>
                 <select
                   name="role"
@@ -370,15 +342,14 @@ console.log(res);
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                 >
-                  <option value="user">User</option>
-                  <option value="admin">Admin</option>
-                  <option value="owner">Owner</option>
+                  <option value="user">{t("user")}</option>
+                  <option value="admin">{t("admin")}</option>
+                  <option value="owner">{t("owner")}</option>
                 </select>
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Subscription Plan
+                  {t("subscription")}
                 </label>
                 <select
                   name="subscription"
@@ -386,12 +357,11 @@ console.log(res);
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                 >
-                  <option value="free">Free</option>
-                  <option value="gold">Gold</option>
-                  <option value="premium">Premium</option>
+                  <option value="free">{t("free")}</option>
+                  <option value="gold">{t("gold")}</option>
+                  <option value="premium">{t("premium")}</option>
                 </select>
               </div>
-
               <div className="flex items-center pt-2">
                 <input
                   type="checkbox"
@@ -401,9 +371,12 @@ console.log(res);
                   onChange={handleInputChange}
                   className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
-                <label htmlFor="verified" className="ml-3 text-sm font-medium text-gray-700 flex items-center gap-2">
-                  <CheckCircle size={16} className="text-green-600" />
-                  Verified Account
+                <label
+                  htmlFor="verified"
+                  className="ml-3 text-sm font-medium text-gray-700 flex items-center gap-2"
+                >
+                  <CheckCircle size={16} className="text-green-600" />{" "}
+                  {t("verifiedAccount")}
                 </label>
               </div>
             </div>
@@ -415,56 +388,29 @@ console.log(res);
               type="button"
               onClick={handleSubmit}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
+              className="flex-1 flex items-center cursor-pointer justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
             >
               {saving ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  Saving...
+                  {t("saving")}...
                 </>
               ) : (
                 <>
                   <Save size={20} />
-                  Save Changes
+                  {t("saveChanges")}
                 </>
               )}
             </button>
-            
             <Link
               to="/admin/users"
               className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
             >
-              Cancel
+              {t("cancel")}
             </Link>
           </div>
         </div>
       </div>
-
-      {/* Toast Notification */}
-      {toast.show && (
-        <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top duration-300">
-          <div
-            className={`px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${
-              toast.type === 'success'
-                ? 'bg-green-600 text-white'
-                : 'bg-red-600 text-white'
-            }`}
-          >
-            {toast.type === 'success' ? (
-              <CheckCircle size={20} />
-            ) : (
-              <AlertTriangle size={20} />
-            )}
-            <span>{toast.message}</span>
-            <button
-              onClick={() => setToast({ show: false, message: '', type: '' })}
-              className="hover:opacity-80 transition-opacity"
-            >
-              <X size={18} />
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

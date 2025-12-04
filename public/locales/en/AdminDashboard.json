@@ -1,0 +1,19 @@
+{
+  "dashboard_title": "Dashboard",
+  "dashboard_subtitle": "Overview of platform statistics",
+
+  "total_users": "Total Users",
+  "total_categories": "Total Categories",
+  "total_gems": "Total Gems",
+
+  "latest_categories": "Latest Categories",
+  "category": "Category",
+  "no_categories": "No categories available",
+
+  "activity": "Activity",
+  "active": "Active",
+  "all_categories_active": "All categories are currently active",
+
+  "growth_rate": "Growth Rate",
+  "compared_last_month": "Compared to last month"
+}

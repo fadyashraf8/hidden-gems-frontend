@@ -141,11 +141,11 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
             <div key={section.id} className="mb-2">
               <button
                 onClick={() => toggleSection(section.id)}
-                className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-700 transition-colors"
+                className="w-full flex items-center justify-between p-3 cursor-pointer rounded-lg hover:bg-slate-700 transition-colors"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 cursor-pointer">
                   <section.icon size={20} />
-                  <span className="font-medium">{section.title}</span>
+                  <span className="font-medium ">{section.title}</span>
                 </div>
                 {openSections[section.id] ? (
                   <ChevronDown size={18} />
@@ -155,7 +155,7 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
               </button>
 
               {openSections[section.id] && (
-                <div className="mt-1 ml-4 space-y-1">
+                <div className="mt-1  ml-4 space-y-1">
                   {section.items.map((item, index) => (
                     <Link
                       key={index}
@@ -179,7 +179,6 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
               i18n.changeLanguage(newLang);
             }}
           >
-            
             <TranslateTwoToneIcon
               style={{ cursor: "pointer", marginRight: "10px" }}
             />
@@ -199,7 +198,7 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
             </Link>
 
             <button
-              className="sidebar-btn dark-mode-toggle"
+              className="sidebar-btn dark-mode-toggle "
               onClick={handleLogout}
             >
               🚪 {t("Sign Out")}
