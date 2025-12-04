@@ -86,22 +86,40 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
     },
   ];
 
+  const sidebarSide = i18n.language === "ar" ? "right-0" : "left-0";
+  const toggleButtonSide =
+    i18n.language === "ar"
+      ? isCollapsed
+        ? "right-4"
+        : "right-60"
+      : isCollapsed
+      ? "left-4"
+      : "left-60";
+  const mobileTranslate = isMobileOpen
+    ? "translate-x-0"
+    : i18n.language === "ar"
+    ? "translate-x-full lg:translate-x-0"
+    : "-translate-x-full lg:translate-x-0";
+
   return (
     <>
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-slate-800 text-white rounded-lg shadow-lg"
+        className={`lg:hidden fixed top-4   ${
+          i18n.language === "ar" ? "right-4 " : "left-4"
+        } z-50 p-2 bg-slate-800 text-white rounded-lg shadow-lg`}
       >
-        {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
+        {isMobileOpen ? <X size={24}   /> : <Menu size={24} />}
       </button>
 
       {/* Desktop Toggle Button */}
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className={`hidden lg:block fixed top-4 z-50 p-2 bg-slate-800 text-white rounded-lg shadow-lg transition-all duration-300 ${
-          isCollapsed ? "left-4" : "left-60"
-        }`}
+        className={`hidden lg:block fixed top-4 ml-4  
+          
+           ${i18n.language === "ar" ? "mr-4 " : "left-4"}
+          z-50 p-2 bg-slate-800 text-white rounded-lg shadow-lg transition-all duration-300 ${toggleButtonSide}`}
       >
         {isCollapsed ? <Menu size={24} /> : <ChevronLeft size={24} />}
       </button>
@@ -116,16 +134,10 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
 
       {/* Sidebar */}
       <aside
-        className={`
-          fixed top-0 left-0 h-screen bg-slate-800 text-white z-40
+        className={`fixed top-0  ${sidebarSide} h-screen bg-slate-800 text-white z-40
           transition-all duration-300 ease-in-out overflow-hidden
           ${isCollapsed ? "lg:w-0 lg:opacity-0" : "lg:w-64 lg:opacity-100"}
-          ${
-            isMobileOpen
-              ? "w-64 translate-x-0"
-              : "w-64 -translate-x-full lg:translate-x-0"
-          }
-        `}
+          w-64 ${mobileTranslate}`}
       >
         <div className="p-6 border-b border-slate-700">
           <Link
