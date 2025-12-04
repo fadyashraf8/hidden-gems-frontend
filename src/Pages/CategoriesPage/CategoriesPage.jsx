@@ -26,8 +26,10 @@ import axios from "axios";
 import { THEME } from "../../Components/Places/constants";
 import PlaceCard from "../../Components/Places/PlaceCard";
 import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
+import { useSelector } from "react-redux";
 
 export default function CategoriesPage() {
+  const { userInfo } = useSelector((state) => state.user || {});
   const { categoryName } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const title = searchParams.get("title");
@@ -77,14 +79,7 @@ export default function CategoriesPage() {
   // Fetch gems when dependencies change
   useEffect(() => {
     fetchGems();
-    
-  }, [
-    categoryName,
-    currentPage,
-    searchInput,
-    selectedCategory,
-    selectedSort,
-  ]);
+  }, [categoryName, currentPage, searchInput, selectedCategory, selectedSort]);
 
   // Reset page when filters change
   useEffect(() => {
@@ -139,7 +134,7 @@ export default function CategoriesPage() {
       .get(`${baseURL}/gems`, { params, withCredentials: true })
       .then((response) => {
         const data = response.data;
-        console.log( "Fetched gems data:", data);
+        console.log("Fetched gems data:", data);
         if (data.message === "success") {
           setGems(data.result || []);
           setTotalPages(data.totalPages || 1);
@@ -171,8 +166,7 @@ export default function CategoriesPage() {
     setCurrentPage(1);
   };
 
-  // Calculate if any filters are active (returns boolean)
-  const hasActiveFilters = Boolean(searchInput || selectedCategory || selectedSort);
+  const hasActiveFilters = searchInput || selectedCategory || selectedSort;
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "white" }}>
@@ -492,8 +486,8 @@ export default function CategoriesPage() {
                   onClick={clearAllFilters}
                   sx={{
                     color: THEME.RED,
-                    textTransform: 'none',
-                    fontSize: '0.95rem',
+                    textTransform: "none",
+                    fontSize: "0.95rem",
                     fontWeight: 600,
                     "&:hover": {
                       backgroundColor: "rgba(220, 38, 38, 0.1)",
@@ -562,7 +556,9 @@ export default function CategoriesPage() {
                       )}
                     </>
                   ) : (
-                    !error && <Typography>No gems match your filters.</Typography>
+                    !error && (
+                      <Typography>No gems match your filters.</Typography>
+                    )
                   )}
                 </Stack>
               )}
@@ -571,7 +567,9 @@ export default function CategoriesPage() {
             {/* Sidebar */}
             <Grid item xs={12} md={4}>
               <Box sx={{ position: "sticky", top: 100 }}>
-                <SubscriptionPlans compact />
+                {(!userInfo?.subscription ||
+                  userInfo?.subscription === "free") &&
+                  userInfo?.role !== "admin" && <SubscriptionPlans compact />}
               </Box>
             </Grid>
           </Grid>
