@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import {
+  ArrowLeft,
   Save,
   MapPin,
   Upload,
   X,
-  Star,
-  CheckCircle,
-  Calendar,
-  Clock,
-  AlertCircle,
   Image,
-  Trash,
   AlertTriangle,
+  Star,
+  User,
+  Mail,
+  CheckCircle,
+  AlertCircle,
+  Trash,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -20,16 +21,15 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function GemOwner() {
   const baseURL = import.meta.env.VITE_Base_URL;
-  const { userInfo, isLoggedIn } = useSelector((state) => state.user);
-  
+  const { userInfo } = useSelector((state) => state.user || {});
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [categories, setCategories] = useState([]);
   const [hasGem, setHasGem] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -46,7 +46,7 @@ export default function GemOwner() {
   const [newImagePreviews, setNewImagePreviews] = useState([]);
 
   const [gemInfo, setGemInfo] = useState({
-    status: "",
+    status: "pending",
     avgRating: 0,
     isSubscribed: false,
     createdAt: "",
@@ -249,6 +249,7 @@ export default function GemOwner() {
       });
 
       toast.success("Gem updated successfully");
+
       setNewImages([]);
       setNewImagePreviews([]);
       fetchOwnerGem();
@@ -269,12 +270,16 @@ export default function GemOwner() {
       });
 
       toast.success("Gem deleted successfully");
-      
+
       if (userInfo.stripeCustomerId) {
         try {
-          await axios.post(`${baseURL}/payment/cancel-owner-subscription`, {}, {
-            withCredentials: true,
-          });
+          await axios.post(
+            `${baseURL}/payment/cancel-owner-subscription`,
+            {},
+            {
+              withCredentials: true,
+            }
+          );
           toast.success("Owner subscription cancelled");
         } catch (error) {
           console.error("Error cancelling subscription:", error);
@@ -283,11 +288,10 @@ export default function GemOwner() {
       }
 
       setShowDeleteModal(false);
-      
+
       setTimeout(() => {
         navigate("/");
       }, 2000);
-
     } catch (error) {
       console.error("Error deleting gem:", error);
       toast.error(error.response?.data?.message || "Failed to delete gem");
@@ -337,9 +341,12 @@ export default function GemOwner() {
           <p className="text-gray-600 mb-6">
             You haven't created any hidden gem yet.
           </p>
-          <Link to={'/owner/gem/add'}  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+          <Link
+            to={"/owner/gem/add"}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          >
             Create Your First Gem
-          </Link >
+          </Link>
         </div>
       </div>
     );
@@ -359,7 +366,9 @@ export default function GemOwner() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-gray-900">Delete Gem?</h3>
-                <p className="text-sm text-gray-600">This action cannot be undone</p>
+                <p className="text-sm text-gray-600">
+                  This action cannot be undone
+                </p>
               </div>
             </div>
 
@@ -434,28 +443,32 @@ export default function GemOwner() {
               </div>
 
               <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <span className="text-sm text-gray-600 flex items-center gap-2">
-                  <Star size={16} className="text-yellow-500" />
-                  Rating
-                </span>
-                <span className="font-semibold text-gray-900">
-                  {gemInfo.avgRating.toFixed(1)} / 5.0
+                <div className="flex items-center gap-2">
+                  <Star className="text-yellow-400 fill-current" size={20} />
+                  <span className="font-medium text-gray-900">
+                    Average Rating
+                  </span>
+                </div>
+                <span className="text-lg font-bold text-gray-900">
+                  {gemInfo.avgRating?.toFixed(1) || "0.0"}
                 </span>
               </div>
 
               <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <span className="text-sm text-gray-600 flex items-center gap-2">
+                <div className="flex items-center gap-2">
                   <CheckCircle
-                    size={16}
                     className={
-                      gemInfo.isSubscribed ? "text-green-600" : "text-gray-400"
+                      gemInfo.isSubscribed ? "text-green-500" : "text-gray-400"
                     }
+                    size={20}
                   />
-                  Subscription
-                </span>
+                  <span className="font-medium text-gray-900">
+                    Subscription
+                  </span>
+                </div>
                 <span
                   className={`text-sm font-medium ${
-                    gemInfo.isSubscribed ? "text-green-600" : "text-gray-600"
+                    gemInfo.isSubscribed ? "text-green-600" : "text-gray-500"
                   }`}
                 >
                   {gemInfo.isSubscribed ? "Active" : "Inactive"}
@@ -464,51 +477,19 @@ export default function GemOwner() {
             </div>
           </div>
 
-          {/* Timestamps */}
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg shadow-sm p-6 border border-blue-100">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Timeline
-            </h3>
-
-            <div className="space-y-3">
-              <div className="p-3 bg-white rounded-lg">
-                <div className="flex items-center gap-2 mb-1">
-                  <Calendar size={14} className="text-blue-600" />
-                  <span className="text-xs font-medium text-gray-600">
-                    Created
-                  </span>
-                </div>
-                <p className="text-sm text-gray-900">
-                  {formatDate(gemInfo.createdAt)}
-                </p>
-              </div>
-
-              <div className="p-3 bg-white rounded-lg">
-                <div className="flex items-center gap-2 mb-1">
-                  <Clock size={14} className="text-blue-600" />
-                  <span className="text-xs font-medium text-gray-600">
-                    Last Updated
-                  </span>
-                </div>
-                <p className="text-sm text-gray-900">
-                  {formatDate(gemInfo.updatedAt)}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Images Management */}
+          {/* Images Card */}
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <Image size={20} className="text-blue-600" />
-                Images ({totalImages}/10)
-              </h3>
-            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <Image size={20} className="text-blue-600" />
+              Images ({totalImages}/10) <span className="text-red-500">*</span>
+            </h3>
 
             {errors.images && (
               <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-red-600 text-sm">{errors.images}</p>
+                <p className="text-red-600 text-sm flex items-center gap-2">
+                  <AlertTriangle size={16} />
+                  {errors.images}
+                </p>
               </div>
             )}
 
@@ -566,7 +547,6 @@ export default function GemOwner() {
               </div>
             )}
 
-            {/* Upload Button */}
             {totalImages < 10 && (
               <label className="w-full block">
                 <input
@@ -582,14 +562,36 @@ export default function GemOwner() {
                 </div>
               </label>
             )}
-
-            <p className="text-xs text-gray-500 mt-3 text-center">
-              Max 10 images total, 5MB each
-            </p>
           </div>
+
+          {/* Timestamps */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h3 className="text-sm font-semibold text-gray-900 mb-3">
+              History
+            </h3>
+            <div className="space-y-2 text-sm text-gray-600">
+              <div className="flex justify-between">
+                <span>Created:</span>
+                <span>{formatDate(gemInfo.createdAt)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Last Updated:</span>
+                <span>{formatDate(gemInfo.updatedAt)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Delete Button */}
+          <button
+            onClick={() => setShowDeleteModal(true)}
+            className="w-full py-3 px-4 bg-white border-2 border-red-100 text-red-600 rounded-lg hover:bg-red-50 hover:border-red-200 transition-colors font-medium flex items-center justify-center gap-2"
+          >
+            <Trash size={20} />
+            Delete Gem
+          </button>
         </div>
 
-        {/* Right Column - Editable Form */}
+        {/* Right Column - Form Fields */}
         <div className="lg:col-span-2 space-y-6">
           {/* Basic Information */}
           <div className="bg-white rounded-lg shadow-sm p-6">
@@ -692,13 +694,13 @@ export default function GemOwner() {
             </div>
           </div>
 
-          {/* Discounts */}
+          {/* Discounts & Settings */}
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               Discount Settings
             </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Free Tier (%)
@@ -768,17 +770,17 @@ export default function GemOwner() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-between items-center gap-4">
+          <div className="flex items-center gap-4">
             <button
               type="button"
               onClick={handleSubmit}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
             >
               {saving ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  Saving...
+                  Saving Changes...
                 </>
               ) : (
                 <>
@@ -788,15 +790,12 @@ export default function GemOwner() {
               )}
             </button>
 
-            <button
-              type="button"
-              onClick={() => setShowDeleteModal(true)}
-              disabled={saving || deleting}
-              className="flex items-center gap-2 px-8 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
+            <Link
+              to="/"
+              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
             >
-              <Trash size={20} />
-              Delete
-            </button>
+              Cancel
+            </Link>
           </div>
         </div>
       </div>

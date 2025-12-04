@@ -26,8 +26,10 @@ import axios from "axios";
 import { THEME } from "../../Components/Places/constants";
 import PlaceCard from "../../Components/Places/PlaceCard";
 import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
+import { useSelector } from "react-redux";
 
 export default function CategoriesPage() {
+  const { userInfo } = useSelector((state) => state.user || {});
   const { categoryName } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const title = searchParams.get("title");
@@ -77,13 +79,7 @@ export default function CategoriesPage() {
   // Fetch gems when dependencies change
   useEffect(() => {
     fetchGems();
-  }, [
-    categoryName,
-    currentPage,
-    searchInput,
-    selectedCategory,
-    selectedSort,
-  ]);
+  }, [categoryName, currentPage, searchInput, selectedCategory, selectedSort]);
 
   // Reset page when filters change
   useEffect(() => {
@@ -127,8 +123,6 @@ export default function CategoriesPage() {
       params.category = selectedCategory;
     }
 
-
-
     // Sort
     if (selectedSort) {
       params.sort = selectedSort;
@@ -138,9 +132,8 @@ export default function CategoriesPage() {
     axios
       .get(`${baseURL}/gems`, { params, withCredentials: true })
       .then((response) => {
-        
         const data = response.data;
-        console.log( "Fetched gems data:", data);
+        console.log("Fetched gems data:", data);
         if (data.message === "success") {
           setGems(data.result || []);
           setTotalPages(data.totalPages || 1);
@@ -172,8 +165,7 @@ export default function CategoriesPage() {
     setCurrentPage(1);
   };
 
-  const hasActiveFilters =
-    searchInput  || selectedCategory || selectedSort;
+  const hasActiveFilters = searchInput || selectedCategory || selectedSort;
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "white" }}>
@@ -237,7 +229,10 @@ export default function CategoriesPage() {
               </Typography>
             </Link>
 
-            <Typography variant="body2" sx={{ fontWeight: 600, color: "white" }}>
+            <Typography
+              variant="body2"
+              sx={{ fontWeight: 600, color: "white" }}
+            >
               {categoryName || "All"}
             </Typography>
           </Breadcrumbs>
@@ -252,7 +247,10 @@ export default function CategoriesPage() {
             >
               {pageTitle}
             </Typography>
-            <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.85)" }}>
+            <Typography
+              variant="body1"
+              sx={{ color: "rgba(255,255,255,0.85)" }}
+            >
               Showing {totalItems} results
             </Typography>
           </Box>
@@ -295,15 +293,16 @@ export default function CategoriesPage() {
                 />
               </Grid>
 
-         
               {/* Category Filter */}
               <Grid item xs={12} sm={6} md={2}>
                 <FormControl fullWidth>
-                  <InputLabel sx={{ 
-                    "&.Mui-focused": { 
-                      color: THEME.RED 
-                    } 
-                  }}>
+                  <InputLabel
+                    sx={{
+                      "&.Mui-focused": {
+                        color: THEME.RED,
+                      },
+                    }}
+                  >
                     Category
                   </InputLabel>
                   <Select
@@ -325,8 +324,8 @@ export default function CategoriesPage() {
                   >
                     <MenuItem value="">All Categories</MenuItem>
                     {categories.map((cat) => (
-                      <MenuItem 
-                        key={cat._id} 
+                      <MenuItem
+                        key={cat._id}
                         value={cat._id}
                         sx={{
                           "&:hover": {
@@ -350,11 +349,13 @@ export default function CategoriesPage() {
               {/* Sort By */}
               <Grid item xs={12} sm={6} md={2}>
                 <FormControl fullWidth>
-                  <InputLabel sx={{ 
-                    "&.Mui-focused": { 
-                      color: THEME.RED 
-                    } 
-                  }}>
+                  <InputLabel
+                    sx={{
+                      "&.Mui-focused": {
+                        color: THEME.RED,
+                      },
+                    }}
+                  >
                     Sort By
                   </InputLabel>
                   <Select
@@ -375,48 +376,102 @@ export default function CategoriesPage() {
                     }}
                   >
                     <MenuItem value="">Default</MenuItem>
-                    <MenuItem value="name" sx={{
-                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
-                      "&.Mui-selected": { 
-                        backgroundColor: "rgba(220, 38, 38, 0.12)",
-                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
-                      },
-                    }}>Name (A-Z)</MenuItem>
-                    <MenuItem value="-name" sx={{
-                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
-                      "&.Mui-selected": { 
-                        backgroundColor: "rgba(220, 38, 38, 0.12)",
-                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
-                      },
-                    }}>Name (Z-A)</MenuItem>
-                    <MenuItem value="-avgRating" sx={{
-                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
-                      "&.Mui-selected": { 
-                        backgroundColor: "rgba(220, 38, 38, 0.12)",
-                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
-                      },
-                    }}>Highest Rating</MenuItem>
-                    <MenuItem value="avgRating" sx={{
-                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
-                      "&.Mui-selected": { 
-                        backgroundColor: "rgba(220, 38, 38, 0.12)",
-                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
-                      },
-                    }}>Lowest Rating</MenuItem>
-                    <MenuItem value="createdAt" sx={{
-                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
-                      "&.Mui-selected": { 
-                        backgroundColor: "rgba(220, 38, 38, 0.12)",
-                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
-                      },
-                    }}>Oldest First</MenuItem>
-                    <MenuItem value="-createdAt" sx={{
-                      "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.08)" },
-                      "&.Mui-selected": { 
-                        backgroundColor: "rgba(220, 38, 38, 0.12)",
-                        "&:hover": { backgroundColor: "rgba(220, 38, 38, 0.16)" }
-                      },
-                    }}>Newest First</MenuItem>
+                    <MenuItem
+                      value="name"
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "rgba(220, 38, 38, 0.08)",
+                        },
+                        "&.Mui-selected": {
+                          backgroundColor: "rgba(220, 38, 38, 0.12)",
+                          "&:hover": {
+                            backgroundColor: "rgba(220, 38, 38, 0.16)",
+                          },
+                        },
+                      }}
+                    >
+                      Name (A-Z)
+                    </MenuItem>
+                    <MenuItem
+                      value="-name"
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "rgba(220, 38, 38, 0.08)",
+                        },
+                        "&.Mui-selected": {
+                          backgroundColor: "rgba(220, 38, 38, 0.12)",
+                          "&:hover": {
+                            backgroundColor: "rgba(220, 38, 38, 0.16)",
+                          },
+                        },
+                      }}
+                    >
+                      Name (Z-A)
+                    </MenuItem>
+                    <MenuItem
+                      value="-avgRating"
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "rgba(220, 38, 38, 0.08)",
+                        },
+                        "&.Mui-selected": {
+                          backgroundColor: "rgba(220, 38, 38, 0.12)",
+                          "&:hover": {
+                            backgroundColor: "rgba(220, 38, 38, 0.16)",
+                          },
+                        },
+                      }}
+                    >
+                      Highest Rating
+                    </MenuItem>
+                    <MenuItem
+                      value="avgRating"
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "rgba(220, 38, 38, 0.08)",
+                        },
+                        "&.Mui-selected": {
+                          backgroundColor: "rgba(220, 38, 38, 0.12)",
+                          "&:hover": {
+                            backgroundColor: "rgba(220, 38, 38, 0.16)",
+                          },
+                        },
+                      }}
+                    >
+                      Lowest Rating
+                    </MenuItem>
+                    <MenuItem
+                      value="createdAt"
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "rgba(220, 38, 38, 0.08)",
+                        },
+                        "&.Mui-selected": {
+                          backgroundColor: "rgba(220, 38, 38, 0.12)",
+                          "&:hover": {
+                            backgroundColor: "rgba(220, 38, 38, 0.16)",
+                          },
+                        },
+                      }}
+                    >
+                      Oldest First
+                    </MenuItem>
+                    <MenuItem
+                      value="-createdAt"
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "rgba(220, 38, 38, 0.08)",
+                        },
+                        "&.Mui-selected": {
+                          backgroundColor: "rgba(220, 38, 38, 0.12)",
+                          "&:hover": {
+                            backgroundColor: "rgba(220, 38, 38, 0.16)",
+                          },
+                        },
+                      }}
+                    >
+                      Newest First
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -430,8 +485,8 @@ export default function CategoriesPage() {
                   onClick={clearAllFilters}
                   sx={{
                     color: THEME.RED,
-                    textTransform: 'none',
-                    fontSize: '0.95rem',
+                    textTransform: "none",
+                    fontSize: "0.95rem",
                     fontWeight: 600,
                     "&:hover": {
                       backgroundColor: "rgba(220, 38, 38, 0.1)",
@@ -500,7 +555,9 @@ export default function CategoriesPage() {
                       )}
                     </>
                   ) : (
-                    !error && <Typography>No gems match your filters.</Typography>
+                    !error && (
+                      <Typography>No gems match your filters.</Typography>
+                    )
                   )}
                 </Stack>
               )}
@@ -509,7 +566,9 @@ export default function CategoriesPage() {
             {/* Sidebar */}
             <Grid item xs={12} md={4}>
               <Box sx={{ position: "sticky", top: 100 }}>
-                <SubscriptionPlans compact />
+                {(!userInfo?.subscription ||
+                  userInfo?.subscription === "free") &&
+                  userInfo?.role !== "admin" && <SubscriptionPlans compact />}
               </Box>
             </Grid>
           </Grid>
