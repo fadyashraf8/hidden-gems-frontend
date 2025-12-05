@@ -14,8 +14,11 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 export default function UserGems() {
+  const { t } = useTranslation("AdminMyGems");
+
   const [gems, setGems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,7 +52,15 @@ export default function UserGems() {
       fetchUserGems();
     }
     fetchCategories();
-  }, [currentPage, searchKeyword, categoryFilter, statusFilter, sortBy, isLoggedIn, userInfo]);
+  }, [
+    currentPage,
+    searchKeyword,
+    categoryFilter,
+    statusFilter,
+    sortBy,
+    isLoggedIn,
+    userInfo,
+  ]);
 
   const fetchUserGems = async () => {
     if (!isLoggedIn || !userInfo?.id) {
@@ -67,20 +78,22 @@ export default function UserGems() {
     if (sortBy) params.sort = sortBy;
 
     try {
-      const response = await axios.get(
-        `${baseURL}/gems/user/${userInfo.id}`,
-        { params, withCredentials: true }
-      );
+      const response = await axios.get(`${baseURL}/gems/user/${userInfo.id}`, {
+        params,
+        withCredentials: true,
+      });
 
       const data = response.data;
       if (data.message === "success") {
         setGems(data.result || data.gems || []);
         setTotalPages(data.totalPages || 1);
-        setTotalItems(data.totalItems || (data.result || data.gems || []).length);
+        setTotalItems(
+          data.totalItems || (data.result || data.gems || []).length
+        );
       }
     } catch (error) {
       console.error("Error fetching user gems:", error);
-      showToast("Failed to load your gems", "error");
+      showToast(t("toast.failedLoad"), "error");
     } finally {
       setLoading(false);
     }
@@ -121,12 +134,12 @@ export default function UserGems() {
       await axios.delete(`${baseURL}/gems/${gemToDelete._id}`, {
         withCredentials: true,
       });
-      showToast("Gem deleted successfully", "success");
+      showToast(t("toast.deleted"), "success");
       closeDeleteModal();
       fetchUserGems();
     } catch (error) {
       console.error("Error deleting gem:", error);
-      showToast("Failed to delete gem", "error");
+      showToast(t("toast.failedDelete"), "error");
     }
   };
 
@@ -173,11 +186,9 @@ export default function UserGems() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Please Log In
+            {t("login.required")}
           </h2>
-          <p className="text-gray-600">
-            You need to be logged in to view your gems
-          </p>
+          <p className="text-gray-600">{t("login.message")}</p>
         </div>
       </div>
     );
@@ -191,10 +202,10 @@ export default function UserGems() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
-                My Hidden Gems
+                {t("header.title")}
               </h1>
               <p className="text-sm text-gray-600 mt-1">
-                Total {totalItems} gems found
+                {t("header.totalGems", { total: totalItems })}
               </p>
             </div>
             <Link
@@ -202,7 +213,7 @@ export default function UserGems() {
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
             >
               <Plus size={20} />
-              Add New Gem
+              {t("header.addNewGem")}
             </Link>
           </div>
 
@@ -215,7 +226,7 @@ export default function UserGems() {
               />
               <input
                 type="text"
-                placeholder="Search your gems..."
+                placeholder={t("search.placeholder")}
                 value={searchKeyword}
                 onChange={handleSearch}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -226,7 +237,7 @@ export default function UserGems() {
               onChange={handleCategoryFilter}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="">All Categories</option>
+              <option value="">{t("filters.allCategories")}</option>
               {categories.map((cat) => (
                 <option key={cat._id} value={cat._id}>
                   {cat.categoryName}
@@ -238,23 +249,23 @@ export default function UserGems() {
               onChange={handleStatusFilter}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="accepted">Accepted</option>
-              <option value="rejected">Rejected</option>
+              <option value="">{t("filters.allStatus")}</option>
+              <option value="pending">{t("filters.pending")}</option>
+              <option value="accepted">{t("filters.accepted")}</option>
+              <option value="rejected">{t("filters.rejected")}</option>
             </select>
             <select
               value={sortBy}
               onChange={handleSort}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="">Sort By</option>
-              <option value="name">Name (A-Z)</option>
-              <option value="-name">Name (Z-A)</option>
-              <option value="-avgRating">Highest Rating</option>
-              <option value="avgRating">Lowest Rating</option>
-              <option value="createdAt">Oldest First</option>
-              <option value="-createdAt">Newest First</option>
+              <option value="">{t("filters.sortBy")}</option>
+              <option value="name">{t("filters.nameAZ")}</option>
+              <option value="-name">{t("filters.nameZA")}</option>
+              <option value="-avgRating">{t("filters.highestRating")}</option>
+              <option value="avgRating">{t("filters.lowestRating")}</option>
+              <option value="createdAt">{t("filters.oldest")}</option>
+              <option value="-createdAt">{t("filters.newest")}</option>
             </select>
           </div>
 
@@ -263,7 +274,7 @@ export default function UserGems() {
               onClick={clearFilters}
               className="mt-4 text-sm text-blue-600 hover:text-blue-700 font-medium"
             >
-              Clear all filters
+              {t("filters.clearAll")}
             </button>
           )}
         </div>
@@ -274,50 +285,53 @@ export default function UserGems() {
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Gem
+                  {t("table.gem")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Category
+                  {t("table.category")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Rating
+                  {t("table.rating")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
+                  {t("table.status")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
+                  {t("table.actions")}
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {gems.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan="5"
-                    className="px-6 py-16 text-center"
-                  >
+                  <td colSpan="5" className="px-6 py-16 text-center">
                     <div className="max-w-md mx-auto">
                       <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
                         <MapPin size={32} className="text-gray-400" />
                       </div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        No Gems Found
+                        {t("empty.noGems")}
                       </h3>
                       <p className="text-gray-600 mb-6">
-                        {searchKeyword || categoryFilter || statusFilter || sortBy
-                          ? "Try adjusting your filters"
-                          : "Start sharing your hidden gems with the community!"}
+                        {searchKeyword ||
+                        categoryFilter ||
+                        statusFilter ||
+                        sortBy
+                          ? t("empty.tryFilters")
+                          : t("empty.startSharing")}
                       </p>
-                      {!searchKeyword && !categoryFilter && !statusFilter && !sortBy && (
-                        <Link
-                          to="/admin/gems/add"
-                          className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                        >
-                          <Plus size={20} />
-                          Add Your First Gem
-                        </Link>
-                      )}
+                      {!searchKeyword &&
+                        !categoryFilter &&
+                        !statusFilter &&
+                        !sortBy && (
+                          <Link
+                            to="/admin/gems/add"
+                            className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                          >
+                            <Plus size={20} />
+                            {t("empty.addFirstGem")}
+                          </Link>
+                        )}
                     </div>
                   </td>
                 </tr>
@@ -339,7 +353,7 @@ export default function UserGems() {
                           ) : (
                             <div className="h-16 w-16 bg-gray-200 flex items-center justify-center">
                               <span className="text-gray-400 text-xs">
-                                No Image
+                                {t("table.noImage")}
                               </span>
                             </div>
                           )}
@@ -383,7 +397,7 @@ export default function UserGems() {
                             : "bg-gray-100 text-gray-800"
                         }`}
                       >
-                        {gem.status}
+                        {t(`status.${gem.status}`)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -391,14 +405,14 @@ export default function UserGems() {
                         <Link
                           to={`/admin/gems/${gem._id}`}
                           className="text-blue-600 hover:text-blue-900 p-2 hover:bg-blue-50 rounded transition-colors"
-                          title="Edit Gem"
+                          title={t("actions.editGem")}
                         >
                           <Edit size={18} />
                         </Link>
                         <button
                           onClick={() => openDeleteModal(gem)}
                           className="text-red-600 hover:text-red-900 p-2 hover:bg-red-50 rounded transition-colors"
-                          title="Delete Gem"
+                          title={t("actions.deleteGem")}
                         >
                           <Trash2 size={18} />
                         </button>
@@ -415,8 +429,10 @@ export default function UserGems() {
         {totalPages > 1 && (
           <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
             <div className="text-sm text-gray-700">
-              Showing page <span className="font-medium">{currentPage}</span> of{" "}
-              <span className="font-medium">{totalPages}</span>
+              {t("pagination.showingPage", {
+                current: currentPage,
+                total: totalPages,
+              })}
             </div>
             <div className="flex gap-2">
               <button
@@ -449,7 +465,7 @@ export default function UserGems() {
                     <AlertTriangle className="text-red-600" size={24} />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900">
-                    Delete Gem
+                    {t("modal.deleteGem")}
                   </h3>
                 </div>
                 <button
@@ -460,9 +476,7 @@ export default function UserGems() {
                 </button>
               </div>
               <div className="mb-6">
-                <p className="text-gray-600 mb-2">
-                  Are you sure you want to delete this hidden gem?
-                </p>
+                <p className="text-gray-600 mb-2">{t("modal.confirmDelete")}</p>
                 {gemToDelete && (
                   <div className="bg-gray-50 p-3 rounded-lg mt-3">
                     <p className="text-sm font-medium text-gray-900">
@@ -474,7 +488,7 @@ export default function UserGems() {
                   </div>
                 )}
                 <p className="text-sm text-red-600 mt-3 font-medium">
-                  This action cannot be undone.
+                  {t("modal.cannotUndo")}
                 </p>
               </div>
               <div className="flex gap-3">
@@ -482,13 +496,13 @@ export default function UserGems() {
                   onClick={closeDeleteModal}
                   className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  Cancel
+                  {t("modal.cancel")}
                 </button>
                 <button
                   onClick={handleDelete}
                   className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
                 >
-                  Delete
+                  {t("modal.delete")}
                 </button>
               </div>
             </div>

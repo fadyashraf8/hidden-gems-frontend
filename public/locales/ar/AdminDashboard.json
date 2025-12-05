@@ -1,0 +1,19 @@
+{
+  "dashboard_title": "لوحة التحكم",
+  "dashboard_subtitle": "نظرة عامة على إحصائيات المنصة",
+
+  "total_users": "إجمالي المستخدمين",
+  "total_categories": "إجمالي الفئات",
+  "total_gems": "إجمالي الـ Gems",
+
+  "latest_categories": "أحدث الفئات",
+  "category": "فئة",
+  "no_categories": "لا توجد فئات متاحة",
+
+  "activity": "النشاط",
+  "active": "نشط",
+  "all_categories_active": "جميع الفئات نشطة حالياً",
+
+  "growth_rate": "معدل النمو",
+  "compared_last_month": "مقارنة بالشهر الماضي"
+}

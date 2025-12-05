@@ -1,0 +1,30 @@
+{
+  "Home": "Back to Home",
+  "arrow": "<<",
+  "auth": {
+    "resetPasswordTitle": "Reset Password",
+    "email": "Email",
+    "verificationCode": "Verification Code",
+    "newPassword": "New Password",
+    "resetPasswordButton": "Reset Password",
+    "backToLogin": "Back to Login",
+    "placeholder-email": "Enter your email",
+    "placeholder-verificationCode": "Enter your verification code",
+    "placeholder-newPassword": "Enter your new password"
+  },
+  "errors": {
+    "emailRequired": "Email is required",
+    "invalidEmail": "Invalid email",
+    "invalidEmailFormat": "Invalid email format",
+    "passwordRequired": "Password is required",
+    "weakPassword": "Weak password",
+    "weakPasswordFormat": "Password must contain letters, numbers, and a special character",
+    "codeRequired": "Verification code is required",
+    "invalidCode": "Invalid verification code",
+    "invalidCodeOrEmail": "Invalid code or email",
+    "general": "Something went wrong"
+  },
+  "success": {
+    "passwordChanged": "Password changed successfully"
+  }
+}

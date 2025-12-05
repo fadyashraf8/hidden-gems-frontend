@@ -1,0 +1,9 @@
+{
+  "title": "Surprise Me",
+  "subtitle": "Describe your mood, and let our AI find the perfect hidden gem for you.",
+  "placeholder": "I'm feeling adventurous and hungry for something spicy...",
+  "button": "Surprise Me!",
+  "loading": "Finding the perfect gem...",
+  "defaultDescription": "A perfect match for your mood!",
+  "errorMessage": "Failed to get a suggestion. Please try again!"
+}

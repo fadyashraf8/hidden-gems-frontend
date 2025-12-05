@@ -1,0 +1,71 @@
+{
+  "navigation": {
+    "backToUsers": "الرجوع للمستخدمين"
+  },
+  "header": {
+    "title": "إضافة مستخدم جديد",
+    "subtitle": "إنشاء حساب مستخدم جديد"
+  },
+  "profile": {
+    "title": "صورة الملف الشخصي",
+    "uploadPhoto": "رفع صورة",
+    "maxSize": "الحجم الأقصى: 5MB",
+    "format": "الصيغ: JPG، PNG، GIF"
+  },
+  "personalInfo": {
+    "title": "المعلومات الشخصية",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "firstNamePlaceholder": "أدخل الاسم الأول",
+    "lastNamePlaceholder": "أدخل اسم العائلة",
+    "required": "*"
+  },
+  "contactInfo": {
+    "title": "معلومات الاتصال",
+    "email": "البريد الإلكتروني",
+    "phoneNumber": "رقم الهاتف",
+    "emailPlaceholder": "user@example.com",
+    "phonePlaceholder": "01234567890"
+  },
+  "security": {
+    "title": "الأمان",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "passwordPlaceholder": "أدخل كلمة المرور (8 أحرف على الأقل)",
+    "confirmPasswordPlaceholder": "قم بتأكيد كلمة المرور"
+  },
+  "accountSettings": {
+    "title": "إعدادات الحساب",
+    "role": "الدور",
+    "user": "مستخدم",
+    "admin": "مشرف",
+    "owner": "مالك",
+    "subscription": "خطة الاشتراك",
+    "free": "مجاني",
+    "platinum": "بلاتينيوم",
+    "gold": "ذهبي",
+    "verified": "حساب موثق"
+  },
+  "actions": {
+    "createUser": "إنشاء مستخدم",
+    "creating": "جاري الإنشاء...",
+    "cancel": "إلغاء"
+  },
+  "errors": {
+    "firstNameRequired": "الاسم الأول مطلوب",
+    "lastNameRequired": "اسم العائلة مطلوب",
+    "emailRequired": "البريد الإلكتروني مطلوب",
+    "emailInvalid": "البريد الإلكتروني غير صالح",
+    "phoneRequired": "رقم الهاتف مطلوب",
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "passwordMin": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+    "confirmPasswordRequired": "يرجى تأكيد كلمة المرور",
+    "passwordMismatch": "كلمتا المرور غير متطابقتين",
+    "fixErrors": "يرجى تصحيح جميع الأخطاء",
+    "imageSize": "يجب أن يكون حجم الصورة أقل من 5MB"
+  },
+  "toast": {
+    "successCreate": "تم إنشاء المستخدم بنجاح",
+    "failedCreate": "فشل إنشاء المستخدم"
+  }
+}

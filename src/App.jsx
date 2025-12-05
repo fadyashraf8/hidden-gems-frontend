@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import { useSelector, useDispatch } from "react-redux";
+import { fetchWishlistCount } from "./redux/wishlistSlice";
 import { checkAuth } from "./redux/userSlice";
 import { useTranslation } from "react-i18next";
 
@@ -39,6 +40,7 @@ import Cities from "./Pages/Footer/Discover/Cities";
 import BusinessesLayout from "./Components/Layout/BusinessesLayout/BusinessesLayout";
 import Business from "./Pages/Footer/Business/Business";
 import AddPlace from "./Pages/Footer/Business/AddPlace";
+import EditPlace from "./Pages/Footer/Business/EditPlace";
 import Advertising from "./Pages/Footer/Business/Advertising";
 import Partners from "./Pages/Footer/Business/Partners";
 import SignUp from "./Pages/SignUp/SignUp";
@@ -77,17 +79,26 @@ import HomeOwner from "./Pages/OwnerPages/HomeOwner/HomeOwner";
 import GemOwner from "./Pages/OwnerPages/GemOwner/GemOwner";
 import AddGemOwner from "./Pages/OwnerPages/AddGemOwner/AddGemOwner";
 import VerifyEmail from "./Pages/VerifyEmail/VerifyEmail";
-
+import VoucherRedeem from "./Pages/AdminPages/VoucherRedeem/VoucherRedeem";
+import Vouchers from "./Pages/Vouchers/Vouchers";
+import Wishlist from "./Pages/wishListPage/wishList";
 function App() {
   const dark = useSelector((state) => state.darkMode.enabled);
   const dispatch = useDispatch();
   const { i18n } = useTranslation();
   const language = i18n.language || "en";
+  const { isLoggedIn } = useSelector((state) => state.user);
 
   // Check Auth on App load
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(fetchWishlistCount());
+    }
+  }, [dispatch, isLoggedIn]);
 
   // Dark Mode toggle
   useEffect(() => {
@@ -120,6 +131,8 @@ function App() {
         { path: "home", element: <Home /> },
         { path: "gems/:id", element: <GemDetails /> },
         { path: "contact-us", element: <ContactUsPage /> },
+        { path: "vouchers", element: <Vouchers /> },
+        { path: "wishlist", element: <Wishlist /> }, 
         { path: "places", element: <CategoriesPage /> },
         { path: "surprise", element: <SurpriseMe /> },
         { path: "places/:categoryName", element: <CategoriesPage /> },
@@ -160,6 +173,14 @@ function App() {
               element: (
                 <ProtectedRoute>
                   <AddPlace />
+                </ProtectedRoute>
+              ),
+            },
+            {
+              path: "editPlace/:gemId",
+              element: (
+                <ProtectedRoute>
+                  <EditPlace />
                 </ProtectedRoute>
               ),
             },
@@ -282,6 +303,8 @@ function App() {
         { path: "gems/:id", element: <EditGem /> },
         { path: "gems/add", element: <AddGem /> },
         { path: "gems/user", element: <UserGems /> },
+
+        //Voucher Redeem
       ],
     },
     // {
@@ -308,6 +331,7 @@ function App() {
         { path: "dashboard", element: <HomeOwner /> },
         { path: "gem", element: <GemOwner /> },
         { path: "gem/add", element: <AddGemOwner /> },
+        { path: ":id", element: <VoucherRedeem /> },
       ],
     },
     {

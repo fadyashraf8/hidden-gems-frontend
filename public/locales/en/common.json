@@ -28,5 +28,8 @@
   "nav_link_contact": "Contact Us",
   "nav_link_about": "About Us",
   "nav_auth_login": "Login",
-  "nav_auth_signup": "Sign Up"
+  "nav_auth_signup": "Sign Up",
+  "nav_link_wishlist": "Wishlist",
+  "wishlist_empty_title": "Your wishlist is empty",
+  "wishlist_empty_description": "Start adding gems you love! Click the heart icon on any gem to save it here."
 }

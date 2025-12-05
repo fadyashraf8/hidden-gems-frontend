@@ -3,5 +3,8 @@
   "firstName-label": "الاسم الاول",
   "lastName-label": "الاسم الاخير",
   "email-label": "البريد الالكتروني",
-  "subscription-label": "الاشتراك"
+  "subscription-label": "الاشتراك",
+  "Manage-Subscription": "ادارة الاشتراك",
+  "activity-log": "سجل النشاط",
+  "profile-info": "معلومات الملف "
 }

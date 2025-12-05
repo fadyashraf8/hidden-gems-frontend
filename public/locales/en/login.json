@@ -1,7 +1,9 @@
 {
   "title": "Welcome Back",
   "subtitle": "Sign in to your account",
-  "Home": "back to Home",
+  "Home": "Back to Home",
+  "arrow": "<<",
+
   "email-placeholder": "Enter your email",
 
   "email-label": "Email",
