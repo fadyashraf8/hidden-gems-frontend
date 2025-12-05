@@ -8,7 +8,7 @@ import WishlistButton from "../wishlistButton/wishlistButton";
 const BASE_URL = import.meta.env.VITE_Base_URL;
 
 
-const GemCard = ({ gem, isUserGem = false, onGemDeleted = null }) => {
+const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false }) => {
   const navigate = useNavigate();
   
     if (!gem) {
@@ -101,7 +101,7 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null }) => {
 
   
   return (
-    <div className="group h-full">
+    <div className={`group h-full ${darkMode ? 'dark' : ''}`}>
       <div className="bg-white dark:bg-zinc-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 dark:border-zinc-700 h-full flex flex-col">
         <div className="relative aspect-[4/3] overflow-hidden">
           <Link to={`/gems/${gem._id}`} className="block w-full h-full">
@@ -157,7 +157,7 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null }) => {
         <div className="p-4 card-body flex-1 flex flex-col">
           <div className="flex justify-between items-start mb-2">
             <Link to={`/gems/${gem._id}`} className="flex-1">
-              <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1 group-hover:text-[#DD0303] transition-colors">
+              <h3 className={`font-bold text-lg dark:hover:text-[#DD0303] text-gray-900 dark:text-white line-clamp-1 group-hover:text-[#DD0303] transition-colors`}>
                 {gem.name}
               </h3>
             </Link>
@@ -176,7 +176,7 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null }) => {
               ( {ratingsCount} )
             </span>
           </div>
-          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm mb-3">
+          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm mt-3 mb-3">
             <MapPin className="w-4 h-4" />
             <span className="line-clamp-1">
               {gem.gemLocation || gem.location}

@@ -1,1 +1,13 @@
 
+:root {
+  --mui-empty-star-color: rgba(0, 0, 0, 0.26); /* Light Mode */
+}
+
+
+.dark {
+  --mui-empty-star-color: rgba(255, 255, 255, 0.3); /* Dark Mode */
+}
+
+.MuiRating-iconEmpty {
+  color: var(--mui-empty-star-color) !important;
+}

@@ -5,14 +5,20 @@ import GemCard from "../../Components/Gems/GemCard.jsx";
 import { getGemsAPI } from "../../Services/GemsAuth";
 import { Stack, Typography, Grid, Container } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 
 
 export default function Home() {
   const { t } = useTranslation("home");
   const [gems, setGems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [dark, setDark] = useState(localStorage.getItem("darkMode"));
+  const isDarkModeEnabled = useSelector((state) => state.darkMode.enabled);
+  
   
   useEffect(() => {
+    // console.log("dark mode is " +dark)
+    console.log(isDarkModeEnabled);
     const fetchGems = async () => {
       try {
         const data = await getGemsAPI();
@@ -28,7 +34,7 @@ export default function Home() {
       }
     };
     fetchGems();
-  }, []);
+  }, [isDarkModeEnabled]);
 
   const slides = [
     {
@@ -57,7 +63,7 @@ export default function Home() {
         <Typography
           variant="h3"
           component="h2"
-          className="text-gray-900 dark:text-white"
+          className={isDarkModeEnabled ? `dark:text-white` : `text-gray-900`}
           sx={{ fontWeight: "bold", textAlign: "center", mb: 6 }}
         >
           {t("section_recent_title")}
@@ -70,7 +76,7 @@ export default function Home() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {gems.slice(0, 4).map((gem) => (
-              <GemCard key={gem._id} gem={gem} />
+              <GemCard key={gem._id} gem={gem} darkMode={isDarkModeEnabled}/>
             ))}
           </div>
         )}
