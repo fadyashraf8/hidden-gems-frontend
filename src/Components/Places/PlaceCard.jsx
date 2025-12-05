@@ -134,7 +134,7 @@ const PlaceCard = ({ gem, rank }) => {
       <div
         style={{ position: "absolute", top: "10px", right: "10px", zIndex: 20 }}
       >
-        <WishlistButton gemId={data._id} size={18} />
+        <WishlistButton gemId={gem._id} size={18} />
       </div>
 
       {/* Content Section */}

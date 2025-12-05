@@ -107,7 +107,7 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null }) => {
           <Link to={`/gems/${gem._id}`} className="block w-full h-full">
              <img
               src={
-                `${BASE_URL}/uploads/gem/${imagesList}` ||
+                `${imagesList}` ||
                 gem.image ||
                 "https://via.placeholder.com/400x300"
               }
