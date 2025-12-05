@@ -1,0 +1,23 @@
+{
+  "backToCategories": "العودة إلى التصنيفات",
+  "editCategory": "تعديل التصنيف",
+  "updateCategoryInfo": "تحديث بيانات التصنيف",
+  "categoryImage": "صورة التصنيف",
+  "uploadImage": "رفع الصورة",
+  "maxSize": "الحجم الأقصى",
+  "format": "الصيغ",
+  "categoryInfo": "معلومات التصنيف",
+  "categoryName": "اسم التصنيف",
+  "enterCategoryName": "أدخل اسم التصنيف",
+  "createdBy": "تم الإنشاء بواسطة",
+  "categoryNameRequired": "اسم التصنيف مطلوب",
+  "fixErrors": "يرجى تصحيح جميع الأخطاء",
+  "failedToLoadCategory": "فشل في تحميل التصنيف",
+  "failedToUpdateCategory": "فشل في تحديث التصنيف",
+  "categoryUpdated": "تم تحديث التصنيف بنجاح",
+  "saving": "جارٍ الحفظ",
+  "saveChanges": "حفظ التعديلات",
+  "cancel": "إلغاء",
+  "imageSizeError": "يجب أن تكون الصورة أقل من 5 ميجابايت",
+  "imageFormatError": "يجب ان يكون صيغة الصورة jpg, png او gif"
+}

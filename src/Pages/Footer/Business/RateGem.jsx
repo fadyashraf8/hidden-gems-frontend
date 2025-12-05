@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Rating, Box, Typography } from "@mui/material"; // Added Box and Typography
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = import.meta.env.VITE_Base_URL;
 
 const RateGem = ({ gemId }) => {
   const navigate = useNavigate();
@@ -22,9 +22,9 @@ const RateGem = ({ gemId }) => {
 
     const userId = localStorage.getItem("userId") || "placeholder_user_id";
     const token = localStorage.getItem("token");
-    const headers = { 
+    const headers = {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}` 
+      Authorization: `Bearer ${token}`,
     };
 
     try {
@@ -38,9 +38,11 @@ const RateGem = ({ gemId }) => {
           body: JSON.stringify({
             gem: gemId,
             rating: reviewData.rating.toString() // e.g. "4.5"
-          }),
+          }
+        ),
+        credentials: "include"
         }).then(async (res) => {
-           if (!res.ok) throw new Error("Failed to save rating");
+          if (!res.ok) throw new Error("Failed to save rating");
         });
         promises.push(ratingRequest);
       }
@@ -54,10 +56,11 @@ const RateGem = ({ gemId }) => {
             userId: userId,
             gemId: gemId,
             description: reviewData.description,
-            images: []
+            images: [],
           }),
+          credentials: "include"
         }).then(async (res) => {
-           if (!res.ok) throw new Error("Failed to save review");
+          if (!res.ok) throw new Error("Failed to save review");
         });
         promises.push(reviewRequest);
       }
@@ -66,7 +69,6 @@ const RateGem = ({ gemId }) => {
 
       toast.success("Feedback submitted! Redirecting...");
       setTimeout(() => navigate("/"), 1500);
-
     } catch (err) {
       console.error(err);
       toast.error(err.message || "Error submitting feedback");
@@ -80,15 +82,14 @@ const RateGem = ({ gemId }) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="bg-gray-50 p-6 rounded-lg addPlace text-center">
-        
         {/* --- CHANGED SECTION START --- */}
         <div className="mb-6 flex flex-col items-center justify-center">
           {/* <Typography component="legend" className="mb-2 font-medium text-gray-700">
              {reviewData.rating}
           </Typography> */}
-          
-          <Rating 
-            name="gem-rating" 
+
+          <Rating
+            name="gem-rating"
             size="large"
             value={reviewData.rating}
             precision={0.5} // <--- This enables half stars
@@ -96,13 +97,13 @@ const RateGem = ({ gemId }) => {
               setReviewData({ ...reviewData, rating: newValue });
             }}
           />
-          
+
           {/* View the value to the user */}
-          <Box sx={{ mt: 1, minHeight: '24px' }}>
+          <Box sx={{ mt: 1, minHeight: "24px" }}>
             {reviewData.rating > 0 && (
-                <span className="text-[#DD0303] font-bold text-lg">
-                    {reviewData.rating} / 5
-                </span>
+              <span className="text-[#DD0303] font-bold text-lg">
+                {reviewData.rating} / 5
+              </span>
             )}
           </Box>
         </div>
@@ -110,21 +111,25 @@ const RateGem = ({ gemId }) => {
 
         <div className="text-left space-y-4">
           <div>
-            <label className="block font-medium">Write a Review (Optional)</label>
+            <label className="block font-medium">
+              Write a Review (Optional)
+            </label>
             <textarea
               rows="4"
               className="w-full p-2 border rounded"
               placeholder="Tell us what you liked..."
               value={reviewData.description}
-              onChange={(e) => setReviewData({ ...reviewData, description: e.target.value })}
+              onChange={(e) =>
+                setReviewData({ ...reviewData, description: e.target.value })
+              }
             ></textarea>
           </div>
         </div>
       </div>
 
       <div className="flex justify-end gap-4 mt-6">
-        <button 
-          type="button" 
+        <button
+          type="button"
           onClick={handleSkip}
           className="text-gray-500 hover:text-gray-700 px-4 py-2"
         >

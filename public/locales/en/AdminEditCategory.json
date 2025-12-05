@@ -1,0 +1,23 @@
+{
+  "backToCategories": "Back to Categories",
+  "editCategory": "Edit Category",
+  "updateCategoryInfo": "Update category information",
+  "categoryImage": "Category Image",
+  "uploadImage": "Upload Image",
+  "maxSize": "Max size",
+  "format": "Format",
+  "categoryInfo": "Category Information",
+  "categoryName": "Category Name",
+  "enterCategoryName": "Enter category name",
+  "createdBy": "Created By",
+  "categoryNameRequired": "Category name is required",
+  "fixErrors": "Please fix all errors",
+  "failedToLoadCategory": "Failed to load category",
+  "failedToUpdateCategory": "Failed to update category",
+  "categoryUpdated": "Category updated successfully",
+  "saving": "Saving",
+  "saveChanges": "Save Changes",
+  "cancel": "Cancel",
+  "imageSizeError": "Image size should be less than 5MB",
+  "imageFormatError": "Image format should be jpg, png or gif"
+}

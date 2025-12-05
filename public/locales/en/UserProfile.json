@@ -4,6 +4,9 @@
     "lastName-label": "Last Name",
     "email-label": "Email",
     "subscription-label": "Subscription",
-    "Manage-Subscription": "Manage Subscription"
+    "Manage-Subscription": "Manage Subscription",
+    "activity-log": "Activity Log",
+    "profile-info": "Profile Information"
+
     
 }

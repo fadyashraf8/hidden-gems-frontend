@@ -82,7 +82,7 @@ export default function Categories() {
 
   const fetchCategories = useCallback(async () => {
     try {
-      console.log(BASE_URL)
+     
       const res = await axios.get(`${BASE_URL}/categories/allCategories`,
       { withCredentials: true }
       );

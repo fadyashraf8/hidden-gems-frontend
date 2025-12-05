@@ -1,0 +1,20 @@
+{
+  "backToCategories": "العودة إلى التصنيفات",
+  "addNewCategory": "إضافة تصنيف جديد",
+  "createNewCategory": "إنشاء تصنيف جديد",
+  "categoryImage": "صورة التصنيف",
+  "uploadImage": "رفع صورة",
+  "imageInfo": "الحجم الأقصى: 5 ميجابايت. الصيغ: JPG, PNG, GIF",
+  "categoryInformation": "معلومات التصنيف",
+  "categoryName": "اسم التصنيف",
+  "enterCategoryName": "أدخل اسم التصنيف",
+  "categoryNameRequired": "اسم التصنيف مطلوب",
+  "categoryImageRequired": "صورة التصنيف مطلوبة",
+  "fixErrors": "يرجى تصحيح جميع الأخطاء",
+  "categoryCreated": "تم إنشاء التصنيف بنجاح",
+  "categoryCreateFailed": "فشل في إنشاء التصنيف",
+  "creating": "جاري الإنشاء...",
+  "createCategory": "إنشاء التصنيف",
+  "cancel": "إلغاء",
+  "imageSizeError": "يجب أن تكون صورة أصغر من 5 ميجابايت"
+}

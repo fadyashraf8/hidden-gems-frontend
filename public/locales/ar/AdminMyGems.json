@@ -1,13 +1,67 @@
 {
-  "myGems": "جواهرى",
-  "gemsCreatedCount": "الجواهر التي قمت بإنشائها شخصياً ({{count}})",
-  "failedLoadGems": "فشل تحميل الجواهر الخاصة بك.",
-  "noGemsCreated": "لم يتم إنشاء أي جواهر بعد",
-  "noGemsCreatedDesc": "لم تقم بإنشاء أي جواهر شخصياً.",
-  "reviews": "تقييمات",
-  "off": "خصم",
-  "premium": "مميز",
-  "na": "غير متوفر",
-  "accepted": "مقبول",
-  "pending": "قيد الانتظار"
+  "login": {
+    "required": "الرجاء تسجيل الدخول",
+    "message": "تحتاج لتسجيل الدخول لعرض الجواهر الخاصة بك"
+  },
+  "header": {
+    "title": "جواهري المخفية",
+    "totalGems": "تم العثور على {{total}} جوهرة",
+    "addNewGem": "إضافة جوهرة جديدة"
+  },
+  "search": {
+    "placeholder": "ابحث عن جواهرك..."
+  },
+  "filters": {
+    "allCategories": "جميع الفئات",
+    "allStatus": "جميع الحالات",
+    "pending": "قيد الانتظار",
+    "accepted": "مقبول",
+    "rejected": "مرفوض",
+    "sortBy": "ترتيب حسب",
+    "nameAZ": "الاسم (أ-ي)",
+    "nameZA": "الاسم (ي-أ)",
+    "highestRating": "أعلى تقييم",
+    "lowestRating": "أقل تقييم",
+    "oldest": "الأقدم أولاً",
+    "newest": "الأحدث أولاً",
+    "clearAll": "مسح جميع الفلاتر"
+  },
+  "table": {
+    "gem": "الجوهرة",
+    "category": "الفئة",
+    "rating": "التقييم",
+    "status": "الحالة",
+    "actions": "الإجراءات",
+    "noImage": "لا توجد صورة"
+  },
+  "empty": {
+    "noGems": "لا توجد جواهر",
+    "tryFilters": "حاول تعديل الفلاتر",
+    "startSharing": "ابدأ بمشاركة جواهرك المخفية مع المجتمع!",
+    "addFirstGem": "أضف جوهرتك الأولى"
+  },
+  "status": {
+    "accepted": "مقبول",
+    "pending": "قيد الانتظار",
+    "rejected": "مرفوض"
+  },
+  "actions": {
+    "editGem": "تعديل الجوهرة",
+    "deleteGem": "حذف الجوهرة"
+  },
+  "modal": {
+    "deleteGem": "حذف الجوهرة",
+    "confirmDelete": "هل أنت متأكد أنك تريد حذف هذه الجوهرة المخفية؟",
+    "cannotUndo": "لا يمكن التراجع عن هذا الإجراء.",
+    "cancel": "إلغاء",
+    "delete": "حذف"
+  },
+  "toast": {
+    "deleted": "تم حذف الجوهرة بنجاح",
+    "failedLoad": "فشل تحميل الجواهر الخاصة بك",
+    "failedDelete": "فشل حذف الجوهرة"
+  },
+  "pagination": {
+    "showingPage": "عرض الصفحة {{current}} من {{total}}"
+  }
 }

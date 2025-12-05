@@ -1,13 +1,67 @@
 {
-  "myGems": "My Gems",
-  "gemsCreatedCount": "Gems you've personally created ({{count}})",
-  "failedLoadGems": "Failed to load your gems.",
-  "noGemsCreated": "No gems created yet",
-  "noGemsCreatedDesc": "You haven't created any gems personally.",
-  "reviews": "reviews",
-  "off": "OFF",
-  "premium": "PREMIUM",
-  "na": "N/A",
-  "accepted": "Accepted",
-  "pending": "Pending"
+  "login": {
+    "required": "Please Log In",
+    "message": "You need to be logged in to view your gems"
+  },
+  "header": {
+    "title": "My Hidden Gems",
+    "totalGems": "Total {{total}} gems found",
+    "addNewGem": "Add New Gem"
+  },
+  "search": {
+    "placeholder": "Search your gems..."
+  },
+  "filters": {
+    "allCategories": "All Categories",
+    "allStatus": "All Status",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "sortBy": "Sort By",
+    "nameAZ": "Name (A-Z)",
+    "nameZA": "Name (Z-A)",
+    "highestRating": "Highest Rating",
+    "lowestRating": "Lowest Rating",
+    "oldest": "Oldest First",
+    "newest": "Newest First",
+    "clearAll": "Clear all filters"
+  },
+  "table": {
+    "gem": "Gem",
+    "category": "Category",
+    "rating": "Rating",
+    "status": "Status",
+    "actions": "Actions",
+    "noImage": "No Image"
+  },
+  "empty": {
+    "noGems": "No Gems Found",
+    "tryFilters": "Try adjusting your filters",
+    "startSharing": "Start sharing your hidden gems with the community!",
+    "addFirstGem": "Add Your First Gem"
+  },
+  "status": {
+    "accepted": "Accepted",
+    "pending": "Pending",
+    "rejected": "Rejected"
+  },
+  "actions": {
+    "editGem": "Edit Gem",
+    "deleteGem": "Delete Gem"
+  },
+  "modal": {
+    "deleteGem": "Delete Gem",
+    "confirmDelete": "Are you sure you want to delete this hidden gem?",
+    "cannotUndo": "This action cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "toast": {
+    "deleted": "Gem deleted successfully",
+    "failedLoad": "Failed to load your gems",
+    "failedDelete": "Failed to delete gem"
+  },
+  "pagination": {
+    "showingPage": "Showing page {{current}} of {{total}}"
+  }
 }

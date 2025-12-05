@@ -1,0 +1,20 @@
+{
+  "backToCategories": "Back to Categories",
+  "addNewCategory": "Add New Category",
+  "createNewCategory": "Create a new category",
+  "categoryImage": "Category Image",
+  "uploadImage": "Upload Image",
+  "imageInfo": "Max size: 5MB. Format: JPG, PNG, GIF",
+  "categoryInformation": "Category Information",
+  "categoryName": "Category Name",
+  "enterCategoryName": "Enter category name",
+  "categoryNameRequired": "Category name is required",
+  "categoryImageRequired": "Category image is required",
+  "fixErrors": "Please fix all errors",
+  "categoryCreated": "Category created successfully",
+  "categoryCreateFailed": "Failed to create category ",
+  "creating": "Creating...",
+  "createCategory": "Create Category",
+  "cancel": "Cancel",
+  "imageSizeError": "Image size should be less than 5MB"
+}
