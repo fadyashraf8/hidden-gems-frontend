@@ -8,16 +8,22 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { useTranslation } from "react-i18next";
 import TranslateTwoToneIcon from "@mui/icons-material/TranslateTwoTone";
-import {Link as LinkScroll} from "react-scroll"
+import { Link as LinkScroll } from "react-scroll"
+import { Heart } from "lucide-react";
+import { fetchWishlistCount } from "../../redux/wishlistSlice";
+
 export default function Navbar() {
   const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
-  const [searchElement, setSearchElement] = useState("");
+  // const [searchElement, setSearchElement] = useState("");
 
   const { isLoggedIn: isloggedin, userInfo: user } = useSelector(
     (state) => state.user
   );
+  // const { isLoggedIn } = useSelector((state) => state.user);
+  const wishlistCount = useSelector((state) => state.wishlist.count);
+
   const dispatch = useDispatch();
 
   const dropdownRef = useRef(null);
@@ -27,25 +33,28 @@ export default function Navbar() {
 
   const navigate = useNavigate();
 
-  const handleSearchChage = (e) => {
-    setSearchElement(e.target.value);
-  };
+  // const handleSearchChage = (e) => {
+  //   setSearchElement(e.target.value);
+  // };
 
-  const handlePressingEnter = (e) => {
-    if (e.key === "Enter") {
-      console.log("enter pressed");
-    }
-  };
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchElement.trim() == "") {
-      navigate("/places");
-    } else {
-      navigate(`/places?title=${searchElement}`);
-      setSearchElement("");
-    }
-  };
+  // const handlePressingEnter = (e) => {
+  //   if (e.key === "Enter") {
+  //     console.log("enter pressed");
+  //   }
+  // };
+
+  // const handleSearchSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (searchElement.trim() == "") {
+  //     navigate("/places");
+  //   } else {
+  //     navigate(`/places?title=${searchElement}`);
+  //     setSearchElement("");
+  //   }
+  // };
+
+
   // Sticky navbar on scroll
   useEffect(() => {
     const scrollFunction = () => {
@@ -91,6 +100,13 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+
+  useEffect(() => {
+    if (isloggedin) {
+      dispatch(fetchWishlistCount());
+    }
+  }, [dispatch, isloggedin]);  
+
   const handleLogout = async () => {
     try {
       await dispatch(logoutUser()).unwrap();
@@ -117,13 +133,11 @@ export default function Navbar() {
   return (
     <nav id="nav" className="navbar normal">
       <div className="navbar-container">
-        {/* Logo */}
         <Link to="/" className="navbar-logo">
-          {/* {t("app_name")} */}
           Gemsy
         </Link>
 
-        <div className="search-box">
+        {/* <div className="search-box">
           <Search size={18} onClick={handleSearchSubmit} />
           <input
             type="text"
@@ -132,7 +146,7 @@ export default function Navbar() {
             value={searchElement}
             placeholder={t("nav_search_placeholder")}
           />
-        </div>
+        </div> */}
 
         <ul className="navbar-links">
           <li>
@@ -155,6 +169,16 @@ export default function Navbar() {
         </ul>
 
         <div className="navbar-actions">
+          {isloggedin && (
+            <Link to="/wishlist" className="icon-btn relative">
+              <Heart size={20} />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
+          )}
           {/* Dark Mode */}
           <TranslateTwoToneIcon
             style={{ cursor: "pointer", marginRight: "10px" }}
@@ -200,7 +224,9 @@ export default function Navbar() {
                     </p>
                   )}
                   <button onClick={() => navigate("/profile")}>Profile</button>
-                  <button onClick={() => navigate("/vouchers")}>Vouchers</button>
+                  <button onClick={() => navigate("/vouchers")}>
+                    Vouchers
+                  </button>
                   {user && user.role !== "admin" && user.role !== "owner" && (
                     <button onClick={() => navigate("/created-by-you")}>
                       My Gems
@@ -247,6 +273,20 @@ export default function Navbar() {
           <li>
             <NavLink to="/about/aboutUS">{t("nav_link_about")}</NavLink>
           </li>
+          {/**  {isloggedin && (
+            <li>
+              <Link to="/wishlist" className="flex items-center gap-2">
+                <Heart size={16} />
+                {t("nav_link_wishlist")}
+                {wishlistCount > 0 && (
+                  <span className="bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {wishlistCount}
+                  </span>
+                )}
+              </Link>
+            </li>
+          )} **/}
+
 
           {!isloggedin && (
             <>
@@ -259,10 +299,10 @@ export default function Navbar() {
             </>
           )}
           <li>
-            <div className="mobile-search">
+            {/* <div className="mobile-search">
               <Search size={18} />
               <input type="text" placeholder={t("nav_search_placeholder")} />
-            </div>
+            </div> */}
           </li>
         </ul>
       )}

@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import { useSelector, useDispatch } from "react-redux";
+import { fetchWishlistCount } from "./redux/wishlistSlice";
 import { checkAuth } from "./redux/userSlice";
 import { useTranslation } from "react-i18next";
 
@@ -79,17 +80,24 @@ import AddGemOwner from "./Pages/OwnerPages/AddGemOwner/AddGemOwner";
 import VerifyEmail from "./Pages/VerifyEmail/VerifyEmail";
 import VoucherRedeem from "./Pages/AdminPages/VoucherRedeem/VoucherRedeem";
 import Vouchers from "./Pages/Vouchers/Vouchers";
-
+import Wishlist from "./Pages/wishListPage/wishList";
 function App() {
   const dark = useSelector((state) => state.darkMode.enabled);
   const dispatch = useDispatch();
   const { i18n } = useTranslation();
   const language = i18n.language || "en";
+  const { isLoggedIn } = useSelector((state) => state.user);
 
   // Check Auth on App load
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(fetchWishlistCount());
+    }
+  }, [dispatch, isLoggedIn]);
 
   // Dark Mode toggle
   useEffect(() => {
@@ -123,7 +131,7 @@ function App() {
         { path: "gems/:id", element: <GemDetails /> },
         { path: "contact-us", element: <ContactUsPage /> },
         { path: "vouchers", element: <Vouchers /> },
-
+        { path: "wishlist", element: <Wishlist /> }, 
         { path: "places", element: <CategoriesPage /> },
         { path: "surprise", element: <SurpriseMe /> },
         { path: "places/:categoryName", element: <CategoriesPage /> },
@@ -288,8 +296,6 @@ function App() {
         { path: "gems/user", element: <UserGems /> },
 
         //Voucher Redeem
-
-
       ],
     },
     // {
@@ -317,7 +323,6 @@ function App() {
         { path: "gem", element: <GemOwner /> },
         { path: "gem/add", element: <AddGemOwner /> },
         { path: ":id", element: <VoucherRedeem /> },
-
       ],
     },
     {
