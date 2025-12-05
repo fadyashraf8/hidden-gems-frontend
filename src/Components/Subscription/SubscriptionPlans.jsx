@@ -38,12 +38,12 @@ const SubscriptionPlans = ({ compact = false }) => {
   // ---------------- Compact Card ----------------
   if (compact) {
     return (
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 text-white shadow-xl">
+      <div className="bg-gradient-to-br from-gray-900  to-gray-800 rounded-2xl p-6 text-white shadow-xl">
         <div className="flex items-center gap-3 mb-4">
           <Crown className="w-8 h-8 text-yellow-400" />
           <div>
             <h3 className="font-bold text-lg">{t("compact.title")}</h3>
-            <p className="text-sm text-gray-300">{t("compact.subtitle")}</p>
+            <p className="text-sm  text-gray-300">{t("compact.subtitle")}</p>
           </div>
         </div>
 
@@ -264,7 +264,7 @@ const SubscriptionPlans = ({ compact = false }) => {
         <div className="w-full flex justify-center mt-4">
           <button
             onClick={() => handleSubscribe("manage")}
-            className="bg-gray-200 text-gray-800 font-semibold py-2 px-6 rounded-lg hover:bg-gray-300 transition"
+            className="bg-gray-200 text-gray-800 cursor-pointer font-semibold py-2 px-6 rounded-lg hover:bg-gray-300 transition"
           >
             {t("common.manageBilling")}
           </button>

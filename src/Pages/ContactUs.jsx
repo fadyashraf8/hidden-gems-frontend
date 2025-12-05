@@ -31,9 +31,7 @@ export default function ContactUsPage() {
     setError,
     formState: { errors, isSubmitting },
   } = useForm();
-
-  // إعادة تحديث رسائل الأخطاء عند تغيير اللغة
-  useEffect(() => {
+ useEffect(() => {
     Object.keys(errors).forEach((field) => {
       const error = errors[field];
       if (error?.type === "required") {

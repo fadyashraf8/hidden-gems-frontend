@@ -1,0 +1,20 @@
+{
+  "errors": {
+    "fetchActivityFailed": "فشل في تحميل الأنشطة"
+  },
+  "no-activity": "لا توجد أنشطة حديثة.",
+  "deleteActivityTitle": "حذف النشاط؟",
+  "deleteActivitySubtitle": "لا يمكن التراجع عن هذا الإجراء",
+  "deleteConfirmMessage": "هل أنت متأكد أنك تريد حذف هذا النشاط:",
+  "cancel": "إلغاء",
+  "delete": "حذف",
+  "deleteActivity": "حذف النشاط",
+  "activityDeleted": "تم حذف النشاط",
+  "deleteFailed": "فشل في حذف النشاط",
+  "showing": "عرض",
+  "to": "إلى",
+  "of": "من",
+  "activities": "نشاط",
+  "previous": "الصفحة السابقة",
+  "next": "الصفحة التالية"
+}

@@ -1,0 +1,26 @@
+{
+  "wishlist": {
+    "backToHome": "Back to Home",
+    "title": "My Wishlist",
+    "item": "item",
+    "items": "items",
+    "clearAll": "Clear All",
+    "confirmClear": "Are you sure you want to clear your entire wishlist?",
+    "clearSuccess": "Wishlist cleared successfully",
+    "clearFail": "Failed to clear wishlist",
+    "emptyTitle": "Your wishlist is empty",
+    "emptySubtitle": "Start adding gems you love! Click the heart icon on any gem to save it here.",
+    "explore": "Explore Gems",
+    "goHome": "Go to Home",
+    "showing": "Showing",
+    "to": "to",
+    "of": "of",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "youHave": "You have",
+    "gems": "gems in your wishlist",
+    "showingPerPage": "Showing {{num}} items per page",
+    "clearWishlist": "Clear wishlist"
+  }
+}

@@ -16,6 +16,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../ui/carousel.jsx";
+import { useTranslation } from "react-i18next";
 
 const BASE_URL = import.meta.env.VITE_Base_URL;
 const ICON_COLOR = "#DD0303";
@@ -75,6 +76,8 @@ const CategoryItem = ({ label, path, image }) => (
 );
 
 export default function Categories() {
+    const { t } = useTranslation("CategoriesHome");
+  
   const [categoriesData, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -151,7 +154,7 @@ export default function Categories() {
   if (!categoriesData || categoriesData.length === 0) {
     return (
       <Container maxWidth="md" sx={{ py: 4 }}>
-        <Alert severity="info">No categories available</Alert>
+        <Alert severity="info">{t("No")}</Alert>
       </Container>
     );
   }
@@ -170,7 +173,8 @@ export default function Categories() {
           fontSize: { xs: "2rem", md: "3rem" },
         }}
       >
-        Browse Categories
+        
+        {t("Browse")}
       </Typography>
 
       <Carousel

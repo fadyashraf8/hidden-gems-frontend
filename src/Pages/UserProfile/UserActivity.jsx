@@ -15,7 +15,7 @@ import {
 import toast from "react-hot-toast";
 
 const UserActivity = () => {
-  const { t } = useTranslation("UserProfile");
+  const { t, i18n } = useTranslation("UserActivity");
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,6 +26,7 @@ const UserActivity = () => {
   const [activityToDelete, setActivityToDelete] = useState(null);
   const baseURL = import.meta.env.VITE_Base_URL;
 
+const isRTL = i18n.language === "ar";
   const fetchActivities = async (page = 1) => {
     setLoading(true);
     try {
@@ -66,37 +67,25 @@ const UserActivity = () => {
 
     try {
       await deleteUserActivity(activityToDelete._id);
-      toast.success("Activity deleted");
+      toast.success(t("activityDeleted"));
       closeDeleteModal();
 
-      // Refetch current page
       await fetchActivities(currentPage);
 
-      // If current page is now empty and not the first page, go to previous page
       if (activities.length === 1 && currentPage > 1) {
         setCurrentPage(currentPage - 1);
       }
     } catch (error) {
-      toast.error("Failed to delete activity");
+      toast.error(t("errors.deleteFailed"));
       closeDeleteModal();
     }
   };
 
-  const goToPage = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+  const goToPage = (pageNumber) => setCurrentPage(pageNumber);
+  const goToPreviousPage = () =>
+    currentPage > 1 && setCurrentPage(currentPage - 1);
+  const goToNextPage = () =>
+    currentPage < totalPages && setCurrentPage(currentPage + 1);
 
   if (loading) {
     return (
@@ -114,14 +103,13 @@ const UserActivity = () => {
     return (
       <div className="text-center text-gray-500 py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">
         <Activity className="w-10 h-10 mx-auto mb-3 text-gray-300" />
-        <p>{t("no-activity") || "No recent activity found."}</p>
+        <p>{t("no-activity")}</p>
       </div>
     );
   }
 
   return (
     <>
-      {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 border border-gray-200">
@@ -129,14 +117,16 @@ const UserActivity = () => {
               <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
                 <AlertTriangle size={24} className="text-red-600" />
               </div>
+
               <div>
                 <h3 className="text-lg font-bold text-gray-900">
-                  Delete Activity?
+                  {t("deleteActivityTitle")}
                 </h3>
                 <p className="text-sm text-gray-600">
-                  This action cannot be undone
+                  {t("deleteActivitySubtitle")}
                 </p>
               </div>
+
               <button
                 onClick={closeDeleteModal}
                 className="ml-auto text-gray-400 hover:text-gray-500"
@@ -146,7 +136,7 @@ const UserActivity = () => {
             </div>
 
             <p className="text-gray-600 mb-6">
-              Are you sure you want to delete this activity:{" "}
+              {t("deleteConfirmMessage")}{" "}
               <span className="font-semibold text-gray-900">
                 {activityToDelete?.text}
               </span>
@@ -158,13 +148,14 @@ const UserActivity = () => {
                 onClick={closeDeleteModal}
                 className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
               >
-                Cancel
+                {t("cancel")}
               </button>
+
               <button
                 onClick={confirmDelete}
                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium"
               >
-                Delete
+                {t("delete")}
               </button>
             </div>
           </div>
@@ -172,7 +163,6 @@ const UserActivity = () => {
       )}
 
       <div className="space-y-6">
-        {/* Activities List */}
         <div className="space-y-4">
           {activities.map((activity) => (
             <div
@@ -182,13 +172,16 @@ const UserActivity = () => {
               <div className="bg-red-50 p-2 rounded-full shrink-0">
                 <Activity className="w-5 h-5 text-[#DD0303]" />
               </div>
+
               <div className="flex-1">
                 <h4 className="font-semibold text-gray-800 mb-1">
                   {activity.text}
                 </h4>
+
                 <p className="text-gray-600 text-sm mb-2">
                   {activity.description}
                 </p>
+
                 <div className="flex items-center gap-4 text-xs text-gray-400">
                   <div className="flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
@@ -198,6 +191,7 @@ const UserActivity = () => {
                       ).toLocaleDateString()}
                     </span>
                   </div>
+
                   <div className="flex items-center gap-1">
                     <Clock className="w-3 h-3" />
                     <span>
@@ -211,10 +205,11 @@ const UserActivity = () => {
                   </div>
                 </div>
               </div>
+
               <button
                 onClick={() => openDeleteModal(activity)}
-                className="absolute top-4 right-4 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all opacity-0 group-hover:opacity-100"
-                title="Delete activity"
+                className="absolute top-4 cursor-pointer right-4 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all opacity-0 group-hover:opacity-100"
+                title={t("deleteActivity")}
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -222,26 +217,29 @@ const UserActivity = () => {
           ))}
         </div>
 
-        {/* Pagination Controls */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between  bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
             <div className="text-sm text-gray-600">
-              Showing {(currentPage - 1) * 10 + 1} to{" "}
-              {Math.min(currentPage * 10, totalItems)} of {totalItems}{" "}
-              activities
+              {t("showing")} {(currentPage - 1) * 10 + 1} {t("to")}{" "}
+              {Math.min(currentPage * 10, totalItems)} {t("of")} {totalItems}{" "}
+              {t("activities")}
             </div>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={goToPreviousPage}
                 disabled={currentPage === 1}
-                className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                title="Previous page"
+                className="p-2 rounded-lg border cursor-pointer border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                title={t("previous")}
               >
-                <ChevronLeft className="w-5 h-5" />
+                {isRTL ? (
+                  <ChevronRight className="w-5 h-5" size={18} />
+                ) : (
+                  <ChevronLeft className="w-5 h-5" size={18} />
+                )}
               </button>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 ">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                   (pageNum) => {
                     const showPage =
@@ -269,7 +267,7 @@ const UserActivity = () => {
                       <button
                         key={pageNum}
                         onClick={() => goToPage(pageNum)}
-                        className={`min-w-[40px] h-10 px-3 rounded-lg font-medium transition-colors ${
+                        className={`min-w-[40px] h-10 px-3 rounded-lg cursor-pointer  font-medium transition-colors ${
                           currentPage === pageNum
                             ? "bg-[#DD0303] text-white"
                             : "border border-gray-200 hover:bg-gray-50 text-gray-700"
@@ -285,10 +283,14 @@ const UserActivity = () => {
               <button
                 onClick={goToNextPage}
                 disabled={currentPage === totalPages}
-                className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                title="Next page"
+                className="p-2 rounded-lg border cursor-pointer border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                title={t("next")}
               >
-                <ChevronRight className="w-5 h-5" />
+                {isRTL ? (
+                  <ChevronLeft className="w-5 h-5" size={18} />
+                ) : (
+                  <ChevronRight className="w-5 h-5" size={18} />
+                )}
               </button>
             </div>
           </div>

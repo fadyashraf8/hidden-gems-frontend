@@ -67,7 +67,7 @@ export default function UserProfile() {
           <div className="flex md:flex-col gap-2 w-full">
             <button
               onClick={() => setActiveTab("info")}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm cursor-pointer font-semibold transition-all ${
                 activeTab === "info"
                   ? "bg-[#DD0303] text-white shadow-md"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -77,10 +77,10 @@ export default function UserProfile() {
             </button>
             <button
               onClick={() => setActiveTab("activity")}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+              className={`px-4 py-2 rounded-lg cursor-pointer text-sm font-semibold transition-all ${
                 activeTab === "activity"
-                  ? "bg-[#DD0303] text-white shadow-md"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-[#DD0303] text-white shadow-md cursor-pointer"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200 cursor-pointer"
               }`}
             >
               {t("activity-log")}
@@ -145,7 +145,7 @@ export default function UserProfile() {
                   {/* Subscription */}
                   <div className="group">
                     <p
-                      className={`text-gray-500 text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
+                      className={`text-gray-500  text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
                     >
                       {t("subscription-label")}
                     </p>
@@ -163,7 +163,7 @@ export default function UserProfile() {
               {/* Subscription Plans */}
               <div className="mt-8">
                 <h3
-                  className={`text-lg font-semibold text-[#DD0303] mb-4 ${textAlign}`}
+                  className={`text-lg  font-semibold text-[#DD0303] mb-4 ${textAlign}`}
                 >
                   {t("Manage-Subscription")}
                 </h3>
@@ -171,8 +171,8 @@ export default function UserProfile() {
               </div>
             </>
           ) : (
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <h3 className="text-lg font-bold text-gray-800 mb-6 border-b pb-4">
+            <div className="bg-white rounded-2xl  cursor-pointer p-6 shadow-sm border border-gray-100">
+              <h3 className="text-lg cursor-pointer font-bold text-gray-800 mb-6 border-b pb-4">
                 {t("recent-activity") || "Recent Activity"}
               </h3>
               <UserActivity userId={user._id || user.id} />
