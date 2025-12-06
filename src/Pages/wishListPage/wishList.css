@@ -40,20 +40,45 @@
     color: #6b7280;
 }
 
-/* Dark mode adjustments */
-.dark .pagination-btn {
+.dark-mode .pagination-btn {
     background-color: #27272a;
     border-color: #3f3f46;
     color: #e4e4e7;
 }
 
-.dark .pagination-btn:hover:not(:disabled) {
+.dark-mode .pagination-btn:hover:not(:disabled) {
     background-color: #3f3f46;
 }
 
-.dark .pagination-btn.active {
-    background-color: #DD0303;
-    color: white;
+/* This controls the "Active" (Red) page number in dark-mode Mode */
+.dark-mode .pagination-btn.active {
+    background-color: #000000; /* Changed from #DD0303 to Black */
+    color: #ffffff;            /* White Text */
+    border-color: #ffffff;     /* White border so it stands out against dark-mode background */
+}
+.dark-mode .back-home-btn {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #e5e7eb !important;
+    padding: 0.75rem 1.5rem; /* Match the py-3 px-6 from tailwind */
+    border-radius: 0.5rem;
+}
+
+/* .dark-mode .back-home-btn:hover {
+    background-color: #f3f4f6 !important;
+    color: #DD0303 !important; 
+} */
+/* 2. Explore / Discover Places Button (Dark Mode) */
+/* We use !important to override the default Red background */
+.dark-mode .explore-btn {
+    background-color: #000000 !important; 
+    color: #ffffff !important;
+    border: 1px solid #ffffff; /* Optional: Adds a nice white border */
+}
+
+.dark-mode .explore-btn:hover,
+ .dark-mode .back-home-btn:hover{
+    background-color: #312d2d !important; /* Dark grey on hover */
 }
 
 /* Animation for page transition */
@@ -105,10 +130,99 @@
     }
 }
 
-.dark .wishlist-card {
+.dark-mode .wishlist-card {
     background: linear-gradient(145deg, #131620, #0d1117);
     border-color: #2d3748;
 }
+
+.wishlist-card:hover {
+    transform: translateY(-4px);
+    transition: transform 0.2s ease;
+}
+
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: #f3f4f6;
+    border-color: #d1d5db;
+    transform: translateY(-1px);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-btn.active {
+    background-color: #DD0303;
+    color: white;
+    border-color: #DD0303;
+    font-weight: 600;
+}
+
+.pagination-ellipsis {
+    padding: 0.5rem;
+    color: #6b7280;
+}
+
+/* --- Dark Mode for Pagination --- */
+.dark-mode .pagination-btn {
+    background-color: #27272a;
+    border-color: #3f3f46;
+    color: #e4e4e7;
+}
+
+.dark-mode .pagination-btn:hover:not(:disabled) {
+    background-color: #3f3f46;
+}
+
+.dark-mode .pagination-btn.active {
+    background-color: #000000;
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+/* --- BUTTON FIXES --- */
+
+/* 1. Back To Home Button (White BG, Black Text/Icon in Dark Mode) */
+.dark-mode .back-home-btn {
+    background-color: #ffffff !important;
+    color: #000000 !important; /* This makes the Text AND Icon Black */
+    border-color: #e5e7eb !important;
+    padding: 0.75rem 1.5rem; /* Matches Tailwind py-3 px-6 */
+    border-radius: 0.5rem;
+}
+
+/* 2. Explore Button (Black BG, White Text/Icon in Dark Mode) */
+.dark-mode .explore-btn {
+    background-color: #000000 !important; 
+    color: #ffffff !important;
+    border: 1px solid #ffffff !important; 
+}
+
+/* 3. Combined Hover State */
+.dark-mode .explore-btn:hover,
+.dark-mode .back-home-btn:hover {
+    /* background-color: #312d2d !important;  */
+    background-color: #dd0303 !important;
+    color: #ffffff !important; /* Text turns white on hover */
+    border-color: #312d2d !important;
+}
+
+/* --- Animations --- */
+.wishlist-grid { animation: fadeIn 0.3s ease-out; }
+.wishlist-empty-state { animation: fadeIn 0.5s ease-out; }
+.wishlist-item-enter { animation: slideIn 0.3s ease-out; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
 
 .wishlist-card:hover {
     transform: translateY(-4px);

@@ -5,31 +5,30 @@ import { useEffect, useState } from "react";
 import { deleteGemAPI } from "../../Services/GemsAuth";
 import WishlistButton from "../wishlistButton/wishlistButton";
 
-const BASE_URL = import.meta.env.VITE_Base_URL;
+import "./GemCard.css";
 
+const BASE_URL = import.meta.env.VITE_Base_URL;
 
 const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false }) => {
   const navigate = useNavigate();
   
-    if (!gem) {
-      console.error("GemCard received null gem prop");
-      return (
-        <div className="bg-white dark:bg-zinc-800 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-zinc-700">
-          <div className="relative aspect-[4/3] overflow-hidden bg-gray-200 dark:bg-gray-700">
-            {/* Placeholder for missing image */}
-            <div className="w-full h-full flex items-center justify-center">
-              <span className="text-gray-500 dark:text-gray-400">No Image</span>
-            </div>
-          </div>
-          <div className="p-4">
-            <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-3/4 mb-2"></div>
-            <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-1/2"></div>
+  if (!gem) {
+    console.error("GemCard received null gem prop");
+    return (
+      // Added 'gem-card' class here too for consistency
+      <div className="gem-card bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+        <div className="relative aspect-[4/3] overflow-hidden bg-gray-200">
+          <div className="w-full h-full flex items-center justify-center">
+            <span className="text-gray-500">No Image</span>
           </div>
         </div>
-      );
-    }
-
-
+        <div className="p-4">
+          <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+          <div className="h-3 bg-gray-300 rounded w-1/2"></div>
+        </div>
+      </div>
+    );
+  }
 
   const imagesList = gem.images?.[0];
   const ratingValue = gem.avgRating || gem.rating || 0;
@@ -99,10 +98,13 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false
     navigate(`/business/editPlace/${gem._id}`);
   };
 
-  
   return (
     <div className={`group h-full ${darkMode ? 'dark' : ''}`}>
-      <div className="bg-white dark:bg-zinc-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 dark:border-zinc-700 h-full flex flex-col">
+      {/* UPDATES HERE: 
+          1. Added 'gem-card' class.
+          2. Removed 'dark:bg-zinc-800' and 'dark:border-zinc-700' (CSS handles it now).
+      */}
+      <div className="gem-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 h-full flex flex-col">
         <div className="relative aspect-[4/3] overflow-hidden">
           <Link to={`/gems/${gem._id}`} className="block w-full h-full">
              <img
@@ -116,10 +118,8 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false
             />
           </Link>
           
-          {/* Status Badge */}
           {isUserGem && getStatusBadge()}
 
-          {/* Discount Badge */}
           <div className="absolute top-3 right-3 z-20">
             <WishlistButton gemId={gem._id} size={24} />
           </div>
@@ -132,7 +132,6 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false
             </div>
           )}
 
-          {/* Edit/Delete Actions - Only show for user's gems */}
           {isUserGem && (
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-2 justify-end">
               <button
@@ -157,26 +156,27 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false
         <div className="p-4 card-body flex-1 flex flex-col">
           <div className="flex justify-between items-start mb-2">
             <Link to={`/gems/${gem._id}`} className="flex-1">
-              <h3 className={`font-bold text-lg dark:hover:text-[#DD0303] text-gray-900 dark:text-white line-clamp-1 group-hover:text-[#DD0303] transition-colors`}>
+              {/* Removed conflicting text dark classes, CSS handles it */}
+              <h3 className={`font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-[#DD0303] transition-colors`}>
                 {gem.name}
               </h3>
             </Link>
           </div>
-          <div className=" dark:bg-black/80 py-1.5 rounded-lg flex items-center gap-2 min-w-[50px] shrink-0">
+          
+          {/* Rating Section */}
+          <div className="py-1.5 rounded-lg flex items-center gap-2 min-w-[50px] shrink-0">
             <Rating
               name="half-rating-read size-small"
               defaultValue={Number(ratingValue)}
               precision={0.1}
               readOnly
             />
-            {/* <span className="text-xs font-bold text-gray-900 dark:text-white leading-none mb-0.5">
-                 {Number(ratingValue).toFixed(1)}
-               </span> */}
-            <span className="text-xs font-bold text-gray-900 dark:text-white leading-none mb-0.5">
+            <span className="text-xs font-bold text-gray-900 leading-none mb-0.5">
               ( {ratingsCount} )
             </span>
           </div>
-          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm mt-3 mb-3">
+
+          <div className="flex items-center gap-2 text-gray-500 text-sm mt-3 mb-3">
             <MapPin className="w-4 h-4" />
             <span className="line-clamp-1">
               {gem.gemLocation || gem.location}
@@ -184,7 +184,7 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false
           </div>
 
           {gem.category && (
-            <div className="inline-block bg-gray-100 dark:bg-zinc-700 px-3 py-1 rounded-full text-xs font-medium text-gray-600 dark:text-gray-300">
+            <div className="inline-block  px-3 py-1 rounded-full text-xs font-medium text-white bg-[#DD0303] self-start mt-auto">
               {gem.category.categoryName || gem.category}
             </div>
           )}
