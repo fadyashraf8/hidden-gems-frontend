@@ -16,7 +16,6 @@ const EditPlace = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [existingImages, setExistingImages] = useState([]);
-  const [imagesToDelete, setImagesToDelete] = useState([]);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -26,7 +25,6 @@ const EditPlace = () => {
     images: [],
   });
 
-  // Fetch Gem Details
   useEffect(() => {
     async function fetchGemDetails() {
       try {
@@ -54,36 +52,6 @@ const EditPlace = () => {
     fetchGemDetails();
   }, [gemId, navigate]);
 
-  // --- FIXED UPDATE FUNCTION ---
-  async function updateGem(gemId, gemData) {
-    try {
-      const token = localStorage.getItem("token"); // 1. Get Token
-      
-      const response = await fetch(`${BASE_URL}/gems/${gemId}`, {
-        method: "PUT",
-        // headers: {
-        //     "Authorization": `Bearer ${token}` // 2. Add Token Header
-        //     // Do NOT add Content-Type here, browser handles it for FormData
-        // },
-        body: gemData,
-        credentials: "include"
-      });
-
-      const res = await response.json(); // 3. Await json()
-
-      // 4. Return a consistent structure
-      if (response.ok) {
-        return { success: true, message: res.message || "Gem updated successfully" };
-      } else {
-        return { success: false, message: res.message || res.error || "Update failed" };
-      }
-    } catch (error) {
-      console.log("Failed to update " + error);
-      return { success: false, message: "Network error" };
-    }
-  }  
-
-  // Fetch Categories
   useEffect(() => {
     async function fetchCategories() {
       try {
@@ -100,6 +68,38 @@ const EditPlace = () => {
     }
     fetchCategories();
   }, []);
+
+  async function updateGem(gemId, gemData) {
+    try {
+      
+      const response = await fetch(`${BASE_URL}/gems/${gemId}`, {
+        method: "PUT",
+      
+        body: gemData,
+        credentials: "include"
+      });
+
+      const res = await response.json();
+
+      if (response.ok) {
+        return { 
+          success: true, 
+          message: res.message || "Gem updated successfully" 
+        };
+      } else {
+        return { 
+          success: false, 
+          message: res.message || res.error || "Update failed" 
+        };
+      }
+    } catch (error) {
+      console.error("Failed to update:", error);
+      return { 
+        success: false, 
+        message: "Network error" 
+      };
+    }
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -119,7 +119,6 @@ const EditPlace = () => {
 
   const removeExistingImage = (imageName) => {
     setExistingImages(existingImages.filter((img) => img !== imageName));
-    setImagesToDelete([...imagesToDelete, imageName]);
   };
 
   const validateForm = () => {
@@ -133,32 +132,32 @@ const EditPlace = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return toast.error("Please fix the errors");
+    
+    if (!validateForm()) {
+      toast.error("Please fix the errors");
+      return;
+    }
 
     setSubmitting(true);
+
     try {
       const dataToSend = new FormData();
+      
       dataToSend.append("name", formData.name);
       dataToSend.append("gemLocation", formData.gemLocation);
       dataToSend.append("category", formData.category);
       dataToSend.append("description", formData.description || "");
-      
-      if (existingImages.length > 0) {
-        dataToSend.append("existingImages", JSON.stringify(existingImages));
-      }
-      
-      if (imagesToDelete.length > 0) {
-        dataToSend.append("imagesToDelete", JSON.stringify(imagesToDelete));
-      }
-      
+
+      existingImages.forEach((image) => {
+        dataToSend.append("oldImages", image);
+      });
+
       formData.images.forEach((file) => {
         dataToSend.append("images", file);
       });
 
-      // --- FIXED LOGIC ---
       const result = await updateGem(gemId, dataToSend);
-      
-      // Now checking result.success specifically
+
       if (result.success) {
         toast.success("Place updated successfully!");
         navigate("/created-by-you");
@@ -175,183 +174,169 @@ const EditPlace = () => {
 
   if (loading) {
     return (
-      <div className="footer-page-wrapper">
-        <div className="footer-page-container">
-          <div className="flex justify-center items-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#DD0303]"></div>
-          </div>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="footer-page-wrapper">
-      <div className="footer-page-container">
-        <h1 className="footer-page-title">Edit Place</h1>
-
-        <div className="footer-page-content">
-          <p className="mb-6">Update your place information</p>
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-gray-800">Edit Place</h1>
+            <p className="text-gray-600 mt-2">Update your place information</p>
+          </div>
 
           <form onSubmit={handleSubmit}>
-            <div className="bg-gray-50 p-6 rounded-lg addPlace">
-              <h2 className="text-2xl font-semibold mb-4 text-[#DD0303]">
+            <div className="space-y-6">
+              <h2 className="text-xl font-semibold text-gray-700">
                 {t("Information-title")}
               </h2>
-              <div className="space-y-4">
-                {/* Name */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Business Name *
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="Enter business name"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#DD0303] ${
-                      errors.name ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-                </div>
 
-                {/* Location */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Address *
-                  </label>
-                  <input
-                    type="text"
-                    name="gemLocation"
-                    value={formData.gemLocation}
-                    onChange={handleInputChange}
-                    placeholder="Enter address"
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#DD0303] ${
-                      errors.gemLocation ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  {errors.gemLocation && <p className="text-red-500 text-sm mt-1">{errors.gemLocation}</p>}
-                </div>
-
-                {/* Category */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Category *
-                  </label>
-                  <select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#DD0303] ${
-                      errors.category ? "border-red-500" : "border-gray-300"
-                    }`}
-                  >
-                    <option value="">Select a category</option>
-                    {categories.map((cat) => (
-                      <option key={cat._id} value={cat._id}>
-                        {cat.categoryName}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
-                </div>
-
-                {/* Description */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Description
-                  </label>
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    placeholder="Add a description (optional)"
-                    rows="4"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#DD0303]"
-                  />
-                </div>
-
-                {/* Existing Images */}
-                {existingImages.length > 0 && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Current Images
-                    </label>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {existingImages.map((image, index) => (
-                        <div key={index} className="relative group">
-                          <img
-                            src={`${BASE_URL}/uploads/gem/${image}`}
-                            alt={`Existing ${index}`}
-                            className="w-full h-32 object-cover rounded-lg"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => removeExistingImage(image)}
-                            className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition"
-                          >
-                            ✕
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Business Name *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#DD0303]"
+                />
+                {errors.name && (
+                  <p className="text-red-500 text-sm mt-1">{errors.name}</p>
                 )}
+              </div>
 
-                {/* New Images */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Address *
+                </label>
+                <input
+                  type="text"
+                  name="gemLocation"
+                  value={formData.gemLocation}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#DD0303]"
+                />
+                {errors.gemLocation && (
+                  <p className="text-red-500 text-sm mt-1">{errors.gemLocation}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Category *
+                </label>
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#DD0303]"
+                >
+                  <option value="">Select a category</option>
+                  {categories.map((cat) => (
+                    <option key={cat._id} value={cat._id}>
+                      {cat.categoryName}
+                    </option>
+                  ))}
+                </select>
+                {errors.category && (
+                  <p className="text-red-500 text-sm mt-1">{errors.category}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  rows="4"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#DD0303]"
+                />
+              </div>
+
+              {existingImages.length > 0 && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Add New Images (Optional)
+                    Current Images
                   </label>
-                  <input
-                    type="file"
-                    multiple
-                    onChange={handleImageChange}
-                    accept="image/*"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#DD0303]"
-                  />
-                  {formData.images.length > 0 && (
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                      {formData.images.map((file, index) => (
-                        <div key={index} className="relative group">
-                          <img
-                            src={URL.createObjectURL(file)}
-                            alt={`New ${index}`}
-                            className="w-full h-32 object-cover rounded-lg"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => removeNewImage(index)}
-                            className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition"
-                          >
-                            ✕
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {existingImages.map((image, index) => (
+                      <div key={index} className="relative group">
+                        <img
+                          src={image}
+                          alt={`Existing ${index}`}
+                          className="w-full h-32 object-cover rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeExistingImage(image)}
+                          className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* Submit Button */}
-              <div className="mt-8 flex gap-4">
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="flex-1 bg-[#DD0303] text-white py-3 rounded-lg font-semibold hover:bg-[#b90202] transition disabled:opacity-50"
-                >
-                  {submitting ? "Updating..." : "Update Place"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigate("/created-by-you")}
-                  className="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-400 transition"
-                >
-                  Cancel
-                </button>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Add New Images (Optional)
+                </label>
+                <input
+                  type="file"
+                  multiple
+                  onChange={handleImageChange}
+                  accept="image/*"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#DD0303]"
+                />
+                {formData.images.length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                    {formData.images.map((file, index) => (
+                      <div key={index} className="relative group">
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={`New ${index}`}
+                          className="w-full h-32 object-cover rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeNewImage(index)}
+                          className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
+            </div>
+
+            <div className="mt-8 flex gap-4">
+              <button
+                type="submit"
+                disabled={submitting}
+                className="flex-1 bg-[#DD0303] text-white py-3 rounded-lg font-semibold hover:bg-[#b90202] transition disabled:opacity-50"
+              >
+                {submitting ? "Updating..." : "Update Place"}
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate("/created-by-you")}
+                className="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-400 transition"
+              >
+                Cancel
+              </button>
             </div>
           </form>
         </div>

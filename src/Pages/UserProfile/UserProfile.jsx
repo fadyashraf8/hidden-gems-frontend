@@ -161,14 +161,16 @@ export default function UserProfile() {
               </Card>
 
               {/* Subscription Plans */}
-              <div className="mt-8">
-                <h3
-                  className={`text-lg  font-semibold text-[#DD0303] mb-4 ${textAlign}`}
-                >
-                  {t("Manage-Subscription")}
-                </h3>
-                <SubscriptionPlans />
-              </div>
+              {user?.role !== "admin" && (
+                <div className="mt-8">
+                  <h3
+                    className={`text-lg  font-semibold text-[#DD0303] mb-4 ${textAlign}`}
+                  >
+                    {t("Manage-Subscription")}
+                  </h3>
+                  <SubscriptionPlans />
+                </div>
+              )}
             </>
           ) : (
             <div className="bg-white rounded-2xl  cursor-pointer p-6 shadow-sm border border-gray-100">
