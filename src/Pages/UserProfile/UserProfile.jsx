@@ -143,32 +143,36 @@ export default function UserProfile() {
                   </div>
 
                   {/* Subscription */}
-                  <div className="group">
-                    <p
-                      className={`text-gray-500  text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
-                    >
-                      {t("subscription-label")}
-                    </p>
-                    <p
-                      className={`bg-gray-100 p-3 rounded-xl border border-gray-200 
-                         group-hover:text-[#DD0303] group-hover:bg-blue-50
-                         transition shadow-sm ${textAlign}`}
-                    >
-                      {user.subscription}
-                    </p>
-                  </div>
+                  {user?.role !== "admin" && (
+                    <div className="group">
+                      <p
+                        className={`text-gray-500  text-sm font-semibold mb-1 group-hover:text-[#DD0303] transition ${textAlign}`}
+                      >
+                        {t("subscription-label")}
+                      </p>
+                      <p
+                        className={`bg-gray-100 p-3 rounded-xl border border-gray-200 
+                           group-hover:text-[#DD0303] group-hover:bg-blue-50
+                           transition shadow-sm ${textAlign}`}
+                      >
+                        {user.subscription}
+                      </p>
+                    </div>
+                  )}
                 </CardBody>
               </Card>
 
               {/* Subscription Plans */}
-              <div className="mt-8">
-                <h3
-                  className={`text-lg  font-semibold text-[#DD0303] mb-4 ${textAlign}`}
-                >
-                  {t("Manage-Subscription")}
-                </h3>
-                <SubscriptionPlans />
-              </div>
+              {user?.role !== "admin" && (
+                <div className="mt-8">
+                  <h3
+                    className={`text-lg  font-semibold text-[#DD0303] mb-4 ${textAlign}`}
+                  >
+                    {t("Manage-Subscription")}
+                  </h3>
+                  <SubscriptionPlans />
+                </div>
+              )}
             </>
           ) : (
             <div className="bg-white rounded-2xl  cursor-pointer p-6 shadow-sm border border-gray-100">
