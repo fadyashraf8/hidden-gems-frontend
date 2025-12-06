@@ -57,24 +57,21 @@ export default function CategoriesPage() {
   const [error, setError] = useState("");
   const [pageTitle, setPageTitle] = useState("All Places");
 
-  // Update URL when page changes
-  useEffect(() => {
-    setSearchParams({ page: currentPage });
-  }, [currentPage, setSearchParams]);
-
   // Fetch categories on mount
   useEffect(() => {
     fetchCategories();
   }, []);
 
-  // Clear query parameter and set search on first render
+  // Clear title parameter and set search on first render
   useEffect(() => {
     if (title) {
-      setSearchParams({ page: currentPage });
       setSearchInput(title);
+      // امسح الـ title من الـ URL بس وخلي الـ page زي ما هي
+      const params = new URLSearchParams(searchParams);
+      params.delete('title');
+      setSearchParams(params);
     }
-
-  }, []);
+  }, [title]);
 
   // Fetch gems when dependencies change
   useEffect(() => {
@@ -538,6 +535,9 @@ export default function CategoriesPage() {
                             page={currentPage}
                             onChange={(e, page) => {
                               setCurrentPage(page);
+                              const params = new URLSearchParams(searchParams);
+                              params.set('page', page.toString());
+                              setSearchParams(params);
                               window.scrollTo(0, 0);
                             }}
                             sx={{

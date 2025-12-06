@@ -1,0 +1,43 @@
+/* GemCard.css */
+
+/* --- Dark Mode Overrides --- */
+
+/* 1. Main Card Container */
+.dark .gem-card {
+  background-color: #000000 !important; /* Force Black Background */
+  border-color: #ffffff !important;     /* Force White Border */
+}
+
+/* 2. Text Colors - We use :not() to prevent painting the stars white */
+/* This selects all h3, spans, and divs EXCEPT those inside the Rating component */
+.dark .gem-card h3,
+.dark .gem-card span:not([class*="MuiRating"]),
+.dark .gem-card div:not([class*="MuiRating"]) {
+  color: #ffffff !important;
+}
+
+/* 3. Secondary/muted text (like location) */
+.dark .gem-card .text-gray-500,
+.dark .gem-card .text-gray-600 {
+  color: #e4e4e7 !important; 
+}
+
+/* 4. Rating Stars - FIXED */
+/* We target the specific icon classes to ensure they turn RED */
+.dark .gem-card .MuiRating-root {
+  color: #DD0303 !important; 
+}
+
+.dark .gem-card .MuiRating-iconFilled {
+  color: #DD0303 !important;
+}
+
+.dark .gem-card .MuiRating-iconHover {
+  color: #b90202 !important; /* Slightly darker red on hover */
+}
+
+/* 5. Empty Stars (Unfilled) */
+/* Make them semi-transparent white so they are visible on black bg */
+.dark .gem-card .MuiRating-iconEmpty {
+  color: rgba(255, 255, 255, 0.5) !important;
+}

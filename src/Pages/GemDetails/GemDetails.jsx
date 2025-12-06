@@ -15,6 +15,7 @@ import { MapPin, Phone, Globe, ChevronDown, Edit2, Trash2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import "./GemDetails.css";
+import ImageCarouselModal from "../../Components/ImageCarouselModal/ImageCarouselModal.jsx";
 import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
 import QRCodeModal from "../../Components/QRCodeModal/QRCodeModal.jsx";
 import toast from "react-hot-toast";
@@ -66,6 +67,8 @@ const GemDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [carouselOpen, setCarouselOpen] = useState(false);
+  const [carouselInitialIndex, setCarouselInitialIndex] = useState(0);
   const [aboutExpanded, setAboutExpanded] = useState(false);
   const [aboutToggleVisible, setAboutToggleVisible] = useState(false);
   const [galleryExpanded, setGalleryExpanded] = useState(false);
@@ -808,6 +811,7 @@ const GemDetails = () => {
               </div>
 
               {/* Gallery */}
+              {/* Gallery */}
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold mb-6 dark:text-white">
                   {copy.galleryTitle}
@@ -820,40 +824,42 @@ const GemDetails = () => {
                     {copy.galleryEmpty}
                   </p>
                 ) : (
-                  <>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {visibleGallery.map((image, index) => (
-                        <div
-                          key={`${image}-${index}`}
-                          className={`aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-zinc-800 gallery-card ${
-                            galleryExpanded && index >= 6
-                              ? "gallery-card-new"
-                              : ""
-                          }`}
-                        >
-                          <img
-                            src={resolveImageSrc(image)}
-                            alt={copy.galleryAlt(index + 1)}
-                            className="w-full h-full object-cover"
-                            onError={(e) => (e.target.src = "/images/Gem.png")}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                    {galleryImages.length > 6 && (
-                      <div className="flex justify-center pt-2">
-                        <ToggleButton
-                          expanded={galleryExpanded}
-                          onClick={() => setGalleryExpanded((prev) => !prev)}
-                          collapsedLabel={copy.seeMore}
-                          expandedLabel={copy.seeLess}
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {galleryImages.slice(0, 6).map((image, index) => (
+                      <button
+                        key={`${image}-${index}`}
+                        type="button"
+                        onClick={() => {
+                          setCarouselInitialIndex(index);
+                          setCarouselOpen(true);
+                        }}
+                        className="aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-zinc-800 hover:ring-2 hover:ring-[#DD0303] transition cursor-pointer"
+                      >
+                        <img
+                          src={resolveImageSrc(image)}
+                          alt={copy.galleryAlt(index + 1)}
+                          className="w-full h-full object-cover hover:scale-105 transition"
+                          onError={(e) => (e.target.src = "/images/Gem.png")}
                         />
-                      </div>
+                      </button>
+                    ))}
+                    {galleryImages.length > 6 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCarouselInitialIndex(0);
+                          setCarouselOpen(true);
+                        }}
+                        className="aspect-square rounded-xl overflow-hidden bg-gray-900/80 dark:bg-zinc-700/80 flex items-center justify-center hover:bg-gray-900 transition cursor-pointer"
+                      >
+                        <span className="text-white text-2xl font-bold">
+                          +{galleryImages.length - 6}
+                        </span>
+                      </button>
                     )}
-                  </>
+                  </div>
                 )}
               </div>
-
               {/* Reviews */}
               <div className="bg-white dark:bg-zinc-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-zinc-700 space-y-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -1161,6 +1167,14 @@ const GemDetails = () => {
         qrCode={voucherQR}
         voucherData={voucherData}
       />
+
+      <ImageCarouselModal
+  isOpen={carouselOpen}
+  onClose={() => setCarouselOpen(false)}
+  images={galleryImages}
+  initialIndex={carouselInitialIndex}
+  resolveImageSrc={resolveImageSrc}
+/>
     </>
   );
 };
