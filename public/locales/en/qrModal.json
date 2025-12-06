@@ -1,0 +1,16 @@
+{
+  "qrModal": {
+    "title": "Your Voucher",
+    "subtitle": "Show this QR code to redeem",
+    "qrAlt": "Voucher QR Code",
+    "code": "Code",
+    "discount": "Discount",
+    "off": "OFF",
+    "expires": "Expires",
+    "howToUse": "How to use",
+    "instructions": "Show this QR code to the staff."
+  },
+  "common": {
+    "done": "Done"
+  }
+}
