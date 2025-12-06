@@ -1,12 +1,13 @@
 import LoadingScreen from "@/Pages/LoadingScreen";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 
 export default function VoucherRedeem() {
   const { id } = useParams();
   const [voucher, setVoucher] = useState(null);
-  const [loading, setLoading] = useState(true); // ← جديد
+  const [loading, setLoading] = useState(true);  
 
   const getVoucherDetails = async () => {
     try {
@@ -14,12 +15,12 @@ export default function VoucherRedeem() {
         `${import.meta.env.VITE_Base_URL}/vouchers/details/${id}`,
         { withCredentials: true }
       );
-      setVoucher(response.data.voucher || null); // ← لو مش موجود حط null
+      setVoucher(response.data.voucher || null);      
     } catch (error) {
       console.error("Error fetching voucher details:", error.response?.data?.error);
-      setVoucher(null); // ← لو فيه error برضه نخلي null
+      setVoucher(null); 
     } finally {
-      setLoading(false); // ← خلصنا التحميل
+      setLoading(false); 
     }
   };
 
@@ -31,6 +32,7 @@ export default function VoucherRedeem() {
         { withCredentials: true }
       );
       console.log("Voucher redeemed:", response.data);
+      toast.success(`${action}`)
     } catch (error) {
       console.error("Error redeeming voucher:", error.response?.data?.error);
     }
@@ -40,7 +42,7 @@ export default function VoucherRedeem() {
     getVoucherDetails();
   }, []);
 
-  if (loading) return <LoadingScreen />; // ← لسة بيحمل
+  if (loading) return <LoadingScreen />;  
 
   if (!voucher)
     return (
