@@ -31,14 +31,23 @@ export default function HomeAdmin() {
 
   const fetchDashboardData = async () => {
     try {
-      const usersRes = await fetch(`${baseUrl}/users`);
-      const usersData = await usersRes.json();
+     const usersRes = await fetch(`${baseUrl}/users`, {
+      credentials: 'include'
+    });
+    const usersData = await usersRes.json();
+    console.log("usersData", usersData);
 
-      const categoriesRes = await fetch(`${baseUrl}/categories`);
-      const categoriesData = await categoriesRes.json();
+    const categoriesRes = await fetch(`${baseUrl}/categories`, {
+      credentials: 'include'
+    });
+    const categoriesData = await categoriesRes.json();
+    console.log("categoriesData", categoriesData);
 
-      const gemsRes = await fetch(`${baseUrl}/gems`);
-      const gemsData = await gemsRes.json();
+    const gemsRes = await fetch(`${baseUrl}/gems`, {
+      credentials: 'include'
+    });
+    const gemsData = await gemsRes.json();
+    console.log("gemsData", gemsData);
 
       setStats({
         users: { total: usersData.totalItems || 0, loading: false },
