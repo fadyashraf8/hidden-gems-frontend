@@ -28,8 +28,8 @@ const CategoryItem = ({ label, path, image }) => (
     sx={{
       textDecoration: "none",
       color: "white",
-      width: "90%",
-      aspectRatio: "1 / 1", //square
+      width: "100%", 
+      aspectRatio: "1 / 1",
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
@@ -39,26 +39,21 @@ const CategoryItem = ({ label, path, image }) => (
       transition: "transform 0.2s, box-shadow 0.2s",
       cursor: "pointer",
       overflow: "hidden",
+      mx: "auto", 
       "&:hover": {
         transform: "translateY(-6px)",
         boxShadow: 10,
       },
-      // --- 2. Background Image Settings (Light Mode Default) ---
       backgroundImage: `url(${image})`,
       backgroundSize: "cover",
       backgroundPosition: "center",
       backgroundRepeat: "no-repeat",
-
-      // --- 4. Dark Mode Override ---
-      // This selector says: "When a parent (like body) has class .dark, apply these styles to ME (&)"
       ".dark-mode &": {
         backgroundImage: `url(${image})`,
         color: "black",
       },
     }}
   >
-    {/* <Icon sx={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', color: ICON_COLOR, mb: 1 }} />
-     */}
     <Typography
       variant="h4"
       sx={{
@@ -76,7 +71,7 @@ const CategoryItem = ({ label, path, image }) => (
 );
 
 export default function Categories() {
-    const { t } = useTranslation("CategoriesHome");
+  const { t } = useTranslation("CategoriesHome");
   
   const [categoriesData, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,9 +80,8 @@ export default function Categories() {
 
   const fetchCategories = useCallback(async () => {
     try {
-     
       const res = await axios.get(`${BASE_URL}/categories/allCategories`,
-      { withCredentials: true }
+        { withCredentials: true }
       );
       console.log(res.data);
       if (res.data.result) {
@@ -104,15 +98,14 @@ export default function Categories() {
     fetchCategories();
   }, [fetchCategories]);
 
-
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
-        setItemsPerSlide(2); // Mobile: 1 item
+        setItemsPerSlide(2); 
       } else if (window.innerWidth < 1024) {
-        setItemsPerSlide(4); // Tablet: 2 items
+        setItemsPerSlide(4); 
       } else {
-        setItemsPerSlide(6); // Desktop: 3 items
+        setItemsPerSlide(6); 
       }
     };
 
@@ -129,7 +122,6 @@ export default function Categories() {
     return groups;
   };
   
-
   if (loading) {
     return (
       <Container
@@ -141,7 +133,6 @@ export default function Categories() {
     );
   }
 
-  // Show error state
   if (error) {
     return (
       <Container maxWidth="md" sx={{ py: 4 }}>
@@ -150,7 +141,6 @@ export default function Categories() {
     );
   }
 
-  // Show empty state
   if (!categoriesData || categoriesData.length === 0) {
     return (
       <Container maxWidth="md" sx={{ py: 4 }}>
@@ -162,7 +152,13 @@ export default function Categories() {
   const categoryGroups = groupCategories(categoriesData, itemsPerSlide);
 
   return (
-    <Container maxWidth="md" sx={{ py: 4, px: 0 }}>
+    <Container 
+      maxWidth="md" 
+      sx={{ 
+        py: 4, 
+        px: { xs: 2, sm: 3, lg: 8 } 
+      }}
+    >
       <Typography
         variant="h3"
         component="h2"
@@ -173,7 +169,6 @@ export default function Categories() {
           fontSize: { xs: "2rem", md: "3rem" },
         }}
       >
-        
         {t("Browse")}
       </Typography>
 
@@ -191,19 +186,19 @@ export default function Categories() {
                 sx={{
                   display: "grid",
                   gridTemplateColumns: {
-                    xs: "2fr", // Mobile: 1 column
-                    sm: "repeat(2, 1fr)", // Tablet: 2 columns
-                    md: "repeat(3, 1fr)", // Desktop: 3 columns
+                    xs: "repeat(2, 1fr)", 
+                    sm: "repeat(2, 1fr)", 
+                    md: "repeat(3, 1fr)", 
                   },
-                  gap: 2,
+                  gap: { xs: 2, sm: 2.5, md: 3 }, 
                   width: "100%",
-                  px: 1,
+                  px: { xs: 1, sm: 2 }, 
+                  justifyItems: "center", 
                 }}
               >
                 {group.map((category) => (
                   <CategoryItem
                     key={category._id}
-                    // Icon={category.Icon}
                     label={category.categoryName}
                     path={
                       "/places/" +
@@ -227,4 +222,3 @@ export default function Categories() {
     </Container>
   );
 }
-
