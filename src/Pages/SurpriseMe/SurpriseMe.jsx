@@ -22,6 +22,63 @@ export default function SurpriseMe() {
     "/images/1.jpg",
   ];
 
+  // Responsive configuration for BounceCards
+  const getResponsiveConfig = () => {
+    const width = window.innerWidth;
+    
+    if (width < 640) { // Mobile
+      return {
+        containerWidth: Math.min(width - 40, 300),
+        containerHeight: Math.min(width - 40, 300),
+        transformStyles: [
+          "rotate(8deg) translate(-80px)",
+          "rotate(4deg) translate(-40px)",
+          "rotate(0deg)",
+          "rotate(-8deg) translate(40px)",
+          "rotate(4deg) translate(80px)",
+        ],
+        enableHover: false, // Disable hover on mobile
+      };
+    } else if (width < 1024) { // Tablet
+      return {
+        containerWidth: 350,
+        containerHeight: 350,
+        transformStyles: [
+          "rotate(10deg) translate(-120px)",
+          "rotate(5deg) translate(-60px)",
+          "rotate(0deg)",
+          "rotate(-8deg) translate(60px)",
+          "rotate(3deg) translate(120px)",
+        ],
+        enableHover: true,
+      };
+    } else { // Desktop
+      return {
+        containerWidth: 500,
+        containerHeight: 500,
+        transformStyles: [
+          "rotate(10deg) translate(-170px)",
+          "rotate(5deg) translate(-85px)",
+          "rotate(-3deg)",
+          "rotate(-10deg) translate(85px)",
+          "rotate(2deg) translate(170px)",
+        ],
+        enableHover: true,
+      };
+    }
+  };
+
+  const [cardConfig, setCardConfig] = useState(getResponsiveConfig());
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setCardConfig(getResponsiveConfig());
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handleSurprise = async () => {
     if (!mood.trim()) return;
 
@@ -114,19 +171,13 @@ export default function SurpriseMe() {
           <BounceCards
             className="custom-bounce-cards"
             images={images}
-            containerWidth={500}
-            containerHeight={500}
+            containerWidth={cardConfig.containerWidth}
+            containerHeight={cardConfig.containerHeight}
             animationDelay={1}
             animationStagger={0.08}
             easeType="elastic.out(1, 0.5)"
-            transformStyles={[
-              "rotate(10deg) translate(-170px)",
-              "rotate(5deg) translate(-85px)",
-              "rotate(-3deg)",
-              "rotate(-10deg) translate(85px)",
-              "rotate(2deg) translate(170px)",
-            ]}
-            enableHover={true}
+            transformStyles={cardConfig.transformStyles}
+            enableHover={cardConfig.enableHover}
           />
         </div>
       </div>
