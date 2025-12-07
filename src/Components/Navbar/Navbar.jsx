@@ -4,11 +4,11 @@ import { Menu, X, Search, User, Moon, Sun } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDarkMode } from "../../redux/darkModeSlice";
 import { logoutUser } from "../../redux/userSlice";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import { useTranslation } from "react-i18next";
 import TranslateTwoToneIcon from "@mui/icons-material/TranslateTwoTone";
-import { Link as LinkScroll } from "react-scroll"
+import { Link as LinkScroll, scroller } from "react-scroll";
 import { Heart } from "lucide-react";
 import { fetchWishlistCount } from "../../redux/wishlistSlice";
 
@@ -16,44 +16,20 @@ export default function Navbar() {
   const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
-  // const [searchElement, setSearchElement] = useState("");
 
   const { isLoggedIn: isloggedin, userInfo: user } = useSelector(
     (state) => state.user
   );
-  // const { isLoggedIn } = useSelector((state) => state.user);
   const wishlistCount = useSelector((state) => state.wishlist.count);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const dropdownRef = useRef(null);
 
   const dark = useSelector((state) => state.darkMode.enabled);
   const handleDarkToggle = () => dispatch(toggleDarkMode());
-
-  const navigate = useNavigate();
-
-  // const handleSearchChage = (e) => {
-  //   setSearchElement(e.target.value);
-  // };
-
-
-  // const handlePressingEnter = (e) => {
-  //   if (e.key === "Enter") {
-  //     console.log("enter pressed");
-  //   }
-  // };
-
-  // const handleSearchSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (searchElement.trim() == "") {
-  //     navigate("/places");
-  //   } else {
-  //     navigate(`/places?title=${searchElement}`);
-  //     setSearchElement("");
-  //   }
-  // };
-
 
   // Sticky navbar on scroll
   useEffect(() => {
@@ -100,12 +76,27 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
   useEffect(() => {
     if (isloggedin) {
       dispatch(fetchWishlistCount());
     }
-  }, [dispatch, isloggedin]);  
+  }, [dispatch, isloggedin]);
+
+  // Handle scrolling after navigation (for deep linking)
+  useEffect(() => {
+    const hash = location.hash;
+    if (hash === "#categories" && location.pathname === "/") {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        scroller.scrollTo("categories", {
+          duration: 800,
+          delay: 0,
+          smooth: "easeInOutQuart",
+          offset: -80, // Adjust for navbar height
+        });
+      }, 100);
+    }
+  }, [location]);
 
   const handleLogout = async () => {
     try {
@@ -130,23 +121,33 @@ export default function Navbar() {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
+  // Handler for Categories link - works from any page
+  const handleCategoriesClick = (e) => {
+    e.preventDefault();
+    
+    if (location.pathname === "/") {
+      // Already on home page, just scroll
+      scroller.scrollTo("categories", {
+        duration: 800,
+        delay: 0,
+        smooth: "easeInOutQuart",
+        offset: -80, // Adjust based on your navbar height
+      });
+    } else {
+      // Navigate to home page with hash, then scroll
+      navigate("/#categories");
+    }
+    
+    // Close mobile menu if open
+    setIsOpen(false);
+  };
+
   return (
     <nav id="nav" className="navbar normal">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
           Gemsy
         </Link>
-
-        {/* <div className="search-box">
-          <Search size={18} onClick={handleSearchSubmit} />
-          <input
-            type="text"
-            onKeyDown={handlePressingEnter}
-            onChange={handleSearchChage}
-            value={searchElement}
-            placeholder={t("nav_search_placeholder")}
-          />
-        </div> */}
 
         <ul className="navbar-links">
           <li>
@@ -156,9 +157,13 @@ export default function Navbar() {
             <NavLink to="/surprise">{t("nav_link_surprise")}</NavLink>
           </li>
           <li>
-            <LinkScroll to="categories" smooth={true}>
+            <a 
+              href="#categories" 
+              onClick={handleCategoriesClick}
+              style={{ cursor: "pointer" }}
+            >
               {t("nav_link_categories")}
-            </LinkScroll>
+            </a>
           </li>
           <li>
             <NavLink to="/contact-us">{t("nav_link_contact")}</NavLink>
@@ -179,7 +184,6 @@ export default function Navbar() {
               )}
             </Link>
           )}
-          {/* Dark Mode */}
           <TranslateTwoToneIcon
             style={{ cursor: "pointer", marginRight: "10px" }}
             onClick={() => {
@@ -207,7 +211,6 @@ export default function Navbar() {
                 onClick={() => setUserDropdown(!userDropdown)}
               >
                 <User size={20} />
-
                 {user && <p style={{ marginLeft: "6px" }}>{user.firstName}</p>}
               </button>
 
@@ -257,53 +260,49 @@ export default function Navbar() {
       {isOpen && (
         <ul className="mobile-menu">
           <li>
-            <NavLink to="/places">{t("nav_link_places")}</NavLink>
+            <NavLink to="/places" onClick={() => setIsOpen(false)}>
+              {t("nav_link_places")}
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/surprise">{t("nav_link_surprise")} </NavLink>
+            <NavLink to="/surprise" onClick={() => setIsOpen(false)}>
+              {t("nav_link_surprise")}
+            </NavLink>
           </li>
           <li>
-            <LinkScroll to="categories" smooth={true}>
+            <a 
+              href="#categories" 
+              onClick={handleCategoriesClick}
+              style={{ cursor: "pointer" }}
+            >
               {t("nav_link_categories")}
-            </LinkScroll>
+            </a>
           </li>
           <li>
-            <NavLink to="/contact">{t("nav_link_contact")}</NavLink>
+            <NavLink to="/contact-us" onClick={() => setIsOpen(false)}>
+              {t("nav_link_contact")}
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/about/aboutUS">{t("nav_link_about")}</NavLink>
+            <NavLink to="/about/aboutUS" onClick={() => setIsOpen(false)}>
+              {t("nav_link_about")}
+            </NavLink>
           </li>
-          {/**  {isloggedin && (
-            <li>
-              <Link to="/wishlist" className="flex items-center gap-2">
-                <Heart size={16} />
-                {t("nav_link_wishlist")}
-                {wishlistCount > 0 && (
-                  <span className="bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {wishlistCount}
-                  </span>
-                )}
-              </Link>
-            </li>
-          )} **/}
-
 
           {!isloggedin && (
             <>
               <li>
-                <Link to="/login">{t("nav_auth_login")}</Link>
+                <Link to="/login" onClick={() => setIsOpen(false)}>
+                  {t("nav_auth_login")}
+                </Link>
               </li>
               <li>
-                <Link to="/signUp">{t("nav_auth_signup")}</Link>
+                <Link to="/signUp" onClick={() => setIsOpen(false)}>
+                  {t("nav_auth_signup")}
+                </Link>
               </li>
             </>
           )}
-          <li>
-            {/* <div className="mobile-search">
-              <Search size={18} />
-              <input type="text" placeholder={t("nav_search_placeholder")} />
-            </div> */}
-          </li>
         </ul>
       )}
     </nav>
