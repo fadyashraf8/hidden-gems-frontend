@@ -43,6 +43,13 @@ export default function HomeAdmin() {
     const categoriesData = await categoriesRes.json();
     console.log("categoriesData", categoriesData);
 
+
+     const AllCategoriesData = await fetch(`${baseUrl}/categories`, {
+      credentials: 'include'
+    });
+    const AllCategoriesDataaaaaa = await AllCategoriesData.json();
+    console.log("categoriesData", categoriesData);
+
     const gemsRes = await fetch(`${baseUrl}/gems`, {
       credentials: 'include'
     });
@@ -55,7 +62,7 @@ export default function HomeAdmin() {
         gems: { total: gemsData.totalItems || 0, loading: false },
       });
 
-      setRecentCategories(categoriesData.result?.slice(0, 6) || []);
+      setRecentCategories(AllCategoriesDataaaaaa.result || []);
     } catch (error) {
       console.error("Error:", error);
       setStats({
