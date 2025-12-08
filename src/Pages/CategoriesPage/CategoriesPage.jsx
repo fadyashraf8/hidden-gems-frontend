@@ -132,7 +132,7 @@ export default function CategoriesPage() {
       .get(`${baseURL}/gems`, { params, withCredentials: true })
       .then((response) => {
         const data = response.data;
-        console.log("Fetched gems data:", data);
+       
         if (data.message === "success") {
           setGems(data.result || []);
           setTotalPages(data.totalPages || 1);

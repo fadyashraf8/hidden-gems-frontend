@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const BASE_URL = import.meta.env.VITE_Base_URL;
 
@@ -30,10 +31,14 @@ export const addToWishlist = createAsyncThunk(
         { withCredentials: true }
       );
       dispatch(fetchWishlistCount()); 
+      console.log("response", response);
+      
       return response.data;  
     } catch (error) {
+
+      
       return rejectWithValue(
-        error.response?.data?.message || "Failed to add to wishlist"
+        error.response?.data?.error || "Failed to add to wishlist"
       );
     }
   }
@@ -49,8 +54,9 @@ export const removeFromWishlist = createAsyncThunk(
       dispatch(fetchWishlistCount()); 
       return gemId;
     } catch (error) {
+
       return rejectWithValue(
-        error.response?.data?.message || "Failed to remove from wishlist",
+        error.response?.data?.error || "Failed to remove from wishlist",
         gemId
       );
     }
@@ -67,6 +73,8 @@ export const clearWishlist = createAsyncThunk(
       dispatch(fetchWishlistCount()); 
       return true;
     } catch (error) {
+      console.log("error", error);
+
       return rejectWithValue(
         error.response?.data?.message || "Failed to clear wishlist"
       );
@@ -82,12 +90,14 @@ export const fetchWishlistItems = createAsyncThunk(
         withCredentials: true,
       });
       
-      console.log("Wishlist API response:", response.data);
+      console.log("Wishlist API response:", response);
 
       return response.data.userWishList || [];
     } catch (error) {
+      console.log("error", error);
+
       return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch wishlist"
+        error.response?.data?.error || "Failed to fetch wishlist"
       );
     }
   }
@@ -146,6 +156,8 @@ const wishlistSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchWishlistItems.fulfilled, (state, action) => {
+        console.log("action.payload",action.payload);
+        
         state.items = action.payload;
         state.loading = false;
       })

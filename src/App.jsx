@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import { useSelector, useDispatch } from "react-redux";
-import { fetchWishlistCount } from "./redux/wishlistSlice";
+import { fetchWishlistCount, fetchWishlistItems } from "./redux/wishlistSlice";
 import { checkAuth } from "./redux/userSlice";
 import { useTranslation } from "react-i18next";
 
@@ -97,6 +97,8 @@ function App() {
 
   useEffect(() => {
     if (isLoggedIn) {
+      dispatch(fetchWishlistItems());
+
       dispatch(fetchWishlistCount());
     }
   }, [dispatch, isLoggedIn]);
@@ -133,7 +135,7 @@ function App() {
         { path: "gems/:id", element: <GemDetails /> },
         { path: "contact-us", element: <ContactUsPage /> },
         { path: "vouchers", element: <Vouchers /> },
-        { path: "wishlist", element: <Wishlist /> }, 
+        { path: "wishlist", element: <Wishlist /> },
         { path: "places", element: <CategoriesPage /> },
         { path: "surprise", element: <SurpriseMe /> },
         { path: "places/:categoryName", element: <CategoriesPage /> },
@@ -308,8 +310,6 @@ function App() {
         //Voucher Redeem
         { path: "vouchers", element: <AllVouchers /> },
         { path: "vouchers/:id", element: <VoucherRedeem /> },
-
-
       ],
     },
     // {

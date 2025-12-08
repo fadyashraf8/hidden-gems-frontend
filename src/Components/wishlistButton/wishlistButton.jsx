@@ -21,6 +21,8 @@ const WishlistButton = ({ gemId, size = 20 }) => {
         (item) => item.gemId?._id === gemId || item.gemId === gemId
       );
       setIsInWishlist(isGemInWishlist);
+      console.log("ok");
+      
     };
 
     checkWishlistStatus();
@@ -46,29 +48,50 @@ const WishlistButton = ({ gemId, size = 20 }) => {
       }
       dispatch(fetchWishlistItems());
     } catch (error) {
-      toast.error(error.message || "Failed to update wishlist");
+      console.log("error", error);
+      
+      toast.error(error);
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <button
-      onClick={handleWishlistToggle}
-      disabled={loading}
-      className="absolute top-3 right-3 bg-white/90 dark:bg-black/80 backdrop-blur-sm p-2 rounded-full shadow-sm hover:shadow-md transition-all z-10"
-      aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
-    >
-      <Heart
-        size={size}
-        className={`transition-colors ${
-          isInWishlist
-            ? "fill-red-500 text-red-500"
-            : "text-gray-500 hover:text-red-500"
-        } ${loading ? "opacity-50" : ""}`}
-      />
-    </button>
-  );
+return (
+  <button
+    onClick={handleWishlistToggle}
+    disabled={loading}
+    style={{
+      position: 'absolute',
+      top: '12px',
+      right: '12px',
+      zIndex: 10,
+      background: 'rgba(255, 255, 255, 0.9)',
+      backdropFilter: 'blur(4px)',
+      padding: '8px',
+      borderRadius: '50%',
+      border: 'none',
+      cursor: 'pointer',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+      transition: 'all 0.2s',
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+    }}
+    aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+  >
+    <Heart
+      size={size}
+      className={`transition-colors ${
+        isInWishlist
+          ? "fill-red-500 text-red-500"
+          : "text-gray-500 hover:text-red-500"
+      } ${loading ? "opacity-50" : ""}`}
+    />
+  </button>
+);
 };
 
 export default WishlistButton;

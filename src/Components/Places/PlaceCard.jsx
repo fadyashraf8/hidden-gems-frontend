@@ -118,6 +118,8 @@ const PlaceCard = ({ gem, rank }) => {
         className="place-card-image"
         style={{
           flexShrink: 0,
+              position: 'relative', 
+
         }}
       >
         <img
@@ -130,13 +132,15 @@ const PlaceCard = ({ gem, rank }) => {
             display: "block",
           }}
         />
+                <WishlistButton gemId={gem._id} size={18} />
+
       </div>
 
-      <div
-        style={{ position: "absolute", top: "10px", right: "10px", zIndex: 20 }}
+      {/* <div
+        style={{ position: "relative", top: "10px", right: "10px", zIndex: 20 }}
       >
-        <WishlistButton gemId={gem._id} size={18} />
-      </div>
+
+      </div> */}
 
       {/* Content Section */}
       <div
