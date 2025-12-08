@@ -6,7 +6,7 @@
 }
 
 .dark-mode .place-card h2,
-.dark-mode .place-card span,
+/* .dark-mode .place-card span, */
 .dark-mode .place-card p {
     color: #e8eaed !important;
 }
