@@ -4,8 +4,10 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
 export default function VoucherRedeem() {
+    const { t } = useTranslation("Vouchers");
+  
   const { id } = useParams();
   const [voucher, setVoucher] = useState(null);
   const [loading, setLoading] = useState(true);  
@@ -55,7 +57,7 @@ export default function VoucherRedeem() {
   if (!voucher)
     return (
       <div className="flex justify-center items-center h-screen text-lg dark:text-white">
-        Voucher Not Found
+        {t(" Voucher Not Found")}
       </div>
     );
 
@@ -63,57 +65,60 @@ export default function VoucherRedeem() {
     <div className="flex flex-col items-center min-h-screen bg-gray-100 dark:bg-zinc-900 p-4 space-y-4">
       {/* Buttons */}
 
-      {user.role==="owner" && (
-<div className="flex space-x-3">
-        <button
-          onClick={() => redeemVoucher("accept")}
-          className="px-4 py-2 bg-gradient-to-r from-green-400 to-green-500 text-white rounded-lg shadow-md 
+      {user.role === "owner" && (
+        <div className="flex space-x-3">
+          <button
+            onClick={() => redeemVoucher("accept")}
+            className="px-4 py-2 bg-gradient-to-r from-green-400 to-green-500 text-white rounded-lg shadow-md 
                      hover:from-green-500 hover:to-green-600 transition-all duration-300"
-        >
-          Accept
-        </button>
-        <button
-          onClick={() => redeemVoucher("reject")}
-          className="px-4 py-2 bg-gradient-to-r from-red-400 to-red-500 text-white rounded-lg shadow-md 
+          >
+            {t("Accept")}
+          </button>
+          <button
+            onClick={() => redeemVoucher("reject")}
+            className="px-4 py-2 bg-gradient-to-r from-red-400 to-red-500 text-white rounded-lg shadow-md 
                      hover:from-red-500 hover:to-red-600 transition-all duration-300"
-        >
-          Reject
-        </button>
-      </div>
+          >
+            {t("Reject")}
+          </button>
+        </div>
       )}
-      
 
       {/* Card */}
       <div className="bg-white dark:bg-zinc-800 shadow-md rounded-xl p-4 w-full max-w-md">
         <h2 className="text-xl font-bold mb-3 text-center dark:text-white">
-          Voucher Details
+          {t("Voucher Details")}
         </h2>
 
         <div className="space-y-2">
-          <Detail label="Code" value={voucher.code} />
+          <Detail label={`${t("Code")}`} value={voucher.code} />
           <Detail
-            label="Created At"
+            label={`${t("Created At")}`}
             value={new Date(voucher.createdAt).toLocaleString()}
           />
-          <Detail label="Discount" value={`${voucher.discount}%`} />
+          <Detail label={`${t("Discount")}`} value={`${voucher.discount}%`} />
           <Detail
-            label="Expiry Date"
+            label={`${t("Expiry Date")}`}
             value={new Date(voucher.expiryDate).toLocaleString()}
           />
 
           <hr className="my-3 border-gray-300 dark:border-zinc-700" />
 
-          <h3 className="text-lg font-semibold dark:text-white">Gem Info</h3>
-          <Detail label="Gem Name" value={voucher.gemId?.name} />
+          <h3 className="text-lg font-semibold text-center dark:text-white">
+            {t("Gem Info")}
+          </h3>
+          <Detail label={`${t("Gem Name")}`} value={voucher.gemId?.name} />
 
           <hr className="my-3 border-gray-300 dark:border-zinc-700" />
 
-          <h3 className="text-lg font-semibold dark:text-white">User Info</h3>
+          <h3 className="text-lg font-semibold text-center dark:text-white">
+            {t("User Info")}
+          </h3>
           <Detail
-            label="Full Name"
+            label={`${t("Full Name")}`}
             value={`${voucher.userId?.firstName} ${voucher.userId?.lastName}`}
           />
-          <Detail label="Email" value={voucher.userId?.email} />
+          <Detail label={`${t("Email")}`} value={voucher.userId?.email} />
         </div>
       </div>
     </div>
