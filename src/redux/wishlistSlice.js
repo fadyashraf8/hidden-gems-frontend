@@ -135,6 +135,8 @@ const wishlistSlice = createSlice({
         state.items = state.items.filter(  
           (item) => item.gemId._id !== action.payload
         );
+        state.loading = false;//fady
+
       })
       .addCase(removeFromWishlist.rejected, (state, action) => {
         state.loading = false;
@@ -157,6 +159,8 @@ const wishlistSlice = createSlice({
       .addCase(clearWishlist.fulfilled, (state) => {
         state.items = [];  
         state.count = 0;
+        state.loading = false; //fady
+
       })
       .addCase(clearWishlist.rejected, (state, action) => {
         state.loading = false;
