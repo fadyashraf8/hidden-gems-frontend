@@ -19,6 +19,7 @@ import ImageCarouselModal from "../../Components/ImageCarouselModal/ImageCarouse
 import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
 import QRCodeModal from "../../Components/QRCodeModal/QRCodeModal.jsx";
 import toast from "react-hot-toast";
+import SurpriseButton from "../../Components/SurpriseButton/SurpriseButton";
 
 const BASE_URL = import.meta.env.VITE_Base_URL;
 const COLLAPSED_ABOUT_HEIGHT = 150;
@@ -737,6 +738,10 @@ const GemDetails = () => {
 
   return (
     <>
+      <SurpriseButton
+        className="fixed top-28 z-50"
+        style={{ right: "2rem", left: "auto" }}
+      />
       <div className="min-h-screen bg-white dark:bg-zinc-900 pb-12 gem-details">
         {/* Hero Image Section - Full Width */}
         <div className="relative h-[50vh] md:h-[60vh] w-full">
@@ -1169,12 +1174,12 @@ const GemDetails = () => {
       />
 
       <ImageCarouselModal
-  isOpen={carouselOpen}
-  onClose={() => setCarouselOpen(false)}
-  images={galleryImages}
-  initialIndex={carouselInitialIndex}
-  resolveImageSrc={resolveImageSrc}
-/>
+        isOpen={carouselOpen}
+        onClose={() => setCarouselOpen(false)}
+        images={galleryImages}
+        initialIndex={carouselInitialIndex}
+        resolveImageSrc={resolveImageSrc}
+      />
     </>
   );
 };

@@ -6,7 +6,7 @@ import { getGemsAPI } from "../../Services/GemsAuth";
 import { Stack, Typography, Grid, Container } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-
+import SurpriseButton from "../../Components/SurpriseButton/SurpriseButton.jsx";
 
 export default function Home() {
   const { t } = useTranslation("home");
@@ -14,19 +14,21 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [dark, setDark] = useState(localStorage.getItem("darkMode"));
   const isDarkModeEnabled = useSelector((state) => state.darkMode.enabled);
-  
-  
+
   useEffect(() => {
     // console.log("dark mode is " +dark)
     console.log(isDarkModeEnabled);
     const fetchGems = async () => {
       try {
         const data = await getGemsAPI();
-        console.log("data",data.result.filter(gem => gem.status === 'accepted'));
-        
+        console.log(
+          "data",
+          data.result.filter((gem) => gem.status === "accepted")
+        );
+
         if (data && data.result) {
-          setGems(data.result.filter(gem => gem.status === 'accepted'));
-        } 
+          setGems(data.result.filter((gem) => gem.status === "accepted"));
+        }
       } catch (error) {
         console.error("Failed to fetch gems", error);
       } finally {
@@ -50,13 +52,21 @@ export default function Home() {
       title: t("hero_slide_3"),
     },
     {
-      image: "images/4.jpg",
       title: t("hero_slide_4"),
     },
   ];
 
   return (
     <>
+      <SurpriseButton
+        style={{
+          position: "fixed",
+          top: "120px",
+          right: "2rem",
+          left: "auto",
+          zIndex: 999,
+        }}
+      />
       <Hero slides={slides} duration={5000} />
 
       <Container maxWidth="xl" sx={{ py: 8 }}>
@@ -76,7 +86,7 @@ export default function Home() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {gems.slice(0, 4).map((gem) => (
-              <GemCard key={gem._id} gem={gem} darkMode={isDarkModeEnabled}/>
+              <GemCard key={gem._id} gem={gem} darkMode={isDarkModeEnabled} />
             ))}
           </div>
         )}
@@ -89,7 +99,4 @@ export default function Home() {
   );
 }
 
-
-
-
-// comment 
+// comment
