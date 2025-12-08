@@ -103,10 +103,14 @@ export default function Navbar() {
       await dispatch(logoutUser()).unwrap();
       setUserDropdown(false);
 
-      toast.success(t("signed-out-successfully"), {
+      toast.success(t("Signed out successfully"), {
         position: "top-center",
         duration: 2000,
-        className: "custom-toast",
+        style: {
+          background: "#DD0303",
+          color: "white",
+        },
+       
         id: "logout-toast",
         ariaProps: { role: "status", "aria-live": "polite" },
         icon: "👋",
