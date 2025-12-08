@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import ScrollToTop from "../../ScrollToTop";
 
 const BusinessesLayout = () => {
   const { t } = useTranslation("BusinessesLayout");
@@ -14,6 +15,7 @@ const BusinessesLayout = () => {
 
   return (
     <div className="mt-10 flex flex-col md:flex-row max-w-6xl mx-auto py-12 px-6 gap-10">
+      <ScrollToTop />
       {/* Sidebar */}
       <aside className="md:w-1/4 border-r border-gray-200">
         <h2 className="text-lg font-semibold mb-4">

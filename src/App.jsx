@@ -50,6 +50,7 @@ import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import NotFoundPage from "./Pages/NotFound/NotFoundPage";
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import PublicRoute from "./Components/Auth/PublicRoute";
+import LoadingScreen from "./Pages/LoadingScreen";
 
 import GemDetails from "./Pages/GemDetails/GemDetails";
 import UserProfile from "./Pages/UserProfile/UserProfile";
@@ -88,7 +89,7 @@ function App() {
   const dispatch = useDispatch();
   const { i18n } = useTranslation();
   const language = i18n.language || "en";
-  const { isLoggedIn } = useSelector((state) => state.user);
+  const { isLoggedIn, loading } = useSelector((state) => state.user);
 
   // Check Auth on App load
   useEffect(() => {
@@ -107,10 +108,14 @@ function App() {
   useEffect(() => {
     if (dark) {
       document.documentElement.classList.add("dark-mode");
+      document.documentElement.classList.add("dark");
       document.body.classList.add("dark-mode");
+      document.body.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark-mode");
+      document.documentElement.classList.remove("dark");
       document.body.classList.remove("dark-mode");
+      document.body.classList.remove("dark");
     }
   }, [dark]);
 
@@ -354,6 +359,8 @@ function App() {
       element: <Cancel />,
     },
   ]);
+
+  if (loading) return <LoadingScreen />;
 
   return (
     <div>

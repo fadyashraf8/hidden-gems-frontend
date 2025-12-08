@@ -28,6 +28,7 @@ import { THEME } from "../../Components/Places/constants";
 import PlaceCard from "../../Components/Places/PlaceCard";
 import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
 import { useSelector } from "react-redux";
+import ScrollToTop from "../../Components/ScrollToTop";
 
 export default function CategoriesPage() {
   const { userInfo } = useSelector((state) => state.user || {});
@@ -132,7 +133,7 @@ export default function CategoriesPage() {
       .get(`${baseURL}/gems`, { params, withCredentials: true })
       .then((response) => {
         const data = response.data;
-       
+
         if (data.message === "success") {
           setGems(data.result || []);
           setTotalPages(data.totalPages || 1);
@@ -168,6 +169,7 @@ export default function CategoriesPage() {
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "white" }}>
+      <ScrollToTop />
       {/* UPPER PART: RED BACKGROUND */}
       <Box
         className="upper-part"
@@ -281,7 +283,7 @@ export default function CategoriesPage() {
                     "& .MuiOutlinedInput-root": {
                       borderRadius: 2,
                       height: 56,
-                      
+
                       "&:hover fieldset": {
                         borderColor: THEME.RED,
                       },
