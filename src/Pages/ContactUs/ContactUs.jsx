@@ -134,6 +134,7 @@ export default function ContactUsPage() {
                     },
                   })}
                   isInvalid={!!errors.firstName}
+                  
                   errorMessage={errors.firstName?.message}
                 />
 

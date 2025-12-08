@@ -109,11 +109,7 @@
     color: #6b7280 !important;
 }
 
-/* Grid Gap Fix for Dark Mode */
-.dark-mode .gap-4,
-.dark-mode .gap-10 {
-    gap: inherit;
-}
+
 
 /* Toast Notifications Dark Mode */
 .dark-mode .Toaster > div {
