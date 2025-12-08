@@ -739,8 +739,13 @@ const GemDetails = () => {
   return (
     <>
       <SurpriseButton
-        className="fixed top-28 z-50"
-        style={{ right: "2rem", left: "auto" }}
+        style={{
+          position: "fixed",
+          top: "120px",
+          right: "2rem",
+          left: "auto",
+          zIndex: 999,
+        }}
       />
       <div className="min-h-screen bg-white dark:bg-zinc-900 pb-12 gem-details">
         {/* Hero Image Section - Full Width */}

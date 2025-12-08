@@ -580,6 +580,15 @@ export default function CategoriesPage() {
           </Grid>
         </Container>
       </Box>
+      <SurpriseButton
+        style={{
+          position: "fixed",
+          top: "120px",
+          right: "2rem",
+          left: "auto",
+          zIndex: 999,
+        }}
+      />
     </Box>
   );
 }
