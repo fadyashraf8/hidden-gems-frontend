@@ -1,0 +1,142 @@
+/* ContactUs.css - Dark Mode Styles */
+
+/* Main Container */
+.dark-mode .min-h-screen {
+    background-color: #0f1419 !important;
+}
+
+/* Headings */
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4 {
+    color: #e8eaed !important;
+}
+
+/* Paragraphs and Text */
+.dark-mode p {
+    color: #9aa0a6 !important;
+}
+
+/* Info Items - Icons Background */
+.dark-mode .bg-red-100 {
+    background-color: rgba(220, 38, 38, 0.15) !important;
+}
+
+.dark-mode .text-red-600 {
+    color: #ff4444 !important;
+}
+
+/* Info Items - Text Colors */
+.dark-mode .text-gray-900 {
+    color: #e8eaed !important;
+}
+
+.dark-mode .text-gray-600 {
+    color: #9aa0a6 !important;
+}
+
+/* Card Background */
+.dark-mode .shadow-xl {
+    background-color: #1a1f2e !important;
+    border: 1px solid #2a3142;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Form Inputs - HeroUI */
+.dark-mode [data-slot="input-wrapper"] {
+    background-color: #131620 !important;
+    border-color: #2a3142 !important;
+}
+
+.dark-mode [data-slot="input"] {
+    color: #e8eaed !important;
+}
+
+.dark-mode [data-slot="label"] {
+    color: #9aa0a6 !important;
+}
+
+/* Input Focus State */
+.dark-mode [data-slot="input-wrapper"]:hover {
+    border-color: #dd0303 !important;
+}
+
+.dark-mode [data-focus="true"] [data-slot="input-wrapper"] {
+    border-color: #dd0303 !important;
+    box-shadow: 0 0 0 2px rgba(221, 3, 3, 0.2) !important;
+}
+
+/* Textarea */
+.dark-mode textarea {
+    background-color: #131620 !important;
+    color: #e8eaed !important;
+    border-color: #2a3142 !important;
+}
+
+.dark-mode textarea:focus {
+    border-color: #dd0303 !important;
+    outline: none;
+}
+
+/* Error Messages */
+.dark-mode [data-slot="error-message"] {
+    color: #ff6b6b !important;
+}
+
+/* Input Invalid State */
+.dark-mode [data-invalid="true"] [data-slot="input-wrapper"] {
+    border-color: #ff4444 !important;
+}
+
+/* Button - Keep Red */
+.dark-mode .bg-red-600 {
+    background-color: #dd0303 !important;
+}
+
+.dark-mode .bg-red-600:hover {
+    background-color: #c20303 !important;
+}
+
+.dark-mode button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Placeholder Text */
+.dark-mode input::placeholder,
+.dark-mode textarea::placeholder {
+    color: #6b7280 !important;
+}
+
+/* Grid Gap Fix for Dark Mode */
+.dark-mode .gap-4,
+.dark-mode .gap-10 {
+    gap: inherit;
+}
+
+/* Toast Notifications Dark Mode */
+.dark-mode .Toaster > div {
+    background-color: #1a1f2e !important;
+    color: #e8eaed !important;
+    border: 1px solid #2a3142 !important;
+}
+
+/* Success Toast */
+.dark-mode [data-type="success"] {
+    background-color: #1a2e1a !important;
+    border-color: #2d4a2d !important;
+}
+
+/* Error Toast */
+.dark-mode [data-type="error"] {
+    background-color: #2e1a1a !important;
+    border-color: #4a2d2d !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .dark-mode .shadow-xl {
+        padding: 1.5rem !important;
+    }
+}

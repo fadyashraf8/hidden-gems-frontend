@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import './ContactUs.css'
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Card, Input, Textarea, Button } from "@heroui/react";
 import SendIcon from "@mui/icons-material/Send";
@@ -7,6 +8,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useTranslation } from "react-i18next";
 import toast, { Toaster } from "react-hot-toast";
+import LoadingScreen from "../LoadingScreen";
 
 const InfoItem = ({ icon: Icon, title, subtitle }) => (
   <div className="flex gap-4 mb-6">
@@ -23,6 +25,7 @@ const InfoItem = ({ icon: Icon, title, subtitle }) => (
 export default function ContactUsPage() {
   const { t, i18n } = useTranslation("ContactUs");
   const isRTL = i18n.language === "ar";
+
 
   const {
     register,

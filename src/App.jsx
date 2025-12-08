@@ -55,7 +55,7 @@ import GemDetails from "./Pages/GemDetails/GemDetails";
 import UserProfile from "./Pages/UserProfile/UserProfile";
 import CreatedByYou from "./Pages/CreatedByYou/CreatedByYou";
 
-import ContactUsPage from "./Pages/ContactUs";
+import ContactUsPage from "./Pages/ContactUs/ContactUs";
 import CategoriesPage from "./Pages/CategoriesPage/CategoriesPage";
 import SurpriseMe from "./Pages/SurpriseMe/SurpriseMe";
 import Success from "./Pages/Subscription/Success";

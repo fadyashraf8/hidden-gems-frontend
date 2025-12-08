@@ -1,0 +1,22 @@
+
+/* PlaceCard.css */
+.dark-mode .place-card {
+    background-color: #1a1f2e;
+    border: 1px solid #2a3142; /* Subtle border for definition */
+}
+
+.dark-mode .place-card h2,
+.dark-mode .place-card span,
+.dark-mode .place-card p {
+    color: #e8eaed !important;
+}
+
+.dark-mode .place-card:hover {
+    border-color: #3a4152;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4) !important;
+}
+
+/* Better contrast for secondary text */
+.dark-mode .place-card div[style*="color: THEME.GREY"] {
+    color: #9aa0a6 !important;
+}

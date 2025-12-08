@@ -1,0 +1,151 @@
+/* Dark Mode Styles for Categories Page */
+
+/* Upper section background */
+.dark-mode .upper-part {
+    background-color: #1a1f2e !important;
+}
+
+/* Lower section background */
+.dark-mode .lower-part {
+    background-color: #0f1419 !important;
+}
+
+/* Search Input Dark Mode */
+.dark-mode .MuiTextField-root .MuiOutlinedInput-root {
+    background-color: #1a1f2e;
+    color: #e8eaed;
+}
+
+.dark-mode .MuiTextField-root .MuiOutlinedInput-root fieldset {
+    border-color: #2a3142;
+}
+
+.dark-mode .MuiTextField-root .MuiOutlinedInput-root:hover fieldset {
+    border-color: #dd0303 !important;
+}
+
+.dark-mode .MuiTextField-root .MuiOutlinedInput-input::placeholder {
+    color: #9aa0a6;
+    opacity: 1;
+}
+
+.dark-mode .MuiTextField-root .MuiOutlinedInput-input {
+    color: #e8eaed;
+}
+
+/* Select/Dropdown Dark Mode */
+.dark-mode .MuiFormControl-root .MuiOutlinedInput-root {
+    background-color: #1a1f2e;
+    color: #e8eaed;
+}
+
+.dark-mode .MuiFormControl-root .MuiOutlinedInput-notchedOutline {
+    border-color: #2a3142;
+}
+
+.dark-mode .MuiFormControl-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: #dd0303 !important;
+}
+
+.dark-mode .MuiInputLabel-root {
+    color: #9aa0a6 !important;
+}
+
+.dark-mode .MuiInputLabel-root.Mui-focused {
+    color: #dd0303 !important;
+}
+
+.dark-mode .MuiSelect-icon {
+    color: #9aa0a6;
+}
+
+/* Dropdown Menu Dark Mode */
+.dark-mode .MuiPaper-root.MuiMenu-paper {
+    background-color: #1a1f2e !important;
+    border: 1px solid #2a3142;
+}
+
+.dark-mode .MuiMenuItem-root {
+    color: #e8eaed !important;
+}
+
+.dark-mode .MuiMenuItem-root:hover {
+    background-color: rgba(220, 38, 38, 0.08) !important;
+}
+
+.dark-mode .MuiMenuItem-root.Mui-selected {
+    background-color: rgba(220, 38, 38, 0.12) !important;
+}
+
+.dark-mode .MuiMenuItem-root.Mui-selected:hover {
+    background-color: rgba(220, 38, 38, 0.16) !important;
+}
+
+/* Clear Filters Button */
+.dark-mode .MuiButton-root {
+    color: #dd0303 !important;
+}
+
+.dark-mode .MuiButton-root:hover {
+    background-color: rgba(220, 38, 38, 0.1) !important;
+}
+
+/* Search Icon */
+.dark-mode .MuiInputAdornment-root svg {
+    color: #9aa0a6 !important;
+}
+
+/* Typography & Text */
+.dark-mode .MuiTypography-root {
+    color: #e8eaed;
+}
+
+.dark-mode .upper-part .MuiTypography-root {
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Pagination Dark Mode */
+.dark-mode .MuiPagination-root .MuiPaginationItem-root {
+    color: #e8eaed;
+    border-color: #2a3142;
+}
+
+.dark-mode .MuiPagination-root .MuiPaginationItem-root:hover {
+    background-color: #1a1f2e;
+}
+
+.dark-mode .MuiPagination-root .MuiPaginationItem-root.Mui-selected {
+    background-color: #dd0303 !important;
+    color: white !important;
+}
+
+/* Alert Dark Mode */
+.dark-mode .MuiAlert-root {
+    background-color: #1a1f2e;
+    color: #e8eaed;
+    border: 1px solid #2a3142;
+}
+
+/* CircularProgress */
+.dark-mode .MuiCircularProgress-root {
+    color: #dd0303 !important;
+}
+
+/* Divider */
+.dark-mode .MuiDivider-root {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Breadcrumbs Links */
+.dark-mode .upper-part a {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.dark-mode .upper-part a:hover {
+    color: white !important;
+}
+
+/* No results text */
+.dark-mode .lower-part > * > * > * > .MuiTypography-root {
+    color: #9aa0a6;
+}   

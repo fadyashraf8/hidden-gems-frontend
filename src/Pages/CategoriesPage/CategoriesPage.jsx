@@ -1,3 +1,4 @@
+import "./CategoriesPage.css";
 import { useState, useEffect } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import {
@@ -68,7 +69,7 @@ export default function CategoriesPage() {
       setSearchInput(title);
       // امسح الـ title من الـ URL بس وخلي الـ page زي ما هي
       const params = new URLSearchParams(searchParams);
-      params.delete('title');
+      params.delete("title");
       setSearchParams(params);
     }
   }, [title]);
@@ -169,8 +170,9 @@ export default function CategoriesPage() {
     <Box sx={{ minHeight: "100vh", bgcolor: "white" }}>
       {/* UPPER PART: RED BACKGROUND */}
       <Box
+        className="upper-part"
         sx={{
-          bgcolor: THEME.RED,
+          bgcolor: "#dd0303",
           pt: { xs: 4, md: 5 },
           pb: 6,
           mt: { xs: 7, md: 8 },
@@ -256,7 +258,7 @@ export default function CategoriesPage() {
       </Box>
 
       {/* LOWER PART: WHITE BACKGROUND */}
-      <Box sx={{ bgcolor: "white", pb: 12, pt: 4 }}>
+      <Box className="lower-part" sx={{ bgcolor: "white", pb: 12, pt: 4 }}>
         <Container maxWidth="lg">
           {/* FILTER BAR - INLINE */}
           <Box sx={{ mb: 4 }}>
@@ -279,6 +281,7 @@ export default function CategoriesPage() {
                     "& .MuiOutlinedInput-root": {
                       borderRadius: 2,
                       height: 56,
+                      
                       "&:hover fieldset": {
                         borderColor: THEME.RED,
                       },
@@ -536,7 +539,7 @@ export default function CategoriesPage() {
                             onChange={(e, page) => {
                               setCurrentPage(page);
                               const params = new URLSearchParams(searchParams);
-                              params.set('page', page.toString());
+                              params.set("page", page.toString());
                               setSearchParams(params);
                               window.scrollTo(0, 0);
                             }}

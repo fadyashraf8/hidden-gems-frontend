@@ -1,3 +1,4 @@
+import './PlaceCard.css';
 import { useNavigate } from 'react-router-dom';
 import { THEME } from './constants';
 import { useEffect, useState } from 'react';
@@ -68,7 +69,7 @@ const PlaceCard = ({ gem, rank }) => {
         overflow: "hidden",
         cursor: "pointer",
         transition: "all 0.2s",
-        backgroundColor: "white",
+        // backgroundColor: "white",
         display: "flex",
         flexDirection: window.innerWidth < 640 ? "column" : "row",
       }}
@@ -149,7 +150,7 @@ const PlaceCard = ({ gem, rank }) => {
         <h2
           style={{
             fontWeight: 800,
-            color: THEME.DARK,
+            // color: THEME.DARK,
             marginBottom: "8px",
             fontSize: "1.5rem",
             margin: "0 0 8px 0",
@@ -169,7 +170,7 @@ const PlaceCard = ({ gem, rank }) => {
           <span
             style={{
               marginLeft: "10px",
-              color: THEME.DARK,
+              // color: THEME.DARK,
               fontWeight: 700,
               fontSize: "0.875rem",
             }}
@@ -180,7 +181,7 @@ const PlaceCard = ({ gem, rank }) => {
 
         <div
           style={{
-            color: THEME.DARK,
+            // color: THEME.DARK,
             marginBottom: "8px",
             fontSize: "0.875rem",
           }}
@@ -188,14 +189,14 @@ const PlaceCard = ({ gem, rank }) => {
           <span style={{ fontWeight: 600 }}>{categoryName}</span>
           {/* <span style={{ margin: "0 6px", color: THEME.GREY }}>•</span>
           {gem.price || "$$"}*/
-          <span style={{ margin: "0 6px", color: THEME.GREY }}>•</span> }
+          <span style={{ margin: "0 6px" }}>•</span> }
           {gem.gemLocation}
         </div>
 
         <div style={{ marginTop: "12px" }}>
           <p
             style={{
-              color: THEME.GREY,
+              // color: THEME.GREY,
               fontSize: "0.9rem",
               lineHeight: 1.5,
               margin: 0,
