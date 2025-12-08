@@ -13,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import LoadingScreen from "../LoadingScreen";
 
 const UserActivity = () => {
   const { t, i18n } = useTranslation("UserActivity");
@@ -87,13 +88,8 @@ const isRTL = i18n.language === "ar";
   const goToNextPage = () =>
     currentPage < totalPages && setCurrentPage(currentPage + 1);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-10">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#DD0303]"></div>
-      </div>
-    );
-  }
+  if (loading) return <LoadingScreen />;
+
 
   if (error) {
     return <div className="text-center text-red-500 py-4">{error}</div>;

@@ -8,6 +8,7 @@ import {
   Menu,
   X,
   ChevronLeft,
+  TicketPercent,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -82,6 +83,15 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
         { label: `💠 ${t("All Hidden Gems")}`, path: "/admin/gems" },
         { label: `✨ ${t("Add Hidden Gem")}`, path: "/admin/gems/add" },
         { label: `⭐ ${t("My Hidden Gems")}`, path: "/admin/gems/user" },
+      ],
+    },
+    {
+      id: "vouchers",
+      title: `vouchers `,
+      icon: TicketPercent,
+      items: [
+        { label: `🎟️ All Vouchers`, path: "/admin/vouchers" },
+
       ],
     },
   ];

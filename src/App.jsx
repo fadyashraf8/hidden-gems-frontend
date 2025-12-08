@@ -79,9 +79,10 @@ import HomeOwner from "./Pages/OwnerPages/HomeOwner/HomeOwner";
 import GemOwner from "./Pages/OwnerPages/GemOwner/GemOwner";
 import AddGemOwner from "./Pages/OwnerPages/AddGemOwner/AddGemOwner";
 import VerifyEmail from "./Pages/VerifyEmail/VerifyEmail";
-import VoucherRedeem from "./Pages/AdminPages/VoucherRedeem/VoucherRedeem";
+import VoucherRedeem from "./Pages/AdminPages/Vouchers/VoucherRedeem/VoucherRedeem";
 import Vouchers from "./Pages/Vouchers/Vouchers";
 import Wishlist from "./Pages/wishListPage/wishList";
+import AllVouchers from "./Pages/AdminPages/Vouchers/AllVouchers/AllVouchers";
 function App() {
   const dark = useSelector((state) => state.darkMode.enabled);
   const dispatch = useDispatch();
@@ -305,6 +306,10 @@ function App() {
         { path: "gems/user", element: <UserGems /> },
 
         //Voucher Redeem
+        { path: "vouchers", element: <AllVouchers /> },
+        { path: "vouchers/:id", element: <VoucherRedeem /> },
+
+
       ],
     },
     // {
@@ -331,6 +336,8 @@ function App() {
         { path: "dashboard", element: <HomeOwner /> },
         { path: "gem", element: <GemOwner /> },
         { path: "gem/add", element: <AddGemOwner /> },
+        { path: "vouchers", element: <AllVouchers /> },
+
         { path: ":id", element: <VoucherRedeem /> },
       ],
     },

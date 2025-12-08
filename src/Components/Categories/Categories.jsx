@@ -17,6 +17,7 @@ import {
   CarouselPrevious,
 } from "../ui/carousel.jsx";
 import { useTranslation } from "react-i18next";
+import LoadingScreen from "@/Pages/LoadingScreen";
 
 const BASE_URL = import.meta.env.VITE_Base_URL;
 const ICON_COLOR = "#DD0303";
@@ -124,12 +125,7 @@ export default function Categories() {
   
   if (loading) {
     return (
-      <Container
-        maxWidth="md"
-        sx={{ py: 4, display: "flex", justifyContent: "center" }}
-      >
-        <CircularProgress />
-      </Container>
+     <LoadingScreen/>
     );
   }
 

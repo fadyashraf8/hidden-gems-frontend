@@ -4,6 +4,7 @@ import { ArrowLeft, Save, Upload, X } from "lucide-react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import LoadingScreen from "@/Pages/LoadingScreen";
 
 export default function EditCategory() {
   const { t } = useTranslation("AdminEditCategory");
@@ -113,13 +114,8 @@ export default function EditCategory() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+  if (loading) return <LoadingScreen />;
+
 
   return (
     <div className="max-w-4xl mx-auto">

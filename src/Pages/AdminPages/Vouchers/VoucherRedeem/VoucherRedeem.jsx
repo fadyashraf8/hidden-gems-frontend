@@ -2,13 +2,18 @@ import LoadingScreen from "@/Pages/LoadingScreen";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 export default function VoucherRedeem() {
   const { id } = useParams();
   const [voucher, setVoucher] = useState(null);
   const [loading, setLoading] = useState(true);  
+  const { isLoggedIn: isloggedin, userInfo: user } = useSelector(
+    (state) => state.user
+  );
 
+  
   const getVoucherDetails = async () => {
     try {
       const response = await axios.get(
@@ -40,6 +45,9 @@ export default function VoucherRedeem() {
 
   useEffect(() => {
     getVoucherDetails();
+
+
+    
   }, []);
 
   if (loading) return <LoadingScreen />;  
@@ -54,7 +62,9 @@ export default function VoucherRedeem() {
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 dark:bg-zinc-900 p-4 space-y-4">
       {/* Buttons */}
-      <div className="flex space-x-3">
+
+      {user.role==="owner" && (
+<div className="flex space-x-3">
         <button
           onClick={() => redeemVoucher("accept")}
           className="px-4 py-2 bg-gradient-to-r from-green-400 to-green-500 text-white rounded-lg shadow-md 
@@ -70,6 +80,8 @@ export default function VoucherRedeem() {
           Reject
         </button>
       </div>
+      )}
+      
 
       {/* Card */}
       <div className="bg-white dark:bg-zinc-800 shadow-md rounded-xl p-4 w-full max-w-md">

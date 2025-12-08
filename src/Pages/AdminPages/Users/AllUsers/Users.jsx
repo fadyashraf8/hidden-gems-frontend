@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import LoadingScreen from "@/Pages/LoadingScreen";
 
 export default function Users() {
   const { t, i18n } = useTranslation("AdminUsers");
@@ -121,13 +122,8 @@ export default function Users() {
     setCurrentPage(1);
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+  if (loading) return <LoadingScreen />;
+
 
   const goToPage = (page) => setCurrentPage(page);
 

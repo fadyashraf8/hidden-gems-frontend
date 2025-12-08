@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { getGemByIdAPI } from "../../../Services/GemsAuth";
+import LoadingScreen from "@/Pages/LoadingScreen";
 
 const BASE_URL = import.meta.env.VITE_Base_URL;
 
@@ -172,13 +173,8 @@ const EditPlace = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
-      </div>
-    );
-  }
+  if (loading) return <LoadingScreen />;
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">

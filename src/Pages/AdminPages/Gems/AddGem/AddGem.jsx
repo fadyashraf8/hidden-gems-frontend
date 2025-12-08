@@ -13,12 +13,16 @@ import {
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast"; // ✅ هنا الـ import
 
 export default function AddGem() {
   const { t, i18n } = useTranslation("AdminAddGem");
   const navigate = useNavigate();
   const baseURL = import.meta.env.VITE_Base_URL;
-  const { userInfo } = useSelector((state) => state.user || {}); // Not currently used
+  const { userInfo } = useSelector((state) => state.user || {});
+
+  const isAdmin = userInfo?.role === "admin";
+  const isOwner = userInfo?.role === "owner";
 
   const [saving, setSaving] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -30,23 +34,18 @@ export default function AddGem() {
     discount: 0,
     discountGold: 0,
     discountPlatinum: 0,
-    isSubscribed: false,
+    ...(isAdmin && { isSubscribed: false }),
   });
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [errors, setErrors] = useState({});
-  const [toast, setToast] = useState({ show: false, message: "", type: "" });
+  // ✅ شيلنا الـ custom toast state
+
+  const backPath = isAdmin ? "/admin/gems" : "/owner/gems";
 
   useEffect(() => {
     fetchCategories();
   }, []);
-
-  const showToast = (key, type, params = {}) => {
-    setToast({ show: true, message: t(key, params), type });
-    setTimeout(() => {
-      setToast({ show: false, message: "", type: "" });
-    }, 3000);
-  };
 
   const fetchCategories = async () => {
     try {
@@ -58,7 +57,7 @@ export default function AddGem() {
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
-      showToast("failedToLoadCategories", "error");
+      toast.error(t("failedToLoadCategories")); // ✅ استخدام الترجمة
     }
   };
 
@@ -79,14 +78,14 @@ export default function AddGem() {
     const totalImages = images.length + files.length;
 
     if (totalImages > 10) {
-      showToast("maxImagesError", "error");
+      toast.error(t("maxImagesError"));
       return;
     }
 
     const validFiles = [];
     files.forEach((file) => {
       if (file.size > 5 * 1024 * 1024) {
-        showToast("fileTooLarge", "error", { fileName: file.name });
+        toast.error(t("fileTooLarge", { fileName: file.name }));
         return;
       }
       validFiles.push(file);
@@ -151,7 +150,7 @@ export default function AddGem() {
     e.preventDefault();
 
     if (!validateForm()) {
-      showToast("fixErrors", "error");
+      toast.error(t("fixErrors"));
       return;
     }
 
@@ -167,8 +166,12 @@ export default function AddGem() {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
       });
-      showToast("gemCreated", "success");
-      setTimeout(() => navigate("/admin/gems"), 1500);
+
+      toast.success(t("gemCreated"));
+
+      setTimeout(() => {
+        navigate(backPath);
+      }, 1500);
     } catch (error) {
       console.error("Error creating gem:", error);
       const errorMsg = error.response?.data?.message;
@@ -178,7 +181,7 @@ export default function AddGem() {
           : errorMsg
         : t("failedToCreateGem");
 
-      showToast(msg, "error");
+      toast.error(msg);
     } finally {
       setSaving(false);
     }
@@ -189,7 +192,7 @@ export default function AddGem() {
       {/* Header */}
       <div className="mb-6">
         <Link
-          to="/admin/gems"
+          to={backPath}
           className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4 transition-colors"
         >
           <ArrowLeft size={20} className="mr-2" />
@@ -447,21 +450,23 @@ export default function AddGem() {
               </div>
             </div>
 
-            <div className="pt-4 border-t">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="isSubscribed"
-                  checked={formData.isSubscribed}
-                  onChange={handleInputChange}
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
-                <span className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                  <CheckCircle size={16} className="text-green-600" />
-                  {t("subscriptionActive")}
-                </span>
-              </label>
-            </div>
+            {isAdmin && (
+              <div className="pt-4 border-t">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="isSubscribed"
+                    checked={formData.isSubscribed}
+                    onChange={handleInputChange}
+                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <span className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                    <CheckCircle size={16} className="text-green-600" />
+                    {t("subscriptionActive")}
+                  </span>
+                </label>
+              </div>
+            )}
           </div>
 
           {/* Action Buttons */}
@@ -486,7 +491,7 @@ export default function AddGem() {
             </button>
 
             <Link
-              to="/admin/gems"
+              to={backPath}
               className="px-6 py-3 border cursor-pointer border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
             >
               {t("cancel")}
@@ -494,32 +499,6 @@ export default function AddGem() {
           </div>
         </div>
       </div>
-
-      {/* Toast Notification */}
-      {toast.show && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-top duration-300">
-          <div
-            className={`px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${
-              toast.type === "success"
-                ? "bg-green-600 text-white"
-                : "bg-red-600 text-white"
-            }`}
-          >
-            {toast.type === "success" ? (
-              <CheckCircle size={20} />
-            ) : (
-              <AlertTriangle size={20} />
-            )}
-            <span>{toast.message}</span>
-            <button
-              onClick={() => setToast({ show: false, message: "", type: "" })}
-              className="hover:opacity-80 transition-opacity"
-            >
-              <X size={18} />
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

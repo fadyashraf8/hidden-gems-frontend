@@ -8,6 +8,7 @@ import {
   Menu,
   X,
   ChevronLeft,
+  TicketPercent,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -65,6 +66,16 @@ export default function SidebarOwner({ isCollapsed, setIsCollapsed }) {
         { label: `➕ ${t("Add Gem")}`, path: "/owner/gem/add" },
       ],
     },
+
+      {
+          id: "vouchers",
+          title: `vouchers `,
+          icon: TicketPercent,
+          items: [
+            { label: `🎟️ All Vouchers`, path: "/owner/vouchers" },
+    
+          ],
+        },
 
    
   ];
