@@ -27,6 +27,7 @@ import axios from "axios";
 import { THEME } from "../../Components/Places/constants";
 import PlaceCard from "../../Components/Places/PlaceCard";
 import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
+import SurpriseButton from "../../Components/SurpriseButton/SurpriseButton";
 import { useSelector } from "react-redux";
 import ScrollToTop from "../../Components/ScrollToTop";
 
