@@ -51,7 +51,9 @@ export default function EditUser() {
         withCredentials: true,
       });
       if (response.data.message === "Success") {
+        
         const user = response.data.result;
+        console.log("user",user);
         setFormData({
           firstName: user.firstName,
           lastName: user.lastName,
@@ -62,7 +64,7 @@ export default function EditUser() {
           subscription: user.subscription,
         });
         if (user.image)
-          setImagePreview(`${baseURL}/uploads/user/${user.image}`);
+          setImagePreview(`${user.image}`);
       }
     } catch (error) {
       console.error("Error fetching user:", error);

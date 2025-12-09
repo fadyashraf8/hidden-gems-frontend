@@ -68,7 +68,7 @@ export default function GemOwner() {
       const response = await axios.get(`${baseURL}/gems/user/${userInfo.id}`, {
         withCredentials: true,
       });
-console.log(response);
+      console.log("response",response);
 
       if (
         response.data.message === "success" &&
@@ -81,7 +81,7 @@ console.log(response);
           name: gem.name,
           gemLocation: gem.gemLocation,
           description: gem.description,
-          category: gem.category._id,
+          category: gem.category?._id,
           discount: gem.discount,
           discountGold: gem.discountGold,
           discountPlatinum: gem.discountPlatinum,
@@ -94,7 +94,7 @@ console.log(response);
           isSubscribed: gem.isSubscribed,
           createdAt: gem.createdAt,
           updatedAt: gem.updatedAt,
-          _id: gem._id,
+          _id: gem?._id,
         });
       } else {
         setHasGem(false);
@@ -243,7 +243,7 @@ console.log(response);
         submitData.append("images", imageFile);
       });
 
-      await axios.put(`${baseURL}/gems/${gemInfo._id}`, submitData, {
+      await axios.put(`${baseURL}/gems/${gemInfo?._id}`, submitData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -267,7 +267,7 @@ console.log(response);
     try {
       setDeleting(true);
 
-      await axios.delete(`${baseURL}/gems/${gemInfo._id}`, {
+      await axios.delete(`${baseURL}/gems/${gemInfo?._id}`, {
         withCredentials: true,
       });
 
@@ -321,8 +321,7 @@ console.log(response);
     });
   };
 
-    if (loading) return <LoadingScreen />;
-
+  if (loading) return <LoadingScreen />;
 
   if (!hasGem) {
     return (
@@ -676,7 +675,7 @@ console.log(response);
                 >
                   <option value="">Select Category</option>
                   {categories.map((cat) => (
-                    <option key={cat._id} value={cat._id}>
+                    <option key={cat?._id} value={cat?._id}>
                       {cat.categoryName}
                     </option>
                   ))}
