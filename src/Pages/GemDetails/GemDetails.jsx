@@ -24,6 +24,7 @@ import SurpriseButton from "../../Components/SurpriseButton/SurpriseButton";
 const BASE_URL = import.meta.env.VITE_Base_URL;
 const COLLAPSED_ABOUT_HEIGHT = 150;
 
+// Helper to extract the string ID from a populated object or a raw string
 const normalizeId = (value) => {
   if (!value) return null;
   if (typeof value === "string") return value;
@@ -33,17 +34,12 @@ const normalizeId = (value) => {
   return null;
 };
 
+// Helper to get the ID regardless of whether it's a Review (userId) or Rating (createdBy)
 const getReviewUserId = (item) => {
   if (!item) return null;
-  if (item.userId) {
-    return normalizeId(item.userId);
-  }
-  if (item.createdBy) {
-    return normalizeId(item.createdBy);
-  }
-  if (item.userId && typeof item.userId === "string") {
-    return item.userId; // Combined object
-  }
+  // Check for populated objects first
+  if (item.userId) return normalizeId(item.userId);
+  if (item.createdBy) return normalizeId(item.createdBy);
   return null;
 };
 
@@ -86,6 +82,7 @@ const GemDetails = () => {
   const [voucherData, setVoucherData] = useState(null);
   const [isCreatingVoucher, setIsCreatingVoucher] = useState(false);
 
+  // --- Voucher Logic ---
   const createVoucher = async () => {
     setIsCreatingVoucher(true);
     try {
@@ -106,6 +103,7 @@ const GemDetails = () => {
     }
   };
 
+  // --- Fetch Ratings ---
   const fetchGemRatings = useCallback(async () => {
     try {
       const res = await fetch(`${BASE_URL}/ratings/gem/${id}`, {
@@ -124,38 +122,38 @@ const GemDetails = () => {
     fetchGemRatings();
   }, [fetchGemRatings]);
 
+  // --- Review State ---
   const [reviewsLoading, setReviewsLoading] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [reviewRating, setReviewRating] = useState(0);
   const [reviewMessage, setReviewMessage] = useState("");
   const [reviewError, setReviewError] = useState("");
   const [submittingReview, setSubmittingReview] = useState(false);
+  
+  // IDs for the currently logged in user's interactions
   const [userRatingId, setUserRatingId] = useState(null);
   const [userReviewId, setUserReviewId] = useState(null);
+  
   const [isEditingReview, setIsEditingReview] = useState(false);
-  const [reviewAuthors, setReviewAuthors] = useState({});
   const [reviewDeleting, setReviewDeleting] = useState(false);
 
   const aboutRef = useRef(null);
   const composerRef = useRef(null);
   const [aboutMaxHeight, setAboutMaxHeight] = useState(0);
+
+  // --- Translations ---
   const copy = useMemo(
     () => ({
       seeMore: t("see_more", { defaultValue: "See more" }),
       seeLess: t("see_less", { defaultValue: "See less" }),
       aboutTitle: t("gem_about_title", { defaultValue: "About" }),
-      aboutCaption: t("gem_about_caption", {
-        defaultValue: "What to expect",
-      }),
+      aboutCaption: t("gem_about_caption", { defaultValue: "What to expect" }),
       aboutPlaceholder: t("gem_about_placeholder", {
         defaultValue: "Details for this gem are coming soon.",
       }),
       galleryTitle: t("gem_gallery_title", { defaultValue: "Gallery" }),
       galleryCount: (count) =>
-        t("gem_gallery_count", {
-          count,
-          defaultValue: `${count} photos`,
-        }),
+        t("gem_gallery_count", { count, defaultValue: `${count} photos` }),
       galleryAlt: (index) =>
         t("gem_gallery_alt", {
           index,
@@ -164,23 +162,16 @@ const GemDetails = () => {
       galleryEmpty: t("gem_gallery_empty", {
         defaultValue: "Gallery will be updated soon.",
       }),
-      reviewsTitle: t("gem_reviews_title", {
-        defaultValue: "Reviews & ratings",
-      }),
+      reviewsTitle: t("gem_reviews_title", { defaultValue: "Reviews & ratings" }),
       reviewsCaption: t("gem_reviews_caption", {
         defaultValue: "Latest impressions from the community",
       }),
       reviewsTotal: (count) =>
-        t("gem_reviews_total", {
-          count,
-          defaultValue: `${count} reviews`,
-        }),
+        t("gem_reviews_total", { count, defaultValue: `${count} reviews` }),
       reviewsEmpty: t("gem_reviews_empty", {
         defaultValue: "No reviews yet. Be the first to share your experience.",
       }),
-      reviewsAnonymous: t("gem_reviews_anonymous", {
-        defaultValue: "Explorer",
-      }),
+      reviewsAnonymous: t("gem_reviews_anonymous", { defaultValue: "Explorer" }),
       reviewsRecent: t("gem_reviews_recent", { defaultValue: "Recently" }),
       reviewsDefaultTitle: t("gem_reviews_default_title", {
         defaultValue: "Visitor feedback",
@@ -194,69 +185,7 @@ const GemDetails = () => {
     [userId]
   );
 
-  const allUserIds = useMemo(() => {
-    const reviewUserIds = reviews.map((review) => getReviewUserId(review));
-    const ratingUserIds = gemRatings.map((rating) => getReviewUserId(rating));
-
-    return Array.from(new Set([...reviewUserIds, ...ratingUserIds])).filter(
-      Boolean
-    );
-  }, [gemRatings, reviews]);
-
-  const enrichReviewAuthors = useCallback(
-    async (list) => {
-      if (!isLoggedIn || !list?.length) return;
-      const uniqueIds = [
-        ...new Set(list.map((item) => getReviewUserId(item)).filter(Boolean)),
-      ];
-      const missing = uniqueIds.filter((id) => !(id in reviewAuthors));
-      if (!missing.length) return;
-
-      const entries = await Promise.all(
-        missing.map(async (id) => {
-          try {
-            const response = await fetch(`${BASE_URL}/auth/me`, {
-              credentials: "include",
-            });
-            if (!response.ok) {
-              throw new Error("Failed to load author");
-            }
-            const data = await response.json();
-            const profile = data.result || data.user || data;
-            return [id, profile];
-          } catch {
-            return [id, null];
-          }
-        })
-      );
-
-      setReviewAuthors((prev) => {
-        const next = { ...prev };
-        entries.forEach(([id, profile]) => {
-          if (profile) {
-            next[id] = profile;
-          } else if (!(id in next)) {
-            next[id] = null;
-          }
-        });
-        return next;
-      });
-    },
-    [isLoggedIn, reviewAuthors]
-  );
-
-  useEffect(() => {
-    if (!normalizedUserId || !userInfo) return;
-    setReviewAuthors((prev) =>
-      prev[normalizedUserId]
-        ? prev
-        : {
-            ...prev,
-            [normalizedUserId]: userInfo,
-          }
-    );
-  }, [normalizedUserId, userInfo]);
-
+  // --- Fetch Gem Data ---
   const fetchGemDetails = useCallback(async () => {
     setLoading(true);
     setError("");
@@ -281,6 +210,7 @@ const GemDetails = () => {
     fetchGemDetails();
   }, [fetchGemDetails]);
 
+  // --- Fetch Reviews ---
   const fetchReviews = useCallback(async () => {
     setReviewsLoading(true);
     try {
@@ -295,18 +225,18 @@ const GemDetails = () => {
         fetched = data.result;
       }
       setReviews(fetched);
-      enrichReviewAuthors(fetched);
     } catch {
       setReviews([]);
     } finally {
       setReviewsLoading(false);
     }
-  }, [id, enrichReviewAuthors]);
+  }, [id]);
 
   useEffect(() => {
     fetchReviews();
   }, [fetchReviews]);
 
+  // --- Fetch Current User's Specific Rating ---
   const fetchUserRating = useCallback(
     async ({ preserveComposerValue = false } = {}) => {
       if (!isLoggedIn || !userId) {
@@ -341,6 +271,7 @@ const GemDetails = () => {
     fetchUserRating();
   }, [fetchUserRating]);
 
+  // --- Helpers ---
   const resolveImageSrc = useCallback((path) => {
     if (!path) return "/images/Gem.png";
     if (/^https?:\/\//i.test(path)) return path;
@@ -394,30 +325,41 @@ const GemDetails = () => {
     ? galleryImages
     : galleryImages.slice(0, 6);
 
+  // --- Combined Feedback Logic ---
+  // Matches reviews and ratings based on the User ID string found in the populated objects
   const combinedFeedback = useMemo(() => {
-    return [...allUserIds].map((userId) => {
-      const review = reviews.find((r) => getReviewUserId(r) === userId);
-      const rating = gemRatings.find(
-        (rate) => getReviewUserId(rate) === userId
-      );
+    const feedbackMap = new Map();
 
-      return { userId, review, rating };
+    // 1. Process Reviews (userId is populated)
+    reviews.forEach((review) => {
+      const uid = getReviewUserId(review);
+      if (uid) {
+        if (!feedbackMap.has(uid)) {
+          feedbackMap.set(uid, { userId: uid });
+        }
+        feedbackMap.get(uid).review = review;
+      }
     });
-  }, [gemRatings, reviews, allUserIds]);
 
-  const totalFeedbackCount = combinedFeedback.length;
+    // 2. Process Ratings (createdBy is populated)
+    gemRatings.forEach((rating) => {
+      const uid = getReviewUserId(rating);
+      if (uid) {
+        if (!feedbackMap.has(uid)) {
+          feedbackMap.set(uid, { userId: uid });
+        }
+        feedbackMap.get(uid).rating = rating;
+      }
+    });
 
-  useEffect(() => {
-    if (combinedFeedback?.length) {
-      enrichReviewAuthors(combinedFeedback);
-    }
-  }, [combinedFeedback, enrichReviewAuthors]);
+    return Array.from(feedbackMap.values());
+  }, [gemRatings, reviews]);
 
+  const totalReviewsCount = combinedFeedback.length;
+  
   const visibleFeedback = reviewsExpanded
     ? combinedFeedback
     : combinedFeedback.slice(0, 3);
-
-  const totalReviewsCount = totalFeedbackCount;
 
   const averageRatingValue = useMemo(() => {
     if (typeof gem?.avgRating === "number") return Number(gem.avgRating);
@@ -465,48 +407,40 @@ const GemDetails = () => {
     return "/images/Gem.png";
   }, [gem?.images, gem?.image, resolveImageSrc]);
 
-  const getProfileDisplayName = (profile) => {
-    if (!profile) return null;
-    const first = profile.firstName ?? profile.first_name ?? "";
-    const last = profile.lastName ?? profile.last_name ?? "";
-    const combined = `${first} ${last}`.trim();
-    if (combined) return combined;
-    if (profile.name) return profile.name;
-    if (profile.userName) return profile.userName;
-    if (profile.email) return profile.email?.split("@")[0];
-    return null;
-  };
+  // --- Formatters ---
 
-  const formatReviewAuthor = (review) => {
-    const resolvedId = getReviewUserId(review);
-    if (resolvedId && reviewAuthors[resolvedId]) {
-      const friendly = getProfileDisplayName(reviewAuthors[resolvedId]);
-      if (friendly) return friendly;
+  const formatReviewAuthor = (feedback) => {
+    // Try to get the user object from Review first, then Rating
+    let userObj = null;
+
+    if (feedback.review && feedback.review.userId && typeof feedback.review.userId === 'object') {
+        userObj = feedback.review.userId;
+    } else if (feedback.rating && feedback.rating.createdBy && typeof feedback.rating.createdBy === 'object') {
+        userObj = feedback.rating.createdBy;
     }
-    if (review.author) return review.author;
-    if (review.userName) return review.userName;
-    if (review.user?.firstName || review.user?.lastName) {
-      return `${review.user?.firstName ?? ""} ${
-        review.user?.lastName ?? ""
-      }`.trim();
+
+    if (userObj) {
+        const first = userObj.firstName || "";
+        const last = userObj.lastName || "";
+        const combined = `${first} ${last}`.trim();
+        if (combined) return combined;
+        if (userObj.name) return userObj.name;
     }
-    if (
-      typeof review.userId === "object" &&
-      review.userId !== null &&
-      (review.userId.firstName || review.userId.lastName)
-    ) {
-      return `${review.userId.firstName ?? ""} ${
-        review.userId.lastName ?? ""
-      }`.trim();
-    }
+
+    // Fallbacks if population failed but we have data elsewhere
+    if (feedback.review?.author) return feedback.review.author;
     return copy.reviewsAnonymous;
   };
 
-  const formatReviewDate = (review) => {
-    if (review.date) return review.date;
+  const formatReviewDate = (feedbackItem) => {
+    // Prefer review date, then rating date
+    const item = feedbackItem.review || feedbackItem.rating;
+    if (!item) return copy.reviewsRecent;
 
-    if (review.createdAt) {
-      const date = new Date(review.createdAt);
+    if (item.date) return item.date;
+
+    if (item.createdAt) {
+      const date = new Date(item.createdAt);
       const now = new Date();
       const diffMs = now - date;
       const diffMins = Math.floor(diffMs / 60000);
@@ -530,36 +464,38 @@ const GemDetails = () => {
     return copy.reviewsRecent;
   };
 
-  const formatReviewTitle = (review) => {
+  const formatReviewTitle = (feedbackItem) => {
+    const review = feedbackItem.review;
+    if (!review) return copy.reviewsDefaultTitle;
     return review.title || review.headline || copy.reviewsDefaultTitle;
   };
 
-  const formatReviewContent = (review) => {
+  const formatReviewContent = (feedbackItem) => {
+    const review = feedbackItem.review;
+    if (!review) return "";
     return review.content || review.description || review.comment || "";
   };
 
+  // --- Interaction Handlers ---
+
   const handleEditReviewClick = (feedback) => {
-    // 1. Validation: Ensure the user owns this feedback
     if (feedback.userId !== normalizedUserId) return;
 
     setIsEditingReview(true);
 
-    // 2. Set Review Data (if exists)
+    // Set Review Data
     if (feedback.review) {
       setUserReviewId(feedback.review._id);
-      setReviewText(formatReviewContent(feedback.review));
+      setReviewText(formatReviewContent(feedback));
     } else {
       setUserReviewId(null);
       setReviewText("");
     }
 
-    // 3. Set Rating Data (if exists)
+    // Set Rating Data
     if (feedback.rating) {
-      // Access the number inside the rating object
       const stars = typeof feedback.rating === 'object' ? feedback.rating.rating : feedback.rating;
       setReviewRating(Number(stars) || 0);
-      
-      // Store the Rating ID so we update it instead of creating a new one
       if (feedback.rating._id) {
         setUserRatingId(feedback.rating._id);
       }
@@ -568,11 +504,8 @@ const GemDetails = () => {
       setReviewRating(0);
     }
 
-    // 4. Clear errors
     setReviewError("");
     setReviewMessage("");
-
-    // 5. Scroll to the "Write Review" section
     composerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
@@ -581,7 +514,7 @@ const GemDetails = () => {
     setReviewText("");
     setReviewMessage("");
     setReviewError("");
-    fetchUserRating(); // Reset rating stars to database value
+    fetchUserRating(); 
   };
 
   const handleDelete = async (feedback) => {
@@ -641,12 +574,10 @@ const GemDetails = () => {
     }
 
        if (!isEditingReview && (userReviewId || userRatingId)) {
-        toast.error("You have already reviewed this place. Please edit your previous review.");
-        return;
+       toast.error("You have already reviewed this place. Please edit your previous review.");
+       return;
     }
-    // ---------------------------------------
 
-    // Allow either review text (5+ chars) OR rating, or both
     const hasReviewText = reviewText.trim().length >= 5;
     const hasRating = reviewRating > 0;
 
@@ -672,9 +603,7 @@ const GemDetails = () => {
         if (editingExisting) {
           response = await axios.patch(
             `${BASE_URL}/review/${userReviewId}`,
-            {
-              description: reviewText.trim(),
-            },
+            { description: reviewText.trim() },
             { withCredentials: true }
           );
         } else {
@@ -705,7 +634,6 @@ const GemDetails = () => {
               return [savedReview, ...prevReviews];
             }
           });
-          enrichReviewAuthors([savedReview]);
         }
       } catch (error) {
         setReviewError(
@@ -716,7 +644,6 @@ const GemDetails = () => {
         return;
       }
     } else if (editingExisting && reviewText.trim().length === 0 && !hasRating) {
-      // Only prevent if removing both text AND rating
       setReviewError(
         "You must have either review text or a rating. Use 'Delete' to remove everything."
       );
@@ -724,9 +651,7 @@ const GemDetails = () => {
       return;
     }
 
-    console.log("Submitting feedback:", { userRatingId, reviewRating, hasReviewText, id });
-
-    // Only submit rating if it's provided
+    // Submit Rating
     if (hasRating) {
       try {
         let effectiveRatingId = userRatingId;
@@ -734,7 +659,6 @@ const GemDetails = () => {
           effectiveRatingId = await fetchUserRating({
             preserveComposerValue: true,
           });
-          console.log("Fetched effectiveRatingId:", effectiveRatingId);
         }
 
         if (effectiveRatingId) {
@@ -751,12 +675,10 @@ const GemDetails = () => {
             { withCredentials: true }
           );
           if (data?.rating?._id) {
-            console.log("Created new rating with ID:", data.rating);
             setUserRatingId(data.rating._id);
           }
         }
       } catch (error) {
-        console.error("Rating submission error:", error);
         setReviewError(
           error?.response?.data?.message ||
             "We couldn't save your rating. Try again."
@@ -766,14 +688,12 @@ const GemDetails = () => {
       }
     }
 
-    // Clear only the text, keep rating if it exists
     if (!hasRating) {
       setReviewText("");
     } else if (hasReviewText) {
       setReviewText("");
     }
     
-    // Set appropriate success message
     if (editingExisting) {
       setReviewMessage("Your feedback was updated.");
     } else if (hasReviewText && hasRating) {
@@ -787,7 +707,6 @@ const GemDetails = () => {
     setIsEditingReview(false);
     setSubmittingReview(false);
     
-    // Only reset rating if we're not editing
     if (!editingExisting) {
       setReviewRating(0);
     }
@@ -1013,7 +932,7 @@ const GemDetails = () => {
                           </button>
                           <button
                             type="button"
-                            onClick={handleDelete}
+                            onClick={() => handleDelete({ review: { _id: userReviewId }, rating: { _id: userRatingId } })}
                             disabled={reviewDeleting}
                             className="text-red-500 hover:text-red-600 disabled:opacity-60"
                           >
@@ -1089,18 +1008,12 @@ const GemDetails = () => {
                             <div className="flex flex-wrap items-center justify-between gap-2">
                               <div>
                                 <p className="font-semibold text-gray-900 dark:text-white">
-                                  {formatReviewTitle(
-                                    feedback.review || feedback.rating
-                                  )}
+                                  {formatReviewTitle(feedback)}
                                 </p>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                                  {formatReviewAuthor(
-                                    feedback.review || feedback.rating
-                                  )}{" "}
+                                  {formatReviewAuthor(feedback)}{" "}
                                   ·{" "}
-                                  {formatReviewDate(
-                                    feedback.review || feedback.rating
-                                  )}
+                                  {formatReviewDate(feedback)}
                                 </p>
                               </div>
                               {ratingValue > 0 && (
@@ -1108,9 +1021,7 @@ const GemDetails = () => {
                               )}
                             </div>
                             <p className="text-gray-700 dark:text-gray-300 review-text">
-                              {formatReviewContent(
-                                feedback.review || feedback.rating
-                              )}
+                              {formatReviewContent(feedback)}
                             </p>
 
                             {normalizedUserId &&
