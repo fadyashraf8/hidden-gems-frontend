@@ -157,9 +157,9 @@ export default function Navbar() {
           <li>
             <NavLink to="/places">{t("nav_link_places")}</NavLink>
           </li>
-          <li>
+          {/* <li>
             <NavLink to="/surprise">{t("nav_link_surprise")}</NavLink>
-          </li>
+          </li> */}
           <li>
             <a
               href="#categories"
@@ -280,11 +280,11 @@ export default function Navbar() {
               {t("nav_link_places")}
             </NavLink>
           </li>
-          <li>
+          {/* <li>
             <NavLink to="/surprise" onClick={() => setIsOpen(false)}>
               {t("nav_link_surprise")}
             </NavLink>
-          </li>
+          </li> */}
           <li>
             <a
               href="#categories"

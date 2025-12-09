@@ -21,7 +21,6 @@ const WishlistButton = ({ gemId, size = 20 }) => {
         (item) => item.gemId?._id === gemId || item.gemId === gemId
       );
       setIsInWishlist(isGemInWishlist);
-      console.log("ok");
       
     };
 

@@ -18,7 +18,7 @@ export default function Home() {
 
   useEffect(() => {
     // console.log("dark mode is " +dark)
-    console.log(isDarkModeEnabled);
+ 
     const fetchGems = async () => {
       try {
         const data = await getGemsAPI();

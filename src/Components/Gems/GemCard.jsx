@@ -11,26 +11,7 @@ const BASE_URL = import.meta.env.VITE_Base_URL;
 
 const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false }) => {
   const navigate = useNavigate();
-  
-  if (!gem) {
-    console.error("GemCard received null gem prop");
-    return (
-      // Added 'gem-card' class here too for consistency
-      <div className="gem-card bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
-        <div className="relative aspect-[4/3] overflow-hidden bg-gray-200">
-          <div className="w-full h-full flex items-center justify-center">
-            <span className="text-gray-500">No Image</span>
-          </div>
-        </div>
-        <div className="p-4">
-          <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-          <div className="h-3 bg-gray-300 rounded w-1/2"></div>
-        </div>
-      </div>
-    );
-  }
-
-  const imagesList = gem.images?.[0];
+    const imagesList = gem.images?.[0];
   const ratingValue = gem.avgRating || gem.rating || 0;
   const [ ratingsCount, setRatingsCount ] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -55,6 +36,26 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false
       console.error("Gem is not passed correctly to GemCard")
     }
   }, [gem._id])
+
+  
+  if (!gem) {
+    console.error("GemCard received null gem prop");
+    return (
+      // Added 'gem-card' class here too for consistency
+      <div className="gem-card bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+        <div className="relative aspect-[4/3] overflow-hidden bg-gray-200">
+          <div className="w-full h-full flex items-center justify-center">
+            <span className="text-gray-500">No Image</span>
+          </div>
+        </div>
+        <div className="p-4">
+          <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+          <div className="h-3 bg-gray-300 rounded w-1/2"></div>
+        </div>
+      </div>
+    );
+  }
+
 
   const getStatusBadge = () => {
     const status = gem.status || "pending";
