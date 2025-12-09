@@ -233,9 +233,17 @@ export default function Navbar() {
                   <button onClick={() => navigate("/profile")}>
                     {t("Profile")}
                   </button>
-                  <button onClick={() => navigate("/vouchers")}>
+                      {user && user.role !== "admin" && user.role !== "owner" && (
+                        <>
+                <button onClick={() => navigate("/vouchers")}>
                      {t("Vouchers")}
                   </button>
+                      <button onClick={() => navigate("/transactions")}>
+                    Transactions
+                  </button>
+                  </>
+                  )}
+                
                   {user && user.role !== "admin" && user.role !== "owner" && (
                     <button onClick={() => navigate("/created-by-you")}>
                        {t("My Gems")}

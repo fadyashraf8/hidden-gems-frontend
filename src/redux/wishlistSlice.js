@@ -90,7 +90,6 @@ export const fetchWishlistItems = createAsyncThunk(
         withCredentials: true,
       });
       
-      console.log("Wishlist API response:", response);
 
       return response.data.userWishList || [];
     } catch (error) {
@@ -156,7 +155,6 @@ const wishlistSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchWishlistItems.fulfilled, (state, action) => {
-        console.log("action.payload",action.payload);
         
         state.items = action.payload;
         state.loading = false;
