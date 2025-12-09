@@ -17,7 +17,6 @@ const PlaceCard = ({ gem, rank }) => {
           const data = await response.json();
           if(data.message === "success" && Array.isArray(data.ratings)){
             setRatingsCount(data.ratings.length)
-             console.log("Gem ID:", data.ratings.length)
           }
         } catch (error) {
           console.log("gemid", gem._id);
