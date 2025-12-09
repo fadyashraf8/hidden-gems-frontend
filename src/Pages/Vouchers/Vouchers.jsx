@@ -8,7 +8,6 @@ export default function Vouchers() {
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // مودال وVoucher محدد
   const [selectedVoucher, setSelectedVoucher] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -17,7 +16,9 @@ export default function Vouchers() {
       const res = await axios.get(`${import.meta.env.VITE_Base_URL}/vouchers`, {
         withCredentials: true,
       });
-      setVouchers(res.data || []); 
+      setVouchers(res.data.vouchers || []); 
+      console.log(res.data);
+      
     } catch (err) {
       console.error("Error fetching vouchers:", err);
       toast.error(err.response?.data?.error || "Failed to fetch vouchers.");
@@ -61,12 +62,11 @@ export default function Vouchers() {
         ))}
       </ul>
 
-      {/* مودال الـQRCode */}
       <QRCodeModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         voucherData={selectedVoucher}
-        qrCode={selectedVoucher?.qrCode} // لو عندك QR code في البيانات
+        qrCode={selectedVoucher?.qrCode}  في 
       />
     </div>
   );

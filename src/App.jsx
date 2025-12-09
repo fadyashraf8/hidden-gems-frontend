@@ -83,6 +83,8 @@ import VoucherRedeem from "./Pages/AdminPages/Vouchers/VoucherRedeem/VoucherRede
 import Vouchers from "./Pages/Vouchers/Vouchers";
 import Wishlist from "./Pages/wishListPage/wishList";
 import AllVouchers from "./Pages/AdminPages/Vouchers/AllVouchers/AllVouchers";
+import AllTransactions from "./Pages/Transactions/AllTransactions/AllTransactions";
+import TransactionDashboard from "./Pages/Transactions/TransactionDashboard/TransactionDashboard";
 function App() {
   const dark = useSelector((state) => state.darkMode.enabled);
   const dispatch = useDispatch();
@@ -135,6 +137,7 @@ function App() {
         { path: "gems/:id", element: <GemDetails /> },
         { path: "contact-us", element: <ContactUsPage /> },
         { path: "vouchers", element: <Vouchers /> },
+        { path: "transactions", element: <AllTransactions /> },
         { path: "wishlist", element: <Wishlist /> },
         { path: "places", element: <CategoriesPage /> },
         { path: "surprise", element: <SurpriseMe /> },
@@ -310,6 +313,9 @@ function App() {
         //Voucher Redeem
         { path: "vouchers", element: <AllVouchers /> },
         { path: "vouchers/:id", element: <VoucherRedeem /> },
+
+        { path: "transactions", element: <TransactionDashboard /> },
+
       ],
     },
     // {
@@ -339,6 +345,7 @@ function App() {
         { path: "vouchers", element: <AllVouchers /> },
 
         { path: ":id", element: <VoucherRedeem /> },
+        { path: "transactions", element: <TransactionDashboard /> },
       ],
     },
     {

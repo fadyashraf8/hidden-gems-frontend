@@ -9,6 +9,7 @@ import {
   X,
   ChevronLeft,
   TicketPercent,
+  ArrowLeftRight,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -67,17 +68,18 @@ export default function SidebarOwner({ isCollapsed, setIsCollapsed }) {
       ],
     },
 
-      {
-          id: "vouchers",
-          title: `vouchers `,
-          icon: TicketPercent,
-          items: [
-            { label: `🎟️ All Vouchers`, path: "/owner/vouchers" },
-    
-          ],
-        },
-
-   
+    {
+      id: "vouchers",
+      title: `vouchers `,
+      icon: TicketPercent,
+      items: [{ label: `🎟️ All Vouchers`, path: "/owner/vouchers" }],
+    },
+    {
+      id: "transactions",
+      title: `transactions `,
+      icon: ArrowLeftRight,
+      items: [{ label: `🎟️ All Transactions`, path: "/owner/transactions" }],
+    },
   ];
 
   return (
@@ -173,7 +175,6 @@ export default function SidebarOwner({ isCollapsed, setIsCollapsed }) {
               i18n.changeLanguage(newLang);
             }}
           >
-            
             <TranslateTwoToneIcon
               style={{ cursor: "pointer", marginRight: "10px" }}
             />

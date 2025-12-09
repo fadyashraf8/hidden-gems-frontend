@@ -9,6 +9,7 @@ import {
   X,
   ChevronLeft,
   TicketPercent,
+  ArrowLeftRight,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -93,6 +94,12 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
         { label: `🎟️ All Vouchers`, path: "/admin/vouchers" },
 
       ],
+    },
+   {
+      id: "transactions",
+      title: `transactions `,
+      icon: ArrowLeftRight,
+      items: [{ label: `🎟️ All Transactions`, path: "/admin/transactions" }],
     },
   ];
 
