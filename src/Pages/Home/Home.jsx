@@ -10,11 +10,13 @@ import SurpriseButton from "../../Components/SurpriseButton/SurpriseButton.jsx";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { lazy, Suspense } from "react";
+import axios from "axios";
 
 export default function Home() {
   const { t } = useTranslation("home");
   const navigate = useNavigate();
   const [gems, setGems] = useState([]);
+  const [subscribedGems, setSubscribedGems] = useState([]);
   const [loading, setLoading] = useState(true);
   const isDarkModeEnabled = useSelector((state) => state.darkMode.enabled);
 
@@ -24,6 +26,7 @@ export default function Home() {
         const data = await getGemsAPI();
         if (data && data.result) {
           setGems(data.result.filter((gem) => gem.status === "accepted"));
+          
         }
       } catch (error) {
         console.error("Failed to fetch gems", error);
@@ -31,6 +34,22 @@ export default function Home() {
         setLoading(false);
       }
     };
+        const fetchSubscribedGems =  () => {
+   
+  axios.get(`${import.meta.env.VITE_Base_URL}/gems/subscribed`).then((res)=>{         
+     setSubscribedGems(res.data?.result?.filter((gem) => gem.status === "accepted"));
+
+console.log(res);
+
+  }).catch((error)=>{
+console.log(error);
+
+  })
+    
+          
+      }
+    
+    fetchSubscribedGems()
     fetchGems();
   }, []);
 
@@ -41,10 +60,14 @@ export default function Home() {
     { image: "images/4.jpg", title: t("hero_slide_4") },
   ];
 
+  const displyData=()=>{
+    console.log(" Subscribed Gems:", subscribedGems);
+    console.log("unSubscribed Gems:", gems);
+    
+  } 
   // Logic:
   // Sponsored -> isSubscribed === true (truthy check)
   // Recent -> !isSubscribed
-  const sponsoredGems = gems.filter((gem) => gem.isSubscribed);
   const recentGems = gems.filter((gem) => !gem.isSubscribed);
 
   // Animation variants
@@ -69,6 +92,7 @@ export default function Home() {
 
   return (
     <>
+
       <SurpriseButton
         style={{
           position: "fixed",
@@ -79,9 +103,10 @@ export default function Home() {
         }}
       />
       <Hero slides={slides} duration={5000} />
+    {/* <button onClick={displyData} className="bg-green-500">Dispaly DAta</button> */}
 
       {/* === SPONSORED SPOTLIGHT SECTION === */}
-      {(loading || sponsoredGems.length > 0) && (
+      {(loading || subscribedGems.length > 0) && (
         <Box
           sx={{
             background: isDarkModeEnabled
@@ -133,6 +158,7 @@ export default function Home() {
               </Typography>
             </motion.div>
 
+
             {loading ? (
               <div className="flex justify-center items-center h-40">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#DD0303]"></div>
@@ -146,7 +172,7 @@ export default function Home() {
                 className="flex flex-wrap justify-center gap-6"
               >
                 {/* Unified grid with consistent heights and hover effects */}
-                {sponsoredGems.slice(0, 4).map((gem, index) => (
+                {subscribedGems.slice(0, 4).map((gem, index) => (
                   <motion.div
                     key={gem._id}
                     variants={fadeIn}
@@ -228,7 +254,7 @@ export default function Home() {
               variants={staggerContainer}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4"
             >
-              {recentGems.slice(0, 8).map((gem, index) => (
+              {recentGems.slice(0, 4).map((gem, index) => (
                 <motion.div key={gem._id} variants={fadeIn}>
                   <GemCard gem={gem} darkMode={isDarkModeEnabled} />
                 </motion.div>
