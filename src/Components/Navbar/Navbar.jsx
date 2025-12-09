@@ -103,10 +103,14 @@ export default function Navbar() {
       await dispatch(logoutUser()).unwrap();
       setUserDropdown(false);
 
-      toast.success(t("signed-out-successfully"), {
+      toast.success(t("Signed out successfully"), {
         position: "top-center",
         duration: 2000,
-        className: "custom-toast",
+        style: {
+          background: "#DD0303",
+          color: "white",
+        },
+       
         id: "logout-toast",
         ariaProps: { role: "status", "aria-live": "polite" },
         icon: "👋",
@@ -157,8 +161,8 @@ export default function Navbar() {
             <NavLink to="/surprise">{t("nav_link_surprise")}</NavLink>
           </li>
           <li>
-            <a 
-              href="#categories" 
+            <a
+              href="#categories"
               onClick={handleCategoriesClick}
               style={{ cursor: "pointer" }}
             >
@@ -226,26 +230,30 @@ export default function Navbar() {
                       Hi {user.firstName}
                     </p>
                   )}
-                  <button onClick={() => navigate("/profile")}>Profile</button>
+                  <button onClick={() => navigate("/profile")}>
+                    {t("Profile")}
+                  </button>
                   <button onClick={() => navigate("/vouchers")}>
-                    Vouchers
+                     {t("Vouchers")}
                   </button>
                   {user && user.role !== "admin" && user.role !== "owner" && (
                     <button onClick={() => navigate("/created-by-you")}>
-                      My Gems
+                       {t("My Gems")}
                     </button>
                   )}
                   {user && user.role === "admin" && (
                     <button onClick={() => navigate("/admin")}>
-                      Admin Dashboard
+                      {t("Admin Dashboard")}
                     </button>
                   )}
                   {user && user.role === "owner" && (
                     <button onClick={() => navigate("/owner/dashboard")}>
-                      Owner Dashboard
+                       {t("Owner Dashboard")}
                     </button>
                   )}
-                  <button onClick={handleLogout}>Sign Out</button>
+                  <button onClick={handleLogout}>
+                     {t("Sign Out")}
+                  </button>
                 </div>
               )}
             </div>
@@ -270,8 +278,8 @@ export default function Navbar() {
             </NavLink>
           </li>
           <li>
-            <a 
-              href="#categories" 
+            <a
+              href="#categories"
               onClick={handleCategoriesClick}
               style={{ cursor: "pointer" }}
             >

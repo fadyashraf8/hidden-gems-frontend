@@ -13,8 +13,10 @@ import {
 import axios from "axios";
 import LoadingScreen from "@/Pages/LoadingScreen";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 export default function AllVouchers() {
+  const { t, i18n } = useTranslation("Vouchers");
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
@@ -90,11 +92,11 @@ export default function AllVouchers() {
     const endpoint = getEndpoint();
 
     try {
-      const response = await axios.get(endpoint, { 
-        params, 
-        withCredentials: true 
+      const response = await axios.get(endpoint, {
+        params,
+        withCredentials: true,
       });
-      
+
       const data = response.data;
       if (data.message === "success") {
         setVouchers(data.result);
@@ -164,10 +166,10 @@ export default function AllVouchers() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
-              Voucher Management
+              {t("vouchers.management_title")}
             </h1>
             <p className="text-sm text-gray-600 mt-1">
-              Total: {totalItems} vouchers found
+              {t("vouchers.total_found", { count: totalItems })}
             </p>
           </div>
         </div>
@@ -181,7 +183,7 @@ export default function AllVouchers() {
             />
             <input
               type="text"
-              placeholder="Search by code, gem name, or email..."
+              placeholder={t("vouchers.search_placeholder")}
               value={searchKeyword}
               onChange={handleSearch}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -192,25 +194,27 @@ export default function AllVouchers() {
             onChange={handleStatusFilter}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
-            <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="expired">Expired</option>
-            <option value="used">Used</option>
+            <option value="">{t("vouchers.all_status")}</option>
+            <option value="active">{t("vouchers.status_active")}</option>
+            <option value="expired">{t("vouchers.status_expired")}</option>
+            <option value="used">{t("vouchers.status_used")}</option>
           </select>
           <select
             value={sortBy}
             onChange={handleSort}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
-            <option value="">Sort By</option>
-            <option value="code">Code (A-Z)</option>
-            <option value="-code">Code (Z-A)</option>
-            <option value="discount">Discount (Low to High)</option>
-            <option value="-discount">Discount (High to Low)</option>
-            <option value="expiryDate">Expiry (Oldest First)</option>
-            <option value="-expiryDate">Expiry (Newest First)</option>
-            <option value="createdAt">Created (Oldest First)</option>
-            <option value="-createdAt">Created (Newest First)</option>
+            <option value="">{t("vouchers.sort_by")}</option>
+            <option value="code">{t("vouchers.sort_code_az")}</option>
+            <option value="-code">{t("vouchers.sort_code_za")}</option>
+            <option value="discount">{t("vouchers.sort_discount_low")}</option>
+            <option value="-discount">
+              {t("vouchers.sort_discount_high")}
+            </option>
+            <option value="expiryDate">{t("vouchers.sort_expiry_old")}</option>
+            <option value="-expiryDate">{t("vouchers.sort_expiry_new")}</option>
+            <option value="createdAt">{t("vouchers.sort_created_old")}</option>
+            <option value="-createdAt">{t("vouchers.sort_created_new")}</option>
           </select>
         </div>
 
@@ -219,7 +223,7 @@ export default function AllVouchers() {
             onClick={clearFilters}
             className="mt-4 text-sm text-blue-600 hover:text-blue-700 font-medium"
           >
-            Clear All Filters
+            {t("vouchers.clear_filters")}
           </button>
         )}
       </div>
@@ -230,22 +234,22 @@ export default function AllVouchers() {
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Voucher Code
+                {t("vouchers.column_code")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Discount
+                {t("vouchers.column_discount")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Gem
+                {t("vouchers.column_gem")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                User Email
+                {t("vouchers.column_user_email")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Expiry Date
+                {t("vouchers.column_expiry")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
+                {t("vouchers.column_actions")}
               </th>
             </tr>
           </thead>
@@ -254,7 +258,7 @@ export default function AllVouchers() {
             {vouchers.length === 0 ? (
               <tr>
                 <td colSpan="6" className="px-6 py-8 text-center text-gray-500">
-                  No vouchers found
+                  {t("vouchers.no_vouchers_found")}
                 </td>
               </tr>
             ) : (
@@ -280,7 +284,7 @@ export default function AllVouchers() {
                     <div className="flex items-center">
                       <MapPin size={14} className="text-blue-500 mr-1" />
                       <span className="text-sm text-gray-900">
-                        {voucher.gemId?.name || "N/A"}
+                        {voucher.gemId?.name || t("vouchers.not_available")}
                       </span>
                     </div>
                   </td>
@@ -288,7 +292,7 @@ export default function AllVouchers() {
                     <div className="flex items-center">
                       <Mail size={14} className="text-gray-400 mr-1" />
                       <span className="text-sm text-gray-600">
-                        {voucher.userId?.email || "N/A"}
+                        {voucher.userId?.email || t("vouchers.not_available")}
                       </span>
                     </div>
                   </td>
@@ -306,7 +310,7 @@ export default function AllVouchers() {
                       </span>
                       {isExpired(voucher.expiryDate) && (
                         <span className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">
-                          Expired
+                          {t("vouchers.expired")}
                         </span>
                       )}
                     </div>
@@ -317,7 +321,7 @@ export default function AllVouchers() {
                       className="text-blue-600 hover:text-blue-900 flex items-center gap-1"
                     >
                       <Eye size={18} />
-                      <span>View</span>
+                      <span>{t("vouchers.view")}</span>
                     </Link>
                   </td>
                 </tr>
@@ -330,22 +334,37 @@ export default function AllVouchers() {
       {/* Pagination */}
       <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
         <div className="text-sm text-gray-700">
-          Showing page {currentPage} of {totalPages}
+          {t("vouchers.showing_page", {
+            current: currentPage,
+            total: totalPages,
+          })}
         </div>
-        <div className="flex gap-2">
+        <div
+          className={`flex gap-2 ${
+            i18n.language === "ar" ? "flex-row-reverse" : ""
+          }`}
+        >
           <button
             onClick={() => goToPage(Math.max(1, currentPage - 1))}
             disabled={currentPage === 1}
             className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            <ChevronLeft size={20} />
+            {i18n.language === "ar" ? (
+              <ChevronLeft size={20} />
+            ) : (
+              <ChevronRight size={20} />
+            )}
           </button>
           <button
             onClick={() => goToPage(Math.min(totalPages, currentPage + 1))}
             disabled={currentPage === totalPages}
             className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            <ChevronRight size={20} />
+            {i18n.language === "ar" ? (
+              <ChevronRight size={20} />
+            ) : (
+              <ChevronLeft size={20} />
+            )}
           </button>
         </div>
       </div>
