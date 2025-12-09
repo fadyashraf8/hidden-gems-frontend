@@ -88,12 +88,9 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
     },
     {
       id: "vouchers",
-      title: `vouchers `,
+      title: ` ${t("Vouchers")}`,
       icon: TicketPercent,
-      items: [
-        { label: `🎟️ All Vouchers`, path: "/admin/vouchers" },
-
-      ],
+      items: [{ label: `🎟️ ${t("All Vouchers")}`, path: "/admin/vouchers" }],
     },
    {
       id: "transactions",

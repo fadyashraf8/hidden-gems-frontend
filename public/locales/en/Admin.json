@@ -12,9 +12,13 @@
   "Add Hidden Gem": "Add Hidden Gem",
   "My Hidden Gems": "My Hidden Gems",
 
+  "Vouchers": "Vouchers",
+  "All Vouchers": "All Vouchers",
+
   "Admin Panel": "Admin Panel",
   "Return to Home": "Return to Home",
   "Sign Out": "Sign Out",
+  "signed-out-successfully": "Signed out successfully!",
 
   "Light Mode": "Light Mode",
   "Dark Mode": "Dark Mode",

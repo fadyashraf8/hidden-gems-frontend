@@ -12,9 +12,13 @@
   "Add Hidden Gem": "إضافة وجهة",
   "My Hidden Gems": "وجهاتي",
 
+  "Vouchers": "الكوبونات",
+  "All Vouchers": "جميع الكوبونات",
+
   "Admin Panel": "لوحة التحكم",
   "Return to Home": "العودة إلى الرئيسية",
   "Sign Out": "تسجيل الخروج",
+  "signed-out-successfully": "تم تسجيل الخروج بنجاح!",
 
   "Light Mode": "وضع النهار",
   "Dark Mode": "الوضع الليلي",

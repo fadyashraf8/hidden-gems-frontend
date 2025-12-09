@@ -4,18 +4,26 @@
   "footer_about_title": "About",
   "footer_discover_title": "Discover",
   "footer_business_title": "For Businesses",
-  
+
   "link_about_us": "About Us",
   "link_careers": "Careers",
   "link_content_guidelines": "Content Guidelines",
   "link_terms_of_service": "Terms of Service",
   "link_privacy_policy": "Privacy Policy",
-  
+  "Signed out successfully": "Signed out successfully!",
+  "Profile": "Profile",
+  "Sign Out": "Sign Out",
+  "Vouchers": "Vouchers",
+  "My Gems": "My Gems",
+  "Admin Dashboard": "Admin Dashboard",
+  " Owner Dashboard": " Owner Dashboard",
+
+
   "link_blog": "Blog",
   "link_support": "Support",
   "link_explore_cities": "Explore Cities",
   "link_spot": "Spot",
-  
+
   "link_for_businesses": "For Businesses",
   "link_add_your_place": "Add Your Place",
   "link_advertising": "Advertising",

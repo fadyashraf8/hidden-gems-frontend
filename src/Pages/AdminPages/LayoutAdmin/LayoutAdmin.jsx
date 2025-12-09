@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import SidebarAdmin from "../SidebarAdmin/SidebarAdmin";
 import { useTranslation } from "react-i18next";
+import ScrollToTop from "../../../Components/ScrollToTop";
 
 export default function LayoutAdmin() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -9,6 +10,7 @@ export default function LayoutAdmin() {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      <ScrollToTop />
       <SidebarAdmin isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
       {/* Main Content Area */}

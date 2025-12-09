@@ -19,6 +19,7 @@ import ImageCarouselModal from "../../Components/ImageCarouselModal/ImageCarouse
 import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
 import QRCodeModal from "../../Components/QRCodeModal/QRCodeModal.jsx";
 import toast from "react-hot-toast";
+import SurpriseButton from "../../Components/SurpriseButton/SurpriseButton";
 
 const BASE_URL = import.meta.env.VITE_Base_URL;
 const COLLAPSED_ABOUT_HEIGHT = 150;
@@ -26,20 +27,24 @@ const COLLAPSED_ABOUT_HEIGHT = 150;
 const normalizeId = (value) => {
   if (!value) return null;
   if (typeof value === "string") return value;
-  if (typeof value === "object") {
-    if (value._id) return String(value._id);
-    if (value.id) return String(value.id);
+  if (typeof value === "object" && value._id) {
+    return String(value._id);
   }
-  return String(value);
+  return null;
 };
 
-const getReviewUserId = (review) => {
-  if (!review) return null;
-  return (
-    normalizeId(review.userId) ||
-    normalizeId(review.user) ||
-    (typeof review.userId === "object" ? String(review.userId) : null)
-  );
+const getReviewUserId = (item) => {
+  if (!item) return null;
+  if (item.userId) {
+    return normalizeId(item.userId);
+  }
+  if (item.createdBy) {
+    return normalizeId(item.createdBy);
+  }
+  if (item.userId && typeof item.userId === "string") {
+    return item.userId; // Combined object
+  }
+  return null;
 };
 
 const ToggleButton = ({ expanded, onClick, collapsedLabel, expandedLabel }) => (
@@ -90,12 +95,8 @@ const GemDetails = () => {
         { withCredentials: true }
       );
 
-      console.log("Voucher created:", response.data);
-      console.log("response.data", response.data);
-
       setVoucherQR(response?.data?.createdVoucher?.qrCode);
       setVoucherData(response?.data?.createdVoucher);
-
       setIsModalOpen(true);
     } catch (err) {
       console.error("Error creating voucher:", err.response?.data?.error);
@@ -104,6 +105,7 @@ const GemDetails = () => {
       setIsCreatingVoucher(false);
     }
   };
+
   const fetchGemRatings = useCallback(async () => {
     try {
       const res = await fetch(`${BASE_URL}/ratings/gem/${id}`, {
@@ -192,13 +194,20 @@ const GemDetails = () => {
     [userId]
   );
 
+  const allUserIds = useMemo(() => {
+    const reviewUserIds = reviews.map((review) => getReviewUserId(review));
+    const ratingUserIds = gemRatings.map((rating) => getReviewUserId(rating));
+
+    return Array.from(new Set([...reviewUserIds, ...ratingUserIds])).filter(
+      Boolean
+    );
+  }, [gemRatings, reviews]);
+
   const enrichReviewAuthors = useCallback(
     async (list) => {
       if (!isLoggedIn || !list?.length) return;
       const uniqueIds = [
-        ...new Set(
-          list.map((review) => getReviewUserId(review)).filter(Boolean)
-        ),
+        ...new Set(list.map((item) => getReviewUserId(item)).filter(Boolean)),
       ];
       const missing = uniqueIds.filter((id) => !(id in reviewAuthors));
       if (!missing.length) return;
@@ -385,7 +394,30 @@ const GemDetails = () => {
     ? galleryImages
     : galleryImages.slice(0, 6);
 
-  const visibleReviews = reviewsExpanded ? reviews : reviews.slice(0, 3);
+  const combinedFeedback = useMemo(() => {
+    return [...allUserIds].map((userId) => {
+      const review = reviews.find((r) => getReviewUserId(r) === userId);
+      const rating = gemRatings.find(
+        (rate) => getReviewUserId(rate) === userId
+      );
+
+      return { userId, review, rating };
+    });
+  }, [gemRatings, reviews, allUserIds]);
+
+  const totalFeedbackCount = combinedFeedback.length;
+
+  useEffect(() => {
+    if (combinedFeedback?.length) {
+      enrichReviewAuthors(combinedFeedback);
+    }
+  }, [combinedFeedback, enrichReviewAuthors]);
+
+  const visibleFeedback = reviewsExpanded
+    ? combinedFeedback
+    : combinedFeedback.slice(0, 3);
+
+  const totalReviewsCount = totalFeedbackCount;
 
   const averageRatingValue = useMemo(() => {
     if (typeof gem?.avgRating === "number") return Number(gem.avgRating);
@@ -401,7 +433,8 @@ const GemDetails = () => {
       return derived.reduce((acc, value) => acc + value, 0) / derived.length;
     }
     return 0;
-  }, [gem?.avgRating, gem?.rating, reviews]);
+  }, [gem?.avgRating, reviews, gemRatings]);
+
   const averageRatingLabel = averageRatingValue.toFixed(1);
 
   useLayoutEffect(() => {
@@ -480,7 +513,6 @@ const GemDetails = () => {
       const diffHours = Math.floor(diffMs / 3600000);
       const diffDays = Math.floor(diffMs / 86400000);
 
-      // Show relative time for recent reviews
       if (diffMins < 1) return "Just now";
       if (diffMins < 60)
         return `${diffMins} minute${diffMins > 1 ? "s" : ""} ago`;
@@ -488,7 +520,6 @@ const GemDetails = () => {
         return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
       if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
 
-      // Show formatted date for older reviews
       return date.toLocaleDateString(undefined, {
         year: "numeric",
         month: "short",
@@ -507,28 +538,42 @@ const GemDetails = () => {
     return review.content || review.description || review.comment || "";
   };
 
-  const totalReviewsCount = reviews.length;
+  const handleEditReviewClick = (feedback) => {
+    // 1. Validation: Ensure the user owns this feedback
+    if (feedback.userId !== normalizedUserId) return;
 
-  const handleEditReviewClick = (review) => {
-    if (!review || !normalizedUserId) return;
-    const ownerId = getReviewUserId(review);
-    if (!ownerId || ownerId !== normalizedUserId) return;
     setIsEditingReview(true);
-    setUserReviewId(review._id || review.id || null);
-    setReviewText(formatReviewContent(review));
-    const existingRating = Number(
-      review.rating ??
-        review.stars ??
-        review.value ??
-        review.score ??
-        reviewRating
-    );
-    if (!Number.isNaN(existingRating) && existingRating > 0) {
-      setReviewRating(existingRating);
+
+    // 2. Set Review Data (if exists)
+    if (feedback.review) {
+      setUserReviewId(feedback.review._id);
+      setReviewText(formatReviewContent(feedback.review));
+    } else {
+      setUserReviewId(null);
+      setReviewText("");
     }
+
+    // 3. Set Rating Data (if exists)
+    if (feedback.rating) {
+      // Access the number inside the rating object
+      const stars = typeof feedback.rating === 'object' ? feedback.rating.rating : feedback.rating;
+      setReviewRating(Number(stars) || 0);
+      
+      // Store the Rating ID so we update it instead of creating a new one
+      if (feedback.rating._id) {
+        setUserRatingId(feedback.rating._id);
+      }
+    } else {
+      setUserRatingId(null);
+      setReviewRating(0);
+    }
+
+    // 4. Clear errors
     setReviewError("");
     setReviewMessage("");
-    composerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    // 5. Scroll to the "Write Review" section
+    composerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
   const handleCancelEdit = () => {
@@ -536,29 +581,44 @@ const GemDetails = () => {
     setReviewText("");
     setReviewMessage("");
     setReviewError("");
+    fetchUserRating(); // Reset rating stars to database value
   };
 
-  const handleDeleteReview = async () => {
-    if (!userReviewId || !normalizedUserId) return;
+  const handleDelete = async (feedback) => {
+    if (!feedback.review && !feedback.rating) return;
     setReviewError("");
     setReviewMessage("");
     setReviewDeleting(true);
+    let deletedItems = [];
+
     try {
-      await axios.delete(`${BASE_URL}/review/${userReviewId}`, {
-        withCredentials: true,
-      });
-      if (userRatingId) {
-        await axios.delete(`${BASE_URL}/ratings/${userRatingId}`, {
+      if (feedback.review && feedback.review._id) {
+        await axios.delete(`${BASE_URL}/review/${feedback.review._id}`, {
           withCredentials: true,
         });
+        deletedItems.push("review");
+      }
+      if (feedback.rating && feedback.rating._id) {
+        await axios.delete(`${BASE_URL}/ratings/${feedback.rating._id}`, {
+          withCredentials: true,
+        });
+        deletedItems.push("rating");
       }
       setUserReviewId(null);
       setUserRatingId(null);
       setReviewRating(0);
       setReviewText("");
       setIsEditingReview(false);
-      setReviewMessage("Your review was deleted.");
 
+      if (deletedItems.includes("review") && deletedItems.includes("rating")) {
+        setReviewMessage("Your feedback has been completely removed.");
+      } else if (deletedItems.includes("review")) {
+        setReviewMessage("Your review text was deleted.");
+      } else if (deletedItems.includes("rating")) {
+        setReviewMessage("Your rating was removed.");
+      }
+
+      fetchGemRatings();
       fetchReviews();
       fetchGemDetails();
     } catch (error) {
@@ -579,13 +639,19 @@ const GemDetails = () => {
       setReviewError("Please sign in to share a review.");
       return;
     }
+
+       if (!isEditingReview && (userReviewId || userRatingId)) {
+        toast.error("You have already reviewed this place. Please edit your previous review.");
+        return;
+    }
+    // ---------------------------------------
+
     if (reviewRating <= 0) {
       setReviewError("Pick a rating before submitting.");
       return;
     }
 
     const hasReviewText = reviewText.trim().length >= 5;
-    // If text is present but short, warn user. If empty, it's a rating-only submission.
     if (reviewText.trim().length > 0 && !hasReviewText) {
       setReviewError(
         "Your review needs at least a few words (or leave it empty to just rate)."
@@ -597,7 +663,6 @@ const GemDetails = () => {
     const editingExisting = isEditingReview && userReviewId;
     let updatedReview = null;
 
-    // Only submit review if there is text
     if (hasReviewText) {
       try {
         let response;
@@ -621,7 +686,6 @@ const GemDetails = () => {
           );
         }
 
-        // Optimistically update the reviews list
         const savedReview =
           response.data.result || response.data.review || response.data;
 
@@ -638,7 +702,6 @@ const GemDetails = () => {
               return [savedReview, ...prevReviews];
             }
           });
-          // Ensure author info is available
           enrichReviewAuthors([savedReview]);
         }
       } catch (error) {
@@ -684,6 +747,7 @@ const GemDetails = () => {
           { withCredentials: true }
         );
         if (data?.rating?._id) {
+          console.log("Created new rating with ID:", data.rating);
           setUserRatingId(data.rating._id);
         }
       }
@@ -707,7 +771,7 @@ const GemDetails = () => {
     );
     setIsEditingReview(false);
     setSubmittingReview(false);
-
+    setReviewRating(0);
     fetchUserRating();
     fetchGemRatings();
     setTimeout(() => {
@@ -737,6 +801,15 @@ const GemDetails = () => {
 
   return (
     <>
+      <SurpriseButton
+        style={{
+          position: "fixed",
+          top: "120px",
+          right: "2rem",
+          left: "auto",
+          zIndex: 999,
+        }}
+      />
       <div className="min-h-screen bg-white dark:bg-zinc-900 pb-12 gem-details">
         {/* Hero Image Section - Full Width */}
         <div className="relative h-[50vh] md:h-[60vh] w-full">
@@ -810,7 +883,6 @@ const GemDetails = () => {
                 )}
               </div>
 
-              {/* Gallery */}
               {/* Gallery */}
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold mb-6 dark:text-white">
@@ -906,7 +978,7 @@ const GemDetails = () => {
                           </p>
                         </div>
                         <RatingStars
-                          value={reviewRating}
+                          value={isEditingReview ? reviewRating : 0}
                           onChange={handleRatingChange}
                           showLabel={false}
                         />
@@ -922,7 +994,7 @@ const GemDetails = () => {
                           </button>
                           <button
                             type="button"
-                            onClick={handleDeleteReview}
+                            onClick={handleDelete}
                             disabled={reviewDeleting}
                             className="text-red-500 hover:text-red-600 disabled:opacity-60"
                           >
@@ -972,29 +1044,23 @@ const GemDetails = () => {
                   )}
                 </div>
 
-                {visibleReviews.length === 0 ? (
+                {visibleFeedback.length === 0 ? (
                   <p className="text-sm text-gray-500 dark:text-gray-400">
                     {reviewsLoading ? "Loading reviews…" : copy.reviewsEmpty}
                   </p>
                 ) : (
                   <>
                     <div className="space-y-4">
-                      {visibleReviews.map((review, index) => {
-                        const reviewUserId = getReviewUserId(review);
-                        const specificRating = gemRatings.find((r) => {
-                          const ratingUserId =
-                            typeof r.createdBy === "object"
-                              ? r.createdBy._id
-                              : r.createdBy;
-                          return String(ratingUserId) === String(reviewUserId);
-                        });
-                        const ratingValue = specificRating
-                          ? specificRating.rating
+                      {visibleFeedback.map((feedback, index) => {
+                        const ratingValue = feedback.rating
+                          ? feedback.rating.rating
                           : 0;
 
                         return (
                           <article
-                            key={review.id || review._id}
+                            key={
+                              feedback.review?._id || feedback.userId || index
+                            }
                             className={`review-card border border-gray-100 dark:border-zinc-700 rounded-2xl p-5 space-y-2 ${
                               reviewsExpanded && index >= 3
                                 ? "review-card-new"
@@ -1004,30 +1070,38 @@ const GemDetails = () => {
                             <div className="flex flex-wrap items-center justify-between gap-2">
                               <div>
                                 <p className="font-semibold text-gray-900 dark:text-white">
-                                  {formatReviewTitle(review)}
+                                  {formatReviewTitle(
+                                    feedback.review || feedback.rating
+                                  )}
                                 </p>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                                  {formatReviewAuthor(review)} ·{" "}
-                                  {formatReviewDate(review)}
+                                  {formatReviewAuthor(
+                                    feedback.review || feedback.rating
+                                  )}{" "}
+                                  ·{" "}
+                                  {formatReviewDate(
+                                    feedback.review || feedback.rating
+                                  )}
                                 </p>
                               </div>
-                              {/* Rating Display - Uses specific user rating */}
                               {ratingValue > 0 && (
                                 <RatingStars rating={ratingValue} readOnly />
                               )}
                             </div>
                             <p className="text-gray-700 dark:text-gray-300 review-text">
-                              {formatReviewContent(review)}
+                              {formatReviewContent(
+                                feedback.review || feedback.rating
+                              )}
                             </p>
 
                             {normalizedUserId &&
-                              getReviewUserId(review) === normalizedUserId && (
+                              feedback.userId === normalizedUserId && (
                                 <div className="flex items-center justify-end gap-3 pt-3 border-t border-gray-100 dark:border-zinc-700/50 mt-3">
                                   <button
                                     type="button"
                                     className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-[#DD0303] text-gray-700 hover:text-white rounded-xl transition-all text-sm font-semibold shadow-sm"
                                     onClick={() =>
-                                      handleEditReviewClick(review)
+                                      handleEditReviewClick(feedback)
                                     }
                                     title="Edit review"
                                   >
@@ -1037,7 +1111,7 @@ const GemDetails = () => {
                                   <button
                                     type="button"
                                     className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-600 text-red-600 hover:text-white rounded-xl transition-all text-sm font-semibold shadow-sm"
-                                    onClick={handleDeleteReview}
+                                    onClick={() => handleDelete(feedback)}
                                     disabled={reviewDeleting}
                                     title="Delete review"
                                   >
@@ -1169,12 +1243,12 @@ const GemDetails = () => {
       />
 
       <ImageCarouselModal
-  isOpen={carouselOpen}
-  onClose={() => setCarouselOpen(false)}
-  images={galleryImages}
-  initialIndex={carouselInitialIndex}
-  resolveImageSrc={resolveImageSrc}
-/>
+        isOpen={carouselOpen}
+        onClose={() => setCarouselOpen(false)}
+        images={galleryImages}
+        initialIndex={carouselInitialIndex}
+        resolveImageSrc={resolveImageSrc}
+      />
     </>
   );
 };
