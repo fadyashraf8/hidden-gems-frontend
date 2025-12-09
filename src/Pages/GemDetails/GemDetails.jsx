@@ -215,7 +215,7 @@ const GemDetails = () => {
       const entries = await Promise.all(
         missing.map(async (id) => {
           try {
-            const response = await fetch(`${BASE_URL}/user/${id}`, {
+            const response = await fetch(`${BASE_URL}/auth/me`, {
               credentials: "include",
             });
             if (!response.ok) {
@@ -646,15 +646,18 @@ const GemDetails = () => {
     }
     // ---------------------------------------
 
-    if (reviewRating <= 0) {
-      setReviewError("Pick a rating before submitting.");
+    // Allow either review text (5+ chars) OR rating, or both
+    const hasReviewText = reviewText.trim().length >= 5;
+    const hasRating = reviewRating > 0;
+
+    if (!hasReviewText && !hasRating) {
+      setReviewError("Please add a review or select a rating to submit.");
       return;
     }
 
-    const hasReviewText = reviewText.trim().length >= 5;
     if (reviewText.trim().length > 0 && !hasReviewText) {
       setReviewError(
-        "Your review needs at least a few words (or leave it empty to just rate)."
+        "Your review needs at least 5 characters (or leave it empty to just rate)."
       );
       return;
     }
@@ -712,66 +715,83 @@ const GemDetails = () => {
         setSubmittingReview(false);
         return;
       }
-    } else if (editingExisting && reviewText.trim().length === 0) {
-      if (editingExisting) {
+    } else if (editingExisting && reviewText.trim().length === 0 && !hasRating) {
+      // Only prevent if removing both text AND rating
+      setReviewError(
+        "You must have either review text or a rating. Use 'Delete' to remove everything."
+      );
+      setSubmittingReview(false);
+      return;
+    }
+
+    console.log("Submitting feedback:", { userRatingId, reviewRating, hasReviewText, id });
+
+    // Only submit rating if it's provided
+    if (hasRating) {
+      try {
+        let effectiveRatingId = userRatingId;
+        if (!effectiveRatingId) {
+          effectiveRatingId = await fetchUserRating({
+            preserveComposerValue: true,
+          });
+          console.log("Fetched effectiveRatingId:", effectiveRatingId);
+        }
+
+        if (effectiveRatingId) {
+          await axios.put(
+            `${BASE_URL}/ratings/${effectiveRatingId}`,
+            { rating: reviewRating },
+            { withCredentials: true }
+          );
+          setUserRatingId(effectiveRatingId);
+        } else {
+          const { data } = await axios.post(
+            `${BASE_URL}/ratings`,
+            { gem: id, rating: reviewRating },
+            { withCredentials: true }
+          );
+          if (data?.rating?._id) {
+            console.log("Created new rating with ID:", data.rating);
+            setUserRatingId(data.rating._id);
+          }
+        }
+      } catch (error) {
+        console.error("Rating submission error:", error);
         setReviewError(
-          "You cannot remove the text from an existing review. Use 'Delete' instead."
+          error?.response?.data?.message ||
+            "We couldn't save your rating. Try again."
         );
         setSubmittingReview(false);
         return;
       }
     }
 
-    console.log("Submitting rating:", { userRatingId, reviewRating, id });
-
-    try {
-      let effectiveRatingId = userRatingId;
-      if (!effectiveRatingId) {
-        effectiveRatingId = await fetchUserRating({
-          preserveComposerValue: true,
-        });
-        console.log("Fetched effectiveRatingId:", effectiveRatingId);
-      }
-
-      if (effectiveRatingId) {
-        await axios.put(
-          `${BASE_URL}/ratings/${effectiveRatingId}`,
-          { rating: reviewRating },
-          { withCredentials: true }
-        );
-        setUserRatingId(effectiveRatingId);
-      } else {
-        const { data } = await axios.post(
-          `${BASE_URL}/ratings`,
-          { gem: id, rating: reviewRating },
-          { withCredentials: true }
-        );
-        if (data?.rating?._id) {
-          console.log("Created new rating with ID:", data.rating);
-          setUserRatingId(data.rating._id);
-        }
-      }
-    } catch (error) {
-      console.error("Rating submission error:", error);
-      setReviewError(
-        error?.response?.data?.message ||
-          "We saved your words but not the rating. Try again."
-      );
-      setSubmittingReview(false);
-      return;
+    // Clear only the text, keep rating if it exists
+    if (!hasRating) {
+      setReviewText("");
+    } else if (hasReviewText) {
+      setReviewText("");
     }
-
-    setReviewText("");
-    setReviewMessage(
-      editingExisting
-        ? "Your review was updated."
-        : hasReviewText
-        ? "Thanks for sharing your thoughts!"
-        : "Thanks for your rating!"
-    );
+    
+    // Set appropriate success message
+    if (editingExisting) {
+      setReviewMessage("Your feedback was updated.");
+    } else if (hasReviewText && hasRating) {
+      setReviewMessage("Thanks for your review and rating!");
+    } else if (hasReviewText) {
+      setReviewMessage("Thanks for sharing your thoughts!");
+    } else {
+      setReviewMessage("Thanks for your rating!");
+    }
+    
     setIsEditingReview(false);
     setSubmittingReview(false);
-    setReviewRating(0);
+    
+    // Only reset rating if we're not editing
+    if (!editingExisting) {
+      setReviewRating(0);
+    }
+    
     fetchUserRating();
     fetchGemRatings();
     setTimeout(() => {
@@ -790,8 +810,7 @@ const GemDetails = () => {
   };
 
   const canSubmitReview =
-    (reviewText.trim().length >= 5 ||
-      (reviewText.trim().length === 0 && reviewRating > 0)) &&
+    (reviewText.trim().length >= 5 || reviewRating > 0) &&
     !submittingReview;
 
   if (loading) return <LoadingScreen />;
@@ -978,7 +997,7 @@ const GemDetails = () => {
                           </p>
                         </div>
                         <RatingStars
-                          value={isEditingReview ? reviewRating : 0}
+                          value={reviewRating ? reviewRating : 0}
                           onChange={handleRatingChange}
                           showLabel={false}
                         />
