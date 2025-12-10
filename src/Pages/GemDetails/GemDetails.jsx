@@ -20,11 +20,12 @@ import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
 import QRCodeModal from "../../Components/QRCodeModal/QRCodeModal.jsx";
 import toast from "react-hot-toast";
 import SurpriseButton from "../../Components/SurpriseButton/SurpriseButton";
+// 1. Ensure these are imported
+import { Avatar, FormControlLabel, Switch } from "@mui/material";
 
 const BASE_URL = import.meta.env.VITE_Base_URL;
 const COLLAPSED_ABOUT_HEIGHT = 150;
 
-// Helper to extract the string ID from a populated object or a raw string
 const normalizeId = (value) => {
   if (!value) return null;
   if (typeof value === "string") return value;
@@ -34,10 +35,8 @@ const normalizeId = (value) => {
   return null;
 };
 
-// Helper to get the ID regardless of whether it's a Review (userId) or Rating (createdBy)
 const getReviewUserId = (item) => {
   if (!item) return null;
-  // Check for populated objects first
   if (item.userId) return normalizeId(item.userId);
   if (item.createdBy) return normalizeId(item.createdBy);
   return null;
@@ -82,7 +81,9 @@ const GemDetails = () => {
   const [voucherData, setVoucherData] = useState(null);
   const [isCreatingVoucher, setIsCreatingVoucher] = useState(false);
 
-  // --- Voucher Logic ---
+  // --- 2. New State for Anonymity ---
+  const [isAnonymous, setIsAnonymous] = useState(false);
+
   const createVoucher = async () => {
     setIsCreatingVoucher(true);
     try {
@@ -103,7 +104,6 @@ const GemDetails = () => {
     }
   };
 
-  // --- Fetch Ratings ---
   const fetchGemRatings = useCallback(async () => {
     try {
       const res = await fetch(`${BASE_URL}/ratings/gem/${id}`, {
@@ -130,7 +130,6 @@ const GemDetails = () => {
   const [reviewError, setReviewError] = useState("");
   const [submittingReview, setSubmittingReview] = useState(false);
   
-  // IDs for the currently logged in user's interactions
   const [userRatingId, setUserRatingId] = useState(null);
   const [userReviewId, setUserReviewId] = useState(null);
   
@@ -141,7 +140,6 @@ const GemDetails = () => {
   const composerRef = useRef(null);
   const [aboutMaxHeight, setAboutMaxHeight] = useState(0);
 
-  // --- Translations ---
   const copy = useMemo(
     () => ({
       seeMore: t("see_more", { defaultValue: "See more" }),
@@ -185,7 +183,6 @@ const GemDetails = () => {
     [userId]
   );
 
-  // --- Fetch Gem Data ---
   const fetchGemDetails = useCallback(async () => {
     setLoading(true);
     setError("");
@@ -210,7 +207,6 @@ const GemDetails = () => {
     fetchGemDetails();
   }, [fetchGemDetails]);
 
-  // --- Fetch Reviews ---
   const fetchReviews = useCallback(async () => {
     setReviewsLoading(true);
     try {
@@ -236,7 +232,6 @@ const GemDetails = () => {
     fetchReviews();
   }, [fetchReviews]);
 
-  // --- Fetch Current User's Specific Rating ---
   const fetchUserRating = useCallback(
     async ({ preserveComposerValue = false } = {}) => {
       if (!isLoggedIn || !userId) {
@@ -271,7 +266,6 @@ const GemDetails = () => {
     fetchUserRating();
   }, [fetchUserRating]);
 
-  // --- Helpers ---
   const resolveImageSrc = useCallback((path) => {
     if (!path) return "/images/Gem.png";
     if (/^https?:\/\//i.test(path)) return path;
@@ -325,12 +319,9 @@ const GemDetails = () => {
     ? galleryImages
     : galleryImages.slice(0, 6);
 
-  // --- Combined Feedback Logic ---
-  // Matches reviews and ratings based on the User ID string found in the populated objects
   const combinedFeedback = useMemo(() => {
     const feedbackMap = new Map();
 
-    // 1. Process Reviews (userId is populated)
     reviews.forEach((review) => {
       const uid = getReviewUserId(review);
       if (uid) {
@@ -341,7 +332,6 @@ const GemDetails = () => {
       }
     });
 
-    // 2. Process Ratings (createdBy is populated)
     gemRatings.forEach((rating) => {
       const uid = getReviewUserId(rating);
       if (uid) {
@@ -407,10 +397,7 @@ const GemDetails = () => {
     return "/images/Gem.png";
   }, [gem?.images, gem?.image, resolveImageSrc]);
 
-  // --- Formatters ---
-
   const formatReviewAuthor = (feedback) => {
-    // Try to get the user object from Review first, then Rating
     let userObj = null;
 
     if (feedback.review && feedback.review.userId && typeof feedback.review.userId === 'object') {
@@ -418,6 +405,11 @@ const GemDetails = () => {
     } else if (feedback.rating && feedback.rating.createdBy && typeof feedback.rating.createdBy === 'object') {
         userObj = feedback.rating.createdBy;
     }
+
+    // --- 3. Check for Anonymous Flag in Display ---
+    // Assuming backend returns an 'isAnonymous' flag on the review/rating object
+    const isReviewAnonymous = feedback.review?.isAnonymous || feedback.rating?.isAnonymous;
+    if(isReviewAnonymous) return copy.reviewsAnonymous;
 
     if (userObj) {
         const first = userObj.firstName || "";
@@ -427,13 +419,11 @@ const GemDetails = () => {
         if (userObj.name) return userObj.name;
     }
 
-    // Fallbacks if population failed but we have data elsewhere
     if (feedback.review?.author) return feedback.review.author;
     return copy.reviewsAnonymous;
   };
 
   const formatReviewDate = (feedbackItem) => {
-    // Prefer review date, then rating date
     const item = feedbackItem.review || feedbackItem.rating;
     if (!item) return copy.reviewsRecent;
 
@@ -476,23 +466,21 @@ const GemDetails = () => {
     return review.content || review.description || review.comment || "";
   };
 
-  // --- Interaction Handlers ---
-
   const handleEditReviewClick = (feedback) => {
     if (feedback.userId !== normalizedUserId) return;
 
     setIsEditingReview(true);
 
-    // Set Review Data
     if (feedback.review) {
       setUserReviewId(feedback.review._id);
       setReviewText(formatReviewContent(feedback));
+      // If editing, check if previous review was anonymous
+      // if(feedback.review.isAnonymous) setIsAnonymous(true);
     } else {
       setUserReviewId(null);
       setReviewText("");
     }
 
-    // Set Rating Data
     if (feedback.rating) {
       const stars = typeof feedback.rating === 'object' ? feedback.rating.rating : feedback.rating;
       setReviewRating(Number(stars) || 0);
@@ -514,6 +502,7 @@ const GemDetails = () => {
     setReviewText("");
     setReviewMessage("");
     setReviewError("");
+    setIsAnonymous(false); // Reset toggle
     fetchUserRating(); 
   };
 
@@ -542,6 +531,7 @@ const GemDetails = () => {
       setReviewRating(0);
       setReviewText("");
       setIsEditingReview(false);
+      setIsAnonymous(false);
 
       if (deletedItems.includes("review") && deletedItems.includes("rating")) {
         setReviewMessage("Your feedback has been completely removed.");
@@ -603,7 +593,8 @@ const GemDetails = () => {
         if (editingExisting) {
           response = await axios.patch(
             `${BASE_URL}/review/${userReviewId}`,
-            { description: reviewText.trim() },
+            // --- 4. Pass Anonymous flag on Edit ---
+            { description: reviewText.trim(), isAnonymous: isAnonymous },
             { withCredentials: true }
           );
         } else {
@@ -613,6 +604,8 @@ const GemDetails = () => {
               description: reviewText.trim(),
               gemId: id,
               userId,
+              // --- 5. Pass Anonymous flag on Create ---
+              isAnonymous: isAnonymous
             },
             { withCredentials: true }
           );
@@ -706,6 +699,7 @@ const GemDetails = () => {
     
     setIsEditingReview(false);
     setSubmittingReview(false);
+    setIsAnonymous(false); // Reset toggle after submit
     
     if (!editingExisting) {
       setReviewRating(0);
@@ -904,11 +898,47 @@ const GemDetails = () => {
                     <form className="space-y-4" onSubmit={handleReviewSubmit}>
                       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                         <div>
-                          <p className="text-sm font-semibold text-gray-700 dark:text-gray-100">
+                          <p className="text-sm font-semibold text-gray-700 dark:text-gray-100 mb-2">
                             {isEditingReview
                               ? "Edit your review"
                               : "Add your review"}
                           </p>
+
+                          {/* --- 6. New User Identity Section with Toggle --- */}
+                          <div className="flex items-center gap-3 mb-2 bg-white dark:bg-zinc-800 p-2 rounded-xl border border-gray-100 dark:border-zinc-700 w-fit">
+                              <Avatar 
+                                src={isAnonymous ? "/images/anonymous-placeholder.png" : resolveImageSrc(userInfo?.profilePic)}
+                                alt={isAnonymous ? "Anonymous" : userInfo?.firstName}
+                                sx={{ width: 32, height: 32 }}
+                              />
+                              <div className="flex flex-col">
+                                <span className={`text-sm font-bold ${isAnonymous ? 'text-gray-500' : 'text-gray-900 dark:text-white'}`}>
+                                    {isAnonymous ? "Anonymous Explorer" : `${userInfo?.firstName} ${userInfo?.lastName}`}
+                                </span>
+                              </div>
+                              <div className="h-4 w-[1px] bg-gray-300 mx-1"></div>
+                              <FormControlLabel 
+                                control={
+                                    <Switch 
+                                        size="small" 
+                                        checked={isAnonymous}
+                                        onChange={(e) => setIsAnonymous(e.target.checked)}
+                                        sx={{
+                                            '& .MuiSwitch-switchBase.Mui-checked': {
+                                              color: '#DD0303',
+                                            },
+                                            '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                                              backgroundColor: '#DD0303',
+                                            },
+                                        }}
+                                    />
+                                } 
+                                label={<span className="text-xs text-gray-500">Post Anonymously</span>} 
+                                className="m-0"
+                              />
+                          </div>
+                          {/* ----------------------------------------------- */}
+
                           <p className="text-xs text-gray-500 dark:text-gray-400">
                             {isEditingReview
                               ? "Update your previous feedback below."

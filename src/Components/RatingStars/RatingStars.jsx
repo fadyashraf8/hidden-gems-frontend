@@ -5,11 +5,11 @@ import { Typography } from "@mui/material";
 
 // --- Configuration ---
 const TOTAL_STARS = 5;
-const STAR_COLOR = "white"; // Stars are always white
-const STAR_SIZE = "1rem"; // Size of the star icon
-const BOX_SIZE = "1.5rem"; // Fixed size for better visibility
+const STAR_COLOR = "white"; 
+const STAR_SIZE = "1rem"; 
+const BOX_SIZE = "1.5rem"; 
 
-// --- Color Logic Helper (No Change) ---
+// --- Color Logic Helper ---
 const getRatingColor = (ratingValue) => {
   if (ratingValue >= 4.5) {
     return "#FA812F";
@@ -33,7 +33,6 @@ const labels = {
   5: "Excellent+",
 };
 
-// Helper to get the correct label text
 const getLabel = (value) => labels[value] || "Select a rating";
 
 export default function RatingStars({
@@ -52,19 +51,30 @@ export default function RatingStars({
     setHover(-1);
   }, [numericValue]);
 
-  const displayValue =
-    hover !== -1 && !readOnly ? hover : Number(numericValue) || 0;
+  // Use the hover value if active, otherwise the actual value
+  const displayValue = hover !== -1 && !readOnly ? hover : Number(numericValue) || 0;
   const clampedValue = Math.min(Math.max(displayValue, 0), TOTAL_STARS);
   const overallColor = getRatingColor(clampedValue);
 
-  const handleStarClick = (starValue) => {
-    if (readOnly || typeof onChange !== "function") return;
-    onChange(starValue);
+  // --- New Helper: Calculate Score based on mouse position ---
+  const calculateScore = (event, index) => {
+    const { width, left } = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - left;
+    // If clicked on the left half (less than 50% width), add 0.5, else add 1
+    const isHalf = x < width / 2;
+    return index + (isHalf ? 0.5 : 1);
   };
 
-  const handleMouseEnter = (starValue) => {
+  const handleClick = (event, index) => {
+    if (readOnly || typeof onChange !== "function") return;
+    const newValue = calculateScore(event, index);
+    onChange(newValue);
+  };
+
+  const handleMouseMove = (event, index) => {
     if (readOnly) return;
-    setHover(starValue);
+    const newValue = calculateScore(event, index);
+    setHover(newValue);
   };
 
   const handleMouseLeave = () => {
@@ -87,28 +97,40 @@ export default function RatingStars({
       {/* --- Individual Star Boxes Row --- */}
       <Box sx={{ display: "flex", gap: 0.5 }}>
         {Array.from({ length: TOTAL_STARS }).map((_, index) => {
-          const starValue = index + 1;
-          const isFilled = starValue <= clampedValue;
-          const boxColor = isFilled ? overallColor : "#E0E0E0";
+          // Logic for Fill State
+          const isFull = clampedValue >= index + 1;
+          const isHalf = !isFull && clampedValue >= index + 0.5;
+
+          // Logic for Background Color (Solid or Gradient)
+          let boxBackground = "#E0E0E0"; // Default Empty Gray
+          
+          if (isFull) {
+             // Fully filled box
+            boxBackground = overallColor;
+          } else if (isHalf) {
+             // Half filled: Linear Gradient (Color | Gray)
+            boxBackground = `linear-gradient(90deg, ${overallColor} 50%, #E0E0E0 50%)`;
+          }
 
           return (
             <Box
               key={index}
-              onClick={() => handleStarClick(starValue)}
-              onMouseEnter={() => handleMouseEnter(starValue)}
+              onClick={(e) => handleClick(e, index)}
+              onMouseMove={(e) => handleMouseMove(e, index)} // Changed from onMouseEnter to onMouseMove
               onMouseLeave={handleMouseLeave}
               sx={{
                 width: BOX_SIZE,
                 height: BOX_SIZE,
-                bgcolor: boxColor,
+                background: boxBackground, // Apply the gradient or solid color
                 borderRadius: 1,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 cursor: readOnly ? "default" : "pointer",
-                transition: "background-color 0.2s, transform 0.2s",
+                transition: "transform 0.2s", // Removed background-color transition because gradients don't animate well
                 transform:
-                  hover === starValue && !readOnly
+                  // Check if this specific box is being hovered
+                  (hover >= index + 0.5 && hover <= index + 1) && !readOnly
                     ? "translateY(-2px)"
                     : "none",
               }}
@@ -117,7 +139,8 @@ export default function RatingStars({
                 sx={{
                   color: STAR_COLOR,
                   fontSize: STAR_SIZE,
-                  opacity: isFilled ? 1 : 0.6,
+                  // If it's half or full, opacity is 1. If empty, 0.6
+                  opacity: isFull || isHalf ? 1 : 0.6,
                 }}
               />
             </Box>
