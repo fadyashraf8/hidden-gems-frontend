@@ -2,7 +2,7 @@ import React from "react";
 import { X, Download } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-const QRCodeModal = ({ isOpen, onClose, qrCode, voucherData }) => {
+const QRCodeModal = ({ isOpen, onClose, qrCode, voucherData,type }) => {
   const { t } = useTranslation("qrModal");
 
   if (!isOpen) return null;
@@ -51,7 +51,8 @@ const QRCodeModal = ({ isOpen, onClose, qrCode, voucherData }) => {
                     {t("qrModal.discount")}
                   </span>
                   <span className="font-bold text-green-600">
-                    {voucherData.discount}% {t("qrModal.off")}
+                    
+                    {voucherData.discount}{type==="points"?" Pound ":`% {t("qrModal.off")}`} 
                   </span>
                 </div>
               )}

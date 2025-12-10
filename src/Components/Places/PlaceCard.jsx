@@ -1,43 +1,45 @@
-import './PlaceCard.css';
-import { useNavigate } from 'react-router-dom';
-import { THEME } from './constants';
-import { useEffect, useState } from 'react';
+import "./PlaceCard.css";
+import { useNavigate } from "react-router-dom";
+import { THEME } from "./constants";
+import { useEffect, useState } from "react";
 
-import WishlistButton from '../wishlistButton/wishlistButton';
+import WishlistButton from "../wishlistButton/wishlistButton";
 const PlaceCard = ({ gem, rank }) => {
-  const BASE_URL = import.meta.env.VITE_Base_URL
-  const navigate = useNavigate(); 
-  const [ ratingsCount, setRatingsCount ] = useState(0);
-    useEffect(() => {
-      const fetchRatingGems = async () => {
-        try {
-          const response = await fetch(`${BASE_URL}/ratings/gem/${gem._id}`,{
-            credentials: 'include',
-          });
-          const data = await response.json();
-          if(data.message === "success" && Array.isArray(data.ratings)){
-            setRatingsCount(data.ratings.length)
-          }
-        } catch (error) {
-          console.log("gemid", gem._id);
-          console.error("Failed to fetch rating count", error);
+  const BASE_URL = import.meta.env.VITE_Base_URL;
+  const navigate = useNavigate();
+  const [ratingsCount, setRatingsCount] = useState(0);
+  useEffect(() => {
+    const fetchRatingGems = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/ratings/gem/${gem._id}`, {
+          credentials: "include",
+        });
+        const data = await response.json();
+        if (data.message === "success" && Array.isArray(data.ratings)) {
+          setRatingsCount(data.ratings.length);
+          console.log("data.ratings.length", data.ratings.length);
         }
+      } catch (error) {
+        console.log("gemid", gem._id);
+        console.error("Failed to fetch rating count", error);
       }
-      if(gem._id){
-         fetchRatingGems();
-       
-      }else{
-        console.error("Gem is not passed correctly to GemCard")
-      }
-      
-    },[gem._id])
+    };
+    if (gem._id) {
+      fetchRatingGems();
+    } else {
+      console.error("Gem is not passed correctly to GemCard");
+    }
+
+    console.log("gem.name", gem, "gem.avgRating", gem.avgRating);
+  }, [gem._id]);
   const handleCardClick = () => {
     navigate(`/gems/${gem._id}`);
   };
 
-  const mainImage = gem.images && gem.images.length > 0 
-    ? `${gem.images[0]}` 
-    : "https://via.placeholder.com/600x400?text=No+Image";
+  const mainImage =
+    gem.images && gem.images.length > 0
+      ? `${gem.images[0]}`
+      : "https://via.placeholder.com/600x400?text=No+Image";
 
   const categoryName = gem.category?.categoryName || "Uncategorized";
 
@@ -49,16 +51,51 @@ const PlaceCard = ({ gem, rank }) => {
 
     for (let i = 0; i < 5; i++) {
       if (i < fullStars) {
-        stars.push(<span key={i} style={{ color: THEME.RED }}>★</span>);
+        // Full star
+        stars.push(
+          <span key={i} style={{ color: THEME.RED }}>
+            ★
+          </span>
+        );
       } else if (i === fullStars && hasHalfStar) {
-        stars.push(<span key={i} style={{ color: THEME.RED }}>⯨</span>);
+        // Half star (overlay technique)
+        stars.push(
+          <span
+            key={i}
+            style={{
+              position: "relative",
+              display: "inline-block",
+              color: "#e0e0e0",
+            }}
+          >
+            ★
+            <span
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: "50%",
+                overflow: "hidden",
+                color: THEME.RED,
+              }}
+            >
+              ★
+            </span>
+          </span>
+        );
       } else {
-        stars.push(<span key={i} style={{ color: '#e0e0e0' }}>★</span>);
+        // Empty star
+        stars.push(
+          <span key={i} style={{ color: "#e0e0e0" }}>
+            ★
+          </span>
+        );
       }
     }
-    return <div style={{ fontSize: '1.2rem', letterSpacing: '2px' }}>{stars}</div>;
+    return (
+      <div style={{ fontSize: "1.2rem", letterSpacing: "2px" }}>{stars}</div>
+    );
   };
-
   return (
     <div
       onClick={handleCardClick}
@@ -117,8 +154,7 @@ const PlaceCard = ({ gem, rank }) => {
         className="place-card-image"
         style={{
           flexShrink: 0,
-              position: 'relative', 
-
+          position: "relative",
         }}
       >
         <img
@@ -131,8 +167,7 @@ const PlaceCard = ({ gem, rank }) => {
             display: "block",
           }}
         />
-                <WishlistButton gemId={gem._id} size={18} />
-
+        <WishlistButton gemId={gem._id} size={18} />
       </div>
 
       {/* <div
@@ -190,9 +225,11 @@ const PlaceCard = ({ gem, rank }) => {
           }}
         >
           <span style={{ fontWeight: 600 }}>{categoryName}</span>
-          {/* <span style={{ margin: "0 6px", color: THEME.GREY }}>•</span>
+          {
+            /* <span style={{ margin: "0 6px", color: THEME.GREY }}>•</span>
           {gem.price || "$$"}*/
-          <span style={{ margin: "0 6px" }}>•</span> }
+            <span style={{ margin: "0 6px" }}>•</span>
+          }
           {gem.gemLocation}
         </div>
 

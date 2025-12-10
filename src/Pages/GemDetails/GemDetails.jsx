@@ -20,6 +20,7 @@ import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
 import QRCodeModal from "../../Components/QRCodeModal/QRCodeModal.jsx";
 import toast from "react-hot-toast";
 import SurpriseButton from "../../Components/SurpriseButton/SurpriseButton";
+import { set } from "zod";
 
 const BASE_URL = import.meta.env.VITE_Base_URL;
 const COLLAPSED_ABOUT_HEIGHT = 150;
@@ -67,7 +68,8 @@ const GemDetails = () => {
   const [gem, setGem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+const [pointsAmount, setPointsAmount] = useState(0);
+const [showPointsInput, setShowPointsInput] = useState(false);
   const [carouselOpen, setCarouselOpen] = useState(false);
   const [carouselInitialIndex, setCarouselInitialIndex] = useState(0);
   const [aboutExpanded, setAboutExpanded] = useState(false);
@@ -79,6 +81,7 @@ const GemDetails = () => {
   const [gemRatings, setGemRatings] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [voucherQR, setVoucherQR] = useState(null);
+  const [voucherType, setVoucherType] = useState(null);
   const [voucherData, setVoucherData] = useState(null);
   const [isCreatingVoucher, setIsCreatingVoucher] = useState(false);
 
@@ -93,6 +96,7 @@ const GemDetails = () => {
       );
 
       setVoucherQR(response?.data?.createdVoucher?.qrCode);
+      setVoucherType("standard");
       setVoucherData(response?.data?.createdVoucher);
       setIsModalOpen(true);
     } catch (err) {
@@ -103,6 +107,35 @@ const GemDetails = () => {
     }
   };
 
+
+// Update the createVoucherByPoints function
+const createVoucherByPoints = async () => {
+  if (!pointsAmount || pointsAmount < 1) {
+    toast.error("Please enter a valid points amount.");
+    return;
+  }
+
+  setIsCreatingVoucher(true);
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/vouchers/createByPoints/${id}`,
+      { points: pointsAmount },
+      { withCredentials: true }
+    );
+
+    setVoucherQR(response?.data?.createdVoucher?.qrCode);
+    setVoucherType("points");
+    setVoucherData(response?.data?.createdVoucher);
+    setIsModalOpen(true);
+    setShowPointsInput(false);
+    toast.success(`Voucher created! ${pointsAmount} points deducted.`);
+  } catch (err) {
+    console.error("Error creating voucher by points:", err);
+    toast.error(err.response?.data?.error || "Failed to create voucher. Check your points balance.");
+  } finally {
+    setIsCreatingVoucher(false);
+  }
+};
   // --- Fetch Ratings ---
   const fetchGemRatings = useCallback(async () => {
     try {
@@ -129,11 +162,11 @@ const GemDetails = () => {
   const [reviewMessage, setReviewMessage] = useState("");
   const [reviewError, setReviewError] = useState("");
   const [submittingReview, setSubmittingReview] = useState(false);
-  
+
   // IDs for the currently logged in user's interactions
   const [userRatingId, setUserRatingId] = useState(null);
   const [userReviewId, setUserReviewId] = useState(null);
-  
+
   const [isEditingReview, setIsEditingReview] = useState(false);
   const [reviewDeleting, setReviewDeleting] = useState(false);
 
@@ -162,7 +195,9 @@ const GemDetails = () => {
       galleryEmpty: t("gem_gallery_empty", {
         defaultValue: "Gallery will be updated soon.",
       }),
-      reviewsTitle: t("gem_reviews_title", { defaultValue: "Reviews & ratings" }),
+      reviewsTitle: t("gem_reviews_title", {
+        defaultValue: "Reviews & ratings",
+      }),
       reviewsCaption: t("gem_reviews_caption", {
         defaultValue: "Latest impressions from the community",
       }),
@@ -171,7 +206,9 @@ const GemDetails = () => {
       reviewsEmpty: t("gem_reviews_empty", {
         defaultValue: "No reviews yet. Be the first to share your experience.",
       }),
-      reviewsAnonymous: t("gem_reviews_anonymous", { defaultValue: "Explorer" }),
+      reviewsAnonymous: t("gem_reviews_anonymous", {
+        defaultValue: "Explorer",
+      }),
       reviewsRecent: t("gem_reviews_recent", { defaultValue: "Recently" }),
       reviewsDefaultTitle: t("gem_reviews_default_title", {
         defaultValue: "Visitor feedback",
@@ -356,7 +393,7 @@ const GemDetails = () => {
   }, [gemRatings, reviews]);
 
   const totalReviewsCount = combinedFeedback.length;
-  
+
   const visibleFeedback = reviewsExpanded
     ? combinedFeedback
     : combinedFeedback.slice(0, 3);
@@ -413,18 +450,26 @@ const GemDetails = () => {
     // Try to get the user object from Review first, then Rating
     let userObj = null;
 
-    if (feedback.review && feedback.review.userId && typeof feedback.review.userId === 'object') {
-        userObj = feedback.review.userId;
-    } else if (feedback.rating && feedback.rating.createdBy && typeof feedback.rating.createdBy === 'object') {
-        userObj = feedback.rating.createdBy;
+    if (
+      feedback.review &&
+      feedback.review.userId &&
+      typeof feedback.review.userId === "object"
+    ) {
+      userObj = feedback.review.userId;
+    } else if (
+      feedback.rating &&
+      feedback.rating.createdBy &&
+      typeof feedback.rating.createdBy === "object"
+    ) {
+      userObj = feedback.rating.createdBy;
     }
 
     if (userObj) {
-        const first = userObj.firstName || "";
-        const last = userObj.lastName || "";
-        const combined = `${first} ${last}`.trim();
-        if (combined) return combined;
-        if (userObj.name) return userObj.name;
+      const first = userObj.firstName || "";
+      const last = userObj.lastName || "";
+      const combined = `${first} ${last}`.trim();
+      if (combined) return combined;
+      if (userObj.name) return userObj.name;
     }
 
     // Fallbacks if population failed but we have data elsewhere
@@ -494,7 +539,10 @@ const GemDetails = () => {
 
     // Set Rating Data
     if (feedback.rating) {
-      const stars = typeof feedback.rating === 'object' ? feedback.rating.rating : feedback.rating;
+      const stars =
+        typeof feedback.rating === "object"
+          ? feedback.rating.rating
+          : feedback.rating;
       setReviewRating(Number(stars) || 0);
       if (feedback.rating._id) {
         setUserRatingId(feedback.rating._id);
@@ -506,7 +554,10 @@ const GemDetails = () => {
 
     setReviewError("");
     setReviewMessage("");
-    composerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    composerRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
   };
 
   const handleCancelEdit = () => {
@@ -514,7 +565,7 @@ const GemDetails = () => {
     setReviewText("");
     setReviewMessage("");
     setReviewError("");
-    fetchUserRating(); 
+    fetchUserRating();
   };
 
   const handleDelete = async (feedback) => {
@@ -573,9 +624,11 @@ const GemDetails = () => {
       return;
     }
 
-       if (!isEditingReview && (userReviewId || userRatingId)) {
-       toast.error("You have already reviewed this place. Please edit your previous review.");
-       return;
+    if (!isEditingReview && (userReviewId || userRatingId)) {
+      toast.error(
+        "You have already reviewed this place. Please edit your previous review."
+      );
+      return;
     }
 
     const hasReviewText = reviewText.trim().length >= 5;
@@ -643,7 +696,11 @@ const GemDetails = () => {
         setSubmittingReview(false);
         return;
       }
-    } else if (editingExisting && reviewText.trim().length === 0 && !hasRating) {
+    } else if (
+      editingExisting &&
+      reviewText.trim().length === 0 &&
+      !hasRating
+    ) {
       setReviewError(
         "You must have either review text or a rating. Use 'Delete' to remove everything."
       );
@@ -693,7 +750,7 @@ const GemDetails = () => {
     } else if (hasReviewText) {
       setReviewText("");
     }
-    
+
     if (editingExisting) {
       setReviewMessage("Your feedback was updated.");
     } else if (hasReviewText && hasRating) {
@@ -703,14 +760,14 @@ const GemDetails = () => {
     } else {
       setReviewMessage("Thanks for your rating!");
     }
-    
+
     setIsEditingReview(false);
     setSubmittingReview(false);
-    
+
     if (!editingExisting) {
       setReviewRating(0);
     }
-    
+
     fetchUserRating();
     fetchGemRatings();
     setTimeout(() => {
@@ -729,8 +786,7 @@ const GemDetails = () => {
   };
 
   const canSubmitReview =
-    (reviewText.trim().length >= 5 || reviewRating > 0) &&
-    !submittingReview;
+    (reviewText.trim().length >= 5 || reviewRating > 0) && !submittingReview;
 
   if (loading) return <LoadingScreen />;
   if (error)
@@ -932,7 +988,12 @@ const GemDetails = () => {
                           </button>
                           <button
                             type="button"
-                            onClick={() => handleDelete({ review: { _id: userReviewId }, rating: { _id: userRatingId } })}
+                            onClick={() =>
+                              handleDelete({
+                                review: { _id: userReviewId },
+                                rating: { _id: userRatingId },
+                              })
+                            }
                             disabled={reviewDeleting}
                             className="text-red-500 hover:text-red-600 disabled:opacity-60"
                           >
@@ -1011,8 +1072,7 @@ const GemDetails = () => {
                                   {formatReviewTitle(feedback)}
                                 </p>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                                  {formatReviewAuthor(feedback)}{" "}
-                                  ·{" "}
+                                  {formatReviewAuthor(feedback)} ·{" "}
                                   {formatReviewDate(feedback)}
                                 </p>
                               </div>
@@ -1139,18 +1199,97 @@ const GemDetails = () => {
                     )}
                   </div>
                 </div>
+<div className="pt-6 border-t border-gray-100 dark:border-zinc-700 space-y-3">
+  <h4 className="font-semibold text-gray-800 dark:text-white mb-3">
+    Get Your Discount
+  </h4>
+  
+  {/* Subscription Voucher */}
+  <button
+    onClick={createVoucher}
+    disabled={isCreatingVoucher}
+    className="w-full bg-gradient-to-r from-[#DD0303] to-[#FF4444] text-white px-4 py-3 rounded-xl font-semibold text-sm hover:from-[#b90202] hover:to-[#DD0303] transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+  >
+    <svg 
+      className="w-5 h-5" 
+      fill="none" 
+      stroke="currentColor" 
+      viewBox="0 0 24 24"
+    >
+      <path 
+        strokeLinecap="round" 
+        strokeLinejoin="round" 
+        strokeWidth={2} 
+        d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" 
+      />
+    </svg>
+    <span>
+      {isCreatingVoucher ? "Creating..." : "Subscriber Voucher"}
+    </span>
+  </button>
 
-                <div className="pt-6 border-t border-gray-100 dark:border-zinc-700">
-                  <button
-                    onClick={createVoucher}
-                    disabled={isCreatingVoucher}
-                    className="w-full bg-[#DD0303] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#b90202] transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isCreatingVoucher
-                      ? "Creating Voucher..."
-                      : "Ask For A Voucher"}
-                  </button>
-                </div>
+  {/* Points Voucher Section */}
+  <div className="bg-gray-50 dark:bg-zinc-900/50 rounded-xl p-4 border border-gray-200 dark:border-zinc-700 space-y-3">
+    <div className="flex items-center justify-between">
+      <h5 className="font-semibold text-gray-900 dark:text-white text-sm">
+        Redeem with Points
+      </h5>
+      <svg 
+        className="w-5 h-5 text-yellow-500" 
+        fill="currentColor" 
+        viewBox="0 0 24 24"
+      >
+        <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+      </svg>
+    </div>
+
+    {showPointsInput ? (
+      <>
+        <div className="flex gap-2">
+          <input
+            type="number"
+            min="1"
+            value={pointsAmount}
+            onChange={(e) => setPointsAmount(Number(e.target.value))}
+            placeholder="Enter points"
+            className="flex-1 px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#DD0303] focus:border-transparent"
+          />
+          <button
+            onClick={createVoucherByPoints}
+            disabled={isCreatingVoucher || !pointsAmount}
+            className="px-4 py-2 bg-[#DD0303] text-white rounded-lg font-semibold text-sm hover:bg-[#b90202] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isCreatingVoucher ? "..." : "✓"}
+          </button>
+          <button
+            onClick={() => {
+              setShowPointsInput(false);
+              setPointsAmount(0);
+            }}
+            className="px-4 py-2 bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-gray-300 rounded-lg font-semibold text-sm hover:bg-gray-300 dark:hover:bg-zinc-600 transition-all"
+          >
+            x
+          </button>
+        </div>
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          Enter the number of points you want to use
+        </p>
+      </>
+    ) : (
+      <button
+        onClick={() => setShowPointsInput(true)}
+        disabled={isCreatingVoucher}
+        className="w-full bg-white dark:bg-zinc-800 text-[#DD0303] border-2 border-[#DD0303] px-4 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#DD0303] hover:text-white transition-all shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Use Points
+      </button>
+    )}
+  </div>
+  
+  <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
+    Choose how you'd like to redeem your discount
+  </p>
+</div>
 
                 {(!userInfo?.subscription ||
                   userInfo?.subscription === "free") &&
@@ -1169,6 +1308,7 @@ const GemDetails = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         qrCode={voucherQR}
+        type={voucherType}
         voucherData={voucherData}
       />
 
