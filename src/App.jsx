@@ -59,6 +59,7 @@ import CreatedByYou from "./Pages/CreatedByYou/CreatedByYou";
 import ContactUsPage from "./Pages/ContactUs/ContactUs";
 import CategoriesPage from "./Pages/CategoriesPage/CategoriesPage";
 import SurpriseMe from "./Pages/SurpriseMe/SurpriseMe";
+import SponsoredGems from "./Pages/SponsoredGems/SponsoredGems";
 import Success from "./Pages/Subscription/Success";
 import Cancel from "./Pages/Subscription/Cancel";
 
@@ -139,6 +140,7 @@ function App() {
       children: [
         { index: true, element: <Home /> },
         { path: "home", element: <Home /> },
+        { path: "sponsored", element: <SponsoredGems /> },
         { path: "gems/:id", element: <GemDetails /> },
         { path: "contact-us", element: <ContactUsPage /> },
         { path: "vouchers", element: <Vouchers /> },
@@ -320,7 +322,6 @@ function App() {
         { path: "vouchers/:id", element: <VoucherRedeem /> },
 
         { path: "transactions", element: <TransactionDashboard /> },
-
       ],
     },
     // {

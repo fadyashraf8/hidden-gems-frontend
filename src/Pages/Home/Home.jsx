@@ -26,7 +26,6 @@ export default function Home() {
         const data = await getGemsAPI();
         if (data && data.result) {
           setGems(data.result.filter((gem) => gem.status === "accepted"));
-          
         }
       } catch (error) {
         console.error("Failed to fetch gems", error);
@@ -34,22 +33,22 @@ export default function Home() {
         setLoading(false);
       }
     };
-        const fetchSubscribedGems =  () => {
-   
-  axios.get(`${import.meta.env.VITE_Base_URL}/gems/subscribed`).then((res)=>{         
-     setSubscribedGems(res.data?.result?.filter((gem) => gem.status === "accepted"));
+    const fetchSubscribedGems = () => {
+      axios
+        .get(`${import.meta.env.VITE_Base_URL}/gems/subscribed`)
+        .then((res) => {
+          setSubscribedGems(
+            res.data?.result?.filter((gem) => gem.status === "accepted")
+          );
 
-console.log(res);
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
 
-  }).catch((error)=>{
-console.log(error);
-
-  })
-    
-          
-      }
-    
-    fetchSubscribedGems()
+    fetchSubscribedGems();
     fetchGems();
   }, []);
 
@@ -60,11 +59,10 @@ console.log(error);
     { image: "images/4.jpg", title: t("hero_slide_4") },
   ];
 
-  const displyData=()=>{
+  const displyData = () => {
     console.log(" Subscribed Gems:", subscribedGems);
     console.log("unSubscribed Gems:", gems);
-    
-  } 
+  };
   // Logic:
   // Sponsored -> isSubscribed === true (truthy check)
   // Recent -> !isSubscribed
@@ -92,7 +90,6 @@ console.log(error);
 
   return (
     <>
-
       <SurpriseButton
         style={{
           position: "fixed",
@@ -103,7 +100,7 @@ console.log(error);
         }}
       />
       <Hero slides={slides} duration={5000} />
-    {/* <button onClick={displyData} className="bg-green-500">Dispaly DAta</button> */}
+      {/* <button onClick={displyData} className="bg-green-500">Dispaly DAta</button> */}
 
       {/* === SPONSORED SPOTLIGHT SECTION === */}
       {(loading || subscribedGems.length > 0) && (
@@ -158,7 +155,6 @@ console.log(error);
               </Typography>
             </motion.div>
 
-
             {loading ? (
               <div className="flex justify-center items-center h-40">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#DD0303]"></div>
@@ -198,6 +194,31 @@ console.log(error);
                 ))}
               </motion.div>
             )}
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+              <div className="relative inline-block group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-orange-600 rounded-full blur opacity-40 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                <Button
+                  onClick={() => navigate("/sponsored")}
+                  sx={{
+                    position: "relative",
+                    bgcolor: "black",
+                    color: "white",
+                    px: 8,
+                    py: 3,
+                    fontSize: "1.25rem",
+                    fontWeight: "bold",
+                    borderRadius: "9999px",
+                    textTransform: "none",
+                    border: "1px solid #333",
+                    "&:hover": {
+                      bgcolor: "#111",
+                    },
+                  }}
+                >
+                  View Elite Collection
+                </Button>
+              </div>
+            </Box>
           </Container>
         </Box>
       )}
