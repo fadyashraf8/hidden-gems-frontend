@@ -22,7 +22,9 @@ export default function VoucherRedeem() {
         `${import.meta.env.VITE_Base_URL}/vouchers/details/${id}`,
         { withCredentials: true }
       );
-      setVoucher(response.data.voucher || null);      
+      setVoucher(response.data.voucher || null);   
+      console.log(response.data.voucher);
+         
     } catch (error) {
       console.error("Error fetching voucher details:", error.response?.data?.error);
       setVoucher(null); 
@@ -96,7 +98,7 @@ export default function VoucherRedeem() {
             label={`${t("Created At")}`}
             value={new Date(voucher.createdAt).toLocaleString()}
           />
-          <Detail label={`${t("Discount")}`} value={`${voucher.discount}%`} />
+          <Detail label={`${t("Discount")}`} value={`${voucher.discount} ${voucher.voucherType==="points"? "Pound" :"%" }   `} />
           <Detail
             label={`${t("Expiry Date")}`}
             value={new Date(voucher.expiryDate).toLocaleString()}
