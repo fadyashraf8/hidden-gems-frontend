@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
-import { Menu, X, Search, User, Moon, Sun } from "lucide-react";
+import { Menu, X, Search, User, Moon, Sun, Star } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDarkMode } from "../../redux/darkModeSlice";
 import { logoutUser } from "../../redux/userSlice";
@@ -179,15 +179,50 @@ export default function Navbar() {
 
         <div className="navbar-actions">
           {isloggedin && (
-            <Link to="/wishlist" className="icon-btn relative">
-              <Heart size={20} />
-              {wishlistCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {wishlistCount}
-                </span>
+            <>
+              <Link to="/wishlist" className="icon-btn relative">
+                <Heart size={20} />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {wishlistCount}
+                  </span>
+                )}
+              </Link>
+
+              {/* Points Display - عرض النقاط */}
+              {isloggedin && (
+                <Link 
+                  to="/profile" 
+                  className="icon-btn relative"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    padding: "6px 12px",
+                    background: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
+                    borderRadius: "20px",
+                    color: "white",
+                    fontWeight: "600",
+                    fontSize: "14px",
+                    transition: "all 0.3s ease",
+                    boxShadow: "0 2px 8px rgba(251, 191, 36, 0.3)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "scale(1.05)";
+                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(251, 191, 36, 0.5)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "scale(1)";
+                    e.currentTarget.style.boxShadow = "0 2px 8px rgba(251, 191, 36, 0.3)";
+                  }}
+                >
+                  <Star size={16} fill="white" />
+                  <span>{user?.points?.toLocaleString() || "0"}</span>
+                </Link>
               )}
-            </Link>
+            </>
           )}
+          
           <TranslateTwoToneIcon
             style={{ cursor: "pointer", marginRight: "10px" }}
             onClick={() => {
@@ -233,20 +268,20 @@ export default function Navbar() {
                   <button onClick={() => navigate("/profile")}>
                     {t("Profile")}
                   </button>
-                      {user && user.role !== "admin" && user.role !== "owner" && (
-                        <>
-                <button onClick={() => navigate("/vouchers")}>
-                     {t("Vouchers")}
-                  </button>
+                  {user && user.role !== "admin" && user.role !== "owner" && (
+                    <>
+                      <button onClick={() => navigate("/vouchers")}>
+                        {t("Vouchers")}
+                      </button>
                       <button onClick={() => navigate("/transactions")}>
-                    Transactions
-                  </button>
-                  </>
+                        Transactions
+                      </button>
+                    </>
                   )}
                 
                   {user && user.role !== "admin" && user.role !== "owner" && (
                     <button onClick={() => navigate("/created-by-you")}>
-                       {t("My Gems")}
+                      {t("My Gems")}
                     </button>
                   )}
                   {user && user.role === "admin" && (
@@ -256,11 +291,11 @@ export default function Navbar() {
                   )}
                   {user && user.role === "owner" && (
                     <button onClick={() => navigate("/owner/dashboard")}>
-                       {t("Owner Dashboard")}
+                      {t("Owner Dashboard")}
                     </button>
                   )}
                   <button onClick={handleLogout}>
-                     {t("Sign Out")}
+                    {t("Sign Out")}
                   </button>
                 </div>
               )}
@@ -275,6 +310,33 @@ export default function Navbar() {
 
       {isOpen && (
         <ul className="mobile-menu">
+          {/* عرض النقاط في الموبايل Menu */}
+          {isloggedin  && (
+            <li>
+              <Link 
+                to="/profile" 
+                onClick={() => setIsOpen(false)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                  padding: "12px",
+                  background: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
+                  borderRadius: "12px",
+                  color: "white",
+                  fontWeight: "700",
+                  fontSize: "16px",
+                  margin: "10px 0",
+                  boxShadow: "0 2px 8px rgba(251, 191, 36, 0.3)",
+                }}
+              >
+                <Star size={20} fill="white" />
+                <span>{user?.points?.toLocaleString() || "0"} {t("Points") || "Points"}</span>
+              </Link>
+            </li>
+          )}
+          
           <li>
             <NavLink to="/places" onClick={() => setIsOpen(false)}>
               {t("nav_link_places")}

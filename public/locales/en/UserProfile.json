@@ -1,12 +1,13 @@
 {
-    "title": " Profile",
-    "firstName-label": "First Name",
-    "lastName-label": "Last Name",
-    "email-label": "Email",
-    "subscription-label": "Subscription",
-    "Manage-Subscription": "Manage Subscription",
-    "activity-log": "Activity ",
-    "profile-info": "Profile Information"
+  "title": " Profile",
+  "firstName-label": "First Name",
+  "lastName-label": "Last Name",
+  "email-label": "Email",
+  "subscription-label": "Subscription",
+  "Manage-Subscription": "Manage Subscription",
+  "activity-log": "Activity ",
+  "profile-info": "Profile Information",
+  "points-label": "Points",
+  "points-badge": "Points Badge"
 
-    
 }
