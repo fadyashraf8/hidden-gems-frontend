@@ -189,7 +189,7 @@ export default function Navbar() {
                 )}
               </Link>
 
-=           {isloggedin && (
+           {isloggedin && (
                 <div
                   onClick={() => navigate("/profile")}
                   style={{
@@ -312,7 +312,7 @@ export default function Navbar() {
 
       {isOpen && (
         <ul className="mobile-menu">
-=     {isloggedin && (
+    {isloggedin && (
                 <div
                   onClick={() => navigate("/profile")}
                   style={{
