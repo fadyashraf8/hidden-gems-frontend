@@ -189,10 +189,9 @@ export default function Navbar() {
                 )}
               </Link>
 
-              {/* Points Display - عرض النقاط */}
-           {isloggedin && (
+=           {isloggedin && (
                 <div
-                  onClick={() => navigate("/points")}
+                  onClick={() => navigate("/profile")}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -313,10 +312,9 @@ export default function Navbar() {
 
       {isOpen && (
         <ul className="mobile-menu">
-          {/* عرض النقاط في الموبايل Menu */}
-     {isloggedin && (
+=     {isloggedin && (
                 <div
-                  onClick={() => navigate("/points")}
+                  onClick={() => navigate("/profile")}
                   style={{
                     display: "flex",
                     alignItems: "center",
