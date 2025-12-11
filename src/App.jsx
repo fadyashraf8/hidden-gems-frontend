@@ -272,8 +272,6 @@ function App() {
           ],
         },
 
-        // 404 Page
-        { path: "*", element: <NotFoundPage /> },
       ],
     },
     // {
@@ -366,6 +364,9 @@ function App() {
       path: "cancel",
       element: <Cancel />,
     },
+    
+        // 404 Page
+        { path: "*", element: <NotFoundPage /> }
   ]);
 
   if (loading) return <LoadingScreen />;

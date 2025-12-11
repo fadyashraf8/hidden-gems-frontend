@@ -190,35 +190,38 @@ export default function Navbar() {
               </Link>
 
               {/* Points Display - عرض النقاط */}
-              {isloggedin && (
-                <Link 
-                  to="/profile" 
-                  className="icon-btn relative"
+           {isloggedin && (
+                <div
+                  onClick={() => navigate("/points")}
                   style={{
                     display: "flex",
                     alignItems: "center",
                     gap: "6px",
-                    padding: "6px 12px",
-                    background: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
+                    padding: "8px 16px",
+                    background: dark ? "#000000" : "#ffffff",
                     borderRadius: "20px",
-                    color: "white",
-                    fontWeight: "600",
-                    fontSize: "14px",
+                    cursor: "pointer",
                     transition: "all 0.3s ease",
-                    boxShadow: "0 2px 8px rgba(251, 191, 36, 0.3)",
+                    boxShadow: dark ? "0 2px 8px rgba(0, 0, 0, 0.3)" : "0 2px 8px rgba(0, 0, 0, 0.1)",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "scale(1.05)";
-                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(251, 191, 36, 0.5)";
+                    e.currentTarget.style.boxShadow = dark 
+                      ? "0 4px 12px rgba(0, 0, 0, 0.5)" 
+                      : "0 4px 12px rgba(0, 0, 0, 0.2)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = "scale(1)";
-                    e.currentTarget.style.boxShadow = "0 2px 8px rgba(251, 191, 36, 0.3)";
+                    e.currentTarget.style.boxShadow = dark 
+                      ? "0 2px 8px rgba(0, 0, 0, 0.3)" 
+                      : "0 2px 8px rgba(0, 0, 0, 0.1)";
                   }}
                 >
-                  <Star size={16} fill="white" />
-                  <span>{user?.points?.toLocaleString() || "0"}</span>
-                </Link>
+                  <Star size={18} fill={dark ? "#ffffff" : "#000000"} color={dark ? "#ffffff" : "#000000"} />
+                  <span style={{ fontWeight: "700", color: dark ? "#ffffff" : "#000000", fontSize: "14px" }}>
+                    {user?.points?.toLocaleString() || "0"}
+                  </span>
+                </div>
               )}
             </>
           )}
@@ -311,31 +314,39 @@ export default function Navbar() {
       {isOpen && (
         <ul className="mobile-menu">
           {/* عرض النقاط في الموبايل Menu */}
-          {isloggedin  && (
-            <li>
-              <Link 
-                to="/profile" 
-                onClick={() => setIsOpen(false)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "8px",
-                  padding: "12px",
-                  background: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
-                  borderRadius: "12px",
-                  color: "white",
-                  fontWeight: "700",
-                  fontSize: "16px",
-                  margin: "10px 0",
-                  boxShadow: "0 2px 8px rgba(251, 191, 36, 0.3)",
-                }}
-              >
-                <Star size={20} fill="white" />
-                <span>{user?.points?.toLocaleString() || "0"} {t("Points") || "Points"}</span>
-              </Link>
-            </li>
-          )}
+     {isloggedin && (
+                <div
+                  onClick={() => navigate("/points")}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    padding: "8px 16px",
+                    background: dark ? "#000000" : "#ffffff",
+                    borderRadius: "20px",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    boxShadow: dark ? "0 2px 8px rgba(0, 0, 0, 0.3)" : "0 2px 8px rgba(0, 0, 0, 0.1)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "scale(1.05)";
+                    e.currentTarget.style.boxShadow = dark 
+                      ? "0 4px 12px rgba(0, 0, 0, 0.5)" 
+                      : "0 4px 12px rgba(0, 0, 0, 0.2)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "scale(1)";
+                    e.currentTarget.style.boxShadow = dark 
+                      ? "0 2px 8px rgba(0, 0, 0, 0.3)" 
+                      : "0 2px 8px rgba(0, 0, 0, 0.1)";
+                  }}
+                >
+                  <Star size={18} fill={dark ? "#ffffff" : "#000000"} color={dark ? "#ffffff" : "#000000"} />
+                  <span style={{ fontWeight: "700", color: dark ? "#ffffff" : "#000000", fontSize: "14px" }}>
+                    {user?.points?.toLocaleString() || "0"}
+                  </span>
+                </div>
+              )}
           
           <li>
             <NavLink to="/places" onClick={() => setIsOpen(false)}>
