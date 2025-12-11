@@ -52,7 +52,7 @@ const QRCodeModal = ({ isOpen, onClose, qrCode, voucherData,type }) => {
                   </span>
                   <span className="font-bold text-green-600">
                     
-                    {voucherData.discount}{type==="points"?" Pound ":`% {t("qrModal.off")}`} 
+                    {voucherData.discount}{type==="points"?" Pound ":`% ${t("qrModal.off")}`} 
                   </span>
                 </div>
               )}

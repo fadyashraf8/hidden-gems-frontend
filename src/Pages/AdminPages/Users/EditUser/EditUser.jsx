@@ -53,7 +53,7 @@ export default function EditUser() {
       if (response.data.message === "Success") {
         
         const user = response.data.result;
-        console.log("user",user);
+        console.log("user",user.subscription);
         setFormData({
           firstName: user.firstName,
           lastName: user.lastName,
@@ -357,7 +357,7 @@ export default function EditUser() {
                 >
                   <option value="free">{t("free")}</option>
                   <option value="gold">{t("gold")}</option>
-                  <option value="premium">{t("premium")}</option>
+                  <option value="platinum">{t("platinum")}</option>
                 </select>
               </div>
               <div className="flex items-center pt-2">
