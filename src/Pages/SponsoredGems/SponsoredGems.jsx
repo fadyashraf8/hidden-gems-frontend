@@ -1,11 +1,19 @@
 import React, { useEffect, useState, useRef } from "react";
 import { getGemsAPI } from "../../Services/GemsAuth";
-import { Box, Typography, Container, Button, Skeleton } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Container,
+  Button,
+  Skeleton,
+  Pagination,
+} from "@mui/material";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Star, MapPin, ArrowRight, Loader2 } from "lucide-react";
 import GemCard from "../../Components/Gems/GemCard";
+import axios from "axios";
 
 const LoadingSkeleton = () => (
   <Box
@@ -46,12 +54,12 @@ const ParallaxGem = ({ gem, index }) => {
     <Box
       ref={ref}
       sx={{
-        minHeight: "80vh",
+        minHeight: "60vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
-        py: 10,
+        py: 6,
       }}
     >
       <Container maxWidth="lg">
@@ -66,7 +74,7 @@ const ParallaxGem = ({ gem, index }) => {
         >
           <motion.div
             style={{ scale }}
-            className="relative w-full lg:w-3/5 h-[500px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl shadow-red-900/20 group cursor-pointer"
+            className="relative w-full lg:w-3/5 h-[400px] lg:h-[450px] rounded-3xl overflow-hidden shadow-2xl shadow-red-900/20 group cursor-pointer"
             onClick={() => navigate(`/gems/${gem._id}`)}
           >
             <img
@@ -141,24 +149,44 @@ export default function SponsoredGems() {
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef(null);
 
-  const topGems = sponsoredGems.slice(0, 2);
-  const remainingGems = sponsoredGems.slice(2);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 6;
+
+  const topGems = sponsoredGems.slice(0, 3);
+  const remainingGems = sponsoredGems.slice(3);
+
+  const paginatedGems = remainingGems.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+    document
+      .getElementById("grid-section")
+      ?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    const fetchGems = async () => {
-      try {
-        const data = await getGemsAPI();
-        if (data && data.result) {
-          const sponsored = data.result.filter((gem) => gem.isSubscribed);
-          setSponsoredGems(sponsored);
-        }
-      } catch (error) {
-        console.error("Error loading gems", error);
-      } finally {
-        setLoading(false);
-      }
+    const fetchGems = () => {
+      axios
+        .get(`${import.meta.env.VITE_Base_URL}/gems/subscribed`)
+        .then((res) => {
+          if (res.data && res.data.result) {
+            const activeSponsored = res.data.result.filter(
+              (gem) => gem.status === "accepted"
+            );
+            setSponsoredGems(activeSponsored);
+          }
+        })
+        .catch((error) => {
+          console.error("Error loading gems", error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     };
     fetchGems();
   }, []);
@@ -250,7 +278,7 @@ export default function SponsoredGems() {
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {remainingGems.map((gem) => (
+              {paginatedGems.map((gem) => (
                 <motion.div
                   key={gem._id}
                   initial={{ opacity: 0 }}
@@ -262,6 +290,35 @@ export default function SponsoredGems() {
                 </motion.div>
               ))}
             </div>
+
+            {remainingGems.length > itemsPerPage && (
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 8 }}>
+                <Pagination
+                  count={Math.ceil(remainingGems.length / itemsPerPage)}
+                  page={page}
+                  onChange={handlePageChange}
+                  sx={{
+                    "& .MuiPaginationItem-root": {
+                      color: "white",
+                      borderColor: "rgba(255,255,255,0.3)",
+                      "&:hover": {
+                        bgcolor: "rgba(255,255,255,0.1)",
+                      },
+                      "&.Mui-selected": {
+                        bgcolor: "#DD0303",
+                        fontWeight: "bold",
+                        "&:hover": {
+                          bgcolor: "#b90202",
+                        },
+                      },
+                    },
+                  }}
+                  variant="outlined"
+                  shape="rounded"
+                  size="large"
+                />
+              </Box>
+            )}
           </Container>
         </section>
       )}
