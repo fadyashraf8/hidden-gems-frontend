@@ -200,10 +200,10 @@ const createVoucherByPoints = async () => {
       reviewsCaption: t("gem_reviews_caption", {
         defaultValue: "Latest impressions from the community",
       }),
-      reviewsTotal: (count) =>
-        t("gem_reviews_total", { count, defaultValue: `${count} reviews` }),
-      reviewsEmpty: t("gem_reviews_empty", {
-        defaultValue: "No reviews yet. Be the first to share your experience.",
+      ratingsTotal: (count) =>
+        t("gem_ratings_total", { count, defaultValue: `${count} ratings` }),
+      ratingsEmpty: t("gem_ratings_empty", {
+        defaultValue: "No ratings yet. Be the first to share your experience.",
       }),
       reviewsAnonymous: t("gem_reviews_anonymous", {
         defaultValue: "Explorer",
@@ -339,6 +339,7 @@ const createVoucherByPoints = async () => {
     } else if (!isEditingReview) {
       setUserReviewId(null);
       setReviewText("");
+
     }
   }, [userReview, isEditingReview]);
 
@@ -383,7 +384,7 @@ const createVoucherByPoints = async () => {
     return Array.from(feedbackMap.values());
   }, [gemRatings, reviews]);
 
-  const totalReviewsCount = combinedFeedback.length;
+  const totalRatingsCount = gemRatings?.length || 0;
 
   const visibleFeedback = reviewsExpanded
     ? combinedFeedback
@@ -555,7 +556,9 @@ const createVoucherByPoints = async () => {
     setReviewMessage("");
     setReviewError("");
     setIsAnonymous(false); // Reset toggle
+    setReviewRating(0);
     fetchUserRating(); 
+
   };
 
   const handleDelete = async (feedback) => {
@@ -610,6 +613,7 @@ const createVoucherByPoints = async () => {
     setReviewError("");
     setReviewMessage("");
 
+    // 1. Validation Checks
     if (!isLoggedIn || !userId) {
       setReviewError("Please sign in to share a review.");
       return;
@@ -641,13 +645,14 @@ const createVoucherByPoints = async () => {
     const editingExisting = isEditingReview && userReviewId;
     let updatedReview = null;
 
+    // 2. Handle Review Text Submission
     if (hasReviewText) {
       try {
         let response;
         if (editingExisting) {
           response = await axios.patch(
             `${BASE_URL}/review/${userReviewId}`,
-            // --- 4. Pass Anonymous flag on Edit ---
+            // Added isAnonymous flag
             { description: reviewText.trim(), isAnonymous: isAnonymous },
             { withCredentials: true }
           );
@@ -658,8 +663,8 @@ const createVoucherByPoints = async () => {
               description: reviewText.trim(),
               gemId: id,
               userId,
-              // --- 5. Pass Anonymous flag on Create ---
-              isAnonymous: isAnonymous
+              // Added isAnonymous flag
+              isAnonymous: isAnonymous,
             },
             { withCredentials: true }
           );
@@ -702,7 +707,7 @@ const createVoucherByPoints = async () => {
       return;
     }
 
-    // Submit Rating
+    // 3. Handle Star Rating Submission
     if (hasRating) {
       try {
         let effectiveRatingId = userRatingId;
@@ -713,16 +718,20 @@ const createVoucherByPoints = async () => {
         }
 
         if (effectiveRatingId) {
+          // Update existing rating
           await axios.put(
             `${BASE_URL}/ratings/${effectiveRatingId}`,
-            { rating: reviewRating },
+            // Added isAnonymous flag
+            { rating: reviewRating, isAnonymous: isAnonymous },
             { withCredentials: true }
           );
           setUserRatingId(effectiveRatingId);
         } else {
+          // Create new rating
           const { data } = await axios.post(
             `${BASE_URL}/ratings`,
-            { gem: id, rating: reviewRating },
+            // Added isAnonymous flag
+            { gem: id, rating: reviewRating, isAnonymous: isAnonymous },
             { withCredentials: true }
           );
           if (data?.rating?._id) {
@@ -739,6 +748,7 @@ const createVoucherByPoints = async () => {
       }
     }
 
+    // 4. Success Messages
     if (!hasRating) {
       setReviewText("");
     } else if (hasReviewText) {
@@ -755,15 +765,18 @@ const createVoucherByPoints = async () => {
       setReviewMessage("Thanks for your rating!");
     }
 
+    // 5. Cleanup and Reset Logic
     setIsEditingReview(false);
     setSubmittingReview(false);
-    setIsAnonymous(false); // Reset toggle after submit
     
-    if (!editingExisting) {
-      setReviewRating(0);
-    }
+    // --- Key Reset Steps ---
+    setIsAnonymous(false); // Turn off the toggle
+    setReviewText("");     // clear text
+    setReviewRating(0);    // clear stars
 
-    fetchUserRating();
+    // Fetch IDs but DO NOT overwrite the 0 stars we just set
+    await fetchUserRating({ preserveComposerValue: true });
+
     fetchGemRatings();
     setTimeout(() => {
       fetchGemDetails();
@@ -820,7 +833,7 @@ const createVoucherByPoints = async () => {
                     showLabel={false}
                   />
                   <span className="font-medium">
-                    ({totalReviewsCount} reviews)
+                    ({totalRatingsCount} reviews)
                   </span>
                 </div>
                 {gem.category && (
@@ -942,7 +955,7 @@ const createVoucherByPoints = async () => {
                       showLabel={false}
                     />
                     <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {copy.reviewsTotal(totalReviewsCount)}
+                      {copy.ratingsTotal(totalRatingsCount)}
                     </span>
                   </div>
                 </div>
@@ -1145,7 +1158,7 @@ const createVoucherByPoints = async () => {
                         );
                       })}
                     </div>
-                    {totalReviewsCount > 3 && (
+                    {totalRatingsCount > 3 && (
                       <div className="flex justify-center pt-2">
                         <ToggleButton
                           expanded={reviewsExpanded}
