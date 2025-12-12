@@ -60,13 +60,16 @@ export default function ContactUsPage() {
 
   const onSubmit = async (data) => {
     try {
-      const res = await fetch("http://localhost:3000/contactus", {
+      const res = await fetch(`${import.meta.env.VITE_Base_URL}/contactus`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
       const result = await res.json();
+
+      console.log(result);
+      
 
       if (!res.ok) {
         toast.error(result.message || t("contact.sent-failed"));

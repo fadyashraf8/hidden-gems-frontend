@@ -1,0 +1,144 @@
+{
+
+    "header": {
+      "contactReports": "تقارير الاتصال",
+      "totalReportsFound": "تم العثور على {{totalItems}} تقرير",
+      "reportsManagement": "إدارة التقارير"
+    },
+    "table": {
+      "user": "المستخدم",
+      "message": "الرسالة",
+      "replies": "الردود",
+      "status": "الحالة",
+      "date": "التاريخ",
+      "actions": "الإجراءات",
+      "noReportsFound": "لا توجد تقارير",
+      "clickToViewFull": "انقر لعرض الرسالة كاملة",
+      "lastReply": "آخر رد"
+    },
+    "inputs": {
+      "searchReports": "ابحث بالاسم، البريد الإلكتروني، أو الرسالة..."
+    },
+    "filters": {
+      "allStatus": "كل الحالات",
+      "allDates": "كل التواريخ",
+      "today": "اليوم",
+      "yesterday": "أمس",
+      "lastWeek": "الأسبوع الماضي",
+      "lastMonth": "الشهر الماضي"
+    },
+    "sort": {
+      "newestFirst": "الأحدث أولاً",
+      "oldestFirst": "الأقدم أولاً",
+      "nameAZ": "الاسم (أ-ي)",
+      "nameZA": "الاسم (ي-أ)",
+      "emailAZ": "البريد الإلكتروني (أ-ي)"
+    },
+    "status": {
+      "pending": "قيد الانتظار",
+      "reviewed": "تمت المراجعة",
+      "resolved": "تم الحل",
+      "rejected": "مرفوض"
+    },
+    "buttons": {
+      "clearAllFilters": "مسح كل الفلاتر",
+      "viewDetails": "عرض التفاصيل",
+      "sendEmail": "إرسال بريد",
+      "deleteReport": "حذف التقرير",
+      "cancel": "إلغاء",
+      "delete": "حذف"
+    },
+    "pagination": {
+      "showingPage": "الصفحة {{currentPage}} من {{totalPages}}"
+    },
+    "modals": {
+      "deleteReport": "حذف التقرير",
+      "confirmDelete": "هل أنت متأكد من حذف هذا التقرير؟ جميع الردود والملاحظات سيتم حذفها نهائياً.",
+      "cannotUndo": "لا يمكن التراجع عن هذا الإجراء."
+    },
+    "toast": {
+      "failedToLoadReports": "فشل تحميل التقارير",
+      "reportDeleted": "تم حذف التقرير بنجاح",
+      "failedToDeleteReport": "فشل حذف التقرير"
+    },
+    "details": {
+      "title": "تفاصيل التقرير",
+      "subtitle": "عرض وإدارة تفاصيل تقرير الاتصال",
+      "messageTitle": "الرسالة",
+      "adminNotes": "ملاحظات المسؤول",
+      "notesPlaceholder": "أضف ملاحظات داخلية حول هذا التقرير...",
+      "noNotes": "لا توجد ملاحظات بعد",
+      "replies": "ردود المسؤول",
+      "summary": "ملخص",
+      "reportId": "معرف التقرير",
+      "created": "تاريخ الإنشاء",
+      "lastUpdated": "آخر تحديث",
+      "repliesCount": "عدد الردود",
+      "quickActions": "إجراءات سريعة",
+      "admin": "المسؤول",
+      "emailSent": "تم إرسال البريد",
+      "notFound": {
+        "title": "التقرير غير موجود",
+        "description": "التقرير الذي تبحث عنه غير موجود أو تم حذفه."
+      },
+      "noReplies": {
+        "title": "لا توجد ردود بعد",
+        "description": "أرسل أول رد على هذا التقرير"
+      },
+      "userInfo": "معلومات المستخدم",
+      "fullName": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "messageLength": "طول الرسالة",
+      "characters": "حرف",
+      "buttons": {
+        "backToReports": "العودة إلى التقارير",
+        "reply": "رد",
+        "delete": "حذف",
+        "markPending": "تعليق",
+        "markReviewed": "تمت المراجعة",
+        "markResolved": "تم الحل",
+        "markRejected": "مرفوض",
+        "editNotes": "تعديل الملاحظات",
+        "save": "حفظ",
+        "saveNotes": "حفظ الملاحظات",
+        "saveAndMarkReviewed": "حفظ وتحديد كمُراجَع",
+        "cancel": "إلغاء",
+        "sendEmail": "إرسال بريد",
+        "sendReply": "إرسال رد",
+        "sendReplyAndEmail": "إرسال رد وبريد",
+        "newReply": "رد جديد",
+        "sendFirstReply": "إرسال أول رد",
+        "refresh": "تحديث",
+        "sending": "جارٍ الإرسال..."
+      },
+      "replyModal": {
+        "title": "إرسال رد",
+        "description": "أرسل ردًا إلى المستخدم. يمكنك أيضًا إرساله كبريد إلكتروني.",
+        "message": "رسالة الرد",
+        "placeholder": "اكتب رسالة الرد هنا...",
+        "sendEmail": "إرسال كبريد إلكتروني للمستخدم",
+        "emailWillBeSent": "سيتم إرسال بريد إلكتروني إلى {{email}}"
+      },
+      "deleteModal": {
+        "title": "حذف التقرير",
+        "description": "هل أنت متأكد من حذف هذا التقرير؟ جميع الردود والملاحظات سيتم حذفها نهائياً.",
+        "cannotUndo": "لا يمكن التراجع عن هذا الإجراء."
+      },
+      "toast": {
+        "failedToLoad": "فشل تحميل تفاصيل التقرير",
+        "statusUpdated": "تم تحديث الحالة بنجاح",
+        "failedToUpdateStatus": "فشل تحديث الحالة",
+        "notesUpdated": "تم تحديث الملاحظات بنجاح",
+        "failedToUpdateNotes": "فشل تحديث الملاحظات",
+        "statusAndNotesUpdated": "تم تحديث الحالة والملاحظات بنجاح",
+        "failedToUpdateStatusAndNotes": "فشل تحديث الحالة والملاحظات",
+        "replyRequired": "رسالة الرد مطلوبة",
+        "replySent": "تم إرسال الرد بنجاح",
+        "replySentWithEmail": "تم إرسال الرد بنجاح وإرسال إشعار البريد الإلكتروني",
+        "failedToSendReply": "فشل إرسال الرد",
+        "reportDeleted": "تم حذف التقرير بنجاح",
+        "failedToDelete": "فشل حذف التقرير"
+      }
+    }
+  
+}

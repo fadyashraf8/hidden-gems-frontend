@@ -1,0 +1,143 @@
+{
+
+    "header": {
+      "contactReports": "Contact Reports",
+      "totalReportsFound": "Total {{totalItems}} reports found",
+      "reportsManagement": "Reports Management"
+    },
+    "table": {
+      "user": "User",
+      "message": "Message",
+      "replies": "Replies",
+      "status": "Status",
+      "date": "Date",
+      "actions": "Actions",
+      "noReportsFound": "No reports found",
+      "clickToViewFull": "Click to view full message",
+      "lastReply": "Last reply"
+    },
+    "inputs": {
+      "searchReports": "Search by name, email, or message..."
+    },
+    "filters": {
+      "allStatus": "All Status",
+      "allDates": "All Dates",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "lastWeek": "Last Week",
+      "lastMonth": "Last Month"
+    },
+    "sort": {
+      "newestFirst": "Newest First",
+      "oldestFirst": "Oldest First",
+      "nameAZ": "Name (A-Z)",
+      "nameZA": "Name (Z-A)",
+      "emailAZ": "Email (A-Z)"
+    },
+    "status": {
+      "pending": "Pending",
+      "reviewed": "Reviewed",
+      "resolved": "Resolved",
+      "rejected": "Rejected"
+    },
+    "buttons": {
+      "clearAllFilters": "Clear All Filters",
+      "viewDetails": "View Details",
+      "sendEmail": "Send Email",
+      "deleteReport": "Delete Report",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    },
+    "pagination": {
+      "showingPage": "Page {{currentPage}} of {{totalPages}}"
+    },
+    "modals": {
+      "deleteReport": "Delete Report",
+      "confirmDelete": "Are you sure you want to delete this report? All replies and notes will be permanently removed.",
+      "cannotUndo": "This action cannot be undone."
+    },
+    "toast": {
+      "failedToLoadReports": "Failed to load reports",
+      "reportDeleted": "Report deleted successfully",
+      "failedToDeleteReport": "Failed to delete report"
+    },
+    "details": {
+      "title": "Report Details",
+      "subtitle": "View and manage contact report details",
+      "messageTitle": "Message",
+      "adminNotes": "Admin Notes",
+      "notesPlaceholder": "Add internal notes about this report...",
+      "noNotes": "No admin notes yet",
+      "replies": "Admin Replies",
+      "summary": "Summary",
+      "reportId": "Report ID",
+      "created": "Created",
+      "lastUpdated": "Last Updated",
+      "repliesCount": "Replies",
+      "quickActions": "Quick Actions",
+      "admin": "Admin",
+      "emailSent": "Email Sent",
+      "notFound": {
+        "title": "Report not found",
+        "description": "The report you're looking for doesn't exist or has been deleted."
+      },
+      "noReplies": {
+        "title": "No replies yet",
+        "description": "Send the first reply to this report"
+      },
+      "userInfo": "User Information",
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "messageLength": "Message Length",
+      "characters": "characters",
+      "buttons": {
+        "backToReports": "Back to Reports",
+        "reply": "Reply",
+        "delete": "Delete",
+        "markPending": "Mark as Pending",
+        "markReviewed": "Mark as Reviewed",
+        "markResolved": "Mark as Resolved",
+        "markRejected": "Mark as Rejected",
+        "editNotes": "Edit Notes",
+        "save": "Save",
+        "saveNotes": "Save Notes",
+        "saveAndMarkReviewed": "Save & Mark as Reviewed",
+        "cancel": "Cancel",
+        "sendEmail": "Send Email",
+        "sendReply": "Send Reply",
+        "sendReplyAndEmail": "Send Reply & Email",
+        "newReply": "New Reply",
+        "sendFirstReply": "Send First Reply",
+        "refresh": "Refresh",
+        "sending": "Sending..."
+      },
+      "replyModal": {
+        "title": "Send Reply",
+        "description": "Send a reply to the user. You can also send it as an email.",
+        "message": "Reply Message",
+        "placeholder": "Type your reply message here...",
+        "sendEmail": "Send as email to user",
+        "emailWillBeSent": "An email will be sent to {{email}}"
+      },
+      "deleteModal": {
+        "title": "Delete Report",
+        "description": "Are you sure you want to delete this report? All replies and notes will be permanently removed.",
+        "cannotUndo": "This action cannot be undone."
+      },
+      "toast": {
+        "failedToLoad": "Failed to load report details",
+        "statusUpdated": "Status updated successfully",
+        "failedToUpdateStatus": "Failed to update status",
+        "notesUpdated": "Notes updated successfully",
+        "failedToUpdateNotes": "Failed to update notes",
+        "statusAndNotesUpdated": "Status and notes updated successfully",
+        "failedToUpdateStatusAndNotes": "Failed to update status and notes",
+        "replyRequired": "Reply message is required",
+        "replySent": "Reply sent successfully",
+        "replySentWithEmail": "Reply sent successfully and email notification sent",
+        "failedToSendReply": "Failed to send reply",
+        "reportDeleted": "Report deleted successfully",
+        "failedToDelete": "Failed to delete report"
+      }
+    }
+  }

@@ -4,6 +4,8 @@ import LoadingScreen from "../LoadingScreen";
 import { useTranslation } from "react-i18next";
 import UserActivity from "./UserActivity";
 import ProfileInfo from "./ProfileInfo";
+import AllReports from "../AdminPages/Reports/AllReports/AllReports";
+import UserReports from "../UserReports/UserReports";
 
 export default function UserProfile() {
   const [user, setUser] = useState(null);
@@ -46,6 +48,13 @@ export default function UserProfile() {
   const textAlign = i18n.language === "ar" ? "text-right" : "text-left";
 
   const [activeTab, setActiveTab] = useState("info");
+
+
+  const tabContent = {
+  info: <ProfileInfo user={user} onUpdateUser={handleUserUpdate} />,
+  activity: <UserActivity userId={user?._id} />,
+  report: <UserReports/>,
+};
 
   return loading ? (
     <LoadingScreen />
@@ -93,23 +102,24 @@ export default function UserProfile() {
             >
               {t("activity-log")}
             </button>
+                   <button
+              onClick={() => setActiveTab("report")}
+              className={`px-4 py-2 rounded-lg cursor-pointer text-sm font-semibold transition-all ${
+                activeTab === "report"
+                  ? "bg-[#DD0303] text-white shadow-md cursor-pointer"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200 cursor-pointer"
+              }`}
+            >
+              {t("report-log")}
+            </button>
           </div>
         </div>
 
         {/* Right: Content Area */}
-        <div className="w-full space-y-8">
-          {activeTab === "info" ? (
-            <ProfileInfo user={user} onUpdateUser={handleUserUpdate} />
-        
-          ) : (
-            <div className="bg-white rounded-2xl  cursor-pointer p-6 shadow-sm border border-gray-100">
-              <h3 className="text-lg cursor-pointer font-bold text-gray-800 mb-6 border-b pb-4">
-                {t("recent-activity") || "Recent Activity"}
-              </h3>
-              <UserActivity userId={user._id || user.id} />
-            </div>
-          )}
-        </div>
+ <div className="w-full space-y-8">
+  {tabContent[activeTab]}
+</div>
+
       </div>
     </div>
   );

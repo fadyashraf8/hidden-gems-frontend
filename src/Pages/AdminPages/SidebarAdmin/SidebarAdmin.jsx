@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   TicketPercent,
   ArrowLeftRight,
+  MessageCircleWarning,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -97,6 +98,12 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
       title: `transactions `,
       icon: ArrowLeftRight,
       items: [{ label: `🎟️ All Transactions`, path: "/admin/transactions" }],
+    },
+     {
+      id: "reports",
+      title: `reports `,
+      icon: MessageCircleWarning,
+      items: [{ label: `All Reports`, path: "/admin/reports" }],
     },
   ];
 

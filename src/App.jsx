@@ -87,6 +87,8 @@ import Wishlist from "./Pages/wishListPage/wishList";
 import AllVouchers from "./Pages/AdminPages/Vouchers/AllVouchers/AllVouchers";
 import AllTransactions from "./Pages/Transactions/AllTransactions/AllTransactions";
 import TransactionDashboard from "./Pages/Transactions/TransactionDashboard/TransactionDashboard";
+import AllReports from "./Pages/AdminPages/Reports/AllReports/AllReports";
+import ReportDetails from "./Pages/AdminPages/Reports/ReportDetails/ReportDetails";
 function App() {
   const dark = useSelector((state) => state.darkMode.enabled);
   const dispatch = useDispatch();
@@ -320,6 +322,9 @@ function App() {
         { path: "vouchers/:id", element: <VoucherRedeem /> },
 
         { path: "transactions", element: <TransactionDashboard /> },
+        // Reports
+        { path: "reports", element: <AllReports /> },
+        { path: "reports/:id", element: <ReportDetails /> },
       ],
     },
     // {
