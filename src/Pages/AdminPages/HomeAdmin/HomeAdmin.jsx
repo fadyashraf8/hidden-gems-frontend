@@ -7,6 +7,7 @@ import {
   Activity,
   BarChart3,
 } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from "recharts";
 import LoadingScreen from "../../LoadingScreen";
 import { useTranslation } from "react-i18next";
 
@@ -31,30 +32,29 @@ export default function HomeAdmin() {
 
   const fetchDashboardData = async () => {
     try {
-     const usersRes = await fetch(`${baseUrl}/users`, {
-      credentials: 'include'
-    });
-    const usersData = await usersRes.json();
-    console.log("usersData", usersData);
+      const usersRes = await fetch(`${baseUrl}/users`, {
+        credentials: 'include'
+      });
+      const usersData = await usersRes.json();
+      console.log("usersData", usersData);
 
-    const categoriesRes = await fetch(`${baseUrl}/categories`, {
-      credentials: 'include'
-    });
-    const categoriesData = await categoriesRes.json();
-    console.log("categoriesData", categoriesData);
+      const categoriesRes = await fetch(`${baseUrl}/categories`, {
+        credentials: 'include'
+      });
+      const categoriesData = await categoriesRes.json();
+      console.log("categoriesData", categoriesData);
 
+      const AllCategoriesData = await fetch(`${baseUrl}/categories`, {
+        credentials: 'include'
+      });
+      const AllCategoriesDataaaaaa = await AllCategoriesData.json();
+      console.log("categoriesData", categoriesData);
 
-     const AllCategoriesData = await fetch(`${baseUrl}/categories`, {
-      credentials: 'include'
-    });
-    const AllCategoriesDataaaaaa = await AllCategoriesData.json();
-    console.log("categoriesData", categoriesData);
-
-    const gemsRes = await fetch(`${baseUrl}/gems`, {
-      credentials: 'include'
-    });
-    const gemsData = await gemsRes.json();
-    console.log("gemsData", gemsData);
+      const gemsRes = await fetch(`${baseUrl}/gems`, {
+        credentials: 'include'
+      });
+      const gemsData = await gemsRes.json();
+      console.log("gemsData", gemsData);
 
       setStats({
         users: { total: usersData.totalItems || 0, loading: false },
@@ -72,6 +72,25 @@ export default function HomeAdmin() {
       });
     }
   };
+
+  // تحويل البيانات الحالية لشكل مناسب للـ Chart
+  const chartData = [
+    {
+      name: t("total_users") || "المستخدمين",
+      value: stats.users.total,
+      color: "#667eea",
+    },
+    {
+      name: t("total_categories") || "الفئات",
+      value: stats.categories.total,
+      color: "#f093fb",
+    },
+    {
+      name: t("total_gems") || "الجواهر",
+      value: stats.gems.total,
+      color: "#4facfe",
+    },
+  ];
 
   const StatCard = ({ icon: Icon, title, value, loading, gradient }) => (
     <div
@@ -134,6 +153,42 @@ export default function HomeAdmin() {
       </div>
     </div>
   );
+
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div
+          style={{
+            background: isDark ? "var(--dm-card-bg)" : "#ffffff",
+            padding: "12px 16px",
+            borderRadius: "8px",
+            border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid #e5e7eb",
+            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+          }}
+        >
+          <p style={{ 
+            color: isDark ? "var(--dm-text)" : "#111827", 
+            fontWeight: "600", 
+            marginBottom: "4px",
+            fontSize: "14px"
+          }}>
+            {payload[0].payload.name}
+          </p>
+          <p
+            style={{
+              color: payload[0].payload.color,
+              fontSize: "18px",
+              fontWeight: "700",
+              margin: "0",
+            }}
+          >
+            {payload[0].value.toLocaleString()}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div
@@ -199,6 +254,84 @@ export default function HomeAdmin() {
             loading={stats.gems.loading}
             gradient="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
           />
+        </div>
+
+        {/* Chart Section - Using Real Data */}
+        <div
+          style={{
+            background: isDark ? "var(--dm-card-bg)" : "#ffffff",
+            borderRadius: "12px",
+            padding: "24px",
+            border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid #e5e7eb",
+            marginBottom: "32px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              marginBottom: "24px",
+            }}
+          >
+            <div
+              style={{
+                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                padding: "10px",
+                borderRadius: "8px",
+              }}
+            >
+              <BarChart3 size={20} color="#ffffff" />
+            </div>
+            <h2
+              style={{
+                fontSize: "18px",
+                fontWeight: "600",
+                color: isDark ? "var(--dm-text)" : "#111827",
+              }}
+            >
+              {t("platform_statistics") || "إحصائيات المنصة"}
+            </h2>
+          </div>
+
+          {stats.users.loading ? (
+            <div style={{ textAlign: "center", padding: "60px 0" }}>
+              <LoadingScreen />
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={chartData}>
+                <CartesianGrid 
+                  strokeDasharray="3 3" 
+                  stroke={isDark ? "#374151" : "#e5e7eb"} 
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="name"
+                  stroke={isDark ? "var(--dm-subtext)" : "#6b7280"}
+                  style={{ fontSize: "13px" }}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis 
+                  stroke={isDark ? "var(--dm-subtext)" : "#6b7280"} 
+                  style={{ fontSize: "12px" }}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)" }} />
+                <Bar 
+                  dataKey="value" 
+                  radius={[8, 8, 0, 0]}
+                  maxBarSize={80}
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </div>
 
         {/* Recent Categories */}
