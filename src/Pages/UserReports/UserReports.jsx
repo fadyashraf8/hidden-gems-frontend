@@ -21,6 +21,7 @@ const UserReports = () => {
   const { isLoggedIn: isloggedin, userInfo: user } = useSelector(
     (state) => state.user
   );
+  const isDarkMode = useSelector((state) => state.darkMode.enabled);
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -36,7 +37,7 @@ const UserReports = () => {
       setLoading(false);
       return;
     }
-    
+
     setLoading(true);
     try {
       const response = await axios.get(
@@ -110,8 +111,18 @@ const UserReports = () => {
 
   if (!user?.email) {
     return (
-      <div className="text-center text-gray-500 py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-        <MessageSquare className="w-10 h-10 mx-auto mb-3 text-gray-300" />
+      <div
+        className={`text-center py-10 rounded-xl border border-dashed ${
+          isDarkMode
+            ? "text-gray-400 bg-gray-800/50 border-gray-700"
+            : "text-gray-500 bg-gray-50 border-gray-200"
+        }`}
+      >
+        <MessageSquare
+          className={`w-10 h-10 mx-auto mb-3 ${
+            isDarkMode ? "text-gray-600" : "text-gray-300"
+          }`}
+        />
         <p>{t("no-user-email") || "User email not found"}</p>
       </div>
     );
@@ -119,8 +130,18 @@ const UserReports = () => {
 
   if (reports.length === 0 && currentPage === 1) {
     return (
-      <div className="text-center text-gray-500 py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-        <MessageSquare className="w-10 h-10 mx-auto mb-3 text-gray-300" />
+      <div
+        className={`text-center py-10 rounded-xl border border-dashed ${
+          isDarkMode
+            ? "text-gray-400 bg-gray-800/50 border-gray-700"
+            : "text-gray-500 bg-gray-50 border-gray-200"
+        }`}
+      >
+        <MessageSquare
+          className={`w-10 h-10 mx-auto mb-3 ${
+            isDarkMode ? "text-gray-600" : "text-gray-300"
+          }`}
+        />
         <p>{t("no-reports") || "No reports found"}</p>
       </div>
     );
@@ -132,7 +153,11 @@ const UserReports = () => {
         {reports.map((report) => (
           <div
             key={report?._id}
-            className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+            className={`p-4 rounded-xl border shadow-sm hover:shadow-md transition-shadow ${
+              isDarkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-gray-100"
+            }`}
           >
             <div className="flex gap-4 items-start">
               <div className="bg-red-50 p-2 rounded-full shrink-0">
@@ -142,7 +167,11 @@ const UserReports = () => {
               <div className="flex-1 space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <h4 className="font-semibold text-gray-800 mb-1">
+                    <h4
+                      className={`font-semibold mb-1 ${
+                        isDarkMode ? "text-white" : "text-gray-800"
+                      }`}
+                    >
                       {t("report-from") || "Report from"} {report.firstName}{" "}
                       {report.lastName}
                     </h4>
@@ -157,22 +186,48 @@ const UserReports = () => {
                   </div>
                 </div>
 
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-gray-700 text-sm">{report.message}</p>
+                <div
+                  className={`p-3 rounded-lg ${
+                    isDarkMode ? "bg-gray-700/50" : "bg-gray-50"
+                  }`}
+                >
+                  <p
+                    className={`text-sm ${
+                      isDarkMode ? "text-gray-300" : "text-gray-700"
+                    }`}
+                  >
+                    {report.message}
+                  </p>
                 </div>
 
                 {report.adminReplies && report.adminReplies.length > 0 && (
-                  <div className="space-y-2 pl-4 border-l-2 border-gray-200">
-                    <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  <div
+                    className={`space-y-2 pl-4 border-l-2 ${
+                      isDarkMode ? "border-gray-700" : "border-gray-200"
+                    }`}
+                  >
+                    <div
+                      className={`flex items-center gap-2 text-sm font-medium ${
+                        isDarkMode ? "text-gray-300" : "text-gray-700"
+                      }`}
+                    >
                       <Mail className="w-4 h-4 text-[#DD0303]" />
                       <span>{t("admin-replies") || "Admin Replies"}</span>
                     </div>
                     {report.adminReplies.map((reply) => (
                       <div
                         key={reply?._id}
-                        className="bg-blue-50 p-3 rounded-lg space-y-2"
+                        className={`p-3 rounded-lg space-y-2 ${
+                          isDarkMode ? "bg-blue-900/30" : "bg-blue-50"
+                        }`}
                       >
-                        <p className="text-gray-700 text-sm">{reply.message}</p>
+                        <p
+                          className={`text-sm ${
+                            isDarkMode ? "text-gray-300" : "text-gray-700"
+                          }`}
+                        >
+                          {reply.message}
+                        </p>
                         <div className="flex items-center gap-3 text-xs text-gray-500">
                           <div className="flex items-center gap-1">
                             <Calendar className="w-3 h-3" />
@@ -228,8 +283,18 @@ const UserReports = () => {
       </div>
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-between bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-          <div className="text-sm text-gray-600">
+        <div
+          className={`flex items-center justify-between p-4 rounded-xl border shadow-sm ${
+            isDarkMode
+              ? "bg-gray-800 border-gray-700"
+              : "bg-white border-gray-100"
+          }`}
+        >
+          <div
+            className={`text-sm ${
+              isDarkMode ? "text-gray-400" : "text-gray-600"
+            }`}
+          >
             {t("showing") || "Showing"} {(currentPage - 1) * 10 + 1}{" "}
             {t("to") || "to"} {Math.min(currentPage * 10, totalItems)}{" "}
             {t("of") || "of"} {totalItems} {t("reports") || "reports"}

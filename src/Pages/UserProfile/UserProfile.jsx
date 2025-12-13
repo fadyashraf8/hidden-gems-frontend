@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import userImage from "../../assets/userImage.png";
 import LoadingScreen from "../LoadingScreen";
 import { useTranslation } from "react-i18next";
@@ -12,6 +13,7 @@ export default function UserProfile() {
   const [loading, setLoading] = useState(true);
   const { t, i18n } = useTranslation("UserProfile");
   const baseURL = import.meta.env.VITE_Base_URL;
+  const isDarkMode = useSelector((state) => state.darkMode.enabled);
 
   useEffect(() => {
     async function fetchUser() {
@@ -28,7 +30,6 @@ export default function UserProfile() {
         const data = await res.json();
         setUser(data.user);
         console.log("data.user", data.user);
-        
       } finally {
         setLoading(false);
       }
@@ -40,7 +41,7 @@ export default function UserProfile() {
   const handleUserUpdate = (updatedFields) => {
     setUser((prev) => ({
       ...prev,
-      ...updatedFields
+      ...updatedFields,
     }));
   };
 
@@ -49,12 +50,11 @@ export default function UserProfile() {
 
   const [activeTab, setActiveTab] = useState("info");
 
-
   const tabContent = {
-  info: <ProfileInfo user={user} onUpdateUser={handleUserUpdate} />,
-  activity: <UserActivity userId={user?._id} />,
-  report: <UserReports/>,
-};
+    info: <ProfileInfo user={user} onUpdateUser={handleUserUpdate} />,
+    activity: <UserActivity userId={user?._id} />,
+    report: <UserReports />,
+  };
 
   return loading ? (
     <LoadingScreen />
@@ -86,7 +86,9 @@ export default function UserProfile() {
               onClick={() => setActiveTab("info")}
               className={`px-4 py-2 rounded-lg text-sm cursor-pointer font-semibold transition-all ${
                 activeTab === "info"
-                  ? "bg-[#DD0303] text-white shadow-md"
+                  ? "bg-[#C15106] text-white shadow-md"
+                  : isDarkMode
+                  ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
@@ -96,17 +98,21 @@ export default function UserProfile() {
               onClick={() => setActiveTab("activity")}
               className={`px-4 py-2 rounded-lg cursor-pointer text-sm font-semibold transition-all ${
                 activeTab === "activity"
-                  ? "bg-[#DD0303] text-white shadow-md cursor-pointer"
+                  ? "bg-[#C15106] text-white shadow-md cursor-pointer"
+                  : isDarkMode
+                  ? "bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200 cursor-pointer"
               }`}
             >
               {t("activity-log")}
             </button>
-                   <button
+            <button
               onClick={() => setActiveTab("report")}
               className={`px-4 py-2 rounded-lg cursor-pointer text-sm font-semibold transition-all ${
                 activeTab === "report"
-                  ? "bg-[#DD0303] text-white shadow-md cursor-pointer"
+                  ? "bg-[#C15106] text-white shadow-md cursor-pointer"
+                  : isDarkMode
+                  ? "bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200 cursor-pointer"
               }`}
             >
@@ -116,10 +122,7 @@ export default function UserProfile() {
         </div>
 
         {/* Right: Content Area */}
- <div className="w-full space-y-8">
-  {tabContent[activeTab]}
-</div>
-
+        <div className="w-full space-y-8">{tabContent[activeTab]}</div>
       </div>
     </div>
   );

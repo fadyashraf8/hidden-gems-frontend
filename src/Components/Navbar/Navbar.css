@@ -69,9 +69,10 @@
   background: var(--dm-bg);
 }
 
+/* Removed hover background change - keeping text color only */
 .dark-mode .navbar.sticky a:hover {
-  background: var(--dm-text);
-  color: #000 !important;
+  /* background: var(--dm-text); */
+  color: #fff !important;
 }
 
 .dark-mode .navbar.sticky .signup-btn {
@@ -82,6 +83,23 @@
 .dark-mode .navbar.sticky .signup-btn:hover {
   background: var(--dm-bg);
   color: var(--dm-text) !important;
+}
+
+/* Points counter styling for sticky navbar - more specific to avoid profile menu */
+.navbar.sticky .navbar-actions > div:has(svg[class*="lucide-star"]) {
+  background: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark-mode .navbar.sticky .navbar-actions > div:has(svg[class*="lucide-star"]) {
+  background: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+.navbar.sticky .navbar-actions > div:has(svg[class*="lucide-star"]) svg,
+.navbar.sticky .navbar-actions > div:has(svg[class*="lucide-star"]) span {
+  color: #ffffff !important;
+  fill: #ffffff !important;
 }
 
 /* Search & Icons */
