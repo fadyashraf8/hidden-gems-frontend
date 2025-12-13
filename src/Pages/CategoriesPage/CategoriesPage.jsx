@@ -1,6 +1,7 @@
 import "./CategoriesPage.css";
 import { useState, useEffect } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next"; 
 import {
   Box,
   Container,
@@ -32,6 +33,7 @@ import { useSelector } from "react-redux";
 import ScrollToTop from "../../Components/ScrollToTop";
 
 export default function CategoriesPage() {
+  const { t } = useTranslation("CategoriesPage"); 
   const { userInfo } = useSelector((state) => state.user || {});
   const { categoryName } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -58,8 +60,7 @@ export default function CategoriesPage() {
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [pageTitle, setPageTitle] = useState("All Places");
-
+  
   // Fetch categories on mount
   useEffect(() => {
     fetchCategories();
@@ -69,7 +70,6 @@ export default function CategoriesPage() {
   useEffect(() => {
     if (title) {
       setSearchInput(title);
-      // امسح الـ title من الـ URL بس وخلي الـ page زي ما هي
       const params = new URLSearchParams(searchParams);
       params.delete("title");
       setSearchParams(params);
@@ -108,49 +108,28 @@ export default function CategoriesPage() {
     setLoading(true);
     setError("");
 
-    // Build query params object
     const params = {
       page: currentPage,
-      status: "accepted", // Only show accepted gems
+      status: "accepted",
     };
 
-    // Search keyword
-    if (searchInput) {
-      params.keyword = searchInput;
-    }
+    if (searchInput) params.keyword = searchInput;
+    if (selectedCategory) params.category = selectedCategory;
+    if (selectedSort) params.sort = selectedSort;
 
-    // Category filter
-    if (selectedCategory) {
-      params.category = selectedCategory;
-    }
-
-    // Sort
-    if (selectedSort) {
-      params.sort = selectedSort;
-    }
-
-    // Fetch from API using axios
     axios
       .get(`${baseURL}/gems`, { params, withCredentials: true })
       .then((response) => {
         const data = response.data;
-
         if (data.message === "success") {
           setGems(data.result || []);
           setTotalPages(data.totalPages || 1);
           setTotalItems(data.totalItems || 0);
-
-          // Update page title
-          if (categoryName) {
-            setPageTitle(`Best ${categoryName} in town`);
-          } else {
-            setPageTitle("Top Gems in your area");
-          }
         }
       })
       .catch((err) => {
         console.error("Error fetching gems:", err);
-        setError(err.message || "Error loading data");
+        setError(err.message || t("messages.errorLoading"));
         setGems([]);
       })
       .finally(() => {
@@ -170,6 +149,11 @@ export default function CategoriesPage() {
 
   // Get Dark Mode State
   const isDarkMode = useSelector((state) => state.darkMode.enabled);
+
+  // Calculate title dynamically for translation support
+  const dynamicPageTitle = categoryName
+    ? t("titles.bestInTown", { category: categoryName })
+    : t("titles.topGems");
 
   return (
     <Box
@@ -223,7 +207,7 @@ export default function CategoriesPage() {
                     "&:hover": { color: "#DD0303" },
                   }}
                 >
-                  Home
+                  {t("breadcrumbs.home")}
                 </Typography>
               </Link>
               <Link to="/places" style={{ textDecoration: "none" }}>
@@ -237,7 +221,7 @@ export default function CategoriesPage() {
                     "&:hover": { color: "#DD0303" },
                   }}
                 >
-                  Places
+                  {t("breadcrumbs.places")}
                 </Typography>
               </Link>
               <Typography
@@ -247,7 +231,7 @@ export default function CategoriesPage() {
                   color: isDarkMode ? "white" : "text.primary",
                 }}
               >
-                {categoryName || "All Collection"}
+                {categoryName || t("breadcrumbs.all")}
               </Typography>
             </Breadcrumbs>
 
@@ -267,7 +251,7 @@ export default function CategoriesPage() {
                   display: "inline-block",
                 }}
               >
-                {pageTitle}
+                {dynamicPageTitle}
               </Typography>
               <Typography
                 variant="h6"
@@ -279,8 +263,7 @@ export default function CategoriesPage() {
                   maxWidth: "600px",
                 }}
               >
-                Discover {totalItems} hidden gems, unified by quality and
-                curated for you.
+                {t("subtitle", { count: totalItems })}
               </Typography>
             </Box>
           </Stack>
@@ -302,7 +285,7 @@ export default function CategoriesPage() {
               <Grid item xs={12} md={5}>
                 <TextField
                   fullWidth
-                  placeholder="Search for places..."
+                  placeholder={t("filters.searchPlaceholder")}
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   InputProps={{
@@ -355,7 +338,7 @@ export default function CategoriesPage() {
                           color: isDarkMode ? "#888" : "#666",
                         }}
                       >
-                        All Categories
+                        {t("filters.allCategories")}
                       </em>
                     </MenuItem>
                     {categories.map((cat) => (
@@ -391,14 +374,24 @@ export default function CategoriesPage() {
                           color: isDarkMode ? "#888" : "#666",
                         }}
                       >
-                        Sort By: Default
+                        {t("sortOptions.default")}
                       </em>
                     </MenuItem>
-                    <MenuItem value="name">Name (A-Z)</MenuItem>
-                    <MenuItem value="-name">Name (Z-A)</MenuItem>
-                    <MenuItem value="-avgRating">Highest Rated</MenuItem>
-                    <MenuItem value="createdAt">Oldest</MenuItem>
-                    <MenuItem value="-createdAt">Newest</MenuItem>
+                    <MenuItem value="name">
+                      {t("sortOptions.nameAZ")}
+                    </MenuItem>
+                    <MenuItem value="-name">
+                      {t("sortOptions.nameZA")}
+                    </MenuItem>
+                    <MenuItem value="-avgRating">
+                      {t("sortOptions.highestRated")}
+                    </MenuItem>
+                    <MenuItem value="createdAt">
+                      {t("sortOptions.oldest")}
+                    </MenuItem>
+                    <MenuItem value="-createdAt">
+                      {t("sortOptions.newest")}
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -418,7 +411,9 @@ export default function CategoriesPage() {
                       p: 1.5,
                       borderRadius: "50%",
                       color: "#DD0303",
-                      bgcolor: isDarkMode ? "rgba(221, 3, 3, 0.1)" : "#fff0f0",
+                      bgcolor: isDarkMode
+                        ? "rgba(221, 3, 3, 0.1)"
+                        : "#fff0f0",
                       "&:hover": {
                         bgcolor: "#DD0303",
                         color: "white",
@@ -452,16 +447,10 @@ export default function CategoriesPage() {
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   {gems.map((gem, index) => (
-                    // Use GemCard directly for consistent UI
                     <div key={gem._id || index} className="h-full">
                       <div className="h-full transition-transform duration-300 hover:-translate-y-2">
                         <GemCard gem={gem} darkMode={isDarkMode} />
                       </div>
-                      {/* NOTE: We are using PlaceCard which currently wraps GemCard or custom logic. 
-                             Ideally we should swap to GemCard directly if PlaceCard is legacy. 
-                             Let's assume for now we want to replace PlaceCard usage with GemCard 
-                             BUT we need to make sure we imported GemCard.
-                         */}
                     </div>
                   ))}
                 </div>
@@ -469,7 +458,11 @@ export default function CategoriesPage() {
                 {/* Pagination */}
                 {totalPages > 1 && (
                   <Box
-                    sx={{ display: "flex", justifyContent: "center", mt: 8 }}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      mt: 8,
+                    }}
                   >
                     <Pagination
                       count={totalPages}
@@ -497,10 +490,10 @@ export default function CategoriesPage() {
               !error && (
                 <Box sx={{ textAlign: "center", py: 10, opacity: 0.6 }}>
                   <Typography variant="h5">
-                    No gems found matching your criteria.
+                    {t("messages.noGemsFound")}
                   </Typography>
                   <Typography variant="body1">
-                    Try adjusting your filters.
+                    {t("messages.tryAdjustingFilters")}
                   </Typography>
                 </Box>
               )

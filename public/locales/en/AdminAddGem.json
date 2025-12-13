@@ -12,6 +12,8 @@
   "imageRequirements": "Required: At least 1 image\nMax: 10 images, 5MB each\nFormat: JPG, PNG, GIF",
   "basicInformation": "Basic Information",
   "gemName": "Gem Name",
+  "gemPhone": "Gem Phone",
+  "enterGemPhone": "Enter gem phone number",
   "enterGemName": "Enter gem name (min 3 characters)",
   "location": "Location",
   "enterLocation": "Enter location",

@@ -11,6 +11,7 @@ const CreateGem = ({ onGemCreated }) => {
   const [formData, setFormData] = useState({
     name: "",
     gemLocation: "",
+    gemPhone: "", 
     category: "",
     images: [], 
   });
@@ -61,6 +62,7 @@ const CreateGem = ({ onGemCreated }) => {
       const dataToSend = new FormData();
       dataToSend.append("name", formData.name);
       dataToSend.append("gemLocation", formData.gemLocation);
+      dataToSend.append("gemPhone", formData.gemPhone); ////
       dataToSend.append("category", formData.category);
       dataToSend.append("status", "pending");
       dataToSend.append("description", "kalaaam to be removed"); ////
@@ -136,6 +138,26 @@ const CreateGem = ({ onGemCreated }) => {
             )}
           </div>
 
+
+       <div>
+            <label className="block font-medium">
+              {t("gemPhone")} 
+            </label>
+            <input
+              type="text"
+              name="gemPhone"
+              value={formData.gemPhone}
+              onChange={handleInputChange}
+              className={`w-full p-2 border rounded ${
+                errors.gemPhone
+                  ? "border-red-500 bg-red-50"
+                  : "border-gray-300"
+              }`}
+            />
+            {errors.gemPhone && (
+              <p className="text-red-500 text-xs mt-1">{errors.gemPhone}</p>
+            )}
+          </div>
           {/* Category */}
           <div>
             <label className="block font-medium">
@@ -163,7 +185,7 @@ const CreateGem = ({ onGemCreated }) => {
 
           {/* 4. Image Upload Input */}
           <div>
-            <label className="block font-medium">{t("Information-l3")}</label>
+            <label className="block font-medium">{t("Information-l4")}</label>
             <input
               type="file"
               multiple // <--- ALLOWS MULTIPLE SELECTION

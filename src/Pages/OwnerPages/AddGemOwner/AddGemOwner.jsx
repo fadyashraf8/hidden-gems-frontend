@@ -25,6 +25,7 @@ export default function AddGemOwner() {
     name: "",
     gemLocation: "",
     description: "",
+    
     category: "",
     discount: 0,
     discountGold: 0,

@@ -21,6 +21,7 @@ const EditPlace = () => {
   const [formData, setFormData] = useState({
     name: "",
     gemLocation: "",
+    gemPhone: "",
     category: "",
     description: "",
     images: [],
@@ -36,6 +37,7 @@ const EditPlace = () => {
             name: gem.name || "",
             gemLocation: gem.gemLocation || "",
             category: gem.category?._id || "",
+            gemPhone: gem?.gemPhone || "",
             description: gem.description || "",
             images: [],
           });
@@ -146,6 +148,7 @@ const EditPlace = () => {
       
       dataToSend.append("name", formData.name);
       dataToSend.append("gemLocation", formData.gemLocation);
+      dataToSend.append("gemPhone", formData.gemPhone);
       dataToSend.append("category", formData.category);
       dataToSend.append("description", formData.description || "");
 
@@ -223,6 +226,21 @@ const EditPlace = () => {
                 )}
               </div>
 
+       <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Gem Phone 
+                </label>
+                <input
+                  type="text"
+                  name="gemPhone"
+                  value={formData.gemPhone}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#DD0303]"
+                />
+                {errors.gemPhone && (
+                  <p className="text-red-500 text-sm mt-1">{errors.gemPhone}</p>
+                )}
+              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Category *

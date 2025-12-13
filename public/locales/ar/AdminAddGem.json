@@ -37,6 +37,8 @@
   "fixErrors": "يرجى تصحيح جميع الأخطاء",
   "gemCreated": "تم إنشاء المكان بنجاح",
   "failedToCreateGem": "فشل في إنشاء المكان",
+  "gemPhone": "هاتف المكان",
+  "enterGemPhone": "أدخل رقم هاتف المكان",
   "toast": {
     "successCreate": "تم إنشاء الجوهرة بنجاح",
     "failedCreate": "فشل إنشاء المستخدم"
