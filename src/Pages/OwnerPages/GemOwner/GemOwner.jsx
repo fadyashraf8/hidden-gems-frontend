@@ -13,6 +13,7 @@ import {
   CheckCircle,
   AlertCircle,
   Trash,
+  Phone,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -68,7 +69,7 @@ export default function GemOwner() {
       const response = await axios.get(`${baseURL}/gems/user/${userInfo.id}`, {
         withCredentials: true,
       });
-      console.log("response",response);
+      console.log("response", response);
 
       if (
         response.data.message === "success" &&
@@ -81,6 +82,7 @@ export default function GemOwner() {
           name: gem.name,
           gemLocation: gem.gemLocation,
           description: gem.description,
+          gemPhone: gem?.gemPhone,
           category: gem.category?._id,
           discount: gem.discount,
           discountGold: gem.discountGold,
@@ -230,6 +232,7 @@ export default function GemOwner() {
       submitData.append("name", formData.name);
       submitData.append("gemLocation", formData.gemLocation);
       submitData.append("description", formData.description);
+      submitData.append("gemPhone", formData.gemPhone);
       submitData.append("category", formData.category);
       submitData.append("discount", formData.discount);
       submitData.append("discountGold", formData.discountGold);
@@ -640,6 +643,32 @@ export default function GemOwner() {
                 )}
               </div>
 
+   <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Gem Phone Number <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <Phone
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <input
+                    type="text"
+                    name="gemPhone"
+                    value={formData.gemPhone}
+                    onChange={handleInputChange}
+                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                      errors.gemPhone ? "border-red-500" : "border-gray-300"
+                    }`}
+                    placeholder="Enter Gem Phone Number"
+                  />
+                </div>
+                {errors.gemPhone && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.gemPhone}
+                  </p>
+                )}
+              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Description <span className="text-red-500">*</span>

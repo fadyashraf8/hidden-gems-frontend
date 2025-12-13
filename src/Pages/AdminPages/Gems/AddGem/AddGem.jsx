@@ -9,11 +9,12 @@ import {
   Image as ImageIcon,
   CheckCircle,
   AlertTriangle,
+  Phone,
 } from "lucide-react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import toast from "react-hot-toast"; // ✅ هنا الـ import
+import toast from "react-hot-toast";
 
 export default function AddGem() {
   const { t, i18n } = useTranslation("AdminAddGem");
@@ -30,6 +31,7 @@ export default function AddGem() {
     name: "",
     gemLocation: "",
     description: "",
+    gemPhone: "",
     category: "",
     discount: 0,
     discountGold: 0,
@@ -39,7 +41,6 @@ export default function AddGem() {
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [errors, setErrors] = useState({});
-  // ✅ شيلنا الـ custom toast state
 
   const backPath = isAdmin ? "/admin/gems" : "/owner/gems";
 
@@ -325,7 +326,30 @@ export default function AddGem() {
                   </p>
                 )}
               </div>
-
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t("gemPhone")} <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <Phone
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <input
+                    type="text"
+                    name="gemPhone"
+                    value={formData.gemPhone}
+                    onChange={handleInputChange}
+                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                      errors.gemPhone ? "border-red-500" : "border-gray-300"
+                    }`}
+                    placeholder={t("enterGemPhone")}
+                  />
+                </div>
+                {errors.gemPhone && (
+                  <p className="text-red-500 text-xs mt-1">{errors.gemPhone}</p>
+                )}
+              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   {t("description")} <span className="text-red-500">*</span>

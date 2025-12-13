@@ -350,7 +350,7 @@ function App() {
       children: [
         { path: "dashboard", element: <HomeOwner /> },
         { path: "gem", element: <GemOwner /> },
-        { path: "gem/add", element: <AddGemOwner /> },
+        { path: "gem/add", element: <AddGem /> },
         { path: "vouchers", element: <AllVouchers /> },
 
         { path: ":id", element: <VoucherRedeem /> },

@@ -12,6 +12,7 @@ import {
   User,
   Mail,
   CheckCircle,
+  Phone,
 } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -32,6 +33,7 @@ export default function EditGem() {
     name: "",
     gemLocation: "",
     description: "",
+    gemPhone: "",
     category: "",
     status: "pending",
     discount: 0,
@@ -71,6 +73,7 @@ export default function EditGem() {
           name: gem.name,
           gemLocation: gem.gemLocation,
           description: gem.description,
+          gemPhone: gem?.gemPhone || "",
           category: gem.category?._id,
           status: gem.status,
           discount: gem.discount,
@@ -206,6 +209,7 @@ export default function EditGem() {
       submitData.append("name", formData.name);
       submitData.append("gemLocation", formData.gemLocation);
       submitData.append("description", formData.description);
+      submitData.append("gemPhone", formData?.gemPhone);
       submitData.append("category", formData.category);
       submitData.append("status", formData.status);
       submitData.append("discount", formData.discount);
@@ -433,6 +437,35 @@ export default function EditGem() {
                   <p className="text-red-500 text-xs mt-1">{errors.gemLocation}</p>
                 )}
               </div>
+
+
+       <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t('gemPhone')} <span className="text-red-500">*</span></label>
+
+                <div className="relative">
+                  <Phone
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+
+                  <input
+                    type="text"
+                    name="gemPhone"
+                    value={formData.gemPhone}
+                    onChange={handleInputChange}
+                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                      errors.gemPhone ? "border-red-500" : "border-gray-300"
+                    }`}
+                    placeholder={t('enterGemPhone')}
+                  />
+                </div>
+
+                {errors.gemPhone && (
+                  <p className="text-red-500 text-xs mt-1">{errors.gemPhone}</p>
+                )}
+              </div>
+
+
 
               {/* DESCRIPTION */}
               <div>
