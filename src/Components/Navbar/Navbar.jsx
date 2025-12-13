@@ -110,7 +110,7 @@ export default function Navbar() {
           background: "#DD0303",
           color: "white",
         },
-       
+
         id: "logout-toast",
         ariaProps: { role: "status", "aria-live": "polite" },
         icon: "👋",
@@ -128,7 +128,7 @@ export default function Navbar() {
   // Handler for Categories link - works from any page
   const handleCategoriesClick = (e) => {
     e.preventDefault();
-    
+
     if (location.pathname === "/") {
       // Already on home page, just scroll
       scroller.scrollTo("categories", {
@@ -141,7 +141,7 @@ export default function Navbar() {
       // Navigate to home page with hash, then scroll
       navigate("/#categories");
     }
-    
+
     // Close mobile menu if open
     setIsOpen(false);
   };
@@ -156,6 +156,13 @@ export default function Navbar() {
         <ul className="navbar-links">
           <li>
             <NavLink to="/places">{t("nav_link_places")}</NavLink>
+          </li>
+          <li>
+            <NavLink to="/sponsored" className="flex items-center gap-1">
+              <Star size={14} fill="#FFD700" color="#FFD700" />
+              Sponsored
+              <Star size={14} fill="#FFD700" color="#FFD700" />
+            </NavLink>
           </li>
           {/* <li>
             <NavLink to="/surprise">{t("nav_link_surprise")}</NavLink>
@@ -189,7 +196,7 @@ export default function Navbar() {
                 )}
               </Link>
 
-           {isloggedin && (
+              {isloggedin && (
                 <div
                   onClick={() => navigate("/profile")}
                   style={{
@@ -201,30 +208,42 @@ export default function Navbar() {
                     borderRadius: "20px",
                     cursor: "pointer",
                     transition: "all 0.3s ease",
-                    boxShadow: dark ? "0 2px 8px rgba(0, 0, 0, 0.3)" : "0 2px 8px rgba(0, 0, 0, 0.1)",
+                    boxShadow: dark
+                      ? "0 2px 8px rgba(0, 0, 0, 0.3)"
+                      : "0 2px 8px rgba(0, 0, 0, 0.1)",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "scale(1.05)";
-                    e.currentTarget.style.boxShadow = dark 
-                      ? "0 4px 12px rgba(0, 0, 0, 0.5)" 
+                    e.currentTarget.style.boxShadow = dark
+                      ? "0 4px 12px rgba(0, 0, 0, 0.5)"
                       : "0 4px 12px rgba(0, 0, 0, 0.2)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = "scale(1)";
-                    e.currentTarget.style.boxShadow = dark 
-                      ? "0 2px 8px rgba(0, 0, 0, 0.3)" 
+                    e.currentTarget.style.boxShadow = dark
+                      ? "0 2px 8px rgba(0, 0, 0, 0.3)"
                       : "0 2px 8px rgba(0, 0, 0, 0.1)";
                   }}
                 >
-                  <Star size={18} fill={dark ? "#ffffff" : "#000000"} color={dark ? "#ffffff" : "#000000"} />
-                  <span style={{ fontWeight: "700", color: dark ? "#ffffff" : "#000000", fontSize: "14px" }}>
+                  <Star
+                    size={18}
+                    fill={dark ? "#ffffff" : "#000000"}
+                    color={dark ? "#ffffff" : "#000000"}
+                  />
+                  <span
+                    style={{
+                      fontWeight: "700",
+                      color: dark ? "#ffffff" : "#000000",
+                      fontSize: "14px",
+                    }}
+                  >
                     {user?.points?.toLocaleString() || "0"}
                   </span>
                 </div>
               )}
             </>
           )}
-          
+
           <TranslateTwoToneIcon
             style={{ cursor: "pointer", marginRight: "10px" }}
             onClick={() => {
@@ -280,7 +299,7 @@ export default function Navbar() {
                       </button>
                     </>
                   )}
-                
+
                   {user && user.role !== "admin" && user.role !== "owner" && (
                     <button onClick={() => navigate("/created-by-you")}>
                       {t("My Gems")}
@@ -296,9 +315,7 @@ export default function Navbar() {
                       {t("Owner Dashboard")}
                     </button>
                   )}
-                  <button onClick={handleLogout}>
-                    {t("Sign Out")}
-                  </button>
+                  <button onClick={handleLogout}>{t("Sign Out")}</button>
                 </div>
               )}
             </div>
@@ -312,43 +329,66 @@ export default function Navbar() {
 
       {isOpen && (
         <ul className="mobile-menu">
-    {isloggedin && (
-                <div
-                  onClick={() => navigate("/profile")}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    padding: "8px 16px",
-                    background: dark ? "#000000" : "#ffffff",
-                    borderRadius: "20px",
-                    cursor: "pointer",
-                    transition: "all 0.3s ease",
-                    boxShadow: dark ? "0 2px 8px rgba(0, 0, 0, 0.3)" : "0 2px 8px rgba(0, 0, 0, 0.1)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "scale(1.05)";
-                    e.currentTarget.style.boxShadow = dark 
-                      ? "0 4px 12px rgba(0, 0, 0, 0.5)" 
-                      : "0 4px 12px rgba(0, 0, 0, 0.2)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "scale(1)";
-                    e.currentTarget.style.boxShadow = dark 
-                      ? "0 2px 8px rgba(0, 0, 0, 0.3)" 
-                      : "0 2px 8px rgba(0, 0, 0, 0.1)";
-                  }}
-                >
-                  <Star size={18} fill={dark ? "#ffffff" : "#000000"} color={dark ? "#ffffff" : "#000000"} />
-                  <span style={{ fontWeight: "700", color: dark ? "#ffffff" : "#000000", fontSize: "14px" }}>
-                    {user?.points?.toLocaleString() || "0"}
-                  </span>
-                </div>
-              )}
-          
+          {isloggedin && (
+            <div
+              onClick={() => navigate("/profile")}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 16px",
+                background: dark ? "#000000" : "#ffffff",
+                borderRadius: "20px",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+                boxShadow: dark
+                  ? "0 2px 8px rgba(0, 0, 0, 0.3)"
+                  : "0 2px 8px rgba(0, 0, 0, 0.1)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+                e.currentTarget.style.boxShadow = dark
+                  ? "0 4px 12px rgba(0, 0, 0, 0.5)"
+                  : "0 4px 12px rgba(0, 0, 0, 0.2)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = dark
+                  ? "0 2px 8px rgba(0, 0, 0, 0.3)"
+                  : "0 2px 8px rgba(0, 0, 0, 0.1)";
+              }}
+            >
+              <Star
+                size={18}
+                fill={dark ? "#ffffff" : "#000000"}
+                color={dark ? "#ffffff" : "#000000"}
+              />
+              <span
+                style={{
+                  fontWeight: "700",
+                  color: dark ? "#ffffff" : "#000000",
+                  fontSize: "14px",
+                }}
+              >
+                {user?.points?.toLocaleString() || "0"}
+              </span>
+            </div>
+          )}
+
           <li>
             <NavLink to="/places" onClick={() => setIsOpen(false)}>
               {t("nav_link_places")}
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/sponsored"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-1"
+            >
+              <Star size={14} fill="#FFD700" color="#FFD700" />
+              Sponsored
+              <Star size={14} fill="#FFD700" color="#FFD700" />
             </NavLink>
           </li>
           {/* <li>

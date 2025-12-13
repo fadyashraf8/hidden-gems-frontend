@@ -26,7 +26,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios";
 import { THEME } from "../../Components/Places/constants";
-import PlaceCard from "../../Components/Places/PlaceCard";
+import GemCard from "../../Components/Gems/GemCard";
 import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
 import SurpriseButton from "../../Components/SurpriseButton/SurpriseButton";
 import { useSelector } from "react-redux";
@@ -151,187 +151,203 @@ export default function CategoriesPage() {
 
   const hasActiveFilters = searchInput || selectedCategory || selectedSort;
 
+  // Get Dark Mode State
+  const isDarkMode = useSelector((state) => state.darkMode.enabled);
+
   // Calculate title dynamically for translation support
   const dynamicPageTitle = categoryName
     ? t("categoriesPage.titles.bestInTown", { category: categoryName })
     : t("categoriesPage.titles.topGems");
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "white" }}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        bgcolor: isDarkMode ? "#121212" : "#f8f9fa",
+        color: isDarkMode ? "white" : "text.primary",
+        transition: "background-color 0.3s ease",
+      }}
+    >
       <ScrollToTop />
-      {/* UPPER PART: RED BACKGROUND */}
+
+      {/* HEADER SECTION */}
       <Box
-        className="upper-part"
         sx={{
-          bgcolor: "#dd0303",
-          pt: { xs: 4, md: 5 },
-          pb: 6,
-          mt: { xs: 7, md: 8 },
+          position: "relative",
+          bgcolor: isDarkMode ? "#1a1a1a" : "#ffffff",
+          pt: { xs: 12, md: 16 }, // Padding top for navbar space
+          pb: { xs: 6, md: 8 },
+          overflow: "hidden",
+          borderBottom: isDarkMode ? "1px solid #333" : "1px solid #eee",
         }}
       >
-        <Container maxWidth="lg">
-          <Breadcrumbs
-            separator={
-              <ArrowRightIcon
-                fontSize="small"
-                sx={{ color: "rgba(255,255,255,0.7)" }}
-              />
-            }
-            aria-label="breadcrumb"
-            sx={{ mb: 3, display: { xs: "none", md: "flex" } }}
+        {/* Decorative Background Elements */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#DD0303] opacity-5 blur-[120px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500 opacity-5 blur-[100px] rounded-full pointer-events-none translate-y-1/2 -translate-x-1/2" />
+
+        <Container maxWidth="xl" sx={{ position: "relative", zIndex: 2 }}>
+          <Stack spacing={2} sx={{ mb: 4 }}>
+            <Breadcrumbs
+              separator={
+                <ArrowRightIcon
+                  fontSize="small"
+                  sx={{
+                    color: isDarkMode
+                      ? "rgba(255,255,255,0.5)"
+                      : "rgba(0,0,0,0.5)",
+                  }}
+                />
+              }
+              aria-label="breadcrumb"
+            >
+              <Link to="/" style={{ textDecoration: "none" }}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontWeight: 600,
+                    color: isDarkMode
+                      ? "rgba(255,255,255,0.7)"
+                      : "text.secondary",
+                    "&:hover": { color: "#DD0303" },
+                  }}
+                >
+                  Home
+                </Typography>
+              </Link>
+              <Link to="/places" style={{ textDecoration: "none" }}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontWeight: 600,
+                    color: isDarkMode
+                      ? "rgba(255,255,255,0.7)"
+                      : "text.secondary",
+                    "&:hover": { color: "#DD0303" },
+                  }}
+                >
+                  Places
+                </Typography>
+              </Link>
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: 600,
+                  color: isDarkMode ? "white" : "text.primary",
+                }}
+              >
+                {categoryName || "All Collection"}
+              </Typography>
+            </Breadcrumbs>
+
+            <Box>
+              <Typography
+                variant="h2"
+                component="h1"
+                sx={{
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  letterSpacing: "-1px",
+                  fontSize: { xs: "2rem", md: "3.5rem" },
+                  background: "linear-gradient(to right, #DD0303, #ff5e5e)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  mb: 1,
+                  display: "inline-block",
+                }}
+              >
+                {pageTitle}
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  color: isDarkMode
+                    ? "rgba(255,255,255,0.6)"
+                    : "text.secondary",
+                  fontWeight: 400,
+                  maxWidth: "600px",
+                }}
+              >
+                Discover {totalItems} hidden gems, unified by quality and
+                curated for you.
+              </Typography>
+            </Box>
+          </Stack>
+
+          {/* FILTERS BAR */}
+          <Box
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              bgcolor: isDarkMode ? "#252525" : "white",
+              boxShadow: isDarkMode
+                ? "0 4px 20px rgba(0,0,0,0.4)"
+                : "0 4px 20px rgba(0,0,0,0.05)",
+              border: isDarkMode ? "1px solid #333" : "1px solid #f0f0f0",
+            }}
           >
-            <Link
-              to="/"
-              style={{
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                variant="body2"
-                sx={{
-                  fontWeight: 600,
-                  color: "rgba(255,255,255,0.85)",
-                  "&:hover": { color: "white" },
-                }}
-              >
-                {t("categoriesPage.breadcrumbs.home")}
-              </Typography>
-            </Link>
-
-            <Link
-              to="/places"
-              style={{
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                variant="body2"
-                sx={{
-                  fontWeight: 600,
-                  color: "rgba(255,255,255,0.85)",
-                  "&:hover": { color: "white" },
-                }}
-              >
-                {t("categoriesPage.breadcrumbs.places")}
-              </Typography>
-            </Link>
-
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: 600, color: "white" }}
-            >
-              {categoryName || t("categoriesPage.breadcrumbs.all")}
-            </Typography>
-          </Breadcrumbs>
-
-          <Divider sx={{ mb: 4, borderColor: "rgba(255,255,255,0.2)" }} />
-
-          <Box sx={{ textAlign: "left" }}>
-            <Typography
-              variant="h4"
-              component="h1"
-              sx={{ fontWeight: 800, color: "white", mb: 1 }}
-            >
-              {dynamicPageTitle}
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ color: "rgba(255,255,255,0.85)" }}
-            >
-              {t("categoriesPage.resultsCount", { count: totalItems })}
-            </Typography>
-          </Box>
-        </Container>
-      </Box>
-
-      {/* LOWER PART: WHITE BACKGROUND */}
-      <Box className="lower-part" sx={{ bgcolor: "white", pb: 12, pt: 4 }}>
-        <Container maxWidth="lg">
-          {/* FILTER BAR - INLINE */}
-          <Box sx={{ mb: 4 }}>
-            <Grid container spacing={2}>
-              {/* Search Input */}
-              <Grid item xs={12} sm={6} md={4}>
+            <Grid container spacing={2} alignItems="center">
+              {/* Search */}
+              <Grid item xs={12} md={5}>
                 <TextField
                   fullWidth
-                  placeholder={t("categoriesPage.filters.searchPlaceholder")}
+                  placeholder="Search for places..."
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <SearchIcon sx={{ color: THEME.GREY }} />
+                        <SearchIcon
+                          sx={{ color: isDarkMode ? "#888" : "#aaa" }}
+                        />
                       </InputAdornment>
                     ),
                   }}
                   sx={{
                     "& .MuiOutlinedInput-root": {
-                      borderRadius: 2,
-                      height: 56,
-                      "&:hover fieldset": {
-                        borderColor: THEME.RED,
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: THEME.RED,
-                        borderWidth: 2,
-                      },
+                      bgcolor: isDarkMode ? "#1e1e1e" : "#f8f9fa",
+                      borderRadius: 3,
+                      "& fieldset": { borderColor: "transparent" },
+                      "&:hover fieldset": { borderColor: "#DD0303" },
+                      "&.Mui-focused fieldset": { borderColor: "#DD0303" },
+                      color: isDarkMode ? "white" : "inherit",
+                    },
+                    "& input::placeholder": {
+                      color: isDarkMode ? "#666" : "#999",
+                      opacity: 1,
                     },
                   }}
                 />
               </Grid>
 
-              {/* Category Filter */}
-              <Grid item xs={12} sm={6} md={2}>
+              {/* Category */}
+              <Grid item xs={12} sm={6} md={3}>
                 <FormControl fullWidth>
-                  <InputLabel
-                    sx={{
-                      "&.Mui-focused": {
-                        color: THEME.RED,
-                      },
-                    }}
-                  >
-                    {t("categoriesPage.filters.categoryLabel")}
-                  </InputLabel>
                   <Select
+                    displayEmpty
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    label={t("categoriesPage.filters.categoryLabel")}
                     sx={{
-                      borderRadius: 2,
-                      height: 56,
-                      width: 150,
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: THEME.RED,
-                      },
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: THEME.RED,
-                        borderWidth: 2,
+                      bgcolor: isDarkMode ? "#1e1e1e" : "#f8f9fa",
+                      borderRadius: 3,
+                      "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                      color: isDarkMode ? "white" : "inherit",
+                      "& .MuiSvgIcon-root": {
+                        color: isDarkMode ? "white" : "inherit",
                       },
                     }}
                   >
                     <MenuItem value="">
-                      {t("categoriesPage.filters.allCategories")}
-                    </MenuItem>
-                    {categories.map((cat) => (
-                      <MenuItem
-                        key={cat._id}
-                        value={cat._id}
-                        sx={{
-                          "&:hover": {
-                            backgroundColor: "rgba(220, 38, 38, 0.08)",
-                          },
-                          "&.Mui-selected": {
-                            backgroundColor: "rgba(220, 38, 38, 0.12)",
-                            "&:hover": {
-                              backgroundColor: "rgba(220, 38, 38, 0.16)",
-                            },
-                          },
+                      <em
+                        style={{
+                          fontStyle: "normal",
+                          color: isDarkMode ? "#888" : "#666",
                         }}
                       >
+                        All Categories
+                      </em>
+                    </MenuItem>
+                    {categories.map((cat) => (
+                      <MenuItem key={cat._id} value={cat._id}>
                         {cat.categoryName}
                       </MenuItem>
                     ))}
@@ -339,241 +355,148 @@ export default function CategoriesPage() {
                 </FormControl>
               </Grid>
 
-              {/* Sort By */}
-              <Grid item xs={12} sm={6} md={2}>
+              {/* Sort */}
+              <Grid item xs={12} sm={6} md={3}>
                 <FormControl fullWidth>
-                  <InputLabel
-                    sx={{
-                      "&.Mui-focused": {
-                        color: THEME.RED,
-                      },
-                    }}
-                  >
-                    {t("categoriesPage.filters.sortByLabel")}
-                  </InputLabel>
                   <Select
+                    displayEmpty
                     value={selectedSort}
                     onChange={(e) => setSelectedSort(e.target.value)}
-                    label={t("categoriesPage.filters.sortByLabel")}
                     sx={{
-                      borderRadius: 2,
-                      height: 56,
-                      width: 150,
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: THEME.RED,
-                      },
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: THEME.RED,
-                        borderWidth: 2,
+                      bgcolor: isDarkMode ? "#1e1e1e" : "#f8f9fa",
+                      borderRadius: 3,
+                      "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                      color: isDarkMode ? "white" : "inherit",
+                      "& .MuiSvgIcon-root": {
+                        color: isDarkMode ? "white" : "inherit",
                       },
                     }}
                   >
                     <MenuItem value="">
-                      {t("categoriesPage.sortOptions.default")}
+                      <em
+                        style={{
+                          fontStyle: "normal",
+                          color: isDarkMode ? "#888" : "#666",
+                        }}
+                      >
+                        Sort By: Default
+                      </em>
                     </MenuItem>
-                    <MenuItem
-                      value="name"
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: "rgba(220, 38, 38, 0.08)",
-                        },
-                        "&.Mui-selected": {
-                          backgroundColor: "rgba(220, 38, 38, 0.12)",
-                          "&:hover": {
-                            backgroundColor: "rgba(220, 38, 38, 0.16)",
-                          },
-                        },
-                      }}
-                    >
-                      {t("categoriesPage.sortOptions.nameAZ")}
-                    </MenuItem>
-                    <MenuItem
-                      value="-name"
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: "rgba(220, 38, 38, 0.08)",
-                        },
-                        "&.Mui-selected": {
-                          backgroundColor: "rgba(220, 38, 38, 0.12)",
-                          "&:hover": {
-                            backgroundColor: "rgba(220, 38, 38, 0.16)",
-                          },
-                        },
-                      }}
-                    >
-                      {t("categoriesPage.sortOptions.nameZA")}
-                    </MenuItem>
-                    <MenuItem
-                      value="-avgRating"
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: "rgba(220, 38, 38, 0.08)",
-                        },
-                        "&.Mui-selected": {
-                          backgroundColor: "rgba(220, 38, 38, 0.12)",
-                          "&:hover": {
-                            backgroundColor: "rgba(220, 38, 38, 0.16)",
-                          },
-                        },
-                      }}
-                    >
-                      {t("categoriesPage.sortOptions.highestRating")}
-                    </MenuItem>
-                    <MenuItem
-                      value="avgRating"
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: "rgba(220, 38, 38, 0.08)",
-                        },
-                        "&.Mui-selected": {
-                          backgroundColor: "rgba(220, 38, 38, 0.12)",
-                          "&:hover": {
-                            backgroundColor: "rgba(220, 38, 38, 0.16)",
-                          },
-                        },
-                      }}
-                    >
-                      {t("categoriesPage.sortOptions.lowestRating")}
-                    </MenuItem>
-                    <MenuItem
-                      value="createdAt"
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: "rgba(220, 38, 38, 0.08)",
-                        },
-                        "&.Mui-selected": {
-                          backgroundColor: "rgba(220, 38, 38, 0.12)",
-                          "&:hover": {
-                            backgroundColor: "rgba(220, 38, 38, 0.16)",
-                          },
-                        },
-                      }}
-                    >
-                      {t("categoriesPage.sortOptions.oldestFirst")}
-                    </MenuItem>
-                    <MenuItem
-                      value="-createdAt"
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: "rgba(220, 38, 38, 0.08)",
-                        },
-                        "&.Mui-selected": {
-                          backgroundColor: "rgba(220, 38, 38, 0.12)",
-                          "&:hover": {
-                            backgroundColor: "rgba(220, 38, 38, 0.16)",
-                          },
-                        },
-                      }}
-                    >
-                      {t("categoriesPage.sortOptions.newestFirst")}
-                    </MenuItem>
+                    <MenuItem value="name">Name (A-Z)</MenuItem>
+                    <MenuItem value="-name">Name (Z-A)</MenuItem>
+                    <MenuItem value="-avgRating">Highest Rated</MenuItem>
+                    <MenuItem value="createdAt">Oldest</MenuItem>
+                    <MenuItem value="-createdAt">Newest</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
-            </Grid>
 
-            {/* Clear Filters Button */}
-            {hasActiveFilters && (
-              <Box sx={{ mt: 2 }}>
-                <Button
-                  startIcon={<ClearIcon />}
-                  onClick={clearAllFilters}
-                  sx={{
-                    color: THEME.RED,
-                    textTransform: "none",
-                    fontSize: "0.95rem",
-                    fontWeight: 600,
-                    "&:hover": {
-                      backgroundColor: "rgba(220, 38, 38, 0.1)",
-                    },
-                  }}
-                >
-                  {t("categoriesPage.filters.clearFilters")}
-                </Button>
-              </Box>
-            )}
+              {/* Clear Button */}
+              <Grid
+                item
+                xs={12}
+                md={1}
+                sx={{ display: "flex", justifyContent: "center" }}
+              >
+                {hasActiveFilters && (
+                  <Button
+                    onClick={clearAllFilters}
+                    sx={{
+                      minWidth: "auto",
+                      p: 1.5,
+                      borderRadius: "50%",
+                      color: "#DD0303",
+                      bgcolor: isDarkMode ? "rgba(221, 3, 3, 0.1)" : "#fff0f0",
+                      "&:hover": {
+                        bgcolor: "#DD0303",
+                        color: "white",
+                      },
+                    }}
+                  >
+                    <ClearIcon />
+                  </Button>
+                )}
+              </Grid>
+            </Grid>
           </Box>
-
-          {error && (
-            <Alert severity="error" sx={{ mb: 3 }}>
-              {error}
-            </Alert>
-          )}
-
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={8}>
-              {loading ? (
-                <Box sx={{ display: "flex", justifyContent: "center", py: 5 }}>
-                  <CircularProgress sx={{ color: THEME.RED }} />
-                </Box>
-              ) : (
-                <Stack spacing={3}>
-                  {gems.length > 0 ? (
-                    <>
-                      {gems.map((gem, index) => (
-                        <PlaceCard
-                          key={gem._id || index}
-                          gem={gem}
-                          rank={(currentPage - 1) * 10 + index + 1}
-                        />
-                      ))}
-
-                      {/* Pagination Controls */}
-                      {totalPages > 1 && (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            mt: 4,
-                          }}
-                        >
-                          <Pagination
-                            count={totalPages}
-                            page={currentPage}
-                            onChange={(e, page) => {
-                              setCurrentPage(page);
-                              const params = new URLSearchParams(searchParams);
-                              params.set("page", page.toString());
-                              setSearchParams(params);
-                              window.scrollTo(0, 0);
-                            }}
-                            sx={{
-                              "& .MuiPaginationItem-root": {
-                                color: THEME.DARK,
-                                "&.Mui-selected": {
-                                  backgroundColor: THEME.RED,
-                                  color: "white",
-                                  "&:hover": { backgroundColor: THEME.RED },
-                                },
-                                "&:hover": { backgroundColor: "#f0f0f0" },
-                              },
-                            }}
-                          />
-                        </Box>
-                      )}
-                    </>
-                  ) : (
-                    !error && (
-                      <Typography>
-                        {t("categoriesPage.messages.noGems")}
-                      </Typography>
-                    )
-                  )}
-                </Stack>
-              )}
-            </Grid>
-
-            {/* Sidebar */}
-            <Grid item xs={12} md={4}>
-              <Box sx={{ position: "sticky", top: 100 }}>
-                {(!userInfo?.subscription ||
-                  userInfo?.subscription === "free") &&
-                  userInfo?.role !== "admin" && <SubscriptionPlans compact />}
-              </Box>
-            </Grid>
-          </Grid>
         </Container>
       </Box>
+
+      {/* BODY CONTENT */}
+      <Container maxWidth="xl" sx={{ pb: 12 }}>
+        {error && (
+          <Alert severity="error" sx={{ mb: 4, borderRadius: 2 }}>
+            {error}
+          </Alert>
+        )}
+
+        {loading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", py: 20 }}>
+            <CircularProgress size={60} sx={{ color: "#DD0303" }} />
+          </Box>
+        ) : (
+          <>
+            {gems.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {gems.map((gem, index) => (
+                    // Use GemCard directly for consistent UI
+                    <div key={gem._id || index} className="h-full">
+                      <div className="h-full transition-transform duration-300 hover:-translate-y-2">
+                        <GemCard gem={gem} darkMode={isDarkMode} />
+                      </div>
+                      {/* NOTE: We are using PlaceCard which currently wraps GemCard or custom logic. 
+                             Ideally we should swap to GemCard directly if PlaceCard is legacy. 
+                             Let's assume for now we want to replace PlaceCard usage with GemCard 
+                             BUT we need to make sure we imported GemCard.
+                         */}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <Box
+                    sx={{ display: "flex", justifyContent: "center", mt: 8 }}
+                  >
+                    <Pagination
+                      count={totalPages}
+                      page={currentPage}
+                      onChange={(e, page) => {
+                        setCurrentPage(page);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      sx={{
+                        "& .MuiPaginationItem-root": {
+                          color: isDarkMode ? "white" : "inherit",
+                          fontSize: "1rem",
+                          "&.Mui-selected": {
+                            bgcolor: "#DD0303",
+                            color: "white",
+                            "&:hover": { bgcolor: "#b90202" },
+                          },
+                        },
+                      }}
+                    />
+                  </Box>
+                )}
+              </>
+            ) : (
+              !error && (
+                <Box sx={{ textAlign: "center", py: 10, opacity: 0.6 }}>
+                  <Typography variant="h5">
+                    No gems found matching your criteria.
+                  </Typography>
+                  <Typography variant="body1">
+                    Try adjusting your filters.
+                  </Typography>
+                </Box>
+              )
+            )}
+          </>
+        )}
+      </Container>
+
       <SurpriseButton
         style={{
           position: "fixed",

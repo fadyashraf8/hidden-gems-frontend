@@ -15,11 +15,11 @@ import { Star, MapPin, ArrowRight, Loader2 } from "lucide-react";
 import GemCard from "../../Components/Gems/GemCard";
 import axios from "axios";
 
-const LoadingSkeleton = () => (
+const LoadingSkeleton = ({ isDarkMode }) => (
   <Box
     sx={{
       height: "100vh",
-      bgcolor: "#0a0a0a",
+      bgcolor: isDarkMode ? "#050505" : "#f8f9fa",
       p: 4,
       display: "flex",
       flexDirection: "column",
@@ -30,18 +30,18 @@ const LoadingSkeleton = () => (
       variant="text"
       width="60%"
       height={100}
-      sx={{ bgcolor: "#333", mb: 2 }}
+      sx={{ bgcolor: isDarkMode ? "#333" : "#e0e0e0", mb: 2 }}
     />
     <Skeleton
       variant="rectangular"
       width="100%"
       height={400}
-      sx={{ bgcolor: "#333", borderRadius: 4 }}
+      sx={{ bgcolor: isDarkMode ? "#333" : "#e0e0e0", borderRadius: 4 }}
     />
   </Box>
 );
 
-const ParallaxGem = ({ gem, index }) => {
+const ParallaxGem = ({ gem, index, isDarkMode }) => {
   const navigate = useNavigate();
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -98,12 +98,21 @@ const ParallaxGem = ({ gem, index }) => {
           <motion.div className="w-full lg:w-2/5 text-left">
             <Typography
               variant="h2"
-              sx={{ fontWeight: 900, color: "white", mb: 2, lineHeight: 1 }}
+              sx={{
+                fontWeight: 900,
+                color: isDarkMode ? "white" : "#1a1a1a",
+                mb: 2,
+                lineHeight: 1,
+              }}
             >
               {gem.name}
             </Typography>
 
-            <div className="flex items-center gap-2 text-gray-400 mb-6">
+            <div
+              className={`flex items-center gap-2 mb-6 ${
+                isDarkMode ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
               <MapPin className="w-5 h-5 text-[#DD0303]" />
               <Typography variant="h6">
                 {gem.address || "Cairo, Egypt"}
@@ -112,7 +121,12 @@ const ParallaxGem = ({ gem, index }) => {
 
             <Typography
               variant="h6"
-              sx={{ color: "gray", mb: 6, fontWeight: 300, lineHeight: 1.6 }}
+              sx={{
+                color: isDarkMode ? "gray" : "#666",
+                mb: 6,
+                fontWeight: 300,
+                lineHeight: 1.6,
+              }}
             >
               {gem.description?.substring(0, 150)}...
             </Typography>
@@ -121,16 +135,19 @@ const ParallaxGem = ({ gem, index }) => {
               onClick={() => navigate(`/gems/${gem._id}`)}
               endIcon={<ArrowRight />}
               sx={{
-                color: "white",
-                borderColor: "white",
+                color: isDarkMode ? "white" : "#1a1a1a",
+                borderColor: isDarkMode ? "white" : "rgba(26, 26, 26, 0.3)",
                 padding: "15px 40px",
                 borderRadius: "50px",
-                border: "1px solid rgba(255,255,255,0.3)",
+                border: isDarkMode
+                  ? "1px solid rgba(255,255,255,0.3)"
+                  : "1px solid rgba(26, 26, 26, 0.3)",
                 fontSize: "1.1rem",
                 transition: "all 0.3s ease",
                 "&:hover": {
                   bgcolor: "#DD0303",
                   borderColor: "#DD0303",
+                  color: "white",
                   px: 6,
                 },
               }}
@@ -148,6 +165,7 @@ export default function SponsoredGems() {
   const [sponsoredGems, setSponsoredGems] = useState([]);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef(null);
+  const isDarkMode = useSelector((state) => state.darkMode.enabled);
 
   const [page, setPage] = useState(1);
   const itemsPerPage = 6;
@@ -191,18 +209,30 @@ export default function SponsoredGems() {
     fetchGems();
   }, []);
 
-  if (loading) return <LoadingSkeleton />;
+  if (loading) return <LoadingSkeleton isDarkMode={isDarkMode} />;
 
   return (
     <div
       ref={scrollRef}
-      className="bg-[#050505] min-h-screen text-white overflow-x-hidden selection:bg-red-500 selection:text-white"
+      className={`min-h-screen overflow-x-hidden ${
+        isDarkMode ? "bg-[#050505] text-white" : "bg-[#f8f9fa] text-gray-900"
+      }`}
     >
       {/* === HERO === */}
-      <section className="h-screen flex items-center justify-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-900/20 via-[#050505] to-[#050505]" />
+      <section
+        className={`h-screen flex items-center justify-center relative overflow-hidden ${
+          isDarkMode ? "bg-[#050505]" : ""
+        }`}
+      >
+        <div
+          className={`absolute inset-0 ${
+            isDarkMode
+              ? "bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-900/20 via-[#050505] to-[#050505]"
+              : "bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-100/40 via-[#f8f9fa] to-[#ffffff]"
+          }`}
+        />
 
-        <Container maxWidth="xl" className="relative z-10 text-center">
+        <Container maxWidth="xl" className="relative z-10 text-center ">
           <motion.div
             initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
             animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
@@ -210,7 +240,8 @@ export default function SponsoredGems() {
           >
             <Typography
               variant="subtitle1"
-              className="tracking-[1em] uppercase text-red-500 mb-4 font-bold"
+              className="tracking-[1em] uppercase mb-4 font-bold"
+              sx={{ color: "red !important" }}
             >
               The Elite Collection
             </Typography>
@@ -231,7 +262,9 @@ export default function SponsoredGems() {
             </Typography>
             <Typography
               variant="h5"
-              className="text-gray-400 max-w-2xl mx-auto font-light"
+              className={`max-w-2xl mx-auto font-light ${
+                isDarkMode ? "text-gray-400" : "text-gray-600"
+              }`}
             >
               Explore the city's most exclusive, verified, and premium
               experiences. Hand-picked for the discerning traveler.
@@ -253,15 +286,23 @@ export default function SponsoredGems() {
       </section>
 
       {/* === TOP 5 CINEMATIC LIST === */}
-      <section className="pb-10">
+      <section className={`pb-10 ${isDarkMode ? "bg-[#050505]" : ""}`}>
         {topGems.map((gem, index) => (
-          <ParallaxGem key={gem._id} gem={gem} index={index} />
+          <ParallaxGem
+            key={gem._id}
+            gem={gem}
+            index={index}
+            isDarkMode={isDarkMode}
+          />
         ))}
       </section>
 
       {/* === REMAINING GEMS GRID === */}
       {remainingGems.length > 0 && (
-        <section className="py-20 bg-[#0a0a0a]">
+        <section
+          id="grid-section"
+          className={`py-20 ${isDarkMode ? "bg-[#0A0A0A]" : "bg-white"}`}
+        >
           <Container maxWidth="xl">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
@@ -269,10 +310,17 @@ export default function SponsoredGems() {
               viewport={{ once: true }}
               className="mb-12 text-center"
             >
-              <Typography variant="h3" fontWeight={800} sx={{ mb: 2 }}>
+              <Typography
+                variant="h3"
+                fontWeight={800}
+                sx={{ mb: 2, color: isDarkMode ? "white" : "#1a1a1a" }}
+              >
                 More Premium Extensions
               </Typography>
-              <Typography variant="body1" className="text-gray-400">
+              <Typography
+                variant="body1"
+                className={isDarkMode ? "text-gray-400" : "text-gray-600"}
+              >
                 Discover more certified high-quality experiences.
               </Typography>
             </motion.div>
@@ -284,9 +332,13 @@ export default function SponsoredGems() {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
-                  className="bg-[#111] rounded-2xl overflow-hidden border border-white/5 hover:border-red-500/50 transition-all duration-300"
+                  className={`rounded-2xl overflow-hidden border transition-all duration-300 ${
+                    isDarkMode
+                      ? "bg-[#111] border-white/5 hover:border-red-500/50"
+                      : "bg-white border-gray-200 hover:border-red-500/50 shadow-sm"
+                  }`}
                 >
-                  <GemCard gem={gem} darkMode={true} />
+                  <GemCard gem={gem} darkMode={isDarkMode} />
                 </motion.div>
               ))}
             </div>
@@ -297,15 +349,23 @@ export default function SponsoredGems() {
                   count={Math.ceil(remainingGems.length / itemsPerPage)}
                   page={page}
                   onChange={handlePageChange}
+                  variant="outlined"
+                  shape="rounded"
+                  size="large"
                   sx={{
                     "& .MuiPaginationItem-root": {
-                      color: "white",
-                      borderColor: "rgba(255,255,255,0.3)",
+                      color: isDarkMode ? "white" : "#1a1a1a",
+                      borderColor: isDarkMode
+                        ? "rgba(255,255,255,0.3)"
+                        : "rgba(26,26,26,0.3)",
                       "&:hover": {
-                        bgcolor: "rgba(255,255,255,0.1)",
+                        bgcolor: isDarkMode
+                          ? "rgba(255,255,255,0.1)"
+                          : "rgba(221,3,3,0.1)",
                       },
                       "&.Mui-selected": {
                         bgcolor: "#DD0303",
+                        color: "white",
                         fontWeight: "bold",
                         "&:hover": {
                           bgcolor: "#b90202",
@@ -313,9 +373,6 @@ export default function SponsoredGems() {
                       },
                     },
                   }}
-                  variant="outlined"
-                  shape="rounded"
-                  size="large"
                 />
               </Box>
             )}
@@ -342,7 +399,7 @@ export default function SponsoredGems() {
             size="large"
             sx={{
               bgcolor: "#DD0303",
-              color: "white",
+              color: "white !important",
               px: 8,
               py: 2,
               borderRadius: "50px",

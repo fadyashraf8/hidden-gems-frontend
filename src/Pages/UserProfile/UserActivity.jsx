@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { deleteUserActivity } from "../../Services/ActivityService";
@@ -26,8 +27,9 @@ const UserActivity = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [activityToDelete, setActivityToDelete] = useState(null);
   const baseURL = import.meta.env.VITE_Base_URL;
+  const isDarkMode = useSelector((state) => state.darkMode.enabled);
 
-const isRTL = i18n.language === "ar";
+  const isRTL = i18n.language === "ar";
   const fetchActivities = async (page = 1) => {
     setLoading(true);
     try {
@@ -90,15 +92,24 @@ const isRTL = i18n.language === "ar";
 
   if (loading) return <LoadingScreen />;
 
-
   if (error) {
     return <div className="text-center text-red-500 py-4">{error}</div>;
   }
 
   if (activities.length === 0 && currentPage === 1) {
     return (
-      <div className="text-center text-gray-500 py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-        <Activity className="w-10 h-10 mx-auto mb-3 text-gray-300" />
+      <div
+        className={`text-center py-10 rounded-xl border border-dashed ${
+          isDarkMode
+            ? "text-gray-400 bg-gray-800/50 border-gray-700"
+            : "text-gray-500 bg-gray-50 border-gray-200"
+        }`}
+      >
+        <Activity
+          className={`w-10 h-10 mx-auto mb-3 ${
+            isDarkMode ? "text-gray-600" : "text-gray-300"
+          }`}
+        />
         <p>{t("no-activity")}</p>
       </div>
     );
@@ -108,17 +119,31 @@ const isRTL = i18n.language === "ar";
     <>
       {showDeleteModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 border border-gray-200">
+          <div
+            className={`rounded-lg shadow-xl max-w-md w-full p-6 border ${
+              isDarkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-gray-200"
+            }`}
+          >
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
                 <AlertTriangle size={24} className="text-red-600" />
               </div>
 
               <div>
-                <h3 className="text-lg font-bold text-gray-900">
+                <h3
+                  className={`text-lg font-bold ${
+                    isDarkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
                   {t("deleteActivityTitle")}
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p
+                  className={`text-sm ${
+                    isDarkMode ? "text-gray-400" : "text-gray-600"
+                  }`}
+                >
                   {t("deleteActivitySubtitle")}
                 </p>
               </div>
@@ -131,9 +156,17 @@ const isRTL = i18n.language === "ar";
               </button>
             </div>
 
-            <p className="text-gray-600 mb-6">
+            <p
+              className={
+                isDarkMode ? "text-gray-300 mb-6" : "text-gray-600 mb-6"
+              }
+            >
               {t("deleteConfirmMessage")}{" "}
-              <span className="font-semibold text-gray-900">
+              <span
+                className={`font-semibold ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
                 {activityToDelete?.text}
               </span>
               ?
@@ -163,18 +196,30 @@ const isRTL = i18n.language === "ar";
           {activities.map((activity) => (
             <div
               key={activity._id}
-              className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex gap-4 items-start group relative"
+              className={`p-4 rounded-xl border shadow-sm hover:shadow-md transition-shadow flex gap-4 items-start group relative ${
+                isDarkMode
+                  ? "bg-gray-800 border-gray-700"
+                  : "bg-white border-gray-100"
+              }`}
             >
               <div className="bg-red-50 p-2 rounded-full shrink-0">
                 <Activity className="w-5 h-5 text-[#DD0303]" />
               </div>
 
               <div className="flex-1">
-                <h4 className="font-semibold text-gray-800 mb-1">
+                <h4
+                  className={`font-semibold mb-1 ${
+                    isDarkMode ? "text-white" : "text-gray-800"
+                  }`}
+                >
                   {activity.text}
                 </h4>
 
-                <p className="text-gray-600 text-sm mb-2">
+                <p
+                  className={`text-sm mb-2 ${
+                    isDarkMode ? "text-gray-400" : "text-gray-600"
+                  }`}
+                >
                   {activity.description}
                 </p>
 
@@ -214,8 +259,18 @@ const isRTL = i18n.language === "ar";
         </div>
 
         {totalPages > 1 && (
-          <div className="flex items-center justify-between  bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-            <div className="text-sm text-gray-600">
+          <div
+            className={`flex items-center justify-between p-4 rounded-xl border shadow-sm ${
+              isDarkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-gray-100"
+            }`}
+          >
+            <div
+              className={`text-sm ${
+                isDarkMode ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
               {t("showing")} {(currentPage - 1) * 10 + 1} {t("to")}{" "}
               {Math.min(currentPage * 10, totalItems)} {t("of")} {totalItems}{" "}
               {t("activities")}
