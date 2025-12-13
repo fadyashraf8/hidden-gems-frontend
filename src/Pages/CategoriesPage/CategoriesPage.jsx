@@ -1,6 +1,7 @@
 import "./CategoriesPage.css";
 import { useState, useEffect } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next"; // Import translation hook
 import {
   Box,
   Container,
@@ -32,6 +33,7 @@ import { useSelector } from "react-redux";
 import ScrollToTop from "../../Components/ScrollToTop";
 
 export default function CategoriesPage() {
+  const { t } = useTranslation("CategoriesPage"); // Initialize hook
   const { userInfo } = useSelector((state) => state.user || {});
   const { categoryName } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -58,7 +60,9 @@ export default function CategoriesPage() {
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [pageTitle, setPageTitle] = useState("All Places");
+  
+  // NOTE: pageTitle state removed. Title is now calculated dynamically below 
+  // to ensure it updates immediately when language switches.
 
   // Fetch categories on mount
   useEffect(() => {
@@ -69,7 +73,6 @@ export default function CategoriesPage() {
   useEffect(() => {
     if (title) {
       setSearchInput(title);
-      // امسح الـ title من الـ URL بس وخلي الـ page زي ما هي
       const params = new URLSearchParams(searchParams);
       params.delete("title");
       setSearchParams(params);
@@ -108,49 +111,29 @@ export default function CategoriesPage() {
     setLoading(true);
     setError("");
 
-    // Build query params object
     const params = {
       page: currentPage,
-      status: "accepted", // Only show accepted gems
+      status: "accepted",
     };
 
-    // Search keyword
-    if (searchInput) {
-      params.keyword = searchInput;
-    }
+    if (searchInput) params.keyword = searchInput;
+    if (selectedCategory) params.category = selectedCategory;
+    if (selectedSort) params.sort = selectedSort;
 
-    // Category filter
-    if (selectedCategory) {
-      params.category = selectedCategory;
-    }
-
-    // Sort
-    if (selectedSort) {
-      params.sort = selectedSort;
-    }
-
-    // Fetch from API using axios
     axios
       .get(`${baseURL}/gems`, { params, withCredentials: true })
       .then((response) => {
         const data = response.data;
-
         if (data.message === "success") {
           setGems(data.result || []);
           setTotalPages(data.totalPages || 1);
           setTotalItems(data.totalItems || 0);
-
-          // Update page title
-          if (categoryName) {
-            setPageTitle(`Best ${categoryName} in town`);
-          } else {
-            setPageTitle("Top Gems in your area");
-          }
+          // Removed manual setPageTitle here to support dynamic translation
         }
       })
       .catch((err) => {
         console.error("Error fetching gems:", err);
-        setError(err.message || "Error loading data");
+        setError(err.message || t("categoriesPage.messages.errorLoading"));
         setGems([]);
       })
       .finally(() => {
@@ -167,6 +150,11 @@ export default function CategoriesPage() {
   };
 
   const hasActiveFilters = searchInput || selectedCategory || selectedSort;
+
+  // Calculate title dynamically for translation support
+  const dynamicPageTitle = categoryName
+    ? t("categoriesPage.titles.bestInTown", { category: categoryName })
+    : t("categoriesPage.titles.topGems");
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "white" }}>
@@ -208,7 +196,7 @@ export default function CategoriesPage() {
                   "&:hover": { color: "white" },
                 }}
               >
-                Home
+                {t("categoriesPage.breadcrumbs.home")}
               </Typography>
             </Link>
 
@@ -228,7 +216,7 @@ export default function CategoriesPage() {
                   "&:hover": { color: "white" },
                 }}
               >
-                Places
+                {t("categoriesPage.breadcrumbs.places")}
               </Typography>
             </Link>
 
@@ -236,7 +224,7 @@ export default function CategoriesPage() {
               variant="body2"
               sx={{ fontWeight: 600, color: "white" }}
             >
-              {categoryName || "All"}
+              {categoryName || t("categoriesPage.breadcrumbs.all")}
             </Typography>
           </Breadcrumbs>
 
@@ -248,13 +236,13 @@ export default function CategoriesPage() {
               component="h1"
               sx={{ fontWeight: 800, color: "white", mb: 1 }}
             >
-              {pageTitle}
+              {dynamicPageTitle}
             </Typography>
             <Typography
               variant="body1"
               sx={{ color: "rgba(255,255,255,0.85)" }}
             >
-              Showing {totalItems} results
+              {t("categoriesPage.resultsCount", { count: totalItems })}
             </Typography>
           </Box>
         </Container>
@@ -270,7 +258,7 @@ export default function CategoriesPage() {
               <Grid item xs={12} sm={6} md={4}>
                 <TextField
                   fullWidth
-                  placeholder="Search gems..."
+                  placeholder={t("categoriesPage.filters.searchPlaceholder")}
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   InputProps={{
@@ -284,7 +272,6 @@ export default function CategoriesPage() {
                     "& .MuiOutlinedInput-root": {
                       borderRadius: 2,
                       height: 56,
-
                       "&:hover fieldset": {
                         borderColor: THEME.RED,
                       },
@@ -307,12 +294,12 @@ export default function CategoriesPage() {
                       },
                     }}
                   >
-                    Category
+                    {t("categoriesPage.filters.categoryLabel")}
                   </InputLabel>
                   <Select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    label="Category"
+                    label={t("categoriesPage.filters.categoryLabel")}
                     sx={{
                       borderRadius: 2,
                       height: 56,
@@ -326,7 +313,9 @@ export default function CategoriesPage() {
                       },
                     }}
                   >
-                    <MenuItem value="">All Categories</MenuItem>
+                    <MenuItem value="">
+                      {t("categoriesPage.filters.allCategories")}
+                    </MenuItem>
                     {categories.map((cat) => (
                       <MenuItem
                         key={cat._id}
@@ -360,12 +349,12 @@ export default function CategoriesPage() {
                       },
                     }}
                   >
-                    Sort By
+                    {t("categoriesPage.filters.sortByLabel")}
                   </InputLabel>
                   <Select
                     value={selectedSort}
                     onChange={(e) => setSelectedSort(e.target.value)}
-                    label="Sort By"
+                    label={t("categoriesPage.filters.sortByLabel")}
                     sx={{
                       borderRadius: 2,
                       height: 56,
@@ -379,7 +368,9 @@ export default function CategoriesPage() {
                       },
                     }}
                   >
-                    <MenuItem value="">Default</MenuItem>
+                    <MenuItem value="">
+                      {t("categoriesPage.sortOptions.default")}
+                    </MenuItem>
                     <MenuItem
                       value="name"
                       sx={{
@@ -394,7 +385,7 @@ export default function CategoriesPage() {
                         },
                       }}
                     >
-                      Name (A-Z)
+                      {t("categoriesPage.sortOptions.nameAZ")}
                     </MenuItem>
                     <MenuItem
                       value="-name"
@@ -410,7 +401,7 @@ export default function CategoriesPage() {
                         },
                       }}
                     >
-                      Name (Z-A)
+                      {t("categoriesPage.sortOptions.nameZA")}
                     </MenuItem>
                     <MenuItem
                       value="-avgRating"
@@ -426,7 +417,7 @@ export default function CategoriesPage() {
                         },
                       }}
                     >
-                      Highest Rating
+                      {t("categoriesPage.sortOptions.highestRating")}
                     </MenuItem>
                     <MenuItem
                       value="avgRating"
@@ -442,7 +433,7 @@ export default function CategoriesPage() {
                         },
                       }}
                     >
-                      Lowest Rating
+                      {t("categoriesPage.sortOptions.lowestRating")}
                     </MenuItem>
                     <MenuItem
                       value="createdAt"
@@ -458,7 +449,7 @@ export default function CategoriesPage() {
                         },
                       }}
                     >
-                      Oldest First
+                      {t("categoriesPage.sortOptions.oldestFirst")}
                     </MenuItem>
                     <MenuItem
                       value="-createdAt"
@@ -474,7 +465,7 @@ export default function CategoriesPage() {
                         },
                       }}
                     >
-                      Newest First
+                      {t("categoriesPage.sortOptions.newestFirst")}
                     </MenuItem>
                   </Select>
                 </FormControl>
@@ -497,7 +488,7 @@ export default function CategoriesPage() {
                     },
                   }}
                 >
-                  Clear all filters
+                  {t("categoriesPage.filters.clearFilters")}
                 </Button>
               </Box>
             )}
@@ -563,7 +554,9 @@ export default function CategoriesPage() {
                     </>
                   ) : (
                     !error && (
-                      <Typography>No gems match your filters.</Typography>
+                      <Typography>
+                        {t("categoriesPage.messages.noGems")}
+                      </Typography>
                     )
                   )}
                 </Stack>

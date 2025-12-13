@@ -163,7 +163,7 @@ const CreateGem = ({ onGemCreated }) => {
 
           {/* 4. Image Upload Input */}
           <div>
-            <label className="block font-medium">{t("Information-l3")}</label>
+            <label className="block font-medium">{t("Information-l4")}</label>
             <input
               type="file"
               multiple // <--- ALLOWS MULTIPLE SELECTION
