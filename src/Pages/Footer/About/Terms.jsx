@@ -12,7 +12,7 @@ const Terms = () => {
 
         <div className="footer-page-content leading-relaxed space-y-4">
           {/* Last updated */}
-          <p className="text-gray-600">{t("title-discreption")}</p>
+          <p className="text-gray-600 text-sm">{t("title-discreption")}</p>
 
           {/* Acceptance */}
           <h2 className="text-2xl font-semibold mt-2 text-[#DD0303]">

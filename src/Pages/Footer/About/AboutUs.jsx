@@ -15,7 +15,7 @@ const AboutUs = () => {
 
           {/* Mission */}
           <div>
-            <h3 className="text-xl font-semibold text-[#DD0303]">
+            <h3 style={{ color: "#DD0303" }} className="text-xl font-semibold ">
               {t("Mission-title")}
             </h3>
             <p className="leading-relaxed">{t("Mission-paragraph")}</p>
@@ -23,7 +23,7 @@ const AboutUs = () => {
 
           {/* Community */}
           <div>
-            <h3 className="text-xl font-semibold text-[#DD0303] mb-3">
+            <h3   style={{ color: "#DD0303" }} className="text-xl font-semibold  mb-3">
               {t("Community-title")}
             </h3>
             <p className="leading-relaxed">{t("Community-paragraph")}</p>
@@ -31,7 +31,7 @@ const AboutUs = () => {
 
           {/* Why gemsy */}
           <div>
-            <h3 className="text-xl font-semibold text-[#DD0303] mb-3">
+            <h3   style={{ color: "#DD0303" }} className="text-xl font-semibold  mb-3">
               {t("Whygemsy-title")}
             </h3>
 

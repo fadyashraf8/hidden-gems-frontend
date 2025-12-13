@@ -14,7 +14,7 @@ const Blog = () => {
               <h2 className="text-2xl font-semibold mb-2 text-[#DD0303]">
                 {t("Top-title")}
               </h2>
-              <p className="mb-4">{t("Top-discreption")}</p>
+              <p className="mb-4 text-sm">{t("Top-discreption")}</p>
               <p>{t("Top-paragraph")}</p>
             </div>
 
@@ -22,7 +22,7 @@ const Blog = () => {
               <h2 className="text-2xl font-semibold mb-2 text-[#DD0303]">
                 {t("How-Write-title")}
               </h2>
-              <p className="mb-4">{t("How-Write-discreption")}</p>
+              <p className="mb-4 text-sm">{t("How-Write-discreption")}</p>
               <p>{t("How-Write-paragraph")}</p>
             </div>
           </div>

@@ -1,6 +1,9 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
+
+import "./About.css";
+
 const Content = () => {
   const { t } = useTranslation("Guidelines");
 
@@ -20,15 +23,15 @@ const Content = () => {
 
             {/* Relevance */}
             <div className="mb-6">
-              <h3 className="text-xl font-semibold text-[#DD0303] mb-2">
+              <h3 style={{ color: "#DD0303" }} className="text-xl font-semibold  mb-2">
                 {t("Relevance-title")}
               </h3>
-              <p className="leading-relaxed">{t("Relevance-p")}</p>
+              <p className="leading-relaxed ">{t("Relevance-p")}</p>
             </div>
 
             {/* Inappropriate Content */}
             <div className="mb-6">
-              <h3 className="text-xl font-semibold text-[#DD0303] mb-2">
+              <h3 style={{ color: "#DD0303" }} className="text-xl font-semibold mb-2">
                 {t("Inappropriate-title")}
               </h3>
               <p className="leading-relaxed">{t("Inappropriate-p")}</p>
@@ -36,15 +39,16 @@ const Content = () => {
 
             {/* Conflicts of Interest */}
             <div className="mb-6">
-              <h3 className="text-xl font-semibold text-[#DD0303] mb-2">
+              <h3 style={{ color: "#DD0303" }} className=" text-[#DD0303] text-xl font-semibold  mb-2">
                 {t("Conflicts-title")}
               </h3>
-              <p className="leading-relaxed">{t("Conflicts-p")}</p>
+              <p className="leading-relaxed ">{t("Conflicts-p")}</p>
             </div>
 
             {/* Privacy */}
             <div className="mb-6">
-              <h3 className="text-xl font-semibold text-[#DD0303] mb-2">
+              <h3
+                style={{ color: "#DD0303" }} className="text-xl font-semibold text-[#DD0303] mb-2">
                 {t("Privacy-title")}
               </h3>
               <p className="leading-relaxed">{t("Privacy-p")}</p>
@@ -52,7 +56,10 @@ const Content = () => {
 
             {/* Promotional Content */}
             <div className="mb-6">
-              <h3 className="text-xl font-semibold text-[#DD0303] mb-2">
+              <h3
+                style={{ color: "#DD0303" }}
+                className="text-xl font-semibold  mb-2"
+              >
                 {t("Promotional-title")}
               </h3>
               <p className="leading-relaxed">{t("Promotional-p")}</p>
@@ -60,7 +67,10 @@ const Content = () => {
 
             {/* Post Your Own Content */}
             <div className="mb-10">
-              <h3 className="text-xl font-semibold text-[#DD0303] mb-2">
+              <h3
+                style={{ color: "#DD0303" }}
+                className="text-xl font-semibold  mb-2"
+              >
                 {t("Own-title")}
               </h3>
               <p className="leading-relaxed">{t("Own-p")}</p>
