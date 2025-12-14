@@ -1,5 +1,4 @@
 {
-  "categoriesPage": {
     "breadcrumbs": {
       "home": "Home",
       "places": "Places",
@@ -28,7 +27,8 @@
     },
     "messages": {
       "noGems": "No gems match your filters.",
-      "errorLoading": "Error loading data"
+      "errorLoading": "Error loading data",
+      "tryAdjustingFilters": "No gems matching your filters, try another filters."
     }
-  }
+  
 }

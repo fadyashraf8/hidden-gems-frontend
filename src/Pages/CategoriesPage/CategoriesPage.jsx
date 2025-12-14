@@ -224,7 +224,7 @@ export default function CategoriesPage() {
                   {t("breadcrumbs.places")}
                 </Typography>
               </Link>
-              <Typography
+              {/* <Typography
                 variant="body2"
                 sx={{
                   fontWeight: 600,
@@ -232,7 +232,7 @@ export default function CategoriesPage() {
                 }}
               >
                 {categoryName || t("breadcrumbs.all")}
-              </Typography>
+              </Typography> */}
             </Breadcrumbs>
 
             <Box>
@@ -490,7 +490,7 @@ export default function CategoriesPage() {
               !error && (
                 <Box sx={{ textAlign: "center", py: 10, opacity: 0.6 }}>
                   <Typography variant="h5">
-                    {t("messages.noGemsFound")}
+                    {t("messages.noGems")}
                   </Typography>
                   <Typography variant="body1">
                     {t("messages.tryAdjustingFilters")}

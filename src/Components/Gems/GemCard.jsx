@@ -100,7 +100,7 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false
   };
 
   return (
-    <div className={`group h-full ${darkMode ? 'dark' : ''}`}>
+    <div dir="ltr" className={`group h-full ${darkMode ? 'dark' : ''}`}>
       {/* UPDATES HERE: 
           1. Added 'gem-card' class.
           2. Removed 'dark:bg-zinc-800' and 'dark:border-zinc-700' (CSS handles it now).
