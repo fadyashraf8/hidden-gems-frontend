@@ -23,6 +23,7 @@ import SurpriseButton from "../../Components/SurpriseButton/SurpriseButton";
 // 1. Ensure these are imported
 import { Avatar, FormControlLabel, Switch } from "@mui/material";
 import { set } from "zod";
+import { user } from "@heroui/react";
 
 const BASE_URL = import.meta.env.VITE_Base_URL;
 const COLLAPSED_ABOUT_HEIGHT = 150;
@@ -1270,43 +1271,77 @@ const GemDetails = () => {
                   </div>
                 </div>
 
-            {/* Subscribtion Info */}
+                {/* Subscribtion Info */}
 
-                {(gem?.discount > 0 || gem?.discountPlatinum > 0||gem?.discountGold >0) && (
+                {(gem?.discount > 0 ||
+                  gem?.discountPlatinum > 0 ||
+                  gem?.discountGold > 0) && (
                   <div className="pt-6 border-t border-gray-100 dark:border-zinc-700 space-y-3">
                     <h4 className="font-semibold text-gray-800 dark:text-white mb-3">
                       Get Your Discount
                     </h4>
 
                     {/* Subscription Voucher */}
-
-                    <button
-                      onClick={createVoucher}
-                      disabled={isCreatingVoucher}
-                      className="w-full bg-gradient-to-r from-[#DD0303] to-[#FF4444] text-white px-4 py-3 rounded-xl font-semibold text-sm hover:from-[#b90202] hover:to-[#DD0303] transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                    {(userInfo?.Subscription === "gold" ||
+                    userInfo?.Subscription === "platinum") ? (
+                      <button
+                        onClick={createVoucher}
+                        disabled={isCreatingVoucher}
+                        className="w-full bg-gradient-to-r from-[#DD0303] to-[#FF4444] text-white px-4 py-3 rounded-xl font-semibold text-sm hover:from-[#b90202] hover:to-[#DD0303] transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"
-                        />
-                      </svg>
-                      <span>
-                        {isCreatingVoucher
-                          ? "Creating..."
-                          : "Subscriber Voucher"}
-                      </span>
-                    </button>
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"
+                          />
+                        </svg>
+                        <span>
+                          {isCreatingVoucher
+                            ? "Creating..."
+                            : "Subscriber Voucher"}
+                        </span>
+                      </button>
+                    ) : (
+<>
+                      <h2 className="font-semibold text-red-800 dark:text-white mb-3">Subscribe to enable this</h2>
+                      <button
+                        // onClick={createVoucher}
+                        disabled={true}
+                        className="w-full bg-gradient-to-r from-[#DD0303] to-[#FF4444] text-white px-4 py-3 rounded-xl font-semibold text-sm hover:from-[#b90202] hover:to-[#DD0303] transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"
+                          />
+                        </svg>
+                        <span>
+                          {isCreatingVoucher
+                            ? "Creating..."
+                            : "Subscriber Voucher"}
+                        </span>
+                      </button>
+                      </>
+                    )}
 
                     {/* Points Voucher Section */}
-                    <div className="bg-gray-50 dark:bg-zinc-900/50 rounded-xl p-4 border border-gray-200 dark:border-zinc-700 space-y-3">
+
+                    {  userInfo?.points > 50 ? (
+                         <div className="bg-gray-50 dark:bg-zinc-900/50 rounded-xl p-4 border border-gray-200 dark:border-zinc-700 space-y-3">
                       <div className="flex items-center justify-between">
                         <h5 className="font-semibold text-gray-900 dark:text-white text-sm">
                           Redeem with Points
@@ -1364,6 +1399,68 @@ const GemDetails = () => {
                         </button>
                       )}
                     </div>
+                    )
+                  :(
+                       <div className="bg-gray-50 dark:bg-zinc-900/50 rounded-xl p-4 border border-gray-200 dark:border-zinc-700 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h5 className="font-semibold text-gray-900 dark:text-white text-sm">
+You should have at least 50 points to redeem a voucher 
+                        </h5>
+                        <svg
+                          className="w-5 h-5 text-yellow-500"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                        </svg>
+                      </div>
+
+                      {showPointsInput ? (
+                        <>
+                          <div className="flex gap-2">
+                            <input
+                              type="number"
+                              min="1"
+                              value={pointsAmount}
+                              onChange={(e) =>
+                                setPointsAmount(Number(e.target.value))
+                              }
+                              placeholder="Enter points"
+                              className="flex-1 px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#DD0303] focus:border-transparent"
+                            />
+                            <button
+                              onClick={createVoucherByPoints}
+                              disabled={isCreatingVoucher || !pointsAmount}
+                              className="px-4 py-2 bg-[#DD0303] text-white rounded-lg font-semibold text-sm hover:bg-[#b90202] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {isCreatingVoucher ? "..." : "✓"}
+                            </button>
+                            <button
+                              onClick={() => {
+                                setShowPointsInput(false);
+                                setPointsAmount(0);
+                              }}
+                              className="px-4 py-2 bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-gray-300 rounded-lg font-semibold text-sm hover:bg-gray-300 dark:hover:bg-zinc-600 transition-all"
+                            >
+                              x
+                            </button>
+                          </div>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            Enter the number of points you want to use
+                          </p>
+                        </>
+                      ) : (
+                        <button
+                          // onClick={() => setShowPointsInput(true)}
+                          disabled={true}
+                          className="w-full bg-white dark:bg-zinc-800 text-[#DD0303] border-2 border-[#DD0303] px-4 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#DD0303] hover:text-white transition-all shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Use Points
+                        </button>
+                      )}
+                    </div>
+                  )}
+                 
 
                     <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
                       Choose how you'd like to redeem your discount
