@@ -3,5 +3,19 @@
   "hero_slide_1": "Discover places you never knew existed",
   "hero_slide_2": "Weekend escapes you’ll actually love",
   "hero_slide_3": "Curated by real locals",
-  "hero_slide_4": "Comfy Places, Cozy Prices"
+  "hero_slide_4": "Comfy Places, Cozy Prices",
+  "spotlight": {
+    "prefix": "Spotlight",
+    "suffix": "Gems",
+    "description": "A hand-picked selection of the city's finest experiences. Don't miss out on these exclusive destinations.",
+    "cta": "View Curated Collection"
+  },
+  "fresh": {
+    "prefix": "Fresh",
+    "suffix": "Finds"
+  },
+  "journeyCTA": "Start Your Discovery Journey",
+  "Browse": "Browse",
+  "Categories": "Categories",
+  "No":"No categories available"
 }

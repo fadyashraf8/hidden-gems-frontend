@@ -164,9 +164,9 @@ export default function Navbar() {
               <Star size={14} fill="#FFD700" color="#FFD700" />
             </NavLink>
           </li>
-          {/* <li>
+          <li>
             <NavLink to="/surprise">{t("nav_link_surprise")}</NavLink>
-          </li> */}
+          </li>
           <li>
             <a
               href="#categories"
@@ -283,7 +283,7 @@ export default function Navbar() {
                         opacity: 0.8,
                       }}
                     >
-                      Hi {user.firstName}
+                      {t("Hi")} {user.firstName}
                     </p>
                   )}
                   <button onClick={() => navigate("/profile")}>
@@ -295,7 +295,7 @@ export default function Navbar() {
                         {t("Vouchers")}
                       </button>
                       <button onClick={() => navigate("/transactions")}>
-                        Transactions
+                        {t("Transactions")}
                       </button>
                     </>
                   )}

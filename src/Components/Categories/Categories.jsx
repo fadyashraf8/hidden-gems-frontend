@@ -78,7 +78,7 @@ const CategoryItem = ({ label, path, image }) => (
 );
 
 export default function Categories() {
-  const { t } = useTranslation("CategoriesHome");
+  const { t } = useTranslation("home");
   const [categoriesData, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -121,7 +121,7 @@ export default function Categories() {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ py: 6, px: { xs: 2, md: 8 } }}>
+    <Container maxWidth="xl" sx={{ direction:"ltr", py: 6, px: { xs: 2, md: 8 } }}>
       {/* ✅ Title without Framer Motion (no observer work) */}
       <Typography
         variant="h3"
@@ -135,7 +135,7 @@ export default function Categories() {
           letterSpacing: "-1px",
         }}
       >
-        {t("Browse")}
+        {t("Browse")} <span style={{ color: "#DD0303" }}>{t("Categories")}</span>
       </Typography>
 
       <div className="relative px-4 md:px-12">

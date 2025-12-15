@@ -9,16 +9,18 @@ import { useSelector } from "react-redux";
 import SurpriseButton from "../../Components/SurpriseButton/SurpriseButton.jsx";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { lazy, Suspense } from "react";
 import axios from "axios";
 
 export default function Home() {
-  const { t } = useTranslation("home");
+  const { t, i18n } = useTranslation("home");
   const navigate = useNavigate();
   const [gems, setGems] = useState([]);
   const [subscribedGems, setSubscribedGems] = useState([]);
   const [loading, setLoading] = useState(true);
   const isDarkModeEnabled = useSelector((state) => state.darkMode.enabled);
+  
+  // check direction for alignment
+  const isRTL = i18n.language === 'ar';
 
   useEffect(() => {
     const fetchGems = async () => {
@@ -40,8 +42,6 @@ export default function Home() {
           setSubscribedGems(
             res.data?.result?.filter((gem) => gem.status === "accepted")
           );
-
-          console.log(res);
         })
         .catch((error) => {
           console.log(error);
@@ -59,13 +59,7 @@ export default function Home() {
     { image: "images/4.jpg", title: t("hero_slide_4") },
   ];
 
-  const displyData = () => {
-    console.log(" Subscribed Gems:", subscribedGems);
-    console.log("unSubscribed Gems:", gems);
-  };
-  // Logic:
-  // Sponsored -> isSubscribed === true (truthy check)
-  // Recent -> !isSubscribed
+  // Logic: Sponsored -> isSubscribed === true, Recent -> !isSubscribed
   const recentGems = gems.filter((gem) => !gem.isSubscribed);
 
   // Animation variants
@@ -82,6 +76,7 @@ export default function Home() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
+      y: 0,
       transition: {
         staggerChildren: 0.2,
       },
@@ -94,13 +89,12 @@ export default function Home() {
         style={{
           position: "fixed",
           top: "120px",
-          right: "2rem",
-          left: "auto",
+          right: isRTL ? "auto" : "2rem", // Flip position for RTL
+          left: isRTL ? "2rem" : "auto",
           zIndex: 999,
         }}
       />
       <Hero slides={slides} duration={5000} />
-      {/* <button onClick={displyData} className="bg-green-500">Dispaly DAta</button> */}
 
       {/* === SPONSORED SPOTLIGHT SECTION === */}
       {(loading || subscribedGems.length > 0) && (
@@ -113,6 +107,7 @@ export default function Home() {
             overflow: "hidden",
             position: "relative",
           }}
+          dir={isRTL ? "rtl" : "ltr"}
         >
           {/* Decorative blurry blobs */}
           <div className="absolute top-0 left-0 w-96 h-96 bg-[#DD0303] opacity-10 blur-[120px] rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2" />
@@ -130,28 +125,29 @@ export default function Home() {
                 className={isDarkModeEnabled ? "text-white" : "text-black"}
                 sx={{
                   fontWeight: 900,
-                  textAlign: "left",
+                  textAlign: isRTL ? "right" : "left", // Dynamic Alignment
                   mb: 2,
                   textTransform: "uppercase",
                   letterSpacing: "-2px",
                   fontSize: { xs: "2.5rem", md: "4rem" },
                 }}
               >
-                Spotlight <span style={{ color: "#DD0303" }}>Gems</span>
+                 {t("spotlight.prefix")} <span style={{ color: "#DD0303" }}>{t("spotlight.suffix")}</span>
               </Typography>
               <Typography
                 variant="h6"
                 sx={{
                   maxWidth: 600,
                   mb: 8,
+                  textAlign: isRTL ? "right" : "left", // Dynamic Alignment
+                  marginLeft: isRTL ? "auto" : 0, // ensure alignment in RTL flex flow
                   color: isDarkModeEnabled
                     ? "rgba(255,255,255,0.6)"
                     : "rgba(0,0,0,0.6)",
                   fontSize: "1.1rem",
                 }}
               >
-                Curated selection of the absolute best experiences in town.
-                Don't miss these premium picks.
+                {t("spotlight.description")}
               </Typography>
             </motion.div>
 
@@ -167,8 +163,7 @@ export default function Home() {
                 variants={staggerContainer}
                 className="flex flex-wrap justify-center gap-6"
               >
-                {/* Unified grid with consistent heights and hover effects */}
-                {subscribedGems.slice(0, 4).map((gem, index) => (
+                {subscribedGems.slice(0, 4).map((gem) => (
                   <motion.div
                     key={gem._id}
                     variants={fadeIn}
@@ -215,7 +210,7 @@ export default function Home() {
                     },
                   }}
                 >
-                  View Elite Collection
+                  {t("spotlight.cta")}
                 </Button>
               </div>
             </Box>
@@ -234,6 +229,7 @@ export default function Home() {
           py: 12,
           bgcolor: isDarkModeEnabled ? "#121212" : "#f8f9fa",
         }}
+        dir={isRTL ? "rtl" : "ltr"}
       >
         <Container maxWidth="xl">
           <motion.div
@@ -256,9 +252,9 @@ export default function Home() {
                 fontSize: { xs: "2rem", md: "3.5rem" },
               }}
             >
-              Fresh{" "}
+              {t("fresh.prefix")}{" "}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#DD0303] to-[#ff5e5e]">
-                Finds
+                {t("fresh.suffix")}
               </span>
             </Typography>
           </motion.div>
@@ -275,7 +271,7 @@ export default function Home() {
               variants={staggerContainer}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4"
             >
-              {recentGems.slice(0, 4).map((gem, index) => (
+              {recentGems.slice(0, 4).map((gem) => (
                 <motion.div key={gem._id} variants={fadeIn}>
                   <GemCard gem={gem} darkMode={isDarkModeEnabled} />
                 </motion.div>
@@ -311,7 +307,7 @@ export default function Home() {
                   },
                 }}
               >
-                Start Your Search Journey
+                {t("journeyCTA")}
               </Button>
             </div>
           </motion.div>

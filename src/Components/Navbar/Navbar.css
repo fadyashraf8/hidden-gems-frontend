@@ -348,7 +348,7 @@
 
 .user-dropdown-menu {
   position: absolute;
-  right: 0;
+  inset-inline-end: 0;
   top: 40px;
   background: white;
   border: 1px solid #ccc;
@@ -365,7 +365,7 @@
   padding: 10px 15px;
   background: none;
   border: none;
-  text-align: left;
+  text-align: start;
   cursor: pointer;
 }
 
