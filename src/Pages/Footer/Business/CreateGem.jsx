@@ -87,7 +87,7 @@ const CreateGem = ({ onGemCreated }) => {
 
     } catch (err) {
       console.error("Error creating gem:", err);
-      toast.error(err.message || "Something went wrong");
+      toast.error(err?.response?.data?.error || "Something went wrong");
     }
   };
 
