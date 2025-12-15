@@ -191,7 +191,7 @@ const UserActivity = () => {
         </div>
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-6 justify-start">
         <div className="space-y-4">
           {activities.map((activity) => (
             <div

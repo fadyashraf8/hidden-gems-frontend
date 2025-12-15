@@ -11,6 +11,7 @@ const SurpriseButton = ({ className = "", style = {} }) => {
 
   return (
     <div
+      dir="ltr"
       style={style}
       className={`fixed z-50 flex items-center group ${className}`}
     >

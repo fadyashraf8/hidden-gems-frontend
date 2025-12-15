@@ -160,7 +160,7 @@ export default function Navbar() {
           <li>
             <NavLink to="/sponsored" className="flex items-center gap-1">
               <Star size={14} fill="#FFD700" color="#FFD700" />
-              Sponsored
+               {t("nav_link_sponsored")}
               <Star size={14} fill="#FFD700" color="#FFD700" />
             </NavLink>
           </li>
@@ -387,7 +387,7 @@ export default function Navbar() {
               className="flex items-center gap-1"
             >
               <Star size={14} fill="#FFD700" color="#FFD700" />
-              Sponsored
+               {t("nav_link_sponsored")}
               <Star size={14} fill="#FFD700" color="#FFD700" />
             </NavLink>
           </li>
