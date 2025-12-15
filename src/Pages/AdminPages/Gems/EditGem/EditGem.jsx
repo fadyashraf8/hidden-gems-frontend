@@ -124,6 +124,29 @@ export default function EditGem() {
     }
   };
 
+  // Separate handler for status changes
+  const handleStatusChange = async (e) => {
+    const newStatus = e.target.value;
+    
+    try {
+    let res=  await axios.put(`${baseURL}/gems/${id}/status`, {
+        status: newStatus
+      }, {
+        withCredentials: true,
+      });
+
+      console.log(
+        "Status update response:", res.data
+      );
+      
+      setFormData((prev) => ({ ...prev, status: newStatus }));
+      toast.success(t('toast.statusUpdated') || 'Status updated successfully');
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error(error.response?.data?.message || t('toast.failedStatusUpdate') || 'Failed to update status');
+    }
+  };
+
   const handleNewImagesChange = (e) => {
     const files = Array.from(e.target.files);
 
@@ -211,7 +234,7 @@ export default function EditGem() {
       submitData.append("description", formData.description);
       submitData.append("gemPhone", formData?.gemPhone);
       submitData.append("category", formData.category);
-      submitData.append("status", formData.status);
+      // NOTE: status is NOT included here - it uses separate API endpoint
       submitData.append("discount", formData.discount);
       submitData.append("discountGold", formData.discountGold);
       submitData.append("discountPlatinum", formData.discountPlatinum);
@@ -515,14 +538,14 @@ export default function EditGem() {
                   )}
                 </div>
 
-                {/* STATUS */}
+                {/* STATUS - Uses separate API */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">{t('status')}</label>
 
                   <select
                     name="status"
                     value={formData.status}
-                    onChange={handleInputChange}
+                    onChange={handleStatusChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                   >
                     <option value="pending">{t('pending')}</option>
@@ -657,6 +680,3 @@ export default function EditGem() {
     </div>
   );
 }
-
-
-
