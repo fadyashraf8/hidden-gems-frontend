@@ -804,6 +804,26 @@ const GemDetails = () => {
     return <div className="text-center text-red-500 mt-10">{error}</div>;
   if (!gem) return <div className="text-center mt-10">Gem not found</div>;
 
+  const recordVisit = useCallback(async () => {
+
+    try {
+      await fetch(`${BASE_URL}/gems/${id}/visit`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo?.token}`,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    recordVisit();
+  }, [recordVisit]);
+
   return (
     <>
       <SurpriseButton
