@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import  { useCallback } from 'react'
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
