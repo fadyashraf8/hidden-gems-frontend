@@ -8,6 +8,7 @@ export default function HomeOwner() {
   const { userInfo } = useSelector((state) => state.user || {});
   const [gems, setGems] = useState([]);
 
+  
   const fetchMyGems = useCallback(async () => {
     try {
       const response = await axios.get(
