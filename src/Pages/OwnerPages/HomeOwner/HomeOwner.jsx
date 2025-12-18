@@ -27,12 +27,9 @@ export default function HomeOwner() {
 
   return (
     <div>
-      {gems.map((gem) => (
-        <div key={gem._id}>
-          <h4>{gem.name}</h4>
-          <p>Total Visits: {gem.visitsCount}</p>
-        </div>
-      ))}
+      
+          <p>Home Owner</p>
+        
     </div>
   );
 }
