@@ -807,14 +807,9 @@ const GemDetails = () => {
   const recordVisit = useCallback(async () => {
 
     try {
-      await fetch(`${BASE_URL}/gems/${id}/visit`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo?.token}`,
-        },
-      });
+      await axios.post(`${BASE_URL}/gems/${id}/visit`,
+        {},
+        {withCredentials: true });
     } catch (error) {
       console.log(error);
     }
