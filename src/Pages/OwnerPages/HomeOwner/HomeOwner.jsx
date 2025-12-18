@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -8,7 +8,7 @@ export default function HomeOwner() {
   const { userInfo } = useSelector((state) => state.user || {});
   const [gems, setGems] = useState([]);
 
-  
+
   const fetchMyGems = useCallback(async () => {
     try {
       const response = await axios.get(
