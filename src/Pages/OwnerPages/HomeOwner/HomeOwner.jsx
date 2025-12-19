@@ -1,44 +1,3 @@
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-// import  { useCallback } from 'react'
-// import { useEffect, useState } from "react";
-// import axios from "axios";
-// import { useSelector } from "react-redux";
-
-export default function HomeOwner() {
-  // const baseURL = import.meta.env.VITE_Base_URL;
-  // const { userInfo } = useSelector((state) => state.user || {});
-  // const [gems, setGems] = useState([]);
-
-
-  // const fetchMyGems = useCallback(async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${baseURL}/gems/user/${userInfo._id}`
-  //     );
-  //     setGems(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching gems:", error);
-  //   }
-  // })
-  
-  // useEffect(() => {
-  //   fetchMyGems();
-  // }, [fetchMyGems]);
-  
-
-  return (
-    <div>
-      
-      <h1>Home Owner</h1>
-       <h3>Welcome</h3>
-          
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -102,13 +61,6 @@ export default function HomeOwner() {
       ) : (
         <p>No gems found.</p>
       )}
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     </div>
   );
 }
