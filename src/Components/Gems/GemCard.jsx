@@ -9,35 +9,39 @@ import "./GemCard.css";
 
 const BASE_URL = import.meta.env.VITE_Base_URL;
 
-const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false }) => {
+const GemCard = ({
+  gem,
+  isUserGem = false,
+  onGemDeleted = null,
+  darkMode = false,
+}) => {
   const navigate = useNavigate();
-    const imagesList = gem.images?.[0];
+  const imagesList = gem.images?.[0];
   const ratingValue = gem.avgRating || gem.rating || 0;
-  const [ ratingsCount, setRatingsCount ] = useState(0);
+  const [ratingsCount, setRatingsCount] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  
+
   useEffect(() => {
     const fetchRatingGems = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/ratings/gem/${gem._id}`,{
-          credentials: "include"
+        const response = await fetch(`${BASE_URL}/ratings/gem/${gem._id}`, {
+          credentials: "include",
         });
         const data = await response.json();
-        if(data.message === "success" && Array.isArray(data.ratings)){
-          setRatingsCount(data.ratings.length)
+        if (data.message === "success" && Array.isArray(data.ratings)) {
+          setRatingsCount(data.ratings.length);
         }
       } catch (error) {
         console.error("Failed to fetch rating count", error);
       }
-    }
-    if(gem._id){
+    };
+    if (gem._id) {
       fetchRatingGems();
-    }else{
-      console.error("Gem is not passed correctly to GemCard")
+    } else {
+      console.error("Gem is not passed correctly to GemCard");
     }
-  }, [gem._id])
+  }, [gem._id]);
 
-  
   if (!gem) {
     console.error("GemCard received null gem prop");
     return (
@@ -55,7 +59,6 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false
       </div>
     );
   }
-
 
   const getStatusBadge = () => {
     const status = gem.status || "pending";
@@ -100,7 +103,7 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false
   };
 
   return (
-    <div dir="ltr" className={`group h-full ${darkMode ? 'dark' : ''}`}>
+    <div dir="ltr" className={`group h-full ${darkMode ? "dark" : ""}`}>
       {/* UPDATES HERE: 
           1. Added 'gem-card' class.
           2. Removed 'dark:bg-zinc-800' and 'dark:border-zinc-700' (CSS handles it now).
@@ -108,7 +111,7 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false
       <div className="gem-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 h-full flex flex-col">
         <div className="relative aspect-[4/3] overflow-hidden">
           <Link to={`/gems/${gem._id}`} className="block w-full h-full">
-             <img
+            <img
               src={
                 `${imagesList}` ||
                 gem.image ||
@@ -118,7 +121,7 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             />
           </Link>
-          
+
           {isUserGem && getStatusBadge()}
 
           <div className="absolute top-3 right-3 z-20">
@@ -158,12 +161,14 @@ const GemCard = ({ gem, isUserGem = false, onGemDeleted = null, darkMode = false
           <div className="flex justify-between items-start mb-2">
             <Link to={`/gems/${gem._id}`} className="flex-1">
               {/* Removed conflicting text dark classes, CSS handles it */}
-              <h3 className={`font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-[#DD0303] transition-colors`}>
+              <h3
+                className={`font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-[#DD0303] transition-colors`}
+              >
                 {gem.name}
               </h3>
             </Link>
           </div>
-          
+
           {/* Rating Section */}
           <div className="py-1.5 rounded-lg flex items-center gap-2 min-w-[50px] shrink-0">
             <Rating
