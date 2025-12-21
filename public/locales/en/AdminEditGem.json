@@ -17,6 +17,7 @@
   "enterLocation": "Enter location",
   "gemPhone": "Gem Phone",
   "enterGemPhone": "Enter gem phone",
+  "toast.statusUpdated": "Gem status updated successfully",
   "description": "Description",
   "enterDescription": "Enter detailed description",
   "category": "Category",

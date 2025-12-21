@@ -29,6 +29,7 @@
   "freeDiscount": "خصم الفئة المجانية (%)",
   "goldDiscount": "خصم الفئة الذهبية (%)",
   "platinumDiscount": "خصم الفئة البلاتينية (%)",
+  "toast.statusUpdated": "تم تحديث حالة الجوهرة بنجاح",
   "isSubscribed": "الاشتراك مفعل",
   "save": "حفظ التغييرات",
   "cancel": "إلغاء",
