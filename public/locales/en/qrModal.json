@@ -4,6 +4,8 @@
     "subtitle": "Show this QR code to redeem",
     "qrAlt": "Voucher QR Code",
     "code": "Code",
+    "Pound": "Pound",
+
     "discount": "Discount",
     "off": "OFF",
     "expires": "Expires",

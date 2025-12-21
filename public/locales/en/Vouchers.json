@@ -1,5 +1,7 @@
 {
   "vouchers": {
+    "points": "Points",
+
     "management_title": "Voucher Management",
     "total_found": "Total: {{count}} vouchers found",
     "search_placeholder": "Search by code, gem name, or email...",

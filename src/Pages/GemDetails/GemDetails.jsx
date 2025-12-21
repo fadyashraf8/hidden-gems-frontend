@@ -20,10 +20,8 @@ import SubscriptionPlans from "../../Components/Subscription/SubscriptionPlans";
 import QRCodeModal from "../../Components/QRCodeModal/QRCodeModal.jsx";
 import toast from "react-hot-toast";
 import SurpriseButton from "../../Components/SurpriseButton/SurpriseButton";
-// 1. Ensure these are imported
-import { Avatar, FormControlLabel, Switch } from "@mui/material";
-import { set } from "zod";
-import { user } from "@heroui/react";
+// Removed FormControlLabel as we are building a custom label for better RTL support
+import { Avatar, Switch } from "@mui/material";
 
 const BASE_URL = import.meta.env.VITE_Base_URL;
 const COLLAPSED_ABOUT_HEIGHT = 150;
@@ -132,6 +130,11 @@ const GemDetails = () => {
       return;
     }
 
+    if (pointsAmount > 300) {
+      toast.error("Maximum 300 points can be redeemed per voucher.");
+      return;
+    }
+
     setIsCreatingVoucher(true);
     try {
       const response = await axios.post(
@@ -172,7 +175,8 @@ const GemDetails = () => {
 
   useEffect(() => {
     fetchGemRatings();
-  }, [fetchGemRatings]);
+    console.log("userInfo", userInfo);
+  }, [fetchGemRatings, userInfo]);
 
   // --- Review State ---
   const [reviewsLoading, setReviewsLoading] = useState(false);
@@ -800,6 +804,13 @@ const GemDetails = () => {
     setTimeout(() => {
       fetchGemDetails();
     }, 500);
+
+    // Reload page after editing to ensure fresh data
+    if (editingExisting) {
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
   };
 
   const handleRatingChange = (value) => {
@@ -993,7 +1004,7 @@ const GemDetails = () => {
                               : "Add your review"}
                           </p>
 
-                          {/* --- 6. New User Identity Section with Toggle --- */}
+                          {/* --- FIXED: User Identity Section --- */}
                           <div className="flex items-center gap-3 mb-2 bg-white dark:bg-zinc-800 p-2 rounded-xl border border-gray-100 dark:border-zinc-700 w-fit">
                             <Avatar
                               src={
@@ -1020,34 +1031,28 @@ const GemDetails = () => {
                               </span>
                             </div>
                             <div className="h-4 w-[1px] bg-gray-300 mx-1"></div>
-                            <FormControlLabel
-                              control={
+                            
+                            {/* --- Custom Toggle Label for better RTL support --- */}
+                            <label className="flex items-center gap-2 cursor-pointer m-0">
                                 <Switch
-                                  size="small"
-                                  checked={isAnonymous}
-                                  onChange={(e) =>
-                                    setIsAnonymous(e.target.checked)
-                                  }
-                                  sx={{
+                                size="small"
+                                checked={isAnonymous}
+                                onChange={(e) => setIsAnonymous(e.target.checked)}
+                                sx={{
                                     "& .MuiSwitch-switchBase.Mui-checked": {
-                                      color: "#DD0303",
+                                    color: "#DD0303",
                                     },
-                                    "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track":
-                                      {
-                                        backgroundColor: "#DD0303",
-                                      },
-                                  }}
+                                    "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                                    backgroundColor: "#DD0303",
+                                    },
+                                }}
                                 />
-                              }
-                              label={
-                                <span className="text-xs text-gray-500">
-                                  Post Anonymously
+                                <span className="text-xs text-gray-500 whitespace-nowrap">
+                                Post Anonymously
                                 </span>
-                              }
-                              className="m-0"
-                            />
+                            </label>
+                            {/* ------------------------------------------------ */}
                           </div>
-                          {/* ----------------------------------------------- */}
 
                           <p className="text-xs text-gray-500 dark:text-gray-400">
                             {isEditingReview
@@ -1232,12 +1237,6 @@ const GemDetails = () => {
                       </div>
                     )}
 
-                    {/* <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-                      <Globe className="w-5 h-5 text-[#DD0303]" />
-                      <a href="#" className="hover:underline">
-                        Visit Website
-                      </a>
-                    </div> */}
                     {/* Discount Section */}
                     {(gem.discount > 0 ||
                       gem.discountGold > 0 ||
@@ -1404,7 +1403,8 @@ const GemDetails = () => {
                               </button>
                             </div>
                             <p className="text-xs text-gray-500 dark:text-gray-400">
-                              Enter the number of points you want to use
+                              Enter the number of points you want to use (1
+                              Point = 1 EGP)
                             </p>
                           </>
                         ) : (

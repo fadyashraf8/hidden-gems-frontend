@@ -56,7 +56,9 @@ export default function Vouchers() {
           >
             <span className="font-semibold dark:text-white">{voucher.code}</span>
             <span className="text-gray-500 dark:text-gray-300">
-              {voucher.discount}% 
+{voucher.voucherType === 'points' ? `${voucher.discount} Points` : ''}
+{voucher.voucherType === 'discount' ? `${voucher.discount}%` : ''}
+              
             </span>
           </li>
         ))}
@@ -66,7 +68,7 @@ export default function Vouchers() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         voucherData={selectedVoucher}
-        qrCode={selectedVoucher?.qrCode}  في 
+        qrCode={selectedVoucher?.qrCode}   
       />
     </div>
   );

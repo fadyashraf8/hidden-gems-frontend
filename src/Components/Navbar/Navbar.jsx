@@ -31,6 +31,13 @@ export default function Navbar() {
   const dark = useSelector((state) => state.darkMode.enabled);
   const handleDarkToggle = () => dispatch(toggleDarkMode());
 
+
+useEffect(()=>{
+console.log("user",user);
+
+},[])
+
+
   // Sticky navbar on scroll
   useEffect(() => {
     const scrollFunction = () => {
@@ -116,7 +123,7 @@ export default function Navbar() {
         icon: "👋",
       });
 
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Failed to sign out");

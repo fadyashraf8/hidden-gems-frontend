@@ -374,23 +374,23 @@ export default function CategoriesPage() {
                           color: isDarkMode ? "#888" : "#666",
                         }}
                       >
-                        {t("sortOptions.default")}
+                        Default
                       </em>
                     </MenuItem>
                     <MenuItem value="name">
-                      {t("sortOptions.nameAZ")}
+                      Name (A-Z)
                     </MenuItem>
                     <MenuItem value="-name">
-                      {t("sortOptions.nameZA")}
+                      Name (Z-A)
                     </MenuItem>
                     <MenuItem value="-avgRating">
-                      {t("sortOptions.highestRated")}
+                      Highest Rating
                     </MenuItem>
                     <MenuItem value="createdAt">
-                      {t("sortOptions.oldest")}
+                      Oldest First
                     </MenuItem>
                     <MenuItem value="-createdAt">
-                      {t("sortOptions.newest")}
+                      Newest First
                     </MenuItem>
                   </Select>
                 </FormControl>
