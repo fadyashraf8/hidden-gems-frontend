@@ -47,7 +47,7 @@ const GemForm = ({ initialData = {}, categories = [], onSubmit, onCancel, isEdit
   };
 
   const handleSubmit = (e) => {
-    console.log(formData)
+    // console.log(formData)
     e.preventDefault();
     if (!validate()) {
       toast.error("Please fill in all required fields");

@@ -104,7 +104,7 @@ export default function SurpriseMe() {
       }
 
       const data = await response.json();
-      console.log("AI Response Data:", data);
+      // console.log("AI Response Data:", data);
 
       // Build a pool of potential candidates from the AI response
       let candidates = [];

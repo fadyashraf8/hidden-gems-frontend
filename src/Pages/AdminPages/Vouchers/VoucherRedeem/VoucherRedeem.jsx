@@ -23,7 +23,7 @@ export default function VoucherRedeem() {
         { withCredentials: true }
       );
       setVoucher(response.data.voucher || null);   
-      console.log(response.data.voucher);
+      // console.log(response.data.voucher);
          
     } catch (error) {
       console.error("Error fetching voucher details:", error.response?.data?.error);
@@ -40,7 +40,7 @@ export default function VoucherRedeem() {
         { desicion: action },
         { withCredentials: true }
       );
-      console.log("Voucher redeemed:", response.data);
+      // console.log("Voucher redeemed:", response.data);
       toast.success(`${action}`)
     } catch (error) {
       console.error("Error redeeming voucher:", error.response?.data?.error);

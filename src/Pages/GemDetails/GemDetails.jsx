@@ -96,7 +96,7 @@ const GemDetails = () => {
         { withCredentials: true }
       );
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }, [id]);
 
@@ -251,7 +251,7 @@ const GemDetails = () => {
       } else {
         const gemData = data.gem || data.result || data;
         setGem(gemData);
-        console.log(gemData);
+        // console.log(gemData);
       }
     } catch {
       setError("Failed to load this gem. Please try again.");

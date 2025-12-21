@@ -16,7 +16,7 @@ import {
 import toast from "react-hot-toast";
 import LoadingScreen from "../LoadingScreen";
 
-const UserActivity = () => {
+const UserActivity = ({ userName }) => {
   const { t, i18n } = useTranslation("UserActivity");
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -193,69 +193,80 @@ const UserActivity = () => {
 
       <div className="space-y-6 justify-start">
         <div className="space-y-4">
-          {activities.map((activity) => (
-            <div
-              key={activity._id}
-              className={`p-4 rounded-xl border shadow-sm hover:shadow-md transition-shadow flex gap-4 items-start group relative ${
-                isDarkMode
-                  ? "bg-gray-800 border-gray-700"
-                  : "bg-white border-gray-100"
-              }`}
-            >
-              <div className="bg-red-50 p-2 rounded-full shrink-0">
-                <Activity className="w-5 h-5 text-[#DD0303]" />
-              </div>
+          {activities.map((activity) => {
+            // Replace "user" with actual name
+            const displayName = userName || "User";
+            const activityText = activity.text
+              ? activity.text.replace(/user/gi, displayName)
+              : "";
+            const activityDesc = activity.description
+              ? activity.description.replace(/user/gi, displayName)
+              : "";
 
-              <div className="flex-1">
-                <h4
-                  className={`font-semibold mb-1 ${
-                    isDarkMode ? "text-white" : "text-gray-800"
-                  }`}
-                >
-                  {activity.text}
-                </h4>
+            return (
+              <div
+                key={activity._id}
+                className={`p-4 rounded-xl border shadow-sm hover:shadow-md transition-shadow flex gap-4 items-start group relative ${
+                  isDarkMode
+                    ? "bg-gray-800 border-gray-700"
+                    : "bg-white border-gray-100"
+                }`}
+              >
+                <div className="bg-red-50 p-2 rounded-full shrink-0">
+                  <Activity className="w-5 h-5 text-[#DD0303]" />
+                </div>
 
-                <p
-                  className={`text-sm mb-2 ${
-                    isDarkMode ? "text-gray-400" : "text-gray-600"
-                  }`}
-                >
-                  {activity.description}
-                </p>
+                <div className="flex-1">
+                  <h4
+                    className={`font-semibold mb-1 ${
+                      isDarkMode ? "text-white" : "text-gray-800"
+                    }`}
+                  >
+                    {activityText}
+                  </h4>
 
-                <div className="flex items-center gap-4 text-xs text-gray-400">
-                  <div className="flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
-                    <span>
-                      {new Date(
-                        activity.createdAt || Date.now()
-                      ).toLocaleDateString()}
-                    </span>
-                  </div>
+                  <p
+                    className={`text-sm mb-2 ${
+                      isDarkMode ? "text-gray-400" : "text-gray-600"
+                    }`}
+                  >
+                    {activityDesc}
+                  </p>
 
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    <span>
-                      {new Date(
-                        activity.createdAt || Date.now()
-                      ).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </span>
+                  <div className="flex items-center gap-4 text-xs text-gray-400">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-3 h-3" />
+                      <span>
+                        {new Date(
+                          activity.createdAt || Date.now()
+                        ).toLocaleDateString()}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      <span>
+                        {new Date(
+                          activity.createdAt || Date.now()
+                        ).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <button
-                onClick={() => openDeleteModal(activity)}
-                className="absolute top-4 cursor-pointer right-4 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all opacity-0 group-hover:opacity-100"
-                title={t("deleteActivity")}
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
+                <button
+                  onClick={() => openDeleteModal(activity)}
+                  className="absolute top-4 cursor-pointer right-4 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all opacity-0 group-hover:opacity-100"
+                  title={t("deleteActivity")}
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            );
+          })}
         </div>
 
         {totalPages > 1 && (

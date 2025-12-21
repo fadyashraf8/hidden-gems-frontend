@@ -199,7 +199,7 @@ export default function TransactionDashboard() {
             withCredentials: true,
           });
           const fetchedGemId = response.data.result[0]?._id;
-          console.log("gemId", fetchedGemId);
+          // console.log("gemId", fetchedGemId);
           setGemId(fetchedGemId);
         } catch (err) {
           console.error("Error fetching gemId:", err);

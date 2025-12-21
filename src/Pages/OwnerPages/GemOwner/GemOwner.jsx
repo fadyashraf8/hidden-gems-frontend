@@ -69,7 +69,7 @@ export default function GemOwner() {
       const response = await axios.get(`${baseURL}/gems/user/${userInfo.id}`, {
         withCredentials: true,
       });
-      console.log("response", response);
+      // console.log("response", response);
 
       if (
         response.data.message === "success" &&

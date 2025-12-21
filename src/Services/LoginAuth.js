@@ -7,7 +7,7 @@ export async function loginAPI(formData) {
     });
     return data;
   } catch (error) {
-    console.log("error",error);
+    // console.log("error",error);
     
     // Prefer returning the backend's response body when available
     if (error.response && error.response.data) {

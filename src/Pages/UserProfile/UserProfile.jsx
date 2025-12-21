@@ -29,7 +29,7 @@ export default function UserProfile() {
 
         const data = await res.json();
         setUser(data.user);
-        console.log("data.user", data.user);
+        // console.log("data.user", data.user);
       } finally {
         setLoading(false);
       }
@@ -52,7 +52,7 @@ export default function UserProfile() {
 
   const tabContent = {
     info: <ProfileInfo user={user} onUpdateUser={handleUserUpdate} />,
-    activity: <UserActivity userId={user?._id} />,
+    activity: <UserActivity userId={user?._id} userName={user?.firstName} />,
     report: <UserReports />,
   };
 
@@ -104,7 +104,9 @@ export default function UserProfile() {
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200 cursor-pointer"
               }`}
             >
-              {t("activity-log")}
+              {user?.firstName
+                ? `${user.firstName}'s Activity`
+                : t("activity-log")}
             </button>
             <button
               onClick={() => setActiveTab("report")}

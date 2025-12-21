@@ -31,7 +31,7 @@ export const addToWishlist = createAsyncThunk(
         { withCredentials: true }
       );
       dispatch(fetchWishlistCount()); 
-      console.log("response", response);
+      // console.log("response", response);
       
       return response.data;  
     } catch (error) {
@@ -73,7 +73,7 @@ export const clearWishlist = createAsyncThunk(
       dispatch(fetchWishlistCount()); 
       return true;
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
 
       return rejectWithValue(
         error.response?.data?.message || "Failed to clear wishlist"
@@ -93,7 +93,7 @@ export const fetchWishlistItems = createAsyncThunk(
 
       return response.data.userWishList || [];
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
 
       return rejectWithValue(
         error.response?.data?.error || "Failed to fetch wishlist"
