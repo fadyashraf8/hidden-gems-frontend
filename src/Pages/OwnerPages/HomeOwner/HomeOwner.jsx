@@ -18,7 +18,7 @@ export default function HomeOwner() {
         withCredentials: true,
       });
 
-      // console.log("HomeOwner gem fetch response:", response.data);
+      console.log("HomeOwner gem fetch response:", response.data);
 
       if (
         response.data.message === "success" &&

@@ -33,6 +33,7 @@ function TransactionModal({ isOpen, onClose, transactionId }) {
         `${import.meta.env.VITE_Base_URL}/transaction/${transactionId}`,
         { withCredentials: true }
       );
+      
       setDetails(res.data);
     } catch (err) {
       console.error("Error fetching transaction details:", err);
@@ -201,6 +202,11 @@ export default function TransactionDashboard() {
           });
           const fetchedGemId = response.data.result[0]?._id;
           // console.log("gemId", fetchedGemId);
+    if (!fetchedGemId) {
+            console.log(setLoading(false));
+
+          }
+
           setGemId(fetchedGemId);
         } catch (err) {
           console.error("Error fetching gemId:", err);
