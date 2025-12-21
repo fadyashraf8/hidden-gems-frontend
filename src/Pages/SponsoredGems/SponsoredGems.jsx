@@ -398,14 +398,13 @@ export default function SponsoredGems() {
             variant="contained"
             size="large"
             sx={{
-              bgcolor: "#DD0303",
-              color: "white !important",
+              bgcolor: "black",
               px: 8,
               py: 2,
               borderRadius: "50px",
               fontWeight: "bold",
               fontSize: "1.2rem",
-              "&:hover": { bgcolor: "#b90202" },
+              "&:hover": { bgcolor: "#b90202", color: "white !important" },
             }}
           >
             Become a Partner

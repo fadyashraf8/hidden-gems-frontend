@@ -62,7 +62,7 @@
 }
 
 .dark-mode .navbar.sticky {
-  background-color: var(--dm-accent);
+  background-color: #7f030393;
 }
 
 .dark-mode .navbar.sticky .login-btn {

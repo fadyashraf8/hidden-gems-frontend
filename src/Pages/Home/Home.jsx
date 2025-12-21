@@ -18,9 +18,9 @@ export default function Home() {
   const [subscribedGems, setSubscribedGems] = useState([]);
   const [loading, setLoading] = useState(true);
   const isDarkModeEnabled = useSelector((state) => state.darkMode.enabled);
-  
+
   // check direction for alignment
-  const isRTL = i18n.language === 'ar';
+  const isRTL = i18n.language === "ar";
 
   useEffect(() => {
     const fetchGems = async () => {
@@ -132,7 +132,10 @@ export default function Home() {
                   fontSize: { xs: "2.5rem", md: "4rem" },
                 }}
               >
-                 {t("spotlight.prefix")} <span style={{ color: "#DD0303" }}>{t("spotlight.suffix")}</span>
+                {t("spotlight.prefix")}{" "}
+                <span style={{ color: "#DD0303" }}>
+                  {t("spotlight.suffix")}
+                </span>
               </Typography>
               <Typography
                 variant="h6"
@@ -197,7 +200,7 @@ export default function Home() {
                   sx={{
                     position: "relative",
                     bgcolor: "black",
-                    color: "white",
+                    color: isDarkModeEnabled ? "#b3b3b3" : "white",
                     px: 8,
                     py: 3,
                     fontSize: "1.25rem",
@@ -207,6 +210,7 @@ export default function Home() {
                     border: "1px solid #333",
                     "&:hover": {
                       bgcolor: "#111",
+                      color: "white !important",
                     },
                   }}
                 >
@@ -273,7 +277,22 @@ export default function Home() {
             >
               {recentGems.slice(0, 4).map((gem) => (
                 <motion.div key={gem._id} variants={fadeIn}>
-                  <GemCard gem={gem} darkMode={isDarkModeEnabled} />
+                  <Box
+                    sx={{
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      transform: "scale(1)",
+                      transition:
+                        "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                      "&:hover": {
+                        transform: "scale(1.05) translateY(-10px)",
+                        zIndex: 10,
+                      },
+                    }}
+                  >
+                    <GemCard gem={gem} darkMode={isDarkModeEnabled} />
+                  </Box>
                 </motion.div>
               ))}
             </motion.div>
@@ -294,7 +313,7 @@ export default function Home() {
                 sx={{
                   position: "relative",
                   bgcolor: "black",
-                  color: "white",
+                  color: isDarkModeEnabled ? "#b3b3b3" : "white",
                   px: 8,
                   py: 3,
                   fontSize: "1.25rem",
@@ -304,6 +323,7 @@ export default function Home() {
                   border: "1px solid #333",
                   "&:hover": {
                     bgcolor: "#111",
+                    color: "white !important",
                   },
                 }}
               >
