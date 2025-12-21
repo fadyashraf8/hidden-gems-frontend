@@ -90,6 +90,7 @@ export const fetchWishlistItems = createAsyncThunk(
         withCredentials: true,
       });
       
+console.log("wishlist" ,response);
 
       return response.data.userWishList || [];
     } catch (error) {

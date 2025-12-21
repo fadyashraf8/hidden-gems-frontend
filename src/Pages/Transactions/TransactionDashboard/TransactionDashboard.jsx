@@ -14,11 +14,13 @@ import {
 import axios from "axios";
 import LoadingScreen from "@/Pages/LoadingScreen";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 // Transaction Details Modal Component
 function TransactionModal({ isOpen, onClose, transactionId }) {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { t, i18n } = useTranslation("OwnerPages");
 
   useEffect(() => {
     if (isOpen && transactionId) {
@@ -33,7 +35,7 @@ function TransactionModal({ isOpen, onClose, transactionId }) {
         `${import.meta.env.VITE_Base_URL}/transaction/${transactionId}`,
         { withCredentials: true }
       );
-      
+
       setDetails(res.data);
     } catch (err) {
       console.error("Error fetching transaction details:", err);
@@ -47,8 +49,8 @@ function TransactionModal({ isOpen, onClose, transactionId }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg max-w-lg w-full max-h-[80vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
-          <h3 className="text-xl font-bold">Transaction Details</h3>
+        <div className="bg-[#dd0303] dark:bg-[#060b15] top-0  border-b p-4 flex justify-between items-center">
+          <h3 className="text-xl font-bold">{t("Transaction Details")}</h3>
           <button
             onClick={onClose}
             className="p-1 hover:bg-gray-100 rounded transition-colors"
@@ -57,38 +59,37 @@ function TransactionModal({ isOpen, onClose, transactionId }) {
           </button>
         </div>
 
-        <div className="p-6">
+        <div className="p-6 dark:bg-[#060b15]">
           {loading ? (
             <div className="flex justify-center py-8">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>
           ) : details ? (
-            <div className="space-y-4">
+            <div className="space-y-4 dark">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-500">Code</p>
+                  <p className="text-sm text-gray-500">{t("Code")}</p>
                   <p className="font-semibold font-mono">{details.code}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Discount</p>
+                  <p className="text-sm text-gray-500">{t("Discount")}</p>
                   <p className="font-semibold text-green-600">{details.discount}%</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Status</p>
+                  <p className="text-sm text-gray-500">{t("Status")}</p>
                   <span
-                    className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${
-                      details.decision === "accept"
+                    className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${details.decision === "accept"
                         ? "bg-green-100 text-green-800"
                         : details.decision === "pending"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-red-100 text-red-800"
-                    }`}
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
                   >
                     {details.decision}
                   </span>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Redeemed At</p>
+                  <p className="text-sm text-gray-500">{t("Redeemed At")}</p>
                   <p className="font-semibold">
                     {new Date(details.redeemedAt).toLocaleDateString("en-US", {
                       year: "numeric",
@@ -105,9 +106,9 @@ function TransactionModal({ isOpen, onClose, transactionId }) {
                 <div className="border-t pt-4">
                   <h4 className="font-semibold mb-2 flex items-center gap-2">
                     <User size={16} className="text-gray-600" />
-                    User Information
+                    {t("User Information")}
                   </h4>
-                  <div className="bg-gray-50 p-3 rounded">
+                  <div className="bg-gray-50  p-3 rounded">
                     <p className="font-medium">
                       {details.user.firstName} {details.user.lastName}
                     </p>
@@ -120,9 +121,9 @@ function TransactionModal({ isOpen, onClose, transactionId }) {
                 <div className="border-t pt-4">
                   <h4 className="font-semibold mb-2 flex items-center gap-2">
                     <User size={16} className="text-purple-600" />
-                    Admin Information
+                    {t("Admin Information")}
                   </h4>
-                  <div className="bg-gray-50 p-3 rounded">
+                  <div className="bg-gray-50  p-3 rounded">
                     <p className="font-medium">
                       {details.admin.firstName} {details.admin.lastName}
                     </p>
@@ -135,12 +136,12 @@ function TransactionModal({ isOpen, onClose, transactionId }) {
                 <div className="border-t pt-4">
                   <h4 className="font-semibold mb-2 flex items-center gap-2">
                     <MapPin size={16} className="text-blue-600" />
-                    Gem Information
+                    {t("Gem Information")}
                   </h4>
-                  <div className="bg-gray-50 p-3 rounded">
+                  <div className="bg-gray-50  p-3 rounded">
                     <p className="font-medium">{details.gemId.name}</p>
                     <p className="text-sm text-gray-600">
-                      Location: {details.gemId.gemLocation}
+                      {t("Location")}: {details.gemId.gemLocation}
                     </p>
                     {details.gemId.description && (
                       <p className="text-sm text-gray-600 mt-2 line-clamp-3">
@@ -153,7 +154,7 @@ function TransactionModal({ isOpen, onClose, transactionId }) {
             </div>
           ) : (
             <div className="text-center py-8 text-gray-500">
-              No details available
+              {t("No details available")}
             </div>
           )}
         </div>
@@ -170,6 +171,7 @@ export default function TransactionDashboard() {
   const [totalItems, setTotalItems] = useState(0);
   const [gemId, setGemId] = useState(null);
   const isDarkMode = useSelector((state) => state.darkMode.enabled);
+  const { t, i18n } = useTranslation("OwnerPages");
 
   // Modal States
   const [selectedTransactionId, setSelectedTransactionId] = useState(null);
@@ -202,7 +204,7 @@ export default function TransactionDashboard() {
           });
           const fetchedGemId = response.data.result[0]?._id;
           // console.log("gemId", fetchedGemId);
-    if (!fetchedGemId) {
+          if (!fetchedGemId) {
             console.log(setLoading(false));
 
           }
@@ -319,10 +321,10 @@ export default function TransactionDashboard() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
-                Transaction Management
+                {t("Transaction Management")}
               </h1>
               <p className="text-sm text-gray-600 mt-1">
-                Total: {totalItems} transactions found
+                {t("Total: {{count}} transactions found", { count: totalItems })}
               </p>
             </div>
           </div>
@@ -347,23 +349,37 @@ export default function TransactionDashboard() {
               onChange={handleStatusFilter}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option className="dark:text-black" value="">All Status</option>
-              <option className="dark:text-black"  value="accept">Accepted</option>
-              <option className="dark:text-black"  value="pending">Pending</option>
-              <option className="dark:text-black"  value="reject">Rejected</option>
+              <option className="dark:text-black" value="">{t("All Status")}</option>
+              <option className="dark:text-black" value="accept">{t("Accepted")}</option>
+              <option className="dark:text-black" value="reject">{t("Rejected")}</option>
             </select>
             <select
               value={sortBy}
               onChange={handleSort}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option className="dark:text-black"  value="">Sort By</option>
-              <option className="dark:text-black"  value="code">Code (A-Z)</option>
-              <option className="dark:text-black"  value="-code">Code (Z-A)</option>
-              <option className="dark:text-black"  value="discount">Discount (Low to High)</option>
-              <option className="dark:text-black"  value="-discount">Discount (High to Low)</option>
-              <option className="dark:text-black"  value="redeemedAt">Date (Oldest First)</option>
-              <option className="dark:text-black"  value="-redeemedAt">Date (Newest First)</option>
+              <option className="dark:text-black" value="">
+                {t("Sort By")}
+              </option>
+              <option className="dark:text-black" value="code">
+                {t("Sort Code AZ")}
+              </option>
+              <option className="dark:text-black" value="-code">
+                {t("Sort Code ZA")}
+              </option>
+              <option className="dark:text-black" value="discount">
+                {t("Sort Discount Low High")}
+              </option>
+              <option className="dark:text-black" value="-discount">
+                {t("Sort Discount High Low")}
+              </option>
+              <option className="dark:text-black" value="redeemedAt">
+                {t("Sort Date Old New")}
+              </option>
+              <option className="dark:text-black" value="-redeemedAt">
+                {t("Sort Date New Old")}
+              </option>
+
             </select>
           </div>
 
@@ -372,7 +388,7 @@ export default function TransactionDashboard() {
               onClick={clearFilters}
               className="mt-4 text-sm text-blue-600 hover:text-blue-700 font-medium"
             >
-              Clear All Filters
+              {t("Clear All Filters")}
             </button>
           )}
         </div>
@@ -381,32 +397,33 @@ export default function TransactionDashboard() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Voucher Code
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Discount
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Gem
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  User
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Admin
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Redeemed Date
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
+           <tr>
+  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+    {t("Voucher Code")}
+  </th>
+  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+    {t("Discount")}
+  </th>
+  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+    {t("Gem")}
+  </th>
+  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+    {t("User")}
+  </th>
+  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+    {t("Admin")}
+  </th>
+  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+    {t("Redeemed Date")}
+  </th>
+  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+    {t("Status")}
+  </th>
+  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+    {t("Actions")}
+  </th>
+</tr>
+
             </thead>
 
             <tbody className="dark:bg-gray-900 bg-white divide-y divide-gray-200">
@@ -473,13 +490,12 @@ export default function TransactionDashboard() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-3 py-1 text-xs font-semibold rounded-full ${
-                          transaction.decision === "accept"
+                        className={`px-3 py-1 text-xs font-semibold rounded-full ${transaction.decision === "accept"
                             ? "bg-green-100 text-green-800"
                             : transaction.decision === "pending"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
                       >
                         {transaction.decision || "N/A"}
                       </span>

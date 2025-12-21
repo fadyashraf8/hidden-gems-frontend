@@ -374,23 +374,23 @@ export default function CategoriesPage() {
                           color: isDarkMode ? "#888" : "#666",
                         }}
                       >
-                        Default
+                        {t("default")}
                       </em>
                     </MenuItem>
                     <MenuItem value="name">
-                      Name (A-Z)
+                      {t("nameAZ")}
                     </MenuItem>
                     <MenuItem value="-name">
-                      Name (Z-A)
+                      {t("nameZA")}
                     </MenuItem>
                     <MenuItem value="-avgRating">
-                      Highest Rating
+                      {t("highestRating")}
                     </MenuItem>
                     <MenuItem value="createdAt">
-                      Oldest First
+                      {t("oldestFirst")}
                     </MenuItem>
                     <MenuItem value="-createdAt">
-                      Newest First
+                      {t("newestFirst")}
                     </MenuItem>
                   </Select>
                 </FormControl>

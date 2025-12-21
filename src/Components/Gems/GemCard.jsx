@@ -40,6 +40,10 @@ const GemCard = ({
     } else {
       console.error("Gem is not passed correctly to GemCard");
     }
+
+console.log("gem",gem);
+
+
   }, [gem._id]);
 
   if (!gem) {

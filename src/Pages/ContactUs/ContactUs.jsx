@@ -167,7 +167,7 @@ export default function ContactUsPage() {
           <InfoItem
             icon={EmailIcon}
             title={t("contact.email-title")}
-            subtitle="support@hiddengemsy.com"
+            subtitle="hiddengemsy@gmail.com"
           />
         </div>
 
