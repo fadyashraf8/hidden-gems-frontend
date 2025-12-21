@@ -29,7 +29,6 @@
   "freeDiscount": "خصم الفئة المجانية (%)",
   "goldDiscount": "خصم الفئة الذهبية (%)",
   "platinumDiscount": "خصم الفئة البلاتينية (%)",
-  "toast.statusUpdated": "تم تحديث حالة الجوهرة بنجاح",
   "isSubscribed": "الاشتراك مفعل",
   "save": "حفظ التغييرات",
   "cancel": "إلغاء",
@@ -44,6 +43,7 @@
     "images": "مطلوب صورة واحدة على الأقل"
   },
   "toast": {
+    "statusUpdated": "تم تحديث حالة الجوهرة بنجاح",
     "failedLoad": "فشل تحميل بيانات الجوهرة ",
     "maxImages": "الحد الأقصى 10 صور فقط",
     "imageTooLarge": "{{name}} أكبر من 5MB",
