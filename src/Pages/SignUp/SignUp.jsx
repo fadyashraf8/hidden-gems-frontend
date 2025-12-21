@@ -11,10 +11,15 @@ import { Eye, EyeOff, User, Mail, Lock, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import "../Login/Login.css";
+import { useDispatch } from "react-redux";
+import { login } from "@/redux/userSlice.js";
+import { GoogleLogin } from "@react-oauth/google";
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { t } = useTranslation("Signup");
+  const dispatch = useDispatch();
+const baseUrl = import.meta.env.VITE_Base_URL;
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [previewImage, setPreviewImage] = useState(null);
@@ -88,6 +93,47 @@ const RegisterPage = () => {
     }
   };
 
+
+
+    const handleGoogleSuccess = async (credentialResponse) => {
+      try {
+        setIsLoading(true);
+        const response = await fetch(baseUrl + "/auth/google", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ token: credentialResponse.credential }),
+        });
+        const data = await response.json();
+        if (response.ok && data.message === "Login successful") {
+          toast.success("Logged in with Google successfully!");
+          try {
+            const res = await fetch(baseUrl + "/auth/me", {
+              credentials: "include",
+            });
+            if (res.ok) {
+              const userData = await res.json();
+              dispatch(login(userData.user));
+            }
+          } catch (e) {
+            console.error(e);
+          }
+          navigate("/", { replace: true });
+        } else {
+          console.log(data);
+          
+          toast.error(data.error || "Google login failed");
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("Something went wrong with Google login");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    const handleGoogleError = () => toast.error("Google login failed!");
+  
   return (
     <div className="page-wrapper relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Slideshow */}
@@ -317,6 +363,17 @@ const RegisterPage = () => {
             </Link>
           </p>
         </form>
+           <div className="flex justify-center p-4">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
+              size="medium"
+              width="280"
+              text="signin_with"
+              shape="pill"
+            />
+          </div>
+
       </motion.div>
     </div>
   );

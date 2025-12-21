@@ -123,7 +123,7 @@ console.log("user",user);
         icon: "👋",
       });
 
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Failed to sign out");
