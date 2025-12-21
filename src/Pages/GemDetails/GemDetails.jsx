@@ -130,6 +130,11 @@ const GemDetails = () => {
       return;
     }
 
+    if (pointsAmount > 300) {
+      toast.error("Maximum 300 points can be redeemed per voucher.");
+      return;
+    }
+
     setIsCreatingVoucher(true);
     try {
       const response = await axios.post(
@@ -1399,7 +1404,8 @@ const GemDetails = () => {
                               </button>
                             </div>
                             <p className="text-xs text-gray-500 dark:text-gray-400">
-                              Enter the number of points you want to use (1 Point = 1 EGP)
+                              Enter the number of points you want to use (1
+                              Point = 1 EGP)
                             </p>
                           </>
                         ) : (
