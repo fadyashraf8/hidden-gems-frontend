@@ -2,21 +2,30 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { XCircle, RefreshCcw, Home } from "lucide-react";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 
 const Cancel = () => {
+  const isDarkMode = useSelector((state) => state.darkMode.enabled);
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-red-50 via-white to-red-50 relative overflow-hidden">
+    <div
+      className={`min-h-screen flex flex-col items-center justify-center ${
+        isDarkMode
+          ? "bg-gradient-to-br from-red-950 via-gray-900 to-red-950"
+          : "bg-gradient-to-br from-red-50 via-white to-red-50"
+      } relative overflow-hidden`}
+    >
       {/* Background Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 0.1, scale: 1 }}
+          animate={{ opacity: isDarkMode ? 0.05 : 0.1, scale: 1 }}
           transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
           className="absolute top-20 right-20 w-72 h-72 bg-red-300 rounded-full blur-3xl"
         />
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 0.1, scale: 1.2 }}
+          animate={{ opacity: isDarkMode ? 0.05 : 0.1, scale: 1.2 }}
           transition={{
             duration: 2.5,
             repeat: Infinity,
@@ -49,7 +58,11 @@ const Cancel = () => {
             }}
             className="relative"
           >
-            <div className="absolute inset-0 bg-red-100 rounded-full blur-xl"></div>
+            <div
+              className={`absolute inset-0 ${
+                isDarkMode ? "bg-red-900" : "bg-red-100"
+              } rounded-full blur-xl`}
+            ></div>
             <XCircle
               className="w-32 h-32 text-red-500 relative z-10 drop-shadow-xl"
               strokeWidth={1.5}
@@ -61,7 +74,9 @@ const Cancel = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 tracking-tight"
+          className={`text-5xl md:text-6xl font-extrabold ${
+            isDarkMode ? "text-white" : "text-gray-900"
+          } mb-6 tracking-tight`}
         >
           Payment <span className="text-red-500">Cancelled</span>
         </motion.h1>
@@ -70,7 +85,9 @@ const Cancel = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.5 }}
-          className="text-xl text-gray-600 mb-10 leading-relaxed"
+          className={`text-xl ${
+            isDarkMode ? "text-gray-300" : "text-gray-600"
+          } mb-10 leading-relaxed`}
         >
           It looks like you cancelled the payment process.{" "}
           <br className="hidden md:block" />
@@ -93,7 +110,11 @@ const Cancel = () => {
 
           <Link
             to="/"
-            className="px-8 py-4 bg-white text-gray-700 border border-gray-200 rounded-full font-bold text-lg shadow-sm hover:bg-gray-50 hover:border-gray-300 transition-all transform hover:-translate-y-1 flex items-center gap-2"
+            className={`px-8 py-4 ${
+              isDarkMode
+                ? "bg-gray-800 text-gray-200 border-gray-700 hover:bg-gray-700"
+                : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300"
+            } border rounded-full font-bold text-lg shadow-sm transition-all transform hover:-translate-y-1 flex items-center gap-2`}
           >
             <Home className="w-5 h-5" />
             Back Home
