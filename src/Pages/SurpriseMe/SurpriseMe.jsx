@@ -11,7 +11,7 @@ export default function SurpriseMe() {
 
   const [mood, setMood] = useState("");
   const [loading, setLoading] = useState(false);
-  const [suggestion, setSuggestion] = useState(null);
+  const [suggestion, setSuggestion] = useState([]);
   const baseURL = import.meta.env.VITE_Base_URL;
 
   const images = [
@@ -83,7 +83,7 @@ export default function SurpriseMe() {
     if (!mood.trim()) return;
 
     setLoading(true);
-    setSuggestion(null);
+    setSuggestion([]);
 
     try {
       const response = await fetch(`${baseURL}/ai`, {
@@ -128,7 +128,7 @@ export default function SurpriseMe() {
 
       setSuggestion((prev) => {
         // Find the FIRST candidate that is NOT already in 'prev'
-        const existingIds = new Set(prev.map((p) => p._id));
+          const existingIds = new Set(prev.map((p) => p._id));
         const nextGem = candidates.find((c) => !existingIds.has(c._id));
 
         if (nextGem) {
@@ -176,26 +176,29 @@ export default function SurpriseMe() {
             </button>
           </div>
 
-          {suggestion && (
-            <div
-              className="suggestion-card fade-in"
-              onClick={() => navigate(`/gems/${suggestion.id}`)}
-              style={{ cursor: "pointer" }}
-            >
-              <img
-                src={suggestion.image}
-                alt={suggestion.name}
-                className="suggestion-image"
-              />
-              <div className="suggestion-info">
-                <h3>{suggestion.name}</h3>
-                <p>{suggestion.description}</p>
-                <div className="suggestion-rating">
-                  ★ {suggestion.rating.toFixed(1)}
+          {suggestion && suggestion.length > 0 && (() => {
+            const current = suggestion[suggestion.length - 1];
+            return (
+              <div
+                className="suggestion-card fade-in"
+                onClick={() => navigate(`/gems/${current._id || current.id}`)}
+                style={{ cursor: "pointer" }}
+              >
+                <img
+                  src={current.image}
+                  alt={current.name}
+                  className="suggestion-image"
+                />
+                <div className="suggestion-info">
+                  <h3>{current.name}</h3>
+                  <p>{current.description}</p>
+                  <div className="suggestion-rating">
+                    ★ {(current.rating || 0).toFixed(1)}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
         </div>
 
         <div className="surprise-right">
