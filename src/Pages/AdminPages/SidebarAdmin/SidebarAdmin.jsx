@@ -217,20 +217,20 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
             {i18n.language === "en" ? t("arabic") : t("english")}
           </div>
 
-          <div className="nav-group bottom-actions flex flex-col justify-start items-start mt-5 gap-2">
+          <div className="nav-group bottom-actions flex flex-col justify-start items-start mt-5 gap-4">
             <button
-              className="sidebar-btn dark-mode-toggle cursor-pointer"
+              className="sidebar-btn hover:w-full hover:bg-slate-500 hover:text-black hover:p-1 hover:rounded-lg cursor-pointer  dark-mode-toggle "
               onClick={() => dispatch(toggleDarkMode())}
             >
               {isDarkMode ? `☀️ ${t("Light Mode")}` : `🌙 ${t("Dark Mode")}`}
             </button>
 
-            <Link to="/" className="sidebar-btn dark-mode-toggle">
+            <Link to="/" className="sidebar-btn hover:w-full hover:bg-slate-500 hover:text-black hover:p-1 hover:rounded-lg cursor-pointer  dark-mode-toggle">
               🏠 {t("Return to Home")}
             </Link>
 
             <button
-              className="sidebar-btn dark-mode-toggle "
+              className="sidebar-btn hover:w-full hover:bg-slate-500 hover:text-black hover:p-1 hover:rounded-lg cursor-pointer  dark-mode-toggle "
               onClick={handleLogout}
             >
               🚪 {t("Sign Out")}
