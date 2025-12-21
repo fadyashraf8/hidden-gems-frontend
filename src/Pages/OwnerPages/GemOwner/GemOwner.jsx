@@ -20,10 +20,12 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingScreen from "@/Pages/LoadingScreen";
+import "./GemOwner.css";
 
 export default function GemOwner() {
   const baseURL = import.meta.env.VITE_Base_URL;
   const { userInfo } = useSelector((state) => state.user || {});
+  const darkEnabled = useSelector((state) => state.darkMode?.enabled);
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
@@ -69,7 +71,7 @@ export default function GemOwner() {
       const response = await axios.get(`${baseURL}/gems/user/${userInfo.id}`, {
         withCredentials: true,
       });
-      console.log("response", response);
+      // console.log("response", response);
 
       if (
         response.data.message === "success" &&
@@ -329,16 +331,16 @@ export default function GemOwner() {
   if (!hasGem) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-          <AlertCircle size={64} className="mx-auto text-gray-400 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8 text-center">
+          <AlertCircle size={64} className="mx-auto text-gray-400 dark:text-gray-300 mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
             No Gem Found
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
             You haven't created any hidden gem yet.
           </p>
           <Link
-            to={"/owner/gem/add"}
+            to={'/owner/gem/add'}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
             Create Your First Gem
@@ -351,24 +353,24 @@ export default function GemOwner() {
   const totalImages = oldImages.length + newImages.length;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className={`${darkEnabled ? 'dark' : ''} max-w-7xl mx-auto px-4 py-8`}>
       {/* Delete Confirmation Modal */}
-      {showDeleteModal && (
+        {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-md w-full p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center">
                 <AlertTriangle size={24} className="text-red-600" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-gray-900">Delete Gem?</h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">Delete Gem?</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">
                   This action cannot be undone
                 </p>
               </div>
             </div>
 
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg p-4 mb-6">
               <p className="text-sm text-red-800 mb-2">
                 <strong>Warning:</strong> Deleting your gem will:
               </p>
@@ -384,7 +386,7 @@ export default function GemOwner() {
               <button
                 onClick={() => setShowDeleteModal(false)}
                 disabled={deleting}
-                className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+                className="flex-1 px-4 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -412,15 +414,15 @@ export default function GemOwner() {
 
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">My Hidden Gem</h1>
-        <p className="text-gray-600">Manage and update your gem information</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">My Hidden Gem</h1>
+        <p className="text-gray-600 dark:text-gray-300">Manage and update your gem information</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Images & Read-Only Info */}
         <div className="lg:col-span-1 space-y-6">
           {/* Status Card */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               Gem Status
             </h3>
@@ -438,10 +440,10 @@ export default function GemOwner() {
                 </span>
               </div>
 
-              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                 <div className="flex items-center gap-2">
                   <Star className="text-yellow-400 fill-current" size={20} />
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-gray-900 dark:text-gray-100">
                     Average Rating
                   </span>
                 </div>
@@ -449,8 +451,7 @@ export default function GemOwner() {
                   {gemInfo.avgRating?.toFixed(1) || "0.0"}
                 </span>
               </div>
-
-              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                 <div className="flex items-center gap-2">
                   <CheckCircle
                     className={
@@ -458,7 +459,7 @@ export default function GemOwner() {
                     }
                     size={20}
                   />
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-gray-900 dark:text-gray-100">
                     Subscription
                   </span>
                 </div>
@@ -474,7 +475,7 @@ export default function GemOwner() {
           </div>
 
           {/* Images Card */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Image size={20} className="text-blue-600" />
               Images ({totalImages}/10) <span className="text-red-500">*</span>
@@ -492,7 +493,7 @@ export default function GemOwner() {
             {/* Old Images */}
             {oldImages.length > 0 && (
               <div className="mb-4">
-                <p className="text-sm font-medium text-gray-700 mb-2">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Current Images
                 </p>
                 <div className="grid grid-cols-2 gap-3">
@@ -501,7 +502,7 @@ export default function GemOwner() {
                       <img
                         src={`${image}`}
                         alt={`Gem ${index + 1}`}
-                        className="w-full h-24 object-cover rounded-lg border-2 border-gray-200"
+                        className="w-full h-24 object-cover rounded-lg border-2 border-gray-200 dark:border-gray-700"
                       />
                       <button
                         type="button"
@@ -528,7 +529,7 @@ export default function GemOwner() {
                       <img
                         src={preview}
                         alt={`New ${index + 1}`}
-                        className="w-full h-24 object-cover rounded-lg border-2 border-blue-200"
+                        className="w-full h-24 object-cover rounded-lg border-2 border-blue-200 dark:border-blue-900"
                       />
                       <button
                         type="button"
@@ -561,7 +562,7 @@ export default function GemOwner() {
           </div>
 
           {/* Timestamps */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
             <h3 className="text-sm font-semibold text-gray-900 mb-3">
               History
             </h3>
@@ -580,7 +581,7 @@ export default function GemOwner() {
           {/* Delete Button */}
           <button
             onClick={() => setShowDeleteModal(true)}
-            className="w-full py-3 px-4 bg-white border-2 border-red-100 text-red-600 rounded-lg hover:bg-red-50 hover:border-red-200 transition-colors font-medium flex items-center justify-center gap-2"
+            className="w-full py-3 px-4 bg-white dark:bg-gray-800 border-2 border-red-100 dark:border-red-700 text-red-600 dark:text-red-300 rounded-lg hover:bg-red-50 dark:hover:bg-red-900 hover:border-red-200 transition-colors font-medium flex items-center justify-center gap-2"
           >
             <Trash size={20} />
             Delete Gem
@@ -590,7 +591,7 @@ export default function GemOwner() {
         {/* Right Column - Form Fields */}
         <div className="lg:col-span-2 space-y-6">
           {/* Basic Information */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Image size={20} className="text-blue-600" />
               Basic Information
@@ -598,7 +599,7 @@ export default function GemOwner() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Gem Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -606,8 +607,8 @@ export default function GemOwner() {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.name ? "border-red-500" : "border-gray-300"
+                  className={`w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                    errors.name ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                   }`}
                   placeholder="Enter gem name"
                 />
@@ -617,7 +618,7 @@ export default function GemOwner() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Location <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
@@ -630,8 +631,8 @@ export default function GemOwner() {
                     name="gemLocation"
                     value={formData.gemLocation}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                      errors.gemLocation ? "border-red-500" : "border-gray-300"
+                    className={`w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                      errors.gemLocation ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                     }`}
                     placeholder="Enter location"
                   />
@@ -644,7 +645,7 @@ export default function GemOwner() {
               </div>
 
    <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Gem Phone Number <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
@@ -657,8 +658,8 @@ export default function GemOwner() {
                     name="gemPhone"
                     value={formData.gemPhone}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                      errors.gemPhone ? "border-red-500" : "border-gray-300"
+                    className={`w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                      errors.gemPhone ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                     }`}
                     placeholder="Enter Gem Phone Number"
                   />
@@ -670,7 +671,7 @@ export default function GemOwner() {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Description <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -678,8 +679,8 @@ export default function GemOwner() {
                   value={formData.description}
                   onChange={handleInputChange}
                   rows="6"
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none ${
-                    errors.description ? "border-red-500" : "border-gray-300"
+                  className={`gemowner-textarea w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none ${
+                    errors.description ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                   }`}
                   placeholder="Enter detailed description"
                 />
@@ -691,15 +692,15 @@ export default function GemOwner() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Category <span className="text-red-500">*</span>
                 </label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.category ? "border-red-500" : "border-gray-300"
+                  className={`w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                    errors.category ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                   }`}
                 >
                   <option value="">Select Category</option>
@@ -717,14 +718,14 @@ export default function GemOwner() {
           </div>
 
           {/* Discounts & Settings */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
               Discount Settings
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Free Tier (%)
                 </label>
                 <input
@@ -734,8 +735,8 @@ export default function GemOwner() {
                   onChange={handleInputChange}
                   min="0"
                   max="100"
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.discount ? "border-red-500" : "border-gray-300"
+                  className={`w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                    errors.discount ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                   }`}
                 />
                 {errors.discount && (
@@ -744,7 +745,7 @@ export default function GemOwner() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Gold Tier (%)
                 </label>
                 <input
@@ -754,8 +755,8 @@ export default function GemOwner() {
                   onChange={handleInputChange}
                   min="0"
                   max="100"
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.discountGold ? "border-red-500" : "border-gray-300"
+                  className={`w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                    errors.discountGold ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                   }`}
                 />
                 {errors.discountGold && (
@@ -766,7 +767,7 @@ export default function GemOwner() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Platinum Tier (%)
                 </label>
                 <input
@@ -776,10 +777,10 @@ export default function GemOwner() {
                   onChange={handleInputChange}
                   min="0"
                   max="100"
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
                     errors.discountPlatinum
                       ? "border-red-500"
-                      : "border-gray-300"
+                      : "border-gray-300 dark:border-gray-600"
                   }`}
                 />
                 {errors.discountPlatinum && (
@@ -814,7 +815,7 @@ export default function GemOwner() {
 
             <Link
               to="/"
-              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium"
             >
               Cancel
             </Link>

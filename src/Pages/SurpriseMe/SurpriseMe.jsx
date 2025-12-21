@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BounceCards from "../../Components/BounceCards/BounceCards";
-import { Sparkles, Frown } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import GemCard from "../../Components/Gems/GemCard";
 import "./SurpriseMe.css";
 
 export default function SurpriseMe() {
@@ -12,8 +11,7 @@ export default function SurpriseMe() {
 
   const [mood, setMood] = useState("");
   const [loading, setLoading] = useState(false);
-  const [suggestions, setSuggestions] = useState([]);
-  const [hasSearched, setHasSearched] = useState(false);
+  const [suggestion, setSuggestion] = useState(null);
   const baseURL = import.meta.env.VITE_Base_URL;
 
   const images = [
@@ -27,9 +25,8 @@ export default function SurpriseMe() {
   // Responsive configuration for BounceCards
   const getResponsiveConfig = () => {
     const width = window.innerWidth;
-
-    if (width < 640) {
-      // Mobile
+    
+    if (width < 640) { // Mobile
       return {
         containerWidth: Math.min(width - 40, 300),
         containerHeight: Math.min(width - 40, 300),
@@ -42,8 +39,7 @@ export default function SurpriseMe() {
         ],
         enableHover: false, // Disable hover on mobile
       };
-    } else if (width < 1024) {
-      // Tablet
+    } else if (width < 1024) { // Tablet
       return {
         containerWidth: 350,
         containerHeight: 350,
@@ -56,8 +52,7 @@ export default function SurpriseMe() {
         ],
         enableHover: true,
       };
-    } else {
-      // Desktop
+    } else { // Desktop
       return {
         containerWidth: 500,
         containerHeight: 500,
@@ -88,7 +83,7 @@ export default function SurpriseMe() {
     if (!mood.trim()) return;
 
     setLoading(true);
-    setHasSearched(true);
+    setSuggestion(null);
 
     try {
       const response = await fetch(`${baseURL}/ai`, {
@@ -104,7 +99,7 @@ export default function SurpriseMe() {
       }
 
       const data = await response.json();
-      console.log("AI Response Data:", data);
+      // console.log("AI Response Data:", data);
 
       // Build a pool of potential candidates from the AI response
       let candidates = [];
@@ -146,46 +141,11 @@ export default function SurpriseMe() {
       });
     } catch (error) {
       console.error("Error fetching suggestion:", error);
+      alert(t("errorMessage"));
     } finally {
       setLoading(false);
     }
   };
-
-  const renderResults = () => (
-    <div className="w-full max-w-sm mx-auto h-[450px] relative">
-      <div className="w-full h-full overflow-y-auto pr-1 custom-scrollbar">
-        <div className="grid grid-cols-1 gap-6 pb-2">
-          {suggestions.map((gem) => (
-            <div key={gem._id} className="h-full">
-              <GemCard gem={gem} darkMode={true} />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Scroll Indicator - Floating below */}
-      {suggestions.length > 1 && (
-        <div className="absolute -bottom-12 left-0 right-0 flex justify-center pointer-events-none z-10">
-          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg text-gray-600 dark:text-gray-300 text-sm font-medium flex items-center gap-2 animate-bounce border border-gray-100 dark:border-gray-700">
-            <span>Scroll for more</span>
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-              ></path>
-            </svg>
-          </div>
-        </div>
-      )}
-    </div>
-  );
 
   return (
     <div className={`surprise-container ${i18n.dir()}`}>
@@ -207,107 +167,49 @@ export default function SurpriseMe() {
               rows={4}
             />
 
-            {/* Button Group */}
-            <div className="flex flex-col gap-3">
-              <button
-                className={`surprise-btn ${loading ? "loading" : ""} ${
-                  suggestions.length >= 3 ? "bg-gray-800 hover:bg-gray-900" : ""
-                }`}
-                onClick={
-                  suggestions.length >= 3
-                    ? () => {
-                        setSuggestions([]);
-                        setHasSearched(false);
-                        setMood("");
-                      }
-                    : handleSurprise
-                }
-                disabled={loading || (suggestions.length < 3 && !mood.trim())}
-              >
-                {loading
-                  ? t("loading")
-                  : suggestions.length >= 3
-                  ? "Start New Search 🔄"
-                  : suggestions.length > 0
-                  ? "Add Another Gem 💎"
-                  : t("button")}
-              </button>
-
-              {/* Helper Messages */}
-              {!loading && (
-                <div className="min-h-[24px] text-center">
-                  {suggestions.length >= 3 ? (
-                    <p className="text-xs text-orange-600 dark:text-orange-400 font-medium animate-pulse">
-                      Maximum of 3 gems reached. Save your favorites!
-                    </p>
-                  ) : suggestions.length > 0 ? (
-                    <p className="text-xs text-purple-600 dark:text-purple-400 font-medium">
-                      Store up to 3 gems at once ({suggestions.length}/3)
-                    </p>
-                  ) : null}
-                </div>
-              )}
-            </div>
+            <button
+              className={`surprise-btn ${loading ? "loading" : ""}`}
+              onClick={handleSurprise}
+              disabled={loading || !mood.trim()}
+            >
+              {loading ? t("loading") : t("button")}
+            </button>
           </div>
 
-          {/* No Results Message */}
-          {hasSearched && !loading && suggestions.length === 0 && (
-            <div className="mt-8 p-6 bg-red-50 dark:bg-red-900/20 rounded-2xl border border-red-100 dark:border-red-900/30 flex items-center gap-4 animate-fadeIn">
-              <div className="bg-red-100 dark:bg-red-900/50 p-3 rounded-full">
-                <Frown className="w-6 h-6 text-red-500" />
-              </div>
-              <div>
-                <h3 className="font-bold text-red-900 dark:text-red-200">
-                  Oops! No gems found.
-                </h3>
-                <p className="text-red-700 dark:text-red-300 text-sm">
-                  Our AI couldn't match that vibe. Try "Romantic dinner" or
-                  "Cozy cafe".
-                </p>
+          {suggestion && (
+            <div
+              className="suggestion-card fade-in"
+              onClick={() => navigate(`/gems/${suggestion.id}`)}
+              style={{ cursor: "pointer" }}
+            >
+              <img
+                src={suggestion.image}
+                alt={suggestion.name}
+                className="suggestion-image"
+              />
+              <div className="suggestion-info">
+                <h3>{suggestion.name}</h3>
+                <p>{suggestion.description}</p>
+                <div className="suggestion-rating">
+                  ★ {suggestion.rating.toFixed(1)}
+                </div>
               </div>
             </div>
-          )}
-
-          {/* MOBILE ONLY: Results appear below button */}
-          {suggestions.length > 0 && (
-            <div className="block lg:hidden w-full mt-4">{renderResults()}</div>
           )}
         </div>
 
         <div className="surprise-right">
-          {/* DESKTOP: Toggle between Results and Cards */}
-          <div className="hidden lg:block w-full">
-            {suggestions.length > 0 ? (
-              renderResults()
-            ) : (
-              <BounceCards
-                className="custom-bounce-cards"
-                images={images}
-                containerWidth={cardConfig.containerWidth}
-                containerHeight={cardConfig.containerHeight}
-                animationDelay={1}
-                animationStagger={0.08}
-                easeType="elastic.out(1, 0.5)"
-                transformStyles={cardConfig.transformStyles}
-                enableHover={cardConfig.enableHover}
-              />
-            )}
-          </div>
-
-          {/* MOBILE: Always show cards (on top due to flex-col-reverse) */}
-          <div className="block lg:hidden w-full opacity-80 scale-90">
-            <BounceCards
-              className="custom-bounce-cards"
-              images={images}
-              containerWidth={cardConfig.containerWidth}
-              containerHeight={cardConfig.containerHeight}
-              animationDelay={1}
-              animationStagger={0.08}
-              easeType="elastic.out(1, 0.5)"
-              transformStyles={cardConfig.transformStyles}
-              enableHover={cardConfig.enableHover}
-            />
-          </div>
+          <BounceCards
+            className="custom-bounce-cards"
+            images={images}
+            containerWidth={cardConfig.containerWidth}
+            containerHeight={cardConfig.containerHeight}
+            animationDelay={1}
+            animationStagger={0.08}
+            easeType="elastic.out(1, 0.5)"
+            transformStyles={cardConfig.transformStyles}
+            enableHover={cardConfig.enableHover}
+          />
         </div>
       </div>
     </div>

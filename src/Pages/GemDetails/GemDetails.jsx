@@ -94,7 +94,7 @@ const GemDetails = () => {
         { withCredentials: true }
       );
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }, [id]);
 
@@ -170,7 +170,8 @@ const GemDetails = () => {
 
   useEffect(() => {
     fetchGemRatings();
-  }, [fetchGemRatings]);
+    console.log("userInfo", userInfo);
+  }, [fetchGemRatings, userInfo]);
 
   // --- Review State ---
   const [reviewsLoading, setReviewsLoading] = useState(false);
@@ -249,7 +250,7 @@ const GemDetails = () => {
       } else {
         const gemData = data.gem || data.result || data;
         setGem(gemData);
-        console.log(gemData);
+        // console.log(gemData);
       }
     } catch {
       setError("Failed to load this gem. Please try again.");
@@ -439,7 +440,8 @@ const GemDetails = () => {
       return;
     }
 
-    const needsToggle = el.scrollHeight - el.clientHeight > 2;
+    // Check if content is taller than collapsed height
+    const needsToggle = el.scrollHeight > COLLAPSED_ABOUT_HEIGHT + 2;
     setAboutToggleVisible(needsToggle);
   }, [aboutExpanded, aboutText]);
 
@@ -798,6 +800,13 @@ const GemDetails = () => {
     setTimeout(() => {
       fetchGemDetails();
     }, 500);
+
+    // Reload page after editing to ensure fresh data
+    if (editingExisting) {
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
   };
 
   const handleRatingChange = (value) => {
@@ -1284,8 +1293,8 @@ const GemDetails = () => {
                     </h4>
 
                     {/* Subscription Voucher */}
-                    {userInfo?.Subscription === "gold" ||
-                    userInfo?.Subscription === "platinum" ? (
+                    {userInfo?.subscription === "gold" ||
+                    userInfo?.subscription === "platinum" ? (
                       <button
                         onClick={createVoucher}
                         disabled={isCreatingVoucher}
@@ -1390,7 +1399,7 @@ const GemDetails = () => {
                               </button>
                             </div>
                             <p className="text-xs text-gray-500 dark:text-gray-400">
-                              Enter the number of points you want to use
+                              Enter the number of points you want to use (1 Point = 1 EGP)
                             </p>
                           </>
                         ) : (

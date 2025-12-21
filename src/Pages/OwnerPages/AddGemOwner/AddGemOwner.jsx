@@ -17,6 +17,7 @@ export default function AddGemOwner() {
   const navigate = useNavigate();
   const baseURL = import.meta.env.VITE_Base_URL;
   const { userInfo } = useSelector((state) => state.user || {});
+  const isDarkMode = useSelector((state) => state.darkMode.enabled);
 
   const [saving, setSaving] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -197,24 +198,24 @@ export default function AddGemOwner() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className={`max-w-7xl mx-auto ${isDarkMode ? "dark" : ""}`}>
       <div className="mb-6">
         <Link
           to="/owner/gems"
-          className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4 transition-colors"
+          className="inline-flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 mb-4 transition-colors"
         >
           <ArrowLeft size={20} className="mr-2" />
           Back to Gems
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Add Hidden Gem</h1>
-        <p className="text-gray-600 mt-2">Create a new hidden gem</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Add Hidden Gem</h1>
+        <p className="text-gray-600 dark:text-gray-300 mt-2">Create a new hidden gem</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Images */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow-sm p-6 sticky top-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 sticky top-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
               <Image size={20} className="text-blue-600" />
               Images ({images.length}/10){" "}
               <span className="text-red-500">*</span>
@@ -236,7 +237,7 @@ export default function AddGemOwner() {
                     <img
                       src={preview}
                       alt={`Preview ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-lg border-2 border-blue-200"
+                      className="w-full h-24 object-cover rounded-lg border-2 border-blue-200 dark:border-blue-900"
                     />
                     <button
                       type="button"
@@ -259,7 +260,7 @@ export default function AddGemOwner() {
                   onChange={handleImageChange}
                   className="hidden"
                 />
-                <div className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors cursor-pointer border-2 border-blue-200">
+                <div className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors cursor-pointer border-2 border-blue-200 dark:bg-transparent dark:text-blue-300 dark:border-blue-900 dark:hover:bg-blue-800">
                   <Upload size={20} />
                   <span className="font-medium">
                     {images.length === 0 ? "Upload Images" : "Add More Images"}
@@ -268,7 +269,7 @@ export default function AddGemOwner() {
               </label>
             )}
 
-            <p className="text-xs text-gray-500 mt-3 text-center">
+            <p className="text-xs text-gray-500 dark:text-gray-300 mt-3 text-center">
               Required: At least 1 image
               <br />
               Max: 10 images, 5MB each
@@ -281,15 +282,15 @@ export default function AddGemOwner() {
         {/* Right Column - Form Fields */}
         <div className="lg:col-span-2 space-y-6">
           {/* Basic Information */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
               <Image size={20} className="text-blue-600" />
               Basic Information
             </h3>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Gem Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -297,8 +298,8 @@ export default function AddGemOwner() {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.name ? "border-red-500" : "border-gray-300"
+                  className={`w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                    errors.name ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                   }`}
                   placeholder="Enter gem name (min 3 characters)"
                 />
@@ -308,12 +309,12 @@ export default function AddGemOwner() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Location <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <MapPin
-                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-300"
                     size={18}
                   />
                   <input
@@ -321,8 +322,8 @@ export default function AddGemOwner() {
                     name="gemLocation"
                     value={formData.gemLocation}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                      errors.gemLocation ? "border-red-500" : "border-gray-300"
+                    className={`w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                      errors.gemLocation ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                     }`}
                     placeholder="Enter location"
                   />
@@ -335,7 +336,7 @@ export default function AddGemOwner() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Description <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -343,8 +344,8 @@ export default function AddGemOwner() {
                   value={formData.description}
                   onChange={handleInputChange}
                   rows="6"
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none ${
-                    errors.description ? "border-red-500" : "border-gray-300"
+                  className={`w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none ${
+                    errors.description ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                   }`}
                   placeholder="Enter detailed description (min 10 characters)"
                 />
@@ -356,15 +357,15 @@ export default function AddGemOwner() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Category <span className="text-red-500">*</span>
                 </label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.category ? "border-red-500" : "border-gray-300"
+                  className={`w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                    errors.category ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                   }`}
                 >
                   <option value="">Select Category</option>
@@ -382,14 +383,14 @@ export default function AddGemOwner() {
           </div>
 
           {/* Discounts & Settings */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
               Discount Settings
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Free Tier Discount (%)
                 </label>
                 <input
@@ -399,8 +400,8 @@ export default function AddGemOwner() {
                   onChange={handleInputChange}
                   min="0"
                   max="100"
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.discount ? "border-red-500" : "border-gray-300"
+                  className={`w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                    errors.discount ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                   }`}
                   placeholder="0"
                 />
@@ -410,7 +411,7 @@ export default function AddGemOwner() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Gold Tier Discount (%)
                 </label>
                 <input
@@ -420,8 +421,8 @@ export default function AddGemOwner() {
                   onChange={handleInputChange}
                   min="0"
                   max="100"
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.discountGold ? "border-red-500" : "border-gray-300"
+                  className={`w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                    errors.discountGold ? "border-red-500" : "border-gray-300 dark:border-gray-600"
                   }`}
                   placeholder="0"
                 />
@@ -433,7 +434,7 @@ export default function AddGemOwner() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Platinum Tier Discount (%)
                 </label>
                 <input
@@ -443,10 +444,10 @@ export default function AddGemOwner() {
                   onChange={handleInputChange}
                   min="0"
                   max="100"
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
                     errors.discountPlatinum
                       ? "border-red-500"
-                      : "border-gray-300"
+                      : "border-gray-300 dark:border-gray-600"
                   }`}
                   placeholder="0"
                 />

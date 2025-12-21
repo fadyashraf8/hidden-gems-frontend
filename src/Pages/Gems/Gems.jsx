@@ -7,7 +7,7 @@ import axios from "axios";
 export default function Gems() {
     const [selectedGem, setSelectedGem] = useState(null); //nothing selected
     const handleSelectedGem = (gemId) => {
-        console.log("Selected gem ID:", gemId);
+        // console.log("Selected gem ID:", gemId);
         setSelectedGem(gemId);
     }
     const [gemsData, setGemsData] = useState([]);

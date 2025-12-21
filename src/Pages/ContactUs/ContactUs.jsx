@@ -68,7 +68,7 @@ export default function ContactUsPage() {
 
       const result = await res.json();
 
-      console.log(result);
+      // console.log(result);
       
 
       if (!res.ok) {

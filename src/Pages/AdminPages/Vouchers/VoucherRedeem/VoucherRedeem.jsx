@@ -3,11 +3,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 export default function VoucherRedeem() {
     const { t } = useTranslation("Vouchers");
-  
+  const navigate = useNavigate();
   const { id } = useParams();
   const [voucher, setVoucher] = useState(null);
   const [loading, setLoading] = useState(true);  
@@ -23,7 +23,7 @@ export default function VoucherRedeem() {
         { withCredentials: true }
       );
       setVoucher(response.data.voucher || null);   
-      console.log(response.data.voucher);
+      // console.log(response.data.voucher);
          
     } catch (error) {
       console.error("Error fetching voucher details:", error.response?.data?.error);
@@ -40,8 +40,9 @@ export default function VoucherRedeem() {
         { desicion: action },
         { withCredentials: true }
       );
-      console.log("Voucher redeemed:", response.data);
+      // console.log("Voucher redeemed:", response.data);
       toast.success(`${action}`)
+      navigate('/owner/transactions');
     } catch (error) {
       console.error("Error redeeming voucher:", error.response?.data?.error);
     }

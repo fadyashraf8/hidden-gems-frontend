@@ -50,6 +50,10 @@ export default function AllVouchers() {
           });
           const fetchedGemId = response.data.result[0]?._id;
           console.log("gemId", fetchedGemId);
+          if (!fetchedGemId) {
+            console.log(setLoading(false));
+
+          }
           setGemId(fetchedGemId);
         } catch (err) {
           console.error("Error fetching gemId:", err);
@@ -300,11 +304,10 @@ export default function AllVouchers() {
                     <div className="flex items-center gap-2">
                       <Calendar size={14} className="text-gray-400" />
                       <span
-                        className={`text-sm ${
-                          isExpired(voucher.expiryDate)
+                        className={`text-sm ${isExpired(voucher.expiryDate)
                             ? "text-red-600 font-semibold"
                             : "text-gray-900"
-                        }`}
+                          }`}
                       >
                         {formatDate(voucher.expiryDate)}
                       </span>
@@ -340,9 +343,8 @@ export default function AllVouchers() {
           })}
         </div>
         <div
-          className={`flex gap-2 ${
-            i18n.language === "ar" ? "flex-row-reverse" : ""
-          }`}
+          className={`flex gap-2 ${i18n.language === "ar" ? "flex-row-reverse" : ""
+            }`}
         >
           <button
             onClick={() => goToPage(Math.max(1, currentPage - 1))}

@@ -203,7 +203,7 @@ export default function ReportDetails() {
         { withCredentials: true }
       )
       .then((response) => {
-          console.log("ooooooooo",response);
+          // console.log("ooooooooo",response);
 
      
           // Add the new reply to the existing replies

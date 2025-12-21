@@ -340,6 +340,8 @@ function App() {
         </ProtectedRoute>
       ),
       children: [
+                { index: true, element: <HomeOwner /> },
+
         { path: "dashboard", element: <HomeOwner /> },
         { path: "gem", element: <GemOwner /> },
         { path: "gem/add", element: <AddGem /> },

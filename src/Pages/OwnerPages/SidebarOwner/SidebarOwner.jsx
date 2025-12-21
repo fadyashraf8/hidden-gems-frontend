@@ -168,36 +168,37 @@ export default function SidebarOwner({ isCollapsed, setIsCollapsed }) {
           ))}
 
           {/* Language Toggle */}
-          <div
-            className="sidebar-btn language-toggle"
+          <button
+            type="button"
             onClick={() => {
               const newLang = i18n.language === "en" ? "ar" : "en";
               i18n.changeLanguage(newLang);
             }}
+            className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-slate-700 text-slate-200"
           >
-            <TranslateTwoToneIcon
-              style={{ cursor: "pointer", marginRight: "10px" }}
-            />
-            {i18n.language === "en" ? t("arabic") : t("english")}
-          </div>
+            <TranslateTwoToneIcon style={{ marginRight: 8 }} />
+            <span className="font-medium">{i18n.language === "en" ? t("arabic") : t("english")}</span>
+          </button>
 
           <div className="nav-group bottom-actions">
             <button
-              className="sidebar-btn dark-mode-toggle"
+              type="button"
+              className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-slate-700 text-slate-200"
               onClick={() => dispatch(toggleDarkMode())}
             >
-              {isDarkMode ? `☀️ ${t("Light Mode")}` : `🌙 ${t("Dark Mode")}`}
+              <span className="font-medium">{isDarkMode ? `☀️ ${t("Light Mode")}` : `🌙 ${t("Dark Mode")}`}</span>
             </button>
 
-            <Link to="/" className="sidebar-btn dark-mode-toggle">
-              🏠 {t("Return to Home")}
+            <Link to="/" className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-slate-700 text-slate-200">
+              <span className="font-medium">🏠 {t("Return to Home")}</span>
             </Link>
 
             <button
-              className="sidebar-btn dark-mode-toggle"
+              type="button"
+              className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-slate-700 text-slate-200"
               onClick={handleLogout}
             >
-              🚪 {t("Sign Out")}
+              <span className="font-medium">🚪 {t("Sign Out")}</span>
             </button>
           </div>
         </nav>

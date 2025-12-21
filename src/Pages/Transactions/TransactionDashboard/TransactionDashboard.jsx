@@ -33,6 +33,7 @@ function TransactionModal({ isOpen, onClose, transactionId }) {
         `${import.meta.env.VITE_Base_URL}/transaction/${transactionId}`,
         { withCredentials: true }
       );
+      
       setDetails(res.data);
     } catch (err) {
       console.error("Error fetching transaction details:", err);
@@ -168,6 +169,7 @@ export default function TransactionDashboard() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [gemId, setGemId] = useState(null);
+  const isDarkMode = useSelector((state) => state.darkMode.enabled);
 
   // Modal States
   const [selectedTransactionId, setSelectedTransactionId] = useState(null);
@@ -199,7 +201,12 @@ export default function TransactionDashboard() {
             withCredentials: true,
           });
           const fetchedGemId = response.data.result[0]?._id;
-          console.log("gemId", fetchedGemId);
+          // console.log("gemId", fetchedGemId);
+    if (!fetchedGemId) {
+            console.log(setLoading(false));
+
+          }
+
           setGemId(fetchedGemId);
         } catch (err) {
           console.error("Error fetching gemId:", err);
@@ -306,7 +313,7 @@ export default function TransactionDashboard() {
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-sm">
+      <div className={`${isDarkMode ? 'dark' : ''}bg-white rounded-lg shadow-sm`}>
         {/* Header */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
@@ -340,23 +347,23 @@ export default function TransactionDashboard() {
               onChange={handleStatusFilter}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="">All Status</option>
-              <option value="accept">Accepted</option>
-              <option value="pending">Pending</option>
-              <option value="reject">Rejected</option>
+              <option className="dark:text-black" value="">All Status</option>
+              <option className="dark:text-black"  value="accept">Accepted</option>
+              <option className="dark:text-black"  value="pending">Pending</option>
+              <option className="dark:text-black"  value="reject">Rejected</option>
             </select>
             <select
               value={sortBy}
               onChange={handleSort}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="">Sort By</option>
-              <option value="code">Code (A-Z)</option>
-              <option value="-code">Code (Z-A)</option>
-              <option value="discount">Discount (Low to High)</option>
-              <option value="-discount">Discount (High to Low)</option>
-              <option value="redeemedAt">Date (Oldest First)</option>
-              <option value="-redeemedAt">Date (Newest First)</option>
+              <option className="dark:text-black"  value="">Sort By</option>
+              <option className="dark:text-black"  value="code">Code (A-Z)</option>
+              <option className="dark:text-black"  value="-code">Code (Z-A)</option>
+              <option className="dark:text-black"  value="discount">Discount (Low to High)</option>
+              <option className="dark:text-black"  value="-discount">Discount (High to Low)</option>
+              <option className="dark:text-black"  value="redeemedAt">Date (Oldest First)</option>
+              <option className="dark:text-black"  value="-redeemedAt">Date (Newest First)</option>
             </select>
           </div>
 
@@ -402,7 +409,7 @@ export default function TransactionDashboard() {
               </tr>
             </thead>
 
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="dark:bg-gray-900 bg-white divide-y divide-gray-200">
               {transactions.length === 0 ? (
                 <tr>
                   <td colSpan="8" className="px-6 py-8 text-center text-gray-500">

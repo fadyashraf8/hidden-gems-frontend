@@ -6,21 +6,23 @@ const BASE_URL = import.meta.env.VITE_Base_URL;
 const CreateGem = ({ onGemCreated }) => {
   const [categories, setCategories] = useState([]);
   const [errors, setErrors] = useState({});
-    const { t } = useTranslation("AddPlace");
+  const { t } = useTranslation("AddPlace");
   // 1. Initialize images as an empty array
   const [formData, setFormData] = useState({
     name: "",
     gemLocation: "",
-    gemPhone: "", 
+    gemPhone: "",
     category: "",
-    images: [], 
+    images: [],
   });
 
   // Fetch Categories
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const res = await fetch(`${BASE_URL}/categories`, { credentials: "include" });
+        const res = await fetch(`${BASE_URL}/categories`, {
+          credentials: "include",
+        });
         if (res.ok) {
           const data = await res.json();
           setCategories(data.result || []);
@@ -48,15 +50,27 @@ const CreateGem = ({ onGemCreated }) => {
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = "Business Name is required";
-    if (!formData.gemLocation.trim()) newErrors.gemLocation = "Address is required";
+    if (!formData.gemLocation.trim())
+      newErrors.gemLocation = "Address is required";
     if (!formData.category) newErrors.category = "Please select a category";
+    if (formData.gemPhone && !/^01[0125][0-9]{8}$/.test(formData.gemPhone)) {
+      newErrors.gemPhone = "Invalid Phone Number";
+    }
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return newErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return toast.error("Please fix the errors");
+    const formErrors = validateForm();
+    if (Object.keys(formErrors).length > 0) {
+      if (formErrors.gemPhone) {
+        toast.error("Invalid Phone Number");
+      } else {
+        toast.error("Please fix the errors");
+      }
+      return;
+    }
 
     try {
       const dataToSend = new FormData();
@@ -81,10 +95,9 @@ const CreateGem = ({ onGemCreated }) => {
       if (!res.ok) throw new Error(data.message || "Failed to create Gem");
 
       toast.success("Place added! Now add a review.");
-      
+
       // Pass ID and Name back to the Wizard
       onGemCreated(data.result._id || data._id, formData.name);
-
     } catch (err) {
       console.error("Error creating gem:", err);
       toast.error(err?.response?.data?.error || "Something went wrong");
@@ -138,22 +151,19 @@ const CreateGem = ({ onGemCreated }) => {
             )}
           </div>
 
-
-       <div>
-            <label className="block font-medium">
-              {t("gemPhone")} 
-            </label>
+          <div>
+            <label className="block font-medium">{t("gemPhone")}</label>
             <input
               type="text"
               name="gemPhone"
               value={formData.gemPhone}
               onChange={handleInputChange}
+              placeholder="01xxxxxxxxx"
               className={`w-full p-2 border rounded ${
-                errors.gemPhone
-                  ? "border-red-500 bg-red-50"
-                  : "border-gray-300"
+                errors.gemPhone ? "border-red-500 bg-red-50" : "border-gray-300"
               }`}
             />
+            <p className="text-xs text-gray-500 mt-1">Format: 01xxxxxxxxx</p>
             {errors.gemPhone && (
               <p className="text-red-500 text-xs mt-1">{errors.gemPhone}</p>
             )}

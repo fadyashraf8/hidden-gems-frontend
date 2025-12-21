@@ -7,6 +7,7 @@ export default function HomeOwner() {
   const { userInfo } = useSelector((state) => state.user || {});
   const [gems, setGems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const isDarkMode = useSelector(state => state.darkMode.enabled);
 
   const fetchMyGems = useCallback(async () => {
     if (!userInfo?.id) return;
@@ -40,7 +41,7 @@ export default function HomeOwner() {
   }, [fetchMyGems]);
 
   return (
-    <div className="p-4">
+    <div className={`p-4 ${isDarkMode ? 'dark' : ''}`}>
       <h2 className="text-2xl font-bold mb-4">My Gems</h2>
       {loading ? (
         <p>Loading...</p>
@@ -49,7 +50,7 @@ export default function HomeOwner() {
           {gems.map((gem) => (
             <div
               key={gem._id}
-              className="mb-4 p-4 border rounded shadow-sm bg-white"
+              className="mb-4 p-4 border rounded shadow-sm dark:bg-gray-800 bg-white"
             >
               <h4 className="font-bold text-lg">{gem.name}</h4>
               <p className="text-gray-600">

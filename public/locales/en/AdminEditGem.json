@@ -43,6 +43,7 @@
     "images": "At least one image is required"
   },
   "toast": {
+    "statusUpdated": "Gem status updated successfully",
     "failedLoad": "Failed to load gem data",
     "maxImages": "Maximum 10 images allowed in total",
     "imageTooLarge": "{{name}} is larger than 5MB",
