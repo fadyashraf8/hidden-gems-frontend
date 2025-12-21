@@ -63,12 +63,12 @@ const GemCard = ({
   const getStatusBadge = () => {
     const status = gem.status || "pending";
     return status.toLowerCase() === "accepted" ? (
-      <div className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1">
+      <div className="absolute top-3 left-3 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1 z-10">
         <CheckCircle className="w-3 h-3" />
         Accepted
       </div>
     ) : (
-      <div className="absolute top-3 right-3 bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1">
+      <div className="absolute top-3 left-3 bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1 z-10">
         <AlertCircle className="w-3 h-3" />
         Pending
       </div>

@@ -1,4 +1,4 @@
-import './ContactUs.css'
+import "./ContactUs.css";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Card, Input, Textarea, Button } from "@heroui/react";
@@ -9,6 +9,9 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useTranslation } from "react-i18next";
 import toast, { Toaster } from "react-hot-toast";
 import LoadingScreen from "../LoadingScreen";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Lock } from "lucide-react";
 
 const InfoItem = ({ icon: Icon, title, subtitle }) => (
   <div className="flex gap-4 mb-6">
@@ -25,16 +28,26 @@ const InfoItem = ({ icon: Icon, title, subtitle }) => (
 export default function ContactUsPage() {
   const { t, i18n } = useTranslation("ContactUs");
   const isRTL = i18n.language === "ar";
-
+  const navigate = useNavigate();
+  const { isLoggedIn, userInfo } = useSelector((state) => state.user || {});
 
   const {
     register,
     handleSubmit,
     reset,
     setError,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm();
- useEffect(() => {
+
+  // Pre-fill email if user is logged in
+  useEffect(() => {
+    if (isLoggedIn && userInfo?.email) {
+      setValue("email", userInfo.email);
+    }
+  }, [isLoggedIn, userInfo, setValue]);
+
+  useEffect(() => {
     Object.keys(errors).forEach((field) => {
       const error = errors[field];
       if (error?.type === "required") {
@@ -60,16 +73,21 @@ export default function ContactUsPage() {
 
   const onSubmit = async (data) => {
     try {
+      // Ensure email is included if pre-filled
+      const submissionData = {
+        ...data,
+        email: isLoggedIn && userInfo?.email ? userInfo.email : data.email,
+      };
+
       const res = await fetch(`${import.meta.env.VITE_Base_URL}/contactus`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(submissionData),
       });
 
       const result = await res.json();
 
       // console.log(result);
-      
 
       if (!res.ok) {
         toast.error(result.message || t("contact.sent-failed"));
@@ -78,6 +96,9 @@ export default function ContactUsPage() {
 
       toast.success(t("contact.sent-success"));
       reset();
+      if (isLoggedIn && userInfo?.email) {
+        setValue("email", userInfo.email);
+      }
     } catch {
       toast.error(t("contact.sent-failed"));
     }
@@ -85,10 +106,44 @@ export default function ContactUsPage() {
 
   return (
     <div
-      className="min-h-screen bg-gray-50 py-16 px-4"
+      className="min-h-screen bg-gray-50 py-16 px-4 relative"
       dir={isRTL ? "rtl" : "ltr"}
     >
       <Toaster position="top-right" />
+
+      {/* Blur Overlay for Non-Authenticated Users */}
+      {!isLoggedIn && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-zinc-800 rounded-2xl p-8 max-w-md w-full shadow-2xl animate-fadeIn">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4">
+                <Lock className="w-8 h-8 text-red-600 dark:text-red-400" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                Sign In Required
+              </h2>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Please sign in to contact us. We need to verify your identity to
+                process your message.
+              </p>
+              <div className="flex gap-3 w-full">
+                <button
+                  onClick={() => navigate("/login")}
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl transition-all transform hover:-translate-y-0.5 shadow-lg"
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={() => navigate("/")}
+                  className="flex-1 bg-gray-200 hover:bg-gray-300 dark:bg-zinc-700 dark:hover:bg-zinc-600 text-gray-900 dark:text-white font-bold py-3 px-6 rounded-xl transition-all"
+                >
+                  Go Home
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="text-center mb-12">
         <h1 className="text-4xl font-extrabold text-gray-900 mb-2">
@@ -112,7 +167,7 @@ export default function ContactUsPage() {
           <InfoItem
             icon={EmailIcon}
             title={t("contact.email-title")}
-            subtitle={t("contact.email-desc")}
+            subtitle="support@hiddengemsy.com"
           />
         </div>
 
@@ -137,7 +192,6 @@ export default function ContactUsPage() {
                     },
                   })}
                   isInvalid={!!errors.firstName}
-                  
                   errorMessage={errors.firstName?.message}
                 />
 
@@ -158,15 +212,28 @@ export default function ContactUsPage() {
               <Input
                 label={t("contact.email")}
                 type="email"
-                {...register("email", {
-                  required: t("contact.errors.email"),
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: t("contact.errors.email-invalid"),
-                  },
-                })}
+                {...(isLoggedIn && userInfo?.email
+                  ? { value: userInfo.email }
+                  : register("email", {
+                      required: t("contact.errors.email"),
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: t("contact.errors.email-invalid"),
+                      },
+                    }))}
                 isInvalid={!!errors.email}
                 errorMessage={errors.email?.message}
+                isReadOnly={isLoggedIn && !!userInfo?.email}
+                className={
+                  isLoggedIn && userInfo?.email
+                    ? "bg-gray-100 dark:bg-zinc-700/30 rounded-xl"
+                    : ""
+                }
+                description={
+                  isLoggedIn && userInfo?.email
+                    ? "Email is pre-filled from your account"
+                    : ""
+                }
               />
 
               <Textarea
