@@ -126,7 +126,7 @@ export default function SurpriseMe() {
         }
       }
 
-      setSuggestions((prev) => {
+      setSuggestion((prev) => {
         // Find the FIRST candidate that is NOT already in 'prev'
         const existingIds = new Set(prev.map((p) => p._id));
         const nextGem = candidates.find((c) => !existingIds.has(c._id));

@@ -172,9 +172,7 @@ const GemDetails = () => {
 
   useEffect(() => {
     fetchGemRatings();
-    console.log("userInfo",userInfo);
-
-  }, [fetchGemRatings,userInfo]);
+  }, [fetchGemRatings]);
 
   // --- Review State ---
   const [reviewsLoading, setReviewsLoading] = useState(false);
@@ -265,7 +263,6 @@ const GemDetails = () => {
 
   useEffect(() => {
     fetchGemDetails();
-    
   }, [fetchGemDetails]);
 
   const fetchReviews = useCallback(async () => {
@@ -444,8 +441,7 @@ const GemDetails = () => {
       return;
     }
 
-    // Check if content is taller than collapsed height
-    const needsToggle = el.scrollHeight > COLLAPSED_ABOUT_HEIGHT + 2;
+    const needsToggle = el.scrollHeight - el.clientHeight > 2;
     setAboutToggleVisible(needsToggle);
   }, [aboutExpanded, aboutText]);
 
@@ -1302,8 +1298,8 @@ const GemDetails = () => {
                     </h4>
 
                     {/* Subscription Voucher */}
-                    {userInfo?.subscription === "gold" ||
-                    userInfo?.subscription === "platinum" ? (
+                    {userInfo?.Subscription === "gold" ||
+                    userInfo?.Subscription === "platinum" ? (
                       <button
                         onClick={createVoucher}
                         disabled={isCreatingVoucher}
