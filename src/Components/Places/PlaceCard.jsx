@@ -17,10 +17,10 @@ const PlaceCard = ({ gem, rank }) => {
         const data = await response.json();
         if (data.message === "success" && Array.isArray(data.ratings)) {
           setRatingsCount(data.ratings.length);
-          console.log("data.ratings.length", data.ratings.length);
+          // console.log("data.ratings.length", data.ratings.length);
         }
       } catch (error) {
-        console.log("gemid", gem._id);
+        // console.log("gemid", gem._id);
         console.error("Failed to fetch rating count", error);
       }
     };
@@ -30,7 +30,7 @@ const PlaceCard = ({ gem, rank }) => {
       console.error("Gem is not passed correctly to GemCard");
     }
 
-    console.log("gem.name", gem, "gem.avgRating", gem.avgRating);
+    // console.log("gem.name", gem, "gem.avgRating", gem.avgRating);
   }, [gem._id]);
   const handleCardClick = () => {
     navigate(`/gems/${gem._id}`);

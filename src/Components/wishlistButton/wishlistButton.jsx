@@ -47,7 +47,7 @@ const WishlistButton = ({ gemId, size = 20 }) => {
       }
       dispatch(fetchWishlistItems());
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       
       toast.error(error);
     } finally {

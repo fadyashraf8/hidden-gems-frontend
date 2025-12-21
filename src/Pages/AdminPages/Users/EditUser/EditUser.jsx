@@ -53,7 +53,7 @@ export default function EditUser() {
       if (response.data.message === "Success") {
         
         const user = response.data.result;
-        console.log("user",user.subscription);
+        // console.log("user",user.subscription);
         setFormData({
           firstName: user.firstName,
           lastName: user.lastName,

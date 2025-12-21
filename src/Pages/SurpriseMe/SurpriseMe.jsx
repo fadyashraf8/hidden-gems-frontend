@@ -99,14 +99,45 @@ export default function SurpriseMe() {
       }
 
       const data = await response.json();
-      const gem = data.suggestions;
+      // console.log("AI Response Data:", data);
 
-      setSuggestion({
-        name: gem.name,
-        description: gem.description || t("defaultDescription"),
-        image: gem.images?.[0] ? `${gem.images[0]}` : "/images/2.jpg",
-        rating: gem.averageRating || 0,
-        id: gem._id,
+      // Build a pool of potential candidates from the AI response
+      let candidates = [];
+
+      // 1. Primary suggestion(s)
+      if (Array.isArray(data.suggestions)) {
+        candidates.push(...data.suggestions);
+      } else if (data.suggestions && typeof data.suggestions === "object") {
+        candidates.push(data.suggestions);
+      }
+
+      // 2. Secondary suggestions (allSuggestions)
+      // We use these as backups if the primary is already in the list!
+      if (Array.isArray(data.allSuggestions)) {
+        candidates.push(...data.allSuggestions);
+      }
+
+      // 3. Fallbacks
+      if (candidates.length === 0) {
+        if (data.suggestion) candidates.push(data.suggestion);
+        else if (data.result) {
+          const res = Array.isArray(data.result) ? data.result : [data.result];
+          candidates.push(...res);
+        }
+      }
+
+      setSuggestions((prev) => {
+        // Find the FIRST candidate that is NOT already in 'prev'
+        const existingIds = new Set(prev.map((p) => p._id));
+        const nextGem = candidates.find((c) => !existingIds.has(c._id));
+
+        if (nextGem) {
+          return [...prev, nextGem]; // Add only the one new unique gem
+        }
+
+        // If all candidates are already in the list, we don't add anything.
+        // User might need to change prompt to get different results.
+        return prev;
       });
     } catch (error) {
       console.error("Error fetching suggestion:", error);

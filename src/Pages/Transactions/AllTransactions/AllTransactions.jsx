@@ -24,7 +24,7 @@ function TransactionModal({ isOpen, onClose, transactionId }) {
         { withCredentials: true }
       );
       setDetails(res.data);
-      console.log("res.data", res.data.admin);
+      // console.log("res.data", res.data.admin);
       
     } catch (err) {
       console.error("Error fetching transaction details:", err);

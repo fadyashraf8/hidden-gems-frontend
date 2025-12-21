@@ -17,7 +17,7 @@ export default function Vouchers() {
         withCredentials: true,
       });
       setVouchers(res.data.vouchers || []); 
-      console.log(res.data);
+      // console.log(res.data);
       
     } catch (err) {
       console.error("Error fetching vouchers:", err);

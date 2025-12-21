@@ -38,7 +38,7 @@ const ActionIcon = ({ iconData, selectedAction, setSelectedAction }) => {
     const handleClick = () => {
         const newSelection = isSelected ? null : iconData.key; 
         setSelectedAction(newSelection);
-        console.log(`Action: ${newSelection ? newSelection : 'None'} selected.`);
+        // console.log(`Action: ${newSelection ? newSelection : 'None'} selected.`);
     };
     
     return (

@@ -36,25 +36,25 @@ export default function HomeAdmin() {
         credentials: 'include'
       });
       const usersData = await usersRes.json();
-      console.log("usersData", usersData);
+      // console.log("usersData", usersData);
 
       const categoriesRes = await fetch(`${baseUrl}/categories`, {
         credentials: 'include'
       });
       const categoriesData = await categoriesRes.json();
-      console.log("categoriesData", categoriesData);
+      // console.log("categoriesData", categoriesData);
 
       const AllCategoriesData = await fetch(`${baseUrl}/categories`, {
         credentials: 'include'
       });
       const AllCategoriesDataaaaaa = await AllCategoriesData.json();
-      console.log("categoriesData", categoriesData);
+      // console.log("categoriesData", categoriesData);
 
       const gemsRes = await fetch(`${baseUrl}/gems`, {
         credentials: 'include'
       });
       const gemsData = await gemsRes.json();
-      console.log("gemsData", gemsData);
+      // console.log("gemsData", gemsData);
 
       setStats({
         users: { total: usersData.totalItems || 0, loading: false },
