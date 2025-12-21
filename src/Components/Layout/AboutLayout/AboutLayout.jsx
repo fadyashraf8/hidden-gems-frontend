@@ -32,7 +32,7 @@ const AboutLayout = () => {
                   `block px-3 py-2 rounded-md transition-all duration-200 ${
                     isActive
                       ? "bg-[#dd030315] font-medium text-[#DD0303] border-l-4 border-[#DD0303]"
-                      : "hover:bg-gray-100 hover:border-l-4 hover:border-gray-400"
+                      : "hover:bg-gray-500 hover:border-l-4 hover:border-gray-400"
                   }`
                 }
               >

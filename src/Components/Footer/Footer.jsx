@@ -29,16 +29,14 @@ const Footer = () => {
   ];
 
   const linkStyle =
-    "block py-2 px-3 rounded transition-all duration-200 hover:bg-gray-100 hover:border-l-4 hover:border-[#DD0303] hover:text-[#DD0303] linkStyle";
+    "block py-2 px-3 rounded transition-all duration-200 hover:bg-gray-500 hover:border-l-4 hover:border-[#DD0303] hover:text-[#DD0303] linkStyle";
 
   // -------------------------------
   // Correct Protected Handler
   // -------------------------------
-const handleProtected = () => {
-  return true; // Allow all links
-};
-
-
+  const handleProtected = () => {
+    return true; // Allow all links
+  };
 
   // -------------------------------
   // Scroll Handler (no reload)
