@@ -198,7 +198,7 @@ export default function AllReports() {
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-sm">
+      <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm">
         {/* Header */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
@@ -236,7 +236,7 @@ export default function AllReports() {
             <select
               value={statusFilter}
               onChange={handleStatusFilter}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="dark:bg-[#060b15] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">{t("filters.allStatus")}</option>
               <option value="pending">{t("status.pending")}</option>
@@ -247,7 +247,7 @@ export default function AllReports() {
             <select
               value={dateFilter}
               onChange={handleDateFilter}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="dark:bg-[#060b15] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">{t("filters.allDates")}</option>
               <option value={today}>{t("filters.today")}</option>
@@ -258,7 +258,7 @@ export default function AllReports() {
             <select
               value={sortBy}
               onChange={handleSort}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="dark:bg-[#060b15] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="-createdAt">{t("sort.newestFirst")}</option>
               <option value="createdAt">{t("sort.oldestFirst")}</option>
@@ -329,7 +329,7 @@ export default function AllReports() {
               </tr>
             </thead>
 
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-[#060b15] divide-y divide-gray-200">
               {reports.length === 0 ? (
                 <tr>
                   <td

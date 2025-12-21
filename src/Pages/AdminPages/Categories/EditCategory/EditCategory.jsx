@@ -136,7 +136,7 @@ export default function EditCategory() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Image */}
         <div className="lg:col-span-1">
-          <div className="bg-red-100 rounded-lg shadow-sm p-6">
+          <div className="bg-white  dark:bg-[#060b15] rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {t("categoryImage")}
             </h3>
@@ -188,7 +188,7 @@ export default function EditCategory() {
 
         {/* Right Column - Form */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {t("categoryInfo")}
             </h3>
@@ -222,7 +222,7 @@ export default function EditCategory() {
                 name="categoryName"
                 value={formData?.createdBy?.email}
                 disabled
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors disabled:bg-gray-100"
+                className="dark:bg-[#060b15] w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors disabled:bg-gray-100"
               />
             </div>
           </div>

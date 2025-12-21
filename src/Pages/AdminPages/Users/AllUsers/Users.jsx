@@ -129,7 +129,7 @@ export default function Users() {
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-sm">
+      <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm">
         {/* Header */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
@@ -167,7 +167,7 @@ export default function Users() {
             <select
               value={roleFilter}
               onChange={handleRoleFilter}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-start"
+              className="dark:bg-[#060b15] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-start"
             >
               <option value="">{t("all_roles")}</option>
               <option value="admin">{t("admin")}</option>
@@ -177,7 +177,7 @@ export default function Users() {
             <select
               value={statusFilter}
               onChange={handleStatusFilter}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-start"
+              className="dark:bg-[#060b15] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-start"
             >
               <option value="">{t("all_status")}</option>
               <option value="true">{t("verified")}</option>
@@ -186,7 +186,7 @@ export default function Users() {
             <select
               value={sortBy}
               onChange={handleSort}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-start"
+              className="dark:bg-[#060b15] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-start"
             >
               <option value="">{t("sort_by")}</option>
               <option value="firstName">{t("name_asc")}</option>
@@ -207,7 +207,7 @@ export default function Users() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto ">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
@@ -223,7 +223,7 @@ export default function Users() {
                 )}
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-[#060b15] divide-y divide-gray-200">
               {users.length === 0 ? (
                 <tr>
                   <td
@@ -271,22 +271,20 @@ export default function Users() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full min-w-[70px] justify-center ${
-                          user.role === "admin"
+                        className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full min-w-[70px] justify-center ${user.role === "admin"
                             ? "bg-purple-100 text-purple-800"
                             : "bg-blue-100 text-blue-800"
-                        }`}
+                          }`}
                       >
                         {t(user.role)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full min-w-[70px] justify-center ${
-                          user.verified
+                        className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full min-w-[70px] justify-center ${user.verified
                             ? "bg-green-100 text-green-800"
                             : "bg-yellow-100 text-yellow-800"
-                        }`}
+                          }`}
                       >
                         {user.verified ? t("verified") : t("pending")}
                       </span>
@@ -426,11 +424,10 @@ export default function Users() {
       {toast.show && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-top duration-300">
           <div
-            className={`px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${
-              toast.type === "success"
+            className={`px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 ${toast.type === "success"
                 ? "bg-green-600 text-white"
                 : "bg-red-600 text-white"
-            }`}
+              }`}
           >
             <span>{toast.message}</span>
             <button

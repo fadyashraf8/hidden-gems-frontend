@@ -293,7 +293,7 @@ export default function EditGem() {
         {/* LEFT COLUMN */}
         <div className="lg:col-span-1 space-y-6">
           {/* IMAGES */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                 <ImageIcon size={20} className="text-blue-600" />
@@ -389,13 +389,11 @@ export default function EditGem() {
           </div>
 
           {/* READ ONLY INFO */}
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg shadow-sm p-6 border border-blue-100">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              {t("gemStats")}
-            </h3>
+          <div className=" bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6 border border-blue-100 " >
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('gemStats')}</h3>
 
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-white rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-white dark:bg-[#060b15] rounded-lg">
                 <span className="text-sm text-gray-600 flex items-center gap-2">
                   <Star size={16} className="text-yellow-500" />{" "}
                   {t("averageRating")}
@@ -405,7 +403,7 @@ export default function EditGem() {
                 </span>
               </div>
 
-              <div className="p-3 bg-white rounded-lg">
+              <div className="p-3 bg-white dark:bg-[#060b15] rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
                   <User size={16} className="text-blue-600" />
                   <span className="text-sm font-medium text-gray-700">
@@ -429,7 +427,7 @@ export default function EditGem() {
         {/* RIGHT COLUMN */}
         <div className="lg:col-span-2 space-y-6">
           {/* BASIC INFO */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <ImageIcon size={20} className="text-blue-600" />
               {t("basicInfo")}
@@ -560,7 +558,7 @@ export default function EditGem() {
                     <option value="">{t("selectCategory")}</option>
 
                     {categories.map((cat) => (
-                      <option key={cat._id} value={cat._id}>
+                      <option className="dark:bg-[#060b15]" key={cat._id} value={cat._id}>
                         {cat.categoryName}
                       </option>
                     ))}
@@ -583,7 +581,7 @@ export default function EditGem() {
                     name="status"
                     value={formData.status}
                     onChange={handleStatusChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="dark:bg-[#060b15] w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                   >
                     <option value="pending">{t("pending")}</option>
                     <option value="accepted">{t("accepted")}</option>
@@ -595,10 +593,8 @@ export default function EditGem() {
           </div>
 
           {/* DISCOUNT SETTINGS */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              {t("discountSettings")}
-            </h3>
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('discountSettings')}</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               {/* FREE TIER */}

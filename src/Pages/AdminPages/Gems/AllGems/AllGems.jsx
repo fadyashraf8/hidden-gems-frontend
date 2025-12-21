@@ -156,7 +156,7 @@ export default function AllGems() {
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-sm">
+      <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm">
         {/* Header */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
@@ -194,7 +194,7 @@ export default function AllGems() {
             <select
               value={categoryFilter}
               onChange={handleCategoryFilter}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="dark:bg-[#060b15] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">{t("filters.allCategories")}</option>
               {categories.map((cat) => (
@@ -206,7 +206,7 @@ export default function AllGems() {
             <select
               value={statusFilter}
               onChange={handleStatusFilter}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="dark:bg-[#060b15] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">{t("filters.allStatus")}</option>
               <option value="pending">{t("status.pending")}</option>
@@ -216,7 +216,7 @@ export default function AllGems() {
             <select
               value={sortBy}
               onChange={handleSort}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="dark:bg-[#060b15] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">{t("filters.sortBy")}</option>
               <option value="name">{t("sort.nameAZ")}</option>
@@ -239,7 +239,7 @@ export default function AllGems() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto ">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200 m-auto">
               <tr>
@@ -281,7 +281,7 @@ export default function AllGems() {
               </tr>
             </thead>
 
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-[#060b15] divide-y divide-gray-200">
               {gems.length === 0 ? (
                 <tr>
                   <td
