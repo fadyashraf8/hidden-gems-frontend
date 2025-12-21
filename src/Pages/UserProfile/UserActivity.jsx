@@ -224,11 +224,11 @@ const UserActivity = () => {
                 </p>
 
                 <div className="flex items-center gap-4 text-xs text-gray-400">
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 w-auto md:w-24">
                     <Calendar className="w-3 h-3" />
                     <span>
                       {new Date(
-                        activity.createdAt || Date.now()
+                        activity.createdAt || "2022-01-01"
                       ).toLocaleDateString()}
                     </span>
                   </div>
