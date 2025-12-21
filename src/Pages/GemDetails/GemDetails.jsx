@@ -172,7 +172,9 @@ const GemDetails = () => {
 
   useEffect(() => {
     fetchGemRatings();
-  }, [fetchGemRatings]);
+    console.log("userInfo",userInfo);
+
+  }, [fetchGemRatings,userInfo]);
 
   // --- Review State ---
   const [reviewsLoading, setReviewsLoading] = useState(false);
@@ -263,6 +265,7 @@ const GemDetails = () => {
 
   useEffect(() => {
     fetchGemDetails();
+    
   }, [fetchGemDetails]);
 
   const fetchReviews = useCallback(async () => {
@@ -1298,8 +1301,8 @@ const GemDetails = () => {
                     </h4>
 
                     {/* Subscription Voucher */}
-                    {userInfo?.Subscription === "gold" ||
-                    userInfo?.Subscription === "platinum" ? (
+                    {userInfo?.subscription === "gold" ||
+                    userInfo?.subscription === "platinum" ? (
                       <button
                         onClick={createVoucher}
                         disabled={isCreatingVoucher}
