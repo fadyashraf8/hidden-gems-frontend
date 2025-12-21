@@ -132,6 +132,11 @@ const GemDetails = () => {
       return;
     }
 
+    if (pointsAmount > 300) {
+      toast.error("Maximum 300 points can be redeemed per voucher.");
+      return;
+    }
+
     setIsCreatingVoucher(true);
     try {
       const response = await axios.post(
@@ -172,9 +177,8 @@ const GemDetails = () => {
 
   useEffect(() => {
     fetchGemRatings();
-    console.log("userInfo",userInfo);
-
-  }, [fetchGemRatings,userInfo]);
+    console.log("userInfo", userInfo);
+  }, [fetchGemRatings, userInfo]);
 
   // --- Review State ---
   const [reviewsLoading, setReviewsLoading] = useState(false);
@@ -265,7 +269,6 @@ const GemDetails = () => {
 
   useEffect(() => {
     fetchGemDetails();
-    
   }, [fetchGemDetails]);
 
   const fetchReviews = useCallback(async () => {
@@ -804,6 +807,13 @@ const GemDetails = () => {
     setTimeout(() => {
       fetchGemDetails();
     }, 500);
+
+    // Reload page after editing to ensure fresh data
+    if (editingExisting) {
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
   };
 
   const handleRatingChange = (value) => {
@@ -1408,7 +1418,8 @@ const GemDetails = () => {
                               </button>
                             </div>
                             <p className="text-xs text-gray-500 dark:text-gray-400">
-                              Enter the number of points you want to use
+                              Enter the number of points you want to use (1
+                              Point = 1 EGP)
                             </p>
                           </>
                         ) : (
