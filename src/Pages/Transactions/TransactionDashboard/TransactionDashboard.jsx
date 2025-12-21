@@ -259,6 +259,8 @@ export default function TransactionDashboard() {
       const data = response.data;
       if (data.message === "success") {
         setTransactions(data.result);
+        console.log(data.result);
+        
         setTotalPages(data.totalPages);
         setTotalItems(data.totalItems);
       }
@@ -446,9 +448,9 @@ export default function TransactionDashboard() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <Percent size={16} className="text-green-600 mr-1" />
                         <span className="text-sm font-bold text-green-600">
-                          {transaction.discount}%
+                          {transaction.discount}
+                          {transaction.voucherType === 'subscription' ? '%' : `${t("Pounds")}`}
                         </span>
                       </div>
                     </td>
