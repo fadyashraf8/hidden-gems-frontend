@@ -280,7 +280,8 @@ export default function AllVouchers() {
                     <div className="flex items-center">
                       <Percent size={16} className="text-green-600 mr-1" />
                       <span className="text-sm font-bold text-green-600">
-                        {voucher.discount}%
+                        {voucher.voucherType === "points" ? `${voucher.discount} ${t("vouchers.points")}` : ""}
+                        {voucher.voucherType === "subscription" ? `${voucher.discount}%` : ""}
                       </span>
                     </div>
                   </td>

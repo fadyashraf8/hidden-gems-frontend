@@ -1,5 +1,6 @@
 {
   "vouchers": {
+    "points": "نقاط",
     "management_title": "إدارة القسائم",
     "total_found": "الإجمالي: {{count}} قسيمة",
     "search_placeholder": "ابحث بالكود، اسم المكان، أو البريد الإلكتروني...",
