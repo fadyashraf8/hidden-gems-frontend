@@ -444,7 +444,8 @@ const GemDetails = () => {
       return;
     }
 
-    const needsToggle = el.scrollHeight - el.clientHeight > 2;
+    // Check if content is taller than collapsed height
+    const needsToggle = el.scrollHeight > COLLAPSED_ABOUT_HEIGHT + 2;
     setAboutToggleVisible(needsToggle);
   }, [aboutExpanded, aboutText]);
 
