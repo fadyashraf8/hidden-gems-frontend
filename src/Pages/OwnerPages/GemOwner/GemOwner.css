@@ -1,0 +1,4 @@
+.gemowner-textarea{background-color:#ffffff !important;color:#111827 !important;border-color:#d1d5db !important}
+.gemowner-textarea::placeholder{color:#6b7280 !important}
+.dark .gemowner-textarea,.dark-mode .gemowner-textarea{background-color:#374151 !important;color:#f9fafb !important;border-color:#4b5563 !important}
+.dark .gemowner-textarea::placeholder,.dark-mode .gemowner-textarea::placeholder{color:#9ca3af !important}
