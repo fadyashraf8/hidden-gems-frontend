@@ -16,15 +16,7 @@ import Home from "./Pages/Home/Home";
 import Layout from "./Components/Layout/Layout";
 import MainLayout from "./Components/Layout/MainLayout";
 import AuthLayout from "./Components/Layout/AuthLayout";
-import AdminLayout from "./Pages/Admin/AdminLayout";
-import AdminUsers from "./Pages/Admin/AdminUsers";
-import AdminGems from "./Pages/Admin/AdminGems";
-import AdminMyGems from "./Pages/Admin/AdminMyGems";
-import AdminCategories from "./Pages/Admin/AdminCategories";
-import OwnerLayout from "./Pages/Owner/OwnerLayout";
-import OwnerDashboard from "./Pages/Owner/OwnerDashboard";
-import AddRestaurant from "./Pages/Owner/AddRestaurant";
-import EditRestaurant from "./Pages/Owner/EditRestaurant";
+
 import AboutLayout from "./Components/Layout/AboutLayout/AboutLayout";
 import AboutUs from "./Pages/Footer/About/AboutUs";
 import Careers from "./Pages/Footer/About/Careers";

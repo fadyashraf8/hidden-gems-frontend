@@ -165,7 +165,7 @@ export default function EditUser() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Profile Image */}
         <div className="lg:col-span-1">
-          <div className="bg-red-50 rounded-lg shadow-sm p-6">
+          <div className="bg-red-50 dark:bg-[#060b15] rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {t("profilePicture")}
             </h3>
@@ -216,7 +216,7 @@ export default function EditUser() {
         {/* Form Fields */}
         <div className="lg:col-span-2 space-y-6">
           {/* Personal Info */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <User size={20} className="text-blue-600" />
               {t("personalInfo")}
@@ -264,7 +264,7 @@ export default function EditUser() {
           </div>
 
           {/* Contact Info */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Mail size={20} className="text-blue-600" />
               {t("contactInfo")}
@@ -324,7 +324,7 @@ export default function EditUser() {
           </div>
 
           {/* Account Settings */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Shield size={20} className="text-blue-600" />
               {t("accountSettings")}
@@ -338,7 +338,7 @@ export default function EditUser() {
                   name="role"
                   value={formData.role}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="dark:bg-[#060b15] w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                 >
                   <option value="user">{t("user")}</option>
                   <option value="admin">{t("admin")}</option>
@@ -353,7 +353,7 @@ export default function EditUser() {
                   name="subscription"
                   value={formData.subscription}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="dark:bg-[#060b15] w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                 >
                   <option value="free">{t("free")}</option>
                   <option value="gold">{t("gold")}</option>

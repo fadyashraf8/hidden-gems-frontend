@@ -123,7 +123,7 @@ export default function AllCategories() {
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-sm">
+      <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm">
         {/* Header */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
@@ -162,7 +162,7 @@ export default function AllCategories() {
             <select
               value={sortBy}
               onChange={handleSort}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="dark:bg-[#060b15] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">{t("sort_by")}</option>
               <option value="categoryName">{t("sort_name_asc")}</option>
@@ -204,7 +204,7 @@ export default function AllCategories() {
               </tr>
             </thead>
 
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-[#060b15] divide-y divide-gray-200">
               {categories.length === 0 ? (
                 <tr>
                   <td

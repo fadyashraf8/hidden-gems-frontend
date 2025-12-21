@@ -160,7 +160,7 @@ export default function AllVouchers() {
   const goToPage = (page) => setCurrentPage(page);
 
   return (
-    <div className="bg-white rounded-lg shadow-sm">
+    <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm">
       {/* Header */}
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-between mb-6">
@@ -192,7 +192,7 @@ export default function AllVouchers() {
           <select
             value={statusFilter}
             onChange={handleStatusFilter}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="dark:bg-[#060b15] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">{t("vouchers.all_status")}</option>
             <option value="active">{t("vouchers.status_active")}</option>
@@ -202,7 +202,7 @@ export default function AllVouchers() {
           <select
             value={sortBy}
             onChange={handleSort}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="dark:bg-[#060b15] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">{t("vouchers.sort_by")}</option>
             <option value="code">{t("vouchers.sort_code_az")}</option>
@@ -254,7 +254,7 @@ export default function AllVouchers() {
             </tr>
           </thead>
 
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-[#060b15] divide-y divide-gray-200">
             {vouchers.length === 0 ? (
               <tr>
                 <td colSpan="6" className="px-6 py-8 text-center text-gray-500">

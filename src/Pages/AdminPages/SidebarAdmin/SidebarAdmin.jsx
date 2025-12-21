@@ -93,13 +93,13 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
       icon: TicketPercent,
       items: [{ label: `🎟️ ${t("All Vouchers")}`, path: "/admin/vouchers" }],
     },
-   {
+    {
       id: "transactions",
       title: `transactions `,
       icon: ArrowLeftRight,
       items: [{ label: `🎟️ All Transactions`, path: "/admin/transactions" }],
     },
-     {
+    {
       id: "reports",
       title: `reports `,
       icon: MessageCircleWarning,
@@ -114,24 +114,23 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
         ? "right-4"
         : "right-60"
       : isCollapsed
-      ? "left-4"
-      : "left-60";
+        ? "left-4"
+        : "left-60";
   const mobileTranslate = isMobileOpen
     ? "translate-x-0"
     : i18n.language === "ar"
-    ? "translate-x-full lg:translate-x-0"
-    : "-translate-x-full lg:translate-x-0";
+      ? "translate-x-full lg:translate-x-0"
+      : "-translate-x-full lg:translate-x-0";
 
   return (
     <>
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className={`lg:hidden fixed top-4   ${
-          i18n.language === "ar" ? "right-4 " : "left-4"
-        } z-50 p-2 bg-slate-800 text-white rounded-lg shadow-lg`}
+        className={`lg:hidden fixed top-4   ${i18n.language === "ar" ? "right-4 " : "left-4"
+          } z-50 p-2 bg-slate-800 text-white rounded-lg shadow-lg`}
       >
-        {isMobileOpen ? <X size={24}   /> : <Menu size={24} />}
+        {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
       {/* Desktop Toggle Button */}
@@ -218,9 +217,9 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
             {i18n.language === "en" ? t("arabic") : t("english")}
           </div>
 
-          <div className="nav-group bottom-actions">
+          <div className="nav-group bottom-actions flex flex-col justify-start items-start mt-5 gap-2">
             <button
-              className="sidebar-btn dark-mode-toggle"
+              className="sidebar-btn dark-mode-toggle cursor-pointer"
               onClick={() => dispatch(toggleDarkMode())}
             >
               {isDarkMode ? `☀️ ${t("Light Mode")}` : `🌙 ${t("Dark Mode")}`}

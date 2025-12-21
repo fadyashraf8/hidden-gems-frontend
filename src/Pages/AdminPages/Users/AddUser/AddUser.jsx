@@ -168,7 +168,7 @@ export default function AddUser() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Profile Image */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow-sm p-6 sticky top-6">
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6  top-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {t("profile.title")}
             </h3>
@@ -224,7 +224,7 @@ export default function AddUser() {
         {/* Right Column - Form Fields */}
         <div className="lg:col-span-2 space-y-6">
           {/* Personal Information */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <User size={20} className="text-blue-600" />
               {t("personalInfo.title")}
@@ -280,7 +280,7 @@ export default function AddUser() {
           </div>
 
           {/* Contact Information */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Mail size={20} className="text-blue-600" />
               {t("contactInfo.title")}
@@ -344,7 +344,7 @@ export default function AddUser() {
           </div>
 
           {/* Security */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Lock size={20} className="text-blue-600" />
               {t("security.title")}
@@ -428,7 +428,7 @@ export default function AddUser() {
           </div>
 
           {/* Account Settings */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Shield size={20} className="text-blue-600" />
               {t("accountSettings.title")}
@@ -443,7 +443,7 @@ export default function AddUser() {
                   name="role"
                   value={formData.role}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="dark:bg-[#060b15] w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                 >
                   <option value="user">{t("accountSettings.user")}</option>
                   <option value="admin">{t("accountSettings.admin")}</option>
@@ -459,7 +459,7 @@ export default function AddUser() {
                   name="subscription"
                   value={formData.subscription}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="dark:bg-[#060b15] w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                 >
                   <option value="free">{t("accountSettings.free")}</option>
                   <option value="platinum">

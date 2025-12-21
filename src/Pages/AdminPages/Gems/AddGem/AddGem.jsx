@@ -208,7 +208,7 @@ export default function AddGem() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Images */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow-sm p-6 sticky top-6">
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6  top-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <ImageIcon size={20} className="text-blue-600" />
               {t("imagesCount", { count: images.length })}
@@ -274,7 +274,7 @@ export default function AddGem() {
         {/* Right Column - Form Fields */}
         <div className="lg:col-span-2 space-y-6">
           {/* Basic Information */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <ImageIcon size={20} className="text-blue-600" />
               {t("basicInformation")}
@@ -385,7 +385,7 @@ export default function AddGem() {
                 >
                   <option value="">{t("selectCategory")}</option>
                   {categories.map((cat) => (
-                    <option key={cat._id} value={cat._id}>
+                    <option className="dark:bg-[#060b15]" key={cat._id} value={cat._id}>
                       {cat.categoryName}
                     </option>
                   ))}
@@ -398,7 +398,7 @@ export default function AddGem() {
           </div>
 
           {/* Discounts & Settings */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {t("discountSettings")}
             </h3>

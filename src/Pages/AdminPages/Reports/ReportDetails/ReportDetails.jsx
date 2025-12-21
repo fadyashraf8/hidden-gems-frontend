@@ -330,7 +330,7 @@ export default function ReportDetails() {
           {/* Left Column - Report Info */}
           <div className="lg:col-span-2 space-y-6">
             {/* Report Card */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
@@ -364,9 +364,7 @@ export default function ReportDetails() {
                       {getStatusIcon(report.status)}
                       {t(`status.${report.status}`)}
                     </span>
-                    <div className="text-xs text-gray-500">
-                      ID: {report._id.substring(0, 8)}...
-                    </div>
+          
                   </div>
                 </div>
 
@@ -375,9 +373,9 @@ export default function ReportDetails() {
                   <button
                     onClick={() => updateStatus("pending")}
                     disabled={updatingStatus || report.status === "pending"}
-                    className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
+                    className={`px-3 py-1.5 text-sm rounded-lg  border transition-colors ${
                       report.status === "pending"
-                        ? "bg-yellow-50 text-yellow-700 border-yellow-300"
+                        ? "bg-yellow-50 dark:bg-[#060b15] dark:text-white text-yellow-700 border-yellow-300"
                         : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                     }`}
                   >
@@ -388,8 +386,8 @@ export default function ReportDetails() {
                     disabled={updatingStatus || report.status === "reviewed"}
                     className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
                       report.status === "reviewed"
-                        ? "bg-blue-50 text-blue-700 border-blue-300"
-                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                        ? "bg-blue-50 dark:bg-[#060b15] dark:text-white text-blue-700 border-blue-300"
+                        : "bg-white dark:bg-[#060b15] dark:text-black text-gray-700 border-gray-300 hover:bg-gray-50"
                     }`}
                   >
                     {t("details.buttons.markReviewed")}
@@ -399,8 +397,8 @@ export default function ReportDetails() {
                     disabled={updatingStatus || report.status === "resolved"}
                     className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
                       report.status === "resolved"
-                        ? "bg-green-50 text-green-700 border-green-300"
-                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                        ? "bg-green-50 dark:bg-[#060b15] dark:text-white text-green-700 border-green-300"
+                        : "bg-white dark:bg-[#060b15] dark:text-black text-gray-700 border-gray-300 hover:bg-gray-50"
                     }`}
                   >
                     {t("details.buttons.markResolved")}
@@ -410,8 +408,8 @@ export default function ReportDetails() {
                     disabled={updatingStatus || report.status === "rejected"}
                     className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
                       report.status === "rejected"
-                        ? "bg-red-50 text-red-700 border-red-300"
-                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                        ? "bg-red-50 dark:bg-[#060b15] dark:text-white text-red-700 border-red-300"
+                        : "bg-white dark:bg-[#060b15] dark:text-black text-gray-700 border-gray-300 hover:bg-gray-50"
                     }`}
                   >
                     {t("details.buttons.markRejected")}
@@ -425,7 +423,7 @@ export default function ReportDetails() {
                   <h3 className="text-sm font-medium text-gray-700 mb-2">
                     {t("details.messageTitle")}
                   </h3>
-                  <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="dark:bg-[#060b15] dark:border dark:border-white  bg-gray-50 rounded-lg p-4">
                     <p className="text-gray-900 whitespace-pre-wrap">
                       {report.message}
                     </p>
@@ -451,7 +449,7 @@ export default function ReportDetails() {
                             setEditingNotes(false);
                             setAdminNotes(report.adminNotes || "");
                           }}
-                          className="text-sm text-gray-600 hover:text-gray-700 font-medium"
+                          className=" text-sm text-gray-600 hover:text-gray-700 font-medium"
                         >
                           {t("details.buttons.cancel")}
                         </button>
@@ -459,7 +457,7 @@ export default function ReportDetails() {
                     ) : (
                       <button
                         onClick={() => setEditingNotes(true)}
-                        className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                        className=" text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
                       >
                         <Edit size={14} />
                         {t("details.buttons.editNotes")}
@@ -471,7 +469,7 @@ export default function ReportDetails() {
                       <textarea
                         value={adminNotes}
                         onChange={(e) => setAdminNotes(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className=" w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         rows="4"
                         placeholder={t("details.notesPlaceholder")}
                       />
@@ -491,7 +489,7 @@ export default function ReportDetails() {
                       </div>
                     </div>
                   ) : (
-                    <div className="bg-blue-50 rounded-lg p-4 min-h-[100px]">
+                    <div className="dark:bg-[#060b15] dark:border dark:border-white bg-blue-50 rounded-lg p-4 min-h-[100px]">
                       {report.adminNotes ? (
                         <p className="text-gray-900 whitespace-pre-wrap">
                           {report.adminNotes}
@@ -508,7 +506,7 @@ export default function ReportDetails() {
             </div>
 
             {/* Replies Section */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
@@ -593,26 +591,19 @@ export default function ReportDetails() {
           {/* Right Column - Details & Actions */}
           <div className="space-y-6">
             {/* Summary Card */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="bg-white dark:bg-[#060b15]  rounded-lg shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  {t("details.summary")}
+                  {t("details.summary")} 
                 </h3>
               </div>
               <div className="p-6 space-y-4">
-                <div>
-                  <div className="text-sm text-gray-600">
-                    {t("details.reportId")}
-                  </div>
-                  <div className="text-sm font-mono text-gray-900 mt-1">
-                    {report._id}
-                  </div>
-                </div>
-                <div>
+         
+                <div className="dark:border dark:border-white dark:border-1 dark:p-1 dark:rounded-md ">
                   <div className="text-sm text-gray-600">
                     {t("details.created")}
                   </div>
-                  <div className="text-sm text-gray-900 mt-1 flex items-center gap-2">
+                  <div className=" text-sm text-gray-900 mt-1 flex items-center gap-2 ">
                     <Calendar size={14} />
                     {formatDate(report.createdAt)}
                   </div>
@@ -621,8 +612,8 @@ export default function ReportDetails() {
                     {formatTime(report.createdAt)}
                   </div>
                 </div>
-                <div>
-                  <div className="text-sm text-gray-600">
+                <div className="dark:border dark:border-white dark:border-1 dark:p-1 dark:rounded-md ">
+                  <div className="   text-sm text-gray-600">
                     {t("details.lastUpdated")}
                   </div>
                   <div className="text-sm text-gray-900 mt-1">
@@ -632,7 +623,7 @@ export default function ReportDetails() {
                     {formatTime(report.updatedAt)}
                   </div>
                 </div>
-                <div>
+                <div className="dark:border dark:border-white dark:border-1 dark:p-1 dark:rounded-md ">
                   <div className="text-sm text-gray-600">
                     {t("details.repliesCount")}
                   </div>
@@ -644,7 +635,7 @@ export default function ReportDetails() {
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900">
                   {t("details.quickActions")}
@@ -653,21 +644,21 @@ export default function ReportDetails() {
               <div className="p-6 space-y-3">
                 <a
                   href={`mailto:${report.email}?subject=Re: Your Contact Report&body=Dear ${report.firstName},`}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="dark:bg-[#060b15] dark:border dark:border-white w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                 >
                   <Mail size={18} />
                   {t("details.buttons.sendEmail")}
                 </a>
                 <button
                   onClick={() => setShowReplyModal(true)}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors"
+                  className="dark:bg-[#060b15] dark:border dark:border-white w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors"
                 >
                   <MessageSquare size={18} />
                   {t("details.buttons.sendReply")}
                 </button>
                 <button
                   onClick={fetchReportDetails}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="dark:bg-[#060b15] dark:border dark:border-white w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   <RefreshCw size={18} />
                   {t("details.buttons.refresh")}
@@ -676,14 +667,14 @@ export default function ReportDetails() {
             </div>
 
             {/* User Information */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-              <div className="p-6 border-b border-gray-200">
+            <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm border border-gray-200">
+              <div className="  p-6 border-b border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900">
                   {t("details.userInfo")}
                 </h3>
               </div>
               <div className="p-6 space-y-3">
-                <div>
+                <div className="dark:border dark:border-white dark:border-1 dark:p-1 dark:rounded-md">
                   <div className="text-sm text-gray-600">
                     {t("details.fullName")}
                   </div>
@@ -691,7 +682,7 @@ export default function ReportDetails() {
                     {report.firstName} {report.lastName}
                   </div>
                 </div>
-                <div>
+                <div className="dark:border dark:border-white dark:border-1 dark:p-1 dark:rounded-md">
                   <div className="text-sm text-gray-600">
                     {t("details.email")}
                   </div>
@@ -699,7 +690,7 @@ export default function ReportDetails() {
                     {report.email}
                   </div>
                 </div>
-                <div>
+                <div className="dark:border dark:border-white dark:border-1 dark:p-1 dark:rounded-md">
                   <div className="text-sm text-gray-600">
                     {t("details.messageLength")}
                   </div>
@@ -771,7 +762,7 @@ export default function ReportDetails() {
                   </label>
                 </div>
                 {sendEmail && (
-                  <div className="bg-blue-50 p-3 rounded-lg mb-4">
+                  <div className="dark:bg-[#060b15] dark:border dark:border-white bg-blue-50 p-3 rounded-lg mb-4">
                     <p className="text-sm text-blue-700">
                       {t("details.replyModal.emailWillBeSent", {
                         email: report.email

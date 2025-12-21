@@ -192,7 +192,7 @@ export default function UserGems() {
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-sm">
+      <div className="bg-white dark:bg-[#060b15] rounded-lg shadow-sm">
         {/* Header */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
@@ -235,7 +235,7 @@ export default function UserGems() {
             >
               <option value="">{t("filters.allCategories")}</option>
               {categories.map((cat) => (
-                <option key={cat._id} value={cat._id}>
+                <option className="dark:bg-[#060b15]" key={cat._id} value={cat._id}>
                   {cat.categoryName}
                 </option>
               ))}
@@ -243,7 +243,7 @@ export default function UserGems() {
             <select
               value={statusFilter}
               onChange={handleStatusFilter}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="dark:bg-[#060b15] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">{t("filters.allStatus")}</option>
               <option value="pending">{t("filters.pending")}</option>
@@ -253,7 +253,7 @@ export default function UserGems() {
             <select
               value={sortBy}
               onChange={handleSort}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="dark:bg-[#060b15] px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">{t("filters.sortBy")}</option>
               <option value="name">{t("filters.nameAZ")}</option>
@@ -297,7 +297,7 @@ export default function UserGems() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-[#060b15] divide-y divide-gray-200">
               {gems.length === 0 ? (
                 <tr>
                   <td colSpan="5" className="px-6 py-16 text-center">
