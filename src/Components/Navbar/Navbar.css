@@ -112,9 +112,9 @@
 }
 
 /* Auth Buttons */
-.dark-mode .auth-btn {
-  background: var(--dm-accent);
-}
+/* .dark-mode .auth-btn {
+  background: var(--lm-accent);
+} */
 
 /* Cards */
 .dark-mode .card-res {
@@ -327,10 +327,10 @@
   background: transparent;
 }
 
-.signup-btn {
+/* .signup-btn {
   background: #dd0303;
   color: white;
-}
+} */
 
 .login-btn:hover {
   background-color: #dd0303;
@@ -338,8 +338,14 @@
 }
 
 .signup-btn:hover {
+  background-color: #000000;
   opacity: 0.9;
-  color: black;
+  color: white;
+}
+.dark-mode   .signup-btn:hover {
+  background-color: #ffffff;
+  opacity: 0.9;
+  color: black !important;
 }
 
 .user-dropdown-wrapper {

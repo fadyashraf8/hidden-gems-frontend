@@ -1,40 +1,40 @@
 {
   "subtitle": "Discover your next favorite spot",
-    "breadcrumbs": {
-      "home": "Home",
-      "places": "Places",
-      "all": "All"
-    },
-    "titles": {
-      "bestInTown": "Best {{category}} in town",
-      "topGems": "Top Gems in your area"
-    },
-    "resultsCount": "Showing {{count}} results",
-    "filters": {
-      "searchPlaceholder": "Search gems...",
-      "categoryLabel": "Category",
-      "allCategories": "All Categories",
-      "sortByLabel": "Sort By",
-      "clearFilters": "Clear all filters"
-    },
-    "sortOptions": {
-      "default": "Default",
-      "nameAZ": "Name (A-Z)",
-      "nameZA": "Name (Z-A)",
-      "highestRating": "Highest Rating",
-      "oldestFirst": "Oldest First",
-      "newestFirst": "Newest First"
-    },
-    "messages": {
-      "noGems": "No gems match your filters.",
-      "errorLoading": "Error loading data",
-      "tryAdjustingFilters": "No gems matching your filters, try another filters."
-    },
-  
-        "default": "Default",
-      "nameAZ": "Name (A-Z)",
-      "nameZA": "Name (Z-A)",
-      "highestRating": "Highest Rating",
-      "oldestFirst": "Oldest First",
-      "newestFirst": "Newest First"
+  "breadcrumbs": {
+    "home": "Home",
+    "places": "Places",
+    "all": "All"
+  },
+  "titles": {
+    "bestInTown": "Best {{category}} in town",
+    "topGems": "Top Gems in your area"
+  },
+  "resultsCount": "Showing {{count}} results",
+  "filters": {
+    "searchPlaceholder": "Search gems...",
+    "categoryLabel": "Category",
+    "allCategories": "All Categories",
+    "sortByLabel": "Sort By",
+    "clearFilters": "Clear all filters"
+  },
+  "sortOptions": {
+    "default": "Default",
+    "nameAZ": "Name (A-Z)",
+    "nameZA": "Name (Z-A)",
+    "highestRating": "Highest Rating",
+    "oldestFirst": "Oldest First",
+    "newestFirst": "Newest First"
+  },
+  "messages": {
+    "noGems": "No gems match your filters.",
+    "errorLoading": "Error loading data",
+    "tryAdjustingFilters": "No gems matching your filters, try another filters."
+  },
+
+  "default": "Default",
+  "nameAZ": "Name (A-Z)",
+  "nameZA": "Name (Z-A)",
+  "highestRating": "Highest Rating",
+  "oldestFirst": "Oldest First",
+  "newestFirst": "Newest First"
 }
