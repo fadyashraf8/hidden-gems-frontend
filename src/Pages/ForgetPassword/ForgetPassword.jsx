@@ -66,7 +66,7 @@ const ForgetPassword = () => {
   async function handle(data) {
     setIsLoading(true);
     try {
-      const res = await fetch("http://localhost:3000/auth/forgetPassword", {
+      const res = await fetch(`${import.meta.env.VITE_Base_URL}/auth/forgetPassword`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

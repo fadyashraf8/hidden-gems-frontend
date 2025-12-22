@@ -69,7 +69,7 @@ const ResetPassword = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const res = await fetch("http://localhost:3000/auth/resetPassword", {
+      const res = await fetch(`${import.meta.env.VITE_Base_URL}/auth/resetPassword`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

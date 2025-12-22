@@ -255,7 +255,7 @@ const GemDetails = () => {
       } else {
         const gemData = data.gem || data.result || data;
         setGem(gemData);
-        // console.log(gemData);
+        console.log(gemData);
       }
     } catch {
       setError("Failed to load this gem. Please try again.");
@@ -1297,8 +1297,8 @@ const GemDetails = () => {
                     </h4>
 
                     {/* Subscription Voucher */}
-                    {userInfo?.Subscription === "gold" ||
-                    userInfo?.Subscription === "platinum" ? (
+                    {userInfo?.subscription === "gold" ||
+                    userInfo?.subscription === "platinum" ? (
                       <button
                         onClick={createVoucher}
                         disabled={isCreatingVoucher}

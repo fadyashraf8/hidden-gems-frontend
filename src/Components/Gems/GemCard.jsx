@@ -15,6 +15,7 @@ const GemCard = ({
   onGemDeleted = null,
   darkMode = false,
 }) => {
+  
   const navigate = useNavigate();
   const imagesList = gem.images?.[0];
   const ratingValue = gem.avgRating || gem.rating || 0;
@@ -41,7 +42,6 @@ const GemCard = ({
       console.error("Gem is not passed correctly to GemCard");
     }
 
-console.log("gem",gem);
 
 
   }, [gem._id]);
