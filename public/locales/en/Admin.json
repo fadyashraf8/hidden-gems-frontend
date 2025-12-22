@@ -15,6 +15,12 @@
   "Vouchers": "Vouchers",
   "All Vouchers": "All Vouchers",
 
+  "transactions": "transactions",
+  "All Transactions": "All Transactions",
+
+    "reports": "Reports",
+  "All Reports": "All Reports",
+
   "Admin Panel": "Admin Panel",
   "Return to Home": "Return to Home",
   "Sign Out": "Sign Out",

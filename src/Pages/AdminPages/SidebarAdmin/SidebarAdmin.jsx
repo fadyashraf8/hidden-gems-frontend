@@ -95,15 +95,15 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
     },
     {
       id: "transactions",
-      title: `transactions `,
+      title: `${t("transactions")} `,
       icon: ArrowLeftRight,
-      items: [{ label: `🎟️ All Transactions`, path: "/admin/transactions" }],
+      items: [{ label: `🎟️ ${t("All Transactions")}`, path: "/admin/transactions" }],
     },
     {
       id: "reports",
-      title: `reports `,
+      title: `${t("reports")} `,
       icon: MessageCircleWarning,
-      items: [{ label: `All Reports`, path: "/admin/reports" }],
+      items: [{ label: `${t("All Reports")}`, path: "/admin/reports" }],
     },
   ];
 
