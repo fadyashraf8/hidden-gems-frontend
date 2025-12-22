@@ -39,7 +39,7 @@ export default function SidebarOwner({ isCollapsed, setIsCollapsed }) {
         },
         icon: "👋",
       });
-      navigate("/");
+      navigate("/login");
     });
   };
 

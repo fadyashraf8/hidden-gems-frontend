@@ -40,7 +40,7 @@ export default function SidebarAdmin({ isCollapsed, setIsCollapsed }) {
         },
         icon: "👋",
       });
-      navigate("/");
+      navigate("/login");
     });
   };
 
