@@ -204,49 +204,27 @@ console.log("user",user);
               </Link>
 
               {isloggedin && (
-                <div
-                  onClick={() => navigate("/profile")}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    padding: "8px 16px",
-                    background: dark ? "#000000" : "#ffffff",
-                    borderRadius: "20px",
-                    cursor: "pointer",
-                    transition: "all 0.3s ease",
-                    boxShadow: dark
-                      ? "0 2px 8px rgba(0, 0, 0, 0.3)"
-                      : "0 2px 8px rgba(0, 0, 0, 0.1)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "scale(1.05)";
-                    e.currentTarget.style.boxShadow = dark
-                      ? "0 4px 12px rgba(0, 0, 0, 0.5)"
-                      : "0 4px 12px rgba(0, 0, 0, 0.2)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "scale(1)";
-                    e.currentTarget.style.boxShadow = dark
-                      ? "0 2px 8px rgba(0, 0, 0, 0.3)"
-                      : "0 2px 8px rgba(0, 0, 0, 0.1)";
-                  }}
-                >
-                  <Star
-                    size={18}
+             <div
+  onClick={() => navigate("/profile")}
+  className={`
+    flex items-center cursor-pointer transition
+    gap-1 md:gap-2
+    px-2 py-1 md:px-4 md:py-2
+    rounded-xl md:rounded-full
+    shadow-md
+    ${dark ? "bg-black text-white" : "bg-white text-black"}
+  `}
+>
+    <Star
+                    size={12}
                     fill={dark ? "#ffffff" : "#000000"}
                     color={dark ? "#ffffff" : "#000000"}
                   />
-                  <span
-                    style={{
-                      fontWeight: "700",
-                      color: dark ? "#ffffff" : "#000000",
-                      fontSize: "14px",
-                    }}
-                  >
-                    {user?.points?.toLocaleString() || "0"}
-                  </span>
-                </div>
+  <span className="font-bold text-xs md:text-sm">
+    {user?.points?.toLocaleString() || "0"}
+  </span>
+</div>
+
               )}
             </>
           )}
@@ -336,7 +314,7 @@ console.log("user",user);
 
       {isOpen && (
         <ul className="mobile-menu">
-          {isloggedin && (
+          {/* {isloggedin && (
             <div
               onClick={() => navigate("/profile")}
               style={{
@@ -380,7 +358,7 @@ console.log("user",user);
                 {user?.points?.toLocaleString() || "0"}
               </span>
             </div>
-          )}
+          )} */}
 
           <li>
             <NavLink to="/places" onClick={() => setIsOpen(false)}>

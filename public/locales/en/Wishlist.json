@@ -1,5 +1,7 @@
 {
   "wishlist": {
+    "cancel":"cancel",
+"clearWarning":"Warning",
     "backToHome": "Back to Home",
     "title": "My Wishlist",
     "item": "item",

@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { Star, MapPin, ArrowRight, Loader2 } from "lucide-react";
 import GemCard from "../../Components/Gems/GemCard";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const LoadingSkeleton = ({ isDarkMode }) => (
   <Box
@@ -162,6 +163,8 @@ const ParallaxGem = ({ gem, index, isDarkMode }) => {
 };
 
 export default function SponsoredGems() {
+    const { t, i18n } = useTranslation("SponsoredGems");
+  const navigate =useNavigate()
   const [sponsoredGems, setSponsoredGems] = useState([]);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef(null);
@@ -170,6 +173,10 @@ export default function SponsoredGems() {
   const [page, setPage] = useState(1);
   const itemsPerPage = 6;
 
+
+  const handleNavigate = ()=>{
+navigate("/profile")
+  }
   const topGems = sponsoredGems.slice(0, 3);
   const remainingGems = sponsoredGems.slice(3);
 
@@ -220,7 +227,7 @@ export default function SponsoredGems() {
     >
       {/* === HERO === */}
       <section
-        className={`h-screen flex items-center justify-center relative overflow-hidden ${
+        className={`h-screen mt-10 flex items-center justify-center relative overflow-hidden ${
           isDarkMode ? "bg-[#050505]" : ""
         }`}
       >
@@ -243,7 +250,7 @@ export default function SponsoredGems() {
               className="tracking-[1em] uppercase mb-4 font-bold"
               sx={{ color: "red !important" }}
             >
-              The Elite Collection
+              {t("The Elite Collection")}
             </Typography>
             <Typography
               variant="h1"
@@ -255,9 +262,9 @@ export default function SponsoredGems() {
                 mb: { xs: 8, md: 4 },
               }}
             >
-              HIDDEN <br />{" "}
+              {t("HIDDEN")} <br />{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#DD0303] to-orange-600">
-                LUXURY
+                {t("LUXURY")}
               </span>
             </Typography>
             <Typography
@@ -266,8 +273,7 @@ export default function SponsoredGems() {
                 isDarkMode ? "text-gray-400" : "text-gray-600"
               }`}
             >
-              Explore the city's most exclusive, verified, and premium
-              experiences. Hand-picked for the discerning traveler.
+             {t("Hero Description")}
             </Typography>
           </motion.div>
 
@@ -279,7 +285,7 @@ export default function SponsoredGems() {
           >
             <div className="w-[1px] h-20 bg-gradient-to-b from-red-500 to-transparent" />
             <span className="text-xs uppercase tracking-widest text-gray-500">
-              Scroll to Explore
+              {t("Scroll to Explore")}
             </span>
           </motion.div>
         </Container>
@@ -315,13 +321,13 @@ export default function SponsoredGems() {
                 fontWeight={800}
                 sx={{ mb: 2, color: isDarkMode ? "white" : "#1a1a1a" }}
               >
-                More Premium Extensions
+                {t("More Premium Extensions")}
               </Typography>
               <Typography
                 variant="body1"
                 className={isDarkMode ? "text-gray-400" : "text-gray-600"}
               >
-                Discover more certified high-quality experiences.
+                {t("More Premium Description")}
               </Typography>
             </motion.div>
 
@@ -383,7 +389,7 @@ export default function SponsoredGems() {
       {sponsoredGems.length === 0 && (
         <Box className="h-[50vh] flex items-center justify-center">
           <Typography variant="h4" className="text-gray-500">
-            No Elite Gems Found at the Moment.
+            {t("No Elite Gems Found")}
           </Typography>
         </Box>
       )}
@@ -392,9 +398,10 @@ export default function SponsoredGems() {
       <section className="py-20 bg-gradient-to-t from-red-900/20 to-[#050505] text-center">
         <Container maxWidth="md">
           <Typography variant="h3" fontWeight={800} mb={4}>
-            Want to be on this list?
+            {t("Want to be on this list")}
           </Typography>
           <Button
+          onClick={handleNavigate}
             variant="contained"
             size="large"
             sx={{
@@ -407,7 +414,7 @@ export default function SponsoredGems() {
               "&:hover": { bgcolor: "#b90202", color: "white !important" },
             }}
           >
-            Become a Partner
+            {t("Become a Partner")}
           </Button>
         </Container>
       </section>

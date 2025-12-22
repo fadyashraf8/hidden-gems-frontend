@@ -1,5 +1,7 @@
 {
   "wishlist": {
+    "cancel":"الغاء",
+    "clearWarning":"تحذير",
     "backToHome": "العودة للصفحة الرئيسية",
     "title": "قائمتي المفضلة",
     "item": "عنصر",

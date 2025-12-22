@@ -58,17 +58,31 @@ const Wishlist = () => {
     }
   };
 
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
   const handleClearWishlist = async () => {
-    if (window.confirm(t("wishlist.confirmClear"))) {
-      try {
-        await dispatch(clearWishlist()).unwrap();
-        setCurrentPage(1);
-        toast.success(t("wishlist.clearSuccess"));
-      } catch (error) {
-        toast.error(t("wishlist.clearFail"));
-      }
+    try {
+      await dispatch(clearWishlist()).unwrap();
+      setCurrentPage(1);
+      toast.success(t("wishlist.clearSuccess"));
+    } catch (error) {
+      toast.error(t("wishlist.clearFail"));
+    } finally {
+      setShowConfirmModal(false);
     }
   };
+
+  // const handleClearWishlist = async () => {
+  //   if (window.confirm(t("wishlist.confirmClear"))) {
+  //     try {
+  //       await dispatch(clearWishlist()).unwrap();
+  //       setCurrentPage(1);
+  //       toast.success(t("wishlist.clearSuccess"));
+  //     } catch (error) {
+  //       toast.error(t("wishlist.clearFail"));
+  //     }
+  //   }
+  // };
 
   const getPageNumbers = () => {
     const pageNumbers = [];
@@ -138,7 +152,7 @@ const Wishlist = () => {
 
               {items.length > 0 && (
                 <button
-                  onClick={handleClearWishlist}
+                  onClick={() => setShowConfirmModal(true)}
                   className="wishlist-clear-header-btn flex items-center gap-2 cursor-pointer bg-red-50 text-red-600 px-4 py-2 rounded-lg hover:bg-red-100 transition-colors"
                   title={t("wishlist.clearWishlist")}
                 >
@@ -236,9 +250,8 @@ const Wishlist = () => {
                       <button
                         key={pageNumber}
                         onClick={() => paginate(pageNumber)}
-                        className={`pagination-btn ${
-                          currentPage === pageNumber ? "active" : ""
-                        }`}
+                        className={`pagination-btn ${currentPage === pageNumber ? "active" : ""
+                          }`}
                       >
                         {pageNumber}
                       </button>
@@ -266,9 +279,8 @@ const Wishlist = () => {
             )}
 
             <div
-              className={`${
-                totalPages > 1 ? "mt-8" : "mt-12"
-              } pt-8 border-t border-gray-200 wishlist-footer-divider`}
+              className={`${totalPages > 1 ? "mt-8" : "mt-12"
+                } pt-8 border-t border-gray-200 wishlist-footer-divider`}
             >
               <div className="flex justify-between items-center">
                 <div>
@@ -281,7 +293,7 @@ const Wishlist = () => {
                 </div>
 
                 <button
-                  onClick={handleClearWishlist}
+                  onClick={() => setShowConfirmModal(true)}
                   className="wishlist-clear-footer-btn flex items-center cursor-pointer gap-2 text-red-600 hover:text-red-700 transition-colors"
                 >
                   <Trash2 size={18} />
@@ -292,6 +304,36 @@ const Wishlist = () => {
           </>
         )}
       </div>
+      {showConfirmModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white dark:bg-[#060b15] rounded-xl p-6 w-full max-w-sm">
+            <h3 className="text-lg font-bold text-gray-900 mb-2">
+              {t("wishlist.confirmClear")}
+            </h3>
+
+            <p className="text-sm text-gray-600 mb-6">
+              {t("wishlist.clearWarning")}
+            </p>
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowConfirmModal(false)}
+                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                {t("wishlist.cancel")}
+              </button>
+
+              <button
+                onClick={handleClearWishlist}
+                className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
+              >
+                {t("wishlist.clearAll")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
