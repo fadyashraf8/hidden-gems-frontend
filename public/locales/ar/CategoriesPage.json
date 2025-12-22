@@ -1,44 +1,40 @@
 {
-    "subtitle": "اكتشف وجهتك المفضلة الجديدة",
-      "default": "الافتراضي",
+  "subtitle": "اكتشف وجهتك المفضلة الجديدة",
+  "default": "الافتراضي",
   "nameAZ": "الاسم (أ-ي)",
   "nameZA": "الاسم (ي-أ)",
-    "highestRating": "الأعلى تقييماً",
-  "lowestRating": "الأقل تقييماً",
-    "oldestFirst": "الأقدم أولاً",
+  "highestRating": "الأعلى تقييماً",
+  "oldestFirst": "الأقدم أولاً",
   "newestFirst": "الأحدث أولاً",
-    "breadcrumbs": {
-      "home": "الرئيسية",
-      "places": "الأماكن",
-      "all": "الكل"
-    },
-    "titles": {
-      "bestInTown": "أفضل أماكن {{category}} في المدينة",
-      "topGems": "أفضل الأماكن المختارة في منطقتك"
-    },
-    "resultsCount": "عرض {{count}} نتيجة",
-    "filters": {
-      "searchPlaceholder": "ابحث عن الأماكن...",
-      "categoryLabel": "التصنيف",
-      "allCategories": "جميع التصنيفات",
-      "sortByLabel": "ترتيب حسب",
-      "clearFilters": "مسح الفلاتر"
-    },
-    "sortOptions": {
-      "default": "الافتراضي",
-      "nameAZ": "الاسم (أ-ي)",
-      "nameZA": "الاسم (ي-أ)",
-      "highestRating": "الأعلى تقييماً",
-      "lowestRating": "الأقل تقييماً",
-      "oldestFirst": "الأقدم أولاً",
-      "newestFirst": "الأحدث أولاً"
-    },
-    "messages": {
-      "noGems": "لا توجد أماكن تطابق خيارات البحث.",
-      "errorLoading": "حدث خطأ أثناء تحميل البيانات",
-      "tryAdjustingFilters": "لا توجد أماكن بهذه المواصفات, جرب خيارات أخري."
-    }
-  
-
-    
+  "breadcrumbs": {
+    "home": "الرئيسية",
+    "places": "الأماكن",
+    "all": "الكل"
+  },
+  "titles": {
+    "bestInTown": "أفضل أماكن {{category}} في المدينة",
+    "topGems": "أفضل الأماكن المختارة في منطقتك"
+  },
+  "resultsCount": "عرض {{count}} نتيجة",
+  "filters": {
+    "searchPlaceholder": "ابحث عن الأماكن...",
+    "categoryLabel": "التصنيف",
+    "allCategories": "جميع التصنيفات",
+    "sortByLabel": "ترتيب حسب",
+    "clearFilters": "مسح الفلاتر"
+  },
+  "sortOptions": {
+    "default": "الافتراضي",
+    "nameAZ": "الاسم (أ-ي)",
+    "nameZA": "الاسم (ي-أ)",
+    "highestRating": "الأعلى تقييماً",
+    "lowestRating": "الأقل تقييماً",
+    "oldestFirst": "الأقدم أولاً",
+    "newestFirst": "الأحدث أولاً"
+  },
+  "messages": {
+    "noGems": "لا توجد أماكن تطابق خيارات البحث.",
+    "errorLoading": "حدث خطأ أثناء تحميل البيانات",
+    "tryAdjustingFilters": "لا توجد أماكن بهذه المواصفات, جرب خيارات أخري."
+  }
 }

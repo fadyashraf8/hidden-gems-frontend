@@ -22,7 +22,6 @@
       "nameAZ": "Name (A-Z)",
       "nameZA": "Name (Z-A)",
       "highestRating": "Highest Rating",
-      "lowestRating": "Lowest Rating",
       "oldestFirst": "Oldest First",
       "newestFirst": "Newest First"
     },
@@ -30,6 +29,12 @@
       "noGems": "No gems match your filters.",
       "errorLoading": "Error loading data",
       "tryAdjustingFilters": "No gems matching your filters, try another filters."
-    }
+    },
   
+        "default": "Default",
+      "nameAZ": "Name (A-Z)",
+      "nameZA": "Name (Z-A)",
+      "highestRating": "Highest Rating",
+      "oldestFirst": "Oldest First",
+      "newestFirst": "Newest First"
 }
